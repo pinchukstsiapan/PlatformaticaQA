@@ -18,4 +18,18 @@ public class SimpleTest extends BaseTest {
 
         Thread.sleep(3000);
     }
+
+    @Test
+    public void secondTest() {
+
+        WebDriver driver = getDriver();
+        driver.get("https://github.com/SergeiDemyanenko/PlatformaticaQA");
+
+        WebElement button = driver.findElement(By.xpath("//details[contains(@data-action, 'get-repo')]"));
+        button.click();
+
+        WebElement input = driver.findElement(By.xpath("(//div[@class='input-group']/input)[1]"));
+        Assert.assertEquals(input.getAttribute("value"), "https://github.com/SergeiDemyanenko/PlatformaticaQA.git");
+    }
+
 }
