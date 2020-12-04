@@ -11,12 +11,14 @@ public class SimpleTest extends BaseTest {
     public void simpleTest() throws InterruptedException {
 
         WebDriver browser = getDriver();
+
         browser.get("https://github.com/SergeiDemyanenko/PlatformaticaQA");
         WebElement name = browser.findElement(By.xpath("//strong/a"));
 
         Assert.assertEquals(name.getText(), "PlatformaticaQA");
 
         Thread.sleep(3000);
+
     }
 
     @Test
