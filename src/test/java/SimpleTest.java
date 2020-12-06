@@ -34,4 +34,31 @@ public class SimpleTest extends BaseTest {
         Assert.assertEquals(input.getAttribute("value"), "https://github.com/SergeiDemyanenko/PlatformaticaQA.git");
     }
 
+    @Test
+    public void newTest() throws InterruptedException {
+
+        WebDriver driver = getDriver();
+        driver.get("https://github.com/SergeiDemyanenko/PlatformaticaQA");
+
+        WebElement button = driver.findElement(By.id("branch-select-menu"));
+        button.click();
+
+        Thread.sleep(2000);
+
+        WebElement link = driver.findElement(By.xpath("//footer/a[contains(text(), 'branches')]"));
+        link.click();
+
+        Assert.assertEquals(driver.getCurrentUrl(), "https://github.com/SergeiDemyanenko/PlatformaticaQA/branches");
+    }
+
+    @Test
+    public void myTest() {
+
+        WebDriver browser = getDriver();
+        browser.get("https://github.com/SergeiDemyanenko/PlatformaticaQA");
+        WebElement name = browser.findElement(By.xpath("//h2[contains(text(),'Languages')]"));
+
+        Assert.assertEquals(name.getText(), "Languages");
+    }
+
 }
