@@ -45,6 +45,8 @@ public class GroupBreakingBad extends BaseTest {
         link.click();
 
         Assert.assertEquals(driver.getCurrentUrl(), "https://en.wikipedia.org/w/index.php?title=List_of_national_parks_of_the_United_States&action=history");
+
     }
+
 }
 
