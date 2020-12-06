@@ -1,13 +1,9 @@
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
-
-import static org.testng.Assert.assertEquals;
 
 public class GroupBreakingBad extends BaseTest {
     @Test
@@ -21,11 +17,11 @@ public class GroupBreakingBad extends BaseTest {
         Thread.sleep(3000);
 
         WebElement input = driver.findElement(By.xpath("//input[contains(@class, 'ph-a11y-location-box')]"));
-        assertEquals(input.getAttribute("placeholder"), "Enter City, State or Zip");
+        Assert.assertEquals(input.getAttribute("placeholder"), "Enter City, State or Zip");
     }
 
     @Test
-    public void alexeySemenov() throws InterruptedException {
+    public void alexeySemenov() throws  InterruptedException{
 
         WebDriver browser = getDriver();
         browser.get("https://www.jizo.com");
@@ -36,7 +32,19 @@ public class GroupBreakingBad extends BaseTest {
         Thread.sleep(3000);
 
         WebElement menuElement = browser.findElement(By.xpath("//*[@id='CityList']/div[1]/div[2]/h4"));
-        assertEquals(menuElement.getText().toLowerCase(), "russia");
+        Assert.assertEquals(menuElement.getText().toLowerCase(), "russia");
+
+    }
+    @Test
+    public void svitlanaVarakuta() throws InterruptedException {
+
+        WebDriver driver = getDriver();
+        driver.get("https://en.wikipedia.org/wiki/List_of_national_parks_of_the_United_States");
+
+        WebElement link = driver.findElement(By.xpath("//div[5]/div[1]/div[2]/nav[1]/div/ul/li[3]/a"));
+        link.click();
+
+        Assert.assertEquals(driver.getCurrentUrl(), "https://en.wikipedia.org/w/index.php?title=List_of_national_parks_of_the_United_States&action=history");
 
     }
 
@@ -58,5 +66,7 @@ public class GroupBreakingBad extends BaseTest {
         assertEquals(getDriver().getTitle(), "Wikipedia, the free encyclopedia");
 
 
-    }
 }
+
+
+    }
