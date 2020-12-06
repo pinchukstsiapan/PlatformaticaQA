@@ -19,4 +19,20 @@ public class GroupBreakingBad extends BaseTest {
         WebElement input = driver.findElement(By.xpath("//input[contains(@class, 'ph-a11y-location-box')]"));
         Assert.assertEquals(input.getAttribute("placeholder"), "Enter City, State or Zip");
     }
+
+    @Test
+    public void alexeySemenov() throws  InterruptedException{
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.jizo.com");
+
+        WebElement inputSearch = browser.findElement(By.xpath("//input[@id='searchCity']"));
+        inputSearch.sendKeys("Rus");
+
+        Thread.sleep(3000);
+
+        WebElement menuElement = browser.findElement(By.xpath("//*[@id='CityList']/div[1]/div[2]/h4"));
+        Assert.assertEquals(menuElement.getText().toLowerCase(), "russia");
+
+    }
 }
