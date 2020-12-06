@@ -1,2 +1,4 @@
-public class BMTest {
+import runner.BaseTest;
+
+public class BMTest extends BaseTest {
 }
