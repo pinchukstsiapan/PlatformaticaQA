@@ -35,4 +35,18 @@ public class GroupBreakingBad extends BaseTest {
         Assert.assertEquals(menuElement.getText().toLowerCase(), "russia");
 
     }
+    @Test
+    public void svitlanaVarakuta() throws InterruptedException {
+
+        WebDriver driver = getDriver();
+        driver.get("https://en.wikipedia.org/wiki/List_of_national_parks_of_the_United_States");
+
+        WebElement link = driver.findElement(By.xpath("//div[5]/div[1]/div[2]/nav[1]/div/ul/li[3]/a"));
+        link.click();
+
+        Assert.assertEquals(driver.getCurrentUrl(), "https://en.wikipedia.org/w/index.php?title=List_of_national_parks_of_the_United_States&action=history");
+
+    }
+
 }
+
