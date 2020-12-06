@@ -19,4 +19,16 @@ public class Group_qui_quaerit_reperit extends BaseTest {
         WebElement fbSocialSignUp = browser.findElement(By.xpath("//a[@id='login-with-facebook']"));
         Assert.assertEquals(fbSocialSignUp.isDisplayed(), true);
     }
+
+    @Test
+    public void oleksandrBurdeinyi() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.selenium.dev/");
+
+        WebElement gettingStarted = browser.findElement(By.xpath("//h2[.='Getting Started']"));
+        Assert.assertEquals(gettingStarted.getText(), "Getting Started");
+
+    }
+
 }
