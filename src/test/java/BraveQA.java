@@ -16,5 +16,35 @@ public class BraveQA extends BaseTest {
         Thread.sleep(2000);
         Assert.assertEquals(language.getText(), "English");
         language.click();
-     }
+    }
+
+
+    @Test
+    public void dmitrySearch() throws InterruptedException {
+        WebDriver browser = getDriver();
+        browser.get("https://www.wikipedia.org");
+
+        WebElement searchLang = browser.findElement(By.xpath("//select[@name='language']/option[@value='ru']"));
+        searchLang.click();
+
+        Thread.sleep(2000);
+
+        Assert.assertEquals(searchLang.isSelected() , true);
+        Thread.sleep(2000);
+
+        WebElement input = browser.findElement(By.xpath("//input[@id='searchInput']"));
+        input.sendKeys("Обеспечение качества");
+
+        Thread.sleep(2000);
+
+        WebElement btn = browser.findElement(By.xpath("//fieldset/button"));
+        btn.click();
+
+        Thread.sleep(2000);
+
+        WebElement hdr = browser.findElement(By.xpath("//h1"));
+        Assert.assertEquals(hdr.getText(), "Обеспечение качества");
+    }
+
+
 }
