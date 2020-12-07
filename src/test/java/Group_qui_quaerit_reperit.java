@@ -37,9 +37,7 @@ public class Group_qui_quaerit_reperit extends BaseTest {
 
     @Test
     public void stanAretinskiy() {
-        // Open and maximize browser window
         WebDriver driver = getDriver();
-        driver.manage().window().maximize();
 
         // Open US UPS default page
         driver.get("https://www.ups.com/us/en");
