@@ -31,4 +31,15 @@ public class GroupEastern extends BaseTest {
         //Thread.sleep(3000);
     }
 
+    @Test
+    public void olgaLytvynova(){
+        WebDriver driver = getDriver();
+        driver.get("https://www.hoteltonight.com/");
+
+        WebElement learnMore = driver.findElement(By.xpath("//span[contains(text(),'Learn more.')]"));
+        learnMore.click();
+
+        Assert.assertEquals(driver.getCurrentUrl(), "https://www.hoteltonight.com/extenuating-circumstances");
+
+    }
 }
