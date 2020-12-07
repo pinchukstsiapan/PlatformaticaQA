@@ -1,3 +1,5 @@
+import java.util.List;
+import java.util.ArrayList;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -29,6 +31,36 @@ public class Group_qui_quaerit_reperit extends BaseTest {
         WebElement gettingStarted = browser.findElement(By.xpath("//h2[.='Getting Started']"));
         Assert.assertEquals(gettingStarted.getText(), "Getting Started");
 
+    }
+
+    @Test
+    public void stanAretinskiy() {
+        // Open and maximize browser window
+        WebDriver driver = getDriver();
+        driver.manage().window().maximize();
+
+        // Open US UPS default page
+        driver.get("https://www.ups.com/us/en");
+
+        // Click 'Schedule a Pickup' link
+        WebElement schedulePickupLink =
+                driver.findElement(By.xpath("//a[@class='ups-analytics'][contains(@href, 'pickup.page')]"));
+        schedulePickupLink.click();
+
+        // Verify url for 'UPS Pickup Options' page
+        String pickupUrl = driver.getCurrentUrl();
+        Assert.assertTrue(pickupUrl.contains("www.ups.com/us/en/shipping/services/pickup.page?WT.mc_id="));
+
+        // Verify page title
+        WebElement pageHeading = driver.findElement(By.cssSelector("h1"));
+        Assert.assertEquals(pageHeading.getText(), "UPS Pickup Options");
+
+        // Verify two article headers
+        List<WebElement> articleHeadersLstWe = driver.findElements(By.cssSelector("h2.ups-article-header"));
+        List<String> articleHeadersLstStr = new ArrayList<>();
+        for(WebElement element : articleHeadersLstWe) {articleHeadersLstStr.add(element.getText());}
+        Assert.assertTrue(articleHeadersLstStr.contains("Request a UPS pickup at your business or home"));
+        Assert.assertTrue(articleHeadersLstStr.contains("Pick up your packages at thousands of convenient locations"));
     }
 
 }
