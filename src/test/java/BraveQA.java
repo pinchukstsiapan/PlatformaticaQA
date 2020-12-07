@@ -69,4 +69,17 @@ public class BraveQA extends BaseTest {
         Thread.sleep(3000);
 
     }
+
+    @Test
+    public void Oxana_Wiki() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.wikipedia.org");
+        WebElement name = browser.findElement(By.xpath("//h1/span"));
+
+        Assert.assertEquals(name.getText(),"Wikipedia");
+
+        Thread.sleep(3000);
+    }
+
 }
