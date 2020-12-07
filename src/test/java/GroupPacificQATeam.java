@@ -22,6 +22,7 @@ public class GroupPacificQATeam extends BaseTest {
 
         WebElement loginWithGoogle = browser.findElement(By.xpath("//div[@class='Modal-content']//button[contains(text(), 'Google')]"));
         Assert.assertEquals("войти через google", loginWithGoogle.getText().toLowerCase());
+    }
 
       @Test
       public void VeraK() throws InterruptedException {
