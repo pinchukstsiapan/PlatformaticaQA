@@ -1,4 +1,5 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
@@ -31,5 +32,25 @@ public class GroupTBD extends BaseTest {
 
         WebElement text = driver.findElement(By.xpath("//div//h3[@class = 'mb-1']"));
         Assert.assertEquals(text.getText(), "There aren’t any releases here");
+    }
+
+    @Test
+    public void galinaMelnyk () {
+        WebDriver driver = getDriver();
+        driver.get("https://www.expedia.com/");
+
+        driver.findElement(By.xpath("//*[@id=\"location-field-destination-menu\"]/div[1]/button")).click();
+
+        WebElement searchField = driver.findElement((By.xpath("//*[@id=\"location-field-destination\"]")));
+        searchField.sendKeys("San Francisco");
+        searchField.sendKeys(Keys.ENTER);
+
+        driver.manage().timeouts().implicitlyWait(4, TimeUnit.SECONDS);
+
+        driver.findElement(By.cssSelector(".uitk-layout-grid-item-columnspan-medium-2 > button")).click();
+
+        WebElement goingToField = driver.findElement(By.xpath("//*[@id=\"app-layer-base\"]/div/div/div/div[1]/div/section/div/form/div[1]/div/div/button[1]"));
+        Assert.assertEquals(goingToField.getText(), "San Francisco (and vicinity), California, United States of America");
+
     }
 }
