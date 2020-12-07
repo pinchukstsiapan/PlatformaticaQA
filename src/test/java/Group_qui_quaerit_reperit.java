@@ -1,5 +1,7 @@
 import java.util.List;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -61,6 +63,20 @@ public class Group_qui_quaerit_reperit extends BaseTest {
         for(WebElement element : articleHeadersLstWe) {articleHeadersLstStr.add(element.getText());}
         Assert.assertTrue(articleHeadersLstStr.contains("Request a UPS pickup at your business or home"));
         Assert.assertTrue(articleHeadersLstStr.contains("Pick up your packages at thousands of convenient locations"));
+    }
+
+    @Test
+    public void seidBayramov() throws InterruptedException {
+
+        WebDriver driver = getDriver();
+        driver.get("https://www.target.com/");
+        driver.manage().timeouts().implicitlyWait(1500, TimeUnit.SECONDS);
+        driver.findElement(By.cssSelector("input[id='search']")).sendKeys("Water");
+        driver.findElement(By.cssSelector("button[class='SearchInputButton-sc-1opoijs-0 dvBrqq']")).click();
+        driver.manage().timeouts().implicitlyWait(1500, TimeUnit.SECONDS);
+        driver.findElement(By.xpath("//div[text()='purified waters']")).click();
+        driver.findElement(By.cssSelector("#home")).click();
+        Thread.sleep(3000);
     }
 
 }
