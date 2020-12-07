@@ -29,4 +29,42 @@ public class GroupJavaBears extends BaseTest {
 
         Thread.sleep(3000);
     }
+
+    @Test
+    public void olgaGTest1() {
+
+        WebDriver browser = getDriver();
+        browser.get("https://korrespondent.net/");
+        WebElement second_nav_link = browser.findElement(By.xpath("//div[@class='header-menu']//ul/li[3]/a"));
+
+        Assert.assertEquals(second_nav_link.getText(), "УКРАИНА");
+    }
+
+    @Test
+    public void olgaGTest2() {
+
+        WebDriver browser = getDriver();
+        browser.get("https://korrespondent.net/");
+
+        WebElement second_nav_link = browser.findElement(By.xpath("//div[@class='header-menu']//ul/li[3]/a"));
+        second_nav_link.click();
+        Assert.assertEquals(browser.getCurrentUrl(), "https://korrespondent.net/ukraine/");
+
+        WebElement caption_title = browser.findElement(By.xpath("//h1[@class='caption-title']"));
+        Assert.assertEquals(caption_title.getText(), "НОВОСТИ УКРАИНЫ");
+    }
+
+    @Test
+    public void olgaGTest3() {
+
+        WebDriver browser = getDriver();
+        browser.get("https://korrespondent.net/");
+
+        WebElement nav_link = browser.findElement(By.xpath("//div[@class='header-menu']//b"));
+        Assert.assertEquals(nav_link.getText(), "ВСЕ РАЗДЕЛЫ");
+        nav_link.click();
+
+        WebElement sitemap = browser.findElement(By.xpath("//div[@id='sitemap']"));
+        Assert.assertTrue(sitemap.isDisplayed());
+    }
 }
