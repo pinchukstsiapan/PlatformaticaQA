@@ -82,4 +82,22 @@ public class BraveQA extends BaseTest {
         Thread.sleep(3000);
     }
 
+    @Test
+    public void alisaGrinko() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.selenium.dev/");
+
+        WebElement downloadTab = browser.findElement(By.xpath("//a[.='Downloads']"));
+        downloadTab.click();
+
+        WebElement linkJavaAPI = browser.findElement(By.xpath("//a[contains(@href, '://seleniumhq.github.io/selenium/docs/api/java/index.html')]"));
+        linkJavaAPI.click();
+
+        WebElement framesTab = browser.findElement(By.xpath("//a[.='Frames']"));
+        Assert.assertEquals(framesTab.getText(), "FRAMES");
+
+        Thread.sleep(3000);
+    }
+
 }
