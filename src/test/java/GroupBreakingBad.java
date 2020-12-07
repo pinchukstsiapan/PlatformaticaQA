@@ -25,7 +25,7 @@ public class GroupBreakingBad extends BaseTest {
     }
 
     @Test
-    public void alexeySemenov() throws  InterruptedException{
+    public void alexeySemenov() throws InterruptedException {
 
         WebDriver browser = getDriver();
         browser.get("https://www.jizo.com");
@@ -39,6 +39,7 @@ public class GroupBreakingBad extends BaseTest {
         assertEquals(menuElement.getText().toLowerCase(), "russia");
 
     }
+
     @Test
     public void svitlanaVarakuta() {
 
@@ -58,6 +59,7 @@ public class GroupBreakingBad extends BaseTest {
         WebDriver driver = getDriver();
         Actions actions = new Actions(driver);
         driver.get("https://www.wikipedia.org");
+        Thread.sleep(2000);
         driver.findElement(By.xpath("//strong[contains(text(),'English')]")).click();
         WebElement search = driver.findElement(By.xpath("//input[@id='searchInput']"));
 
@@ -69,8 +71,7 @@ public class GroupBreakingBad extends BaseTest {
 
         assertEquals(getDriver().getTitle(), "Wikipedia, the free encyclopedia");
 
+    }
+
 
 }
-
-
-    }
