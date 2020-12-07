@@ -5,7 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
-public class JavaBears extends BaseTest {
+public class GroupJavaBears extends BaseTest {
 
     @Test
     public void victoriaRogozhkina() {
