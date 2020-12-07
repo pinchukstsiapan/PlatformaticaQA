@@ -5,6 +5,9 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
 public class GroupJavaBears extends BaseTest {
 
     @Test
@@ -26,8 +29,28 @@ public class GroupJavaBears extends BaseTest {
 
         WebElement title = driver.findElement(By.xpath("//span[@id='History']"));
         Assert.assertEquals(title.getText(), "History");
+    }
 
-        Thread.sleep(3000);
+    @Test
+    public void Alex_Mack2() throws InterruptedException {
+
+        WebDriver driver = getDriver();
+        driver.get("https://dota2.ru/");
+
+        WebElement base = driver.findElement(By.xpath("//header//ul//a[contains(text(), 'База')]"));
+        base.click();
+
+        WebElement heroes = driver.findElement(By.xpath("//header//ul//a[contains(text(), 'Герои')]"));
+        heroes.click();
+        Thread.sleep(2000);
+
+        WebElement riki = driver.findElement(By.xpath("//div//a[contains(@href, '/heroes/riki')]"));
+        riki.click();
+        Thread.sleep(2000);
+
+        WebElement guides = driver.findElement(By.xpath("//h2//a[contains(text(), 'Гайды по герою')]"));
+        guides.click();
+        Assert.assertEquals(driver.getCurrentUrl(), "https://dota2.ru/guides/riki/");
     }
 
     @Test
