@@ -12,10 +12,16 @@ public class BraveQA extends BaseTest {
         WebDriver browser = getDriver();
         browser.get("https://www.wikipedia.org");
 
-        WebElement language = browser.findElement(By.xpath("//strong[contains(text(),'English')]"));
+        WebElement language = browser.findElement(By.xpath("//a[@id = 'js-link-box-en']/strong"));
         Thread.sleep(2000);
         Assert.assertEquals(language.getText(), "English");
         language.click();
+
+        WebElement simpleSearch = browser.findElement(By.id("searchInput"));
+        simpleSearch.sendKeys("New York");
+        WebElement searchButton = browser.findElement(By.id("searchButton"));
+        searchButton.click();
+        Thread.sleep(2000);
     }
 
 
