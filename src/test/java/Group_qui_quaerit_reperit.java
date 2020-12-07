@@ -77,4 +77,13 @@ public class Group_qui_quaerit_reperit extends BaseTest {
         Thread.sleep(3000);
     }
 
+    @Test
+    public  void stanMaslov() throws InterruptedException {
+        WebDriver driver = getDriver();
+        driver.get("https://www.walmart.com/");
+        WebElement header =  driver.findElement(By.cssSelector("h1"));
+        Assert.assertEquals(header.getText(), "Walmart.com - Save Money. Live Better.");
+        WebElement logo = driver.findElement(By.cssSelector("[class=\"z_a\"]"));
+        Assert.assertEquals(logo.isDisplayed(),true);
+    }
 }
