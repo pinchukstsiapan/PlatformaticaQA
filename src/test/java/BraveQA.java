@@ -91,13 +91,11 @@ public class BraveQA extends BaseTest {
         WebElement downloadTab = browser.findElement(By.xpath("//a[.='Downloads']"));
         downloadTab.click();
 
-        WebElement linkJavaAPI = browser.findElement(By.xpath("//a[contains(@href, '://seleniumhq.github.io/selenium/docs/api/java/index.html')]"));
+        WebElement linkJavaAPI = browser.findElement(By.xpath("//td[text()='Java']/following-sibling::td/a[text()='API Docs']"));
         linkJavaAPI.click();
 
         WebElement framesTab = browser.findElement(By.xpath("//a[.='Frames']"));
         Assert.assertEquals(framesTab.getText(), "FRAMES");
-
-        Thread.sleep(3000);
     }
 
 }
