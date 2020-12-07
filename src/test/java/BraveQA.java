@@ -46,5 +46,21 @@ public class BraveQA extends BaseTest {
         Assert.assertEquals(hdr.getText(), "Обеспечение качества");
     }
 
+    @Test
+    public void VictoriaRet() throws InterruptedException {
 
+        WebDriver browser = getDriver();
+        browser.get("https://www.ebay.com/");
+
+        WebElement shop = browser.findElement(By.xpath("//*[@id='gh-shop-a']"));
+        Assert.assertTrue(shop.isDisplayed());
+
+        WebElement search = browser.findElement(By.xpath("//*[@class='gh-tb ui-autocomplete-input']"));
+        search.sendKeys("dress");
+        WebElement searchButton = browser.findElement(By.xpath("//*[@id='gh-btn']"));
+        searchButton.click();
+
+        Thread.sleep(3000);
+
+    }
 }
