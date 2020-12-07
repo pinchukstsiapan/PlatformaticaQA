@@ -16,7 +16,7 @@ public class SimpleTest extends BaseTest {
 
         Assert.assertEquals(name.getText(), "PlatformaticaQA");
 
-        Thread.sleep(4000);
+        Thread.sleep(3000);
     }
 
     @Test
@@ -49,4 +49,5 @@ public class SimpleTest extends BaseTest {
         Assert.assertEquals(driver.getCurrentUrl(), "https://github.com/SergeiDemyanenko/PlatformaticaQA/branches");
     }
 
+    
 }
