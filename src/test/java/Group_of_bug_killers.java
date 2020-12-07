@@ -66,13 +66,13 @@ public class Group_of_bug_killers extends BaseTest {
         alexa.get("https://www.tut.by/");
 
         WebElement searchField = alexa.findElement(By.xpath("//*[@id = 'search_from_str']"));
-        searchField.sendKeys("Выборы 2020");
+        searchField.sendKeys("Выборы август 2020");
         searchField.click();
 
         WebElement submitButton = alexa.findElement(By.xpath("//input[@class = 'button big']"));
         submitButton.click();
 
-        Assert.assertEquals(alexa.getCurrentUrl(), "https://search.tut.by/?status=1&ru=1&encoding=1&page=0&how=rlv&query=%D0%92%D1%8B%D0%B1%D0%BE%D1%80%D1%8B+2020");
+        Assert.assertEquals(alexa.getCurrentUrl(), "https://search.tut.by/?status=1&ru=1&encoding=1&page=0&how=rlv&query=%D0%92%D1%8B%D0%B1%D0%BE%D1%80%D1%8B+%D0%B0%D0%B2%D0%B3%D1%83%D1%81%D1%82+2020");
 
     }
 }
