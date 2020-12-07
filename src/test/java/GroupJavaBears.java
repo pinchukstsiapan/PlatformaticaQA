@@ -18,5 +18,15 @@ public class GroupJavaBears extends BaseTest {
 
         Assert.assertEquals(driver.getCurrentUrl(), "https://developer.mozilla.org/en-US/docs/Web/XPath/Functions/contains");
     }
+    @Test
+    public void Alex_Mack() throws InterruptedException {
 
+        WebDriver driver = getDriver();
+        driver.get("https://en.wikipedia.org/wiki/Golden_Gate");
+
+        WebElement title = driver.findElement(By.xpath("//span[@id='History']"));
+        Assert.assertEquals(title.getText(), "History");
+
+        Thread.sleep(3000);
+    }
 }
