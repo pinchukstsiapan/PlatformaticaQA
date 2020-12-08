@@ -2,6 +2,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
@@ -18,6 +19,7 @@ public class Group_lets_do_it_Test extends BaseTest {
         Thread.sleep(3000);
     }
 
+    @Ignore
     @Test
     public void secondTestChuevaT() throws InterruptedException{
 

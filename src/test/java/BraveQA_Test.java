@@ -98,6 +98,7 @@ public class BraveQA_Test extends BaseTest {
         Assert.assertEquals(framesTab.getText(), "FRAMES");
     }
 
+    @Ignore
     @Test
     public void kateHargreaves() throws InterruptedException {
 

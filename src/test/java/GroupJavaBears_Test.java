@@ -66,6 +66,7 @@ public class GroupJavaBears_Test extends BaseTest {
         Assert.assertEquals(second_nav_link.getText(), "УКРАИНА");
     }
 
+    @Ignore
     @Test
     public void olgaGTest2() {
 
@@ -106,6 +107,7 @@ public class GroupJavaBears_Test extends BaseTest {
         Assert.assertEquals(browser.getCurrentUrl(), "https://us.pandora.net/en/shopping-bag");
     }
 
+    @Ignore
     @Test
     public void IgorTest2() throws InterruptedException {
 
