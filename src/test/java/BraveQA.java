@@ -35,7 +35,7 @@ public class BraveQA extends BaseTest {
 
         Thread.sleep(2000);
 
-        Assert.assertEquals(searchLang.isSelected() , true);
+        Assert.assertEquals(searchLang.isSelected(), true);
         Thread.sleep(2000);
 
         WebElement input = browser.findElement(By.xpath("//input[@id='searchInput']"));
@@ -77,7 +77,7 @@ public class BraveQA extends BaseTest {
         browser.get("https://www.wikipedia.org");
         WebElement name = browser.findElement(By.xpath("//h1/span"));
 
-        Assert.assertEquals(name.getText(),"Wikipedia");
+        Assert.assertEquals(name.getText(), "Wikipedia");
 
         Thread.sleep(3000);
     }
@@ -122,7 +122,7 @@ public class BraveQA extends BaseTest {
     }
 
     @Test
-    public void ekaterinaEr() throws InterruptedException{
+    public void ekaterinaEr() throws InterruptedException {
         WebDriver browser = getDriver();
         browser.get("https://www.vrbo.com/");
 
@@ -138,9 +138,10 @@ public class BraveQA extends BaseTest {
         Assert.assertEquals(name.getText(), "Fajardo, Puerto Rico");
 
     }
-  
+
     @Test
     public void romanSafarin() throws InterruptedException {
+
 
         WebDriver browser = getDriver();
         browser.get("https://www.latimes.com/");
@@ -149,8 +150,7 @@ public class BraveQA extends BaseTest {
         Assert.assertEquals(name.getText(), "COVID-19");
 
         Thread.sleep(3000);
+
     }
 
 }
-
-
