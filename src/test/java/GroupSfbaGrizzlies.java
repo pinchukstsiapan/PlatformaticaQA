@@ -50,5 +50,15 @@ public class GroupSfbaGrizzlies extends BaseTest {
         Thread.sleep(3000);
 
     }
+    @Test
 
+    public void lanaRogova() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://vpl.bibliocommons.com/v2/");
+        WebElement text = browser.findElement(By.xpath("//a[@id='biblionav_account_trigger']"));
+        Thread.sleep(2000);
+        Assert.assertEquals(text.getText(), "Log In / My VPL\n" +
+                "User Log In / My VPL.");
+    }
 }
