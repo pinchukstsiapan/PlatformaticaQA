@@ -3,6 +3,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
@@ -10,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 public class GroupTBD_Test extends BaseTest {
 
+    @Ignore
     @Test
     public void vadimTymeichuk () {
 

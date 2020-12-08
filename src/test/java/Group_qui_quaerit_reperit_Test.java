@@ -6,6 +6,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
@@ -35,6 +36,7 @@ public class Group_qui_quaerit_reperit_Test extends BaseTest {
 
     }
 
+    @Ignore
     @Test
     public void stanAretinskiy() {
         WebDriver driver = getDriver();
@@ -77,6 +79,7 @@ public class Group_qui_quaerit_reperit_Test extends BaseTest {
         Thread.sleep(3000);
     }
 
+    @Ignore
     @Test
     public  void stanMaslov() throws InterruptedException {
         WebDriver driver = getDriver();
