@@ -36,6 +36,7 @@ public class GroupTBD_Test extends BaseTest {
         Assert.assertEquals(text.getText(), "There aren’t any releases here");
     }
 
+    @Ignore
     @Test
     public void galinaMelnyk () {
         WebDriver driver = getDriver();
