@@ -1,6 +1,7 @@
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
@@ -33,5 +34,16 @@ public class Group_lets_do_it extends BaseTest {
         Thread.sleep(3000);
     }
 
+    @Test
+    public void dmitryTregubov()
+    {
+
+        WebDriver browser = getDriver();
+        browser.get("https://kp.org/");
+        browser.findElement(By.xpath("//li/a[text()='Shop Plans']")).click();
+
+        Assert.assertEquals(browser.getTitle(), "Shop Our Plans| Kaiser Permanente");
+
+    }
 
 }
