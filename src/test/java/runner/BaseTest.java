@@ -32,6 +32,7 @@ public abstract class BaseTest {
 
         if (!remoteWebDriver) {
             WebDriverManager.chromedriver().setup();
+
         }
     }
 
