@@ -111,6 +111,7 @@ public class GroupPacificQATeam extends BaseTest {
 
     }
 
+    @Test
     public void gulyaFirstTest() throws InterruptedException {
 
         WebDriver driver = getDriver();
