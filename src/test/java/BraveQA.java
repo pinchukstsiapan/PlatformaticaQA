@@ -98,4 +98,30 @@ public class BraveQA extends BaseTest {
         Assert.assertEquals(framesTab.getText(), "FRAMES");
     }
 
+    @Test
+    public void kateHargreaves() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.target.com/");
+
+        browser.findElement(By.xpath("//div[@data-test='storeId-store-name']")).click();
+        Thread.sleep(1000);
+        browser.findElement(By.xpath("//button[contains(@aria-label, 'Set Lakeland')]")).click();
+
+        Assert.assertEquals(browser.findElement(By.xpath("//div[@data-test='storeId-store-name']")).getText(), "Lakeland South");
+
+        browser.findElement(By.xpath("//*[@id='search']")).sendKeys("Ornament hooks");
+        Thread.sleep(1000);
+
+        browser.findElement(By.xpath("//*[@data-test='btnSearch']")).click();
+
+        Thread.sleep(3000);
+
+        Assert.assertEquals(browser.findElement(By.xpath("//*[@data-test='numberOfSearchResults']")).getText(), "339 results");
+
+    }
+
+
 }
+
+
