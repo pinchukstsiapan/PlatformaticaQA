@@ -120,7 +120,24 @@ public class BraveQA extends BaseTest {
         Assert.assertEquals(browser.findElement(By.xpath("//*[@data-test='numberOfSearchResults']")).getText(), "339 results");
 
     }
+    @Test
+    public void ekaterinaEr() throws InterruptedException{
+        WebDriver browser = getDriver();
+        browser.get("https://www.vrbo.com/");
 
+        WebElement tripBroad = browser.findElement(By.xpath(" //span[contains(text(),'Trip Boards')]"));
+        tripBroad.click();
+        WebElement nameTrip = browser.findElement(By.xpath(" //input[@id='create-tripboard-form__input__empty-tripboards']"));
+        nameTrip.sendKeys("Fajardo, Puerto Rico");
+        WebElement but = browser.findElement(By.xpath("//span[contains(text(),'Create Trip Board')]"));
+        but.click();
+        Thread.sleep(3000);
+        WebElement name = browser.findElement(By.xpath("//h2[contains(text(),'Fajardo')]"));
+
+        Assert.assertEquals(name.getText(), "Fajardo, Puerto Rico");
+
+
+    }
 
 }
 
