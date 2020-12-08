@@ -5,7 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
-public class Group_qa6ers extends BaseTest {
+public class Group_qa6ers_Test extends BaseTest {
     @Test
     public void rinsal() {
         WebDriver driver = getDriver();

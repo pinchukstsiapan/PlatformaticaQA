@@ -12,7 +12,7 @@ import runner.BaseTest;
 import java.rmi.registry.Registry;
 import java.security.Signature;
 
-public class GroupPacificQATeam extends BaseTest {
+public class GroupPacificQATeam_Test extends BaseTest {
 
     @Test
     public void alexanderKazakov() throws InterruptedException {

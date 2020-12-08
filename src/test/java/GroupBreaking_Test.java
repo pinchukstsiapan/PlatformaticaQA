@@ -5,7 +5,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class GroupBreaking {
+public class GroupBreaking_Test {
         @Test
         public void NataliyaPlatonova() throws InterruptedException{
             WebDriver driver = new ChromeDriver();

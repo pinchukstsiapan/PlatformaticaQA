@@ -5,7 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
-public class Teachers extends BaseTest {
+public class Teachers_Test extends BaseTest {
 
     @Test
     public void testSergeiD() {

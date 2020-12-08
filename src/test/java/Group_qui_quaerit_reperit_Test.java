@@ -9,7 +9,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
-public class Group_qui_quaerit_reperit extends BaseTest {
+public class Group_qui_quaerit_reperit_Test extends BaseTest {
 
     @Test
     public void galinaRuban() throws InterruptedException {
