@@ -41,11 +41,25 @@ public class GroupBreakingBad_Test extends BaseTest {
     }
 
     @Test
+    public void svitlanaVarakuta() {
+
+        WebDriver driver = getDriver();
+        driver.get("https://en.wikipedia.org/wiki/List_of_national_parks_of_the_United_States");
+
+        WebElement link = driver.findElement(By.xpath("//div[5]/div[1]/div[2]/nav[1]/div/ul/li[3]/a"));
+        link.click();
+
+        assertEquals(driver.getCurrentUrl(), "https://en.wikipedia.org/w/index.php?title=List_of_national_parks_of_the_United_States&action=history");
+
+    }
+
+    @Test
     public void searchFieldTestPK() throws InterruptedException {
 
         WebDriver driver = getDriver();
         Actions actions = new Actions(driver);
         driver.get("https://www.wikipedia.org");
+        Thread.sleep(2000);
         driver.findElement(By.xpath("//strong[contains(text(),'English')]")).click();
         WebElement search = driver.findElement(By.xpath("//input[@id='searchInput']"));
 
@@ -57,6 +71,7 @@ public class GroupBreakingBad_Test extends BaseTest {
 
         assertEquals(getDriver().getTitle(), "Wikipedia, the free encyclopedia");
 
-
     }
+
+
 }

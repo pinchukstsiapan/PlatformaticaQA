@@ -2,6 +2,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
@@ -35,7 +36,7 @@ public class BraveQA_Test extends BaseTest {
 
         Thread.sleep(2000);
 
-        Assert.assertEquals(searchLang.isSelected() , true);
+        Assert.assertEquals(searchLang.isSelected(), true);
         Thread.sleep(2000);
 
         WebElement input = browser.findElement(By.xpath("//input[@id='searchInput']"));
@@ -77,7 +78,7 @@ public class BraveQA_Test extends BaseTest {
         browser.get("https://www.wikipedia.org");
         WebElement name = browser.findElement(By.xpath("//h1/span"));
 
-        Assert.assertEquals(name.getText(),"Wikipedia");
+        Assert.assertEquals(name.getText(), "Wikipedia");
 
         Thread.sleep(3000);
     }
@@ -121,8 +122,10 @@ public class BraveQA_Test extends BaseTest {
         Assert.assertEquals(browser.findElement(By.xpath("//*[@data-test='numberOfSearchResults']")).getText(), "339 results");
 
     }
+
+    @Ignore
     @Test
-    public void ekaterinaEr() throws InterruptedException{
+    public void ekaterinaEr() throws InterruptedException {
         WebDriver browser = getDriver();
         browser.get("https://www.vrbo.com/");
 
@@ -137,9 +140,20 @@ public class BraveQA_Test extends BaseTest {
 
         Assert.assertEquals(name.getText(), "Fajardo, Puerto Rico");
 
+    }
+
+    @Test
+    public void romanSafarin() throws InterruptedException {
+
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.latimes.com/");
+        WebElement name = browser.findElement(By.xpath("(//div//a[contains (@aria-label, 'COVID-19')])[1]"));
+
+        Assert.assertEquals(name.getText(), "COVID-19");
+
+        Thread.sleep(3000);
 
     }
 
 }
-
-
