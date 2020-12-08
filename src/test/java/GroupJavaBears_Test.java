@@ -3,6 +3,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
@@ -32,6 +33,7 @@ public class GroupJavaBears_Test extends BaseTest {
         Assert.assertEquals(title.getText(), "History");
     }
 
+    @Ignore
     @Test
     public void Alex_Mack2() throws InterruptedException {
 

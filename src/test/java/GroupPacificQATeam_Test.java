@@ -5,6 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import org.testng.annotations.TestInstance;
 import runner.BaseTest;
@@ -28,6 +29,7 @@ public class GroupPacificQATeam_Test extends BaseTest {
         Assert.assertEquals("войти через google", loginWithGoogle.getText().toLowerCase());
     }
 
+    @Ignore
     @Test
     public void VeraK() throws InterruptedException {
         /*
