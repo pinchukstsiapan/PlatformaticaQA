@@ -50,4 +50,12 @@ public class GroupEastern extends BaseTest {
         WebElement button = driver.findElement(By.xpath("//a[@class='edit-page-link button']"));
         Assert.assertEquals(button.getText(), "EDIT");
     }
+
+    @Test
+    public void KatyaKishko(){
+        WebDriver browser = getDriver();
+        browser.get("https://www.target.com/");
+        WebElement icon = browser.findElement(By.xpath("//span[@class='styles__AccountName-sc-1kk0q5l-0 hVhJPq']"));
+        Assert.assertEquals(icon.getText(), "Sign in");
+    }
 }
