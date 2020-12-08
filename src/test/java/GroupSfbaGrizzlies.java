@@ -56,10 +56,9 @@ public class GroupSfbaGrizzlies extends BaseTest {
 
         WebDriver browser = getDriver();
         browser.get("https://vpl.bibliocommons.com/v2/");
-        WebElement name = browser.findElement(By.id("link_advancedsearch"));
-
-        Assert.assertEquals(name.getText(), "Advanced Search");
-
+        WebElement text = browser.findElement(By.xpath("//a[@id='biblionav_account_trigger']"));
         Thread.sleep(2000);
+        Assert.assertEquals(text.getText(), "Log In / My VPL\n" +
+                "User Log In / My VPL.");
     }
 }
