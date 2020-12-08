@@ -59,9 +59,8 @@ public class Group_of_bug_killers extends BaseTest {
         Assert.assertEquals(name.getText(), "Languages");
     }
 
-
     @Test
-    public void aliakseiFranchuk () {
+    public void aliakseiFranchuk() {
         WebDriver alexa = getDriver();
         alexa.get("https://www.tut.by/");
 
@@ -75,4 +74,19 @@ public class Group_of_bug_killers extends BaseTest {
         Assert.assertEquals(alexa.getCurrentUrl(), "https://search.tut.by/?status=1&ru=1&encoding=1&page=0&how=rlv&query=%D0%92%D1%8B%D0%B1%D0%BE%D1%80%D1%8B+%D0%B0%D0%B2%D0%B3%D1%83%D1%81%D1%82+2020");
 
     }
+
+    @Test
+    public void SvetlanaGusachenkoTest() {
+
+        WebDriver driver = getDriver();
+        driver.get("https://en.wikipedia.org/wiki/Main_Page");
+
+        WebElement link = driver.findElement(By.id("n-portal"));
+        Assert.assertEquals(link.getText(), "Community portal");
+
+        link.click();
+        WebElement name = driver.findElement(By.xpath("//*[@id=\"Welcome_to_the_Community_portal!\"]"));
+        Assert.assertEquals(name.getText(), "Welcome to the Community portal!");
+    }
 }
+
