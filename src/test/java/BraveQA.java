@@ -121,6 +121,20 @@ public class BraveQA extends BaseTest {
 
     }
 
+    @Test
+    public void romanSafarin() throws InterruptedException {
+
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.latimes.com/");
+        WebElement name = browser.findElement(By.xpath("(//div//a[contains (@aria-label, 'COVID-19')])[1]"));
+
+        Assert.assertEquals(name.getText(), "COVID-19");
+
+        Thread.sleep(3000);
+
+    }
+
 
 }
 
