@@ -73,14 +73,15 @@ public class GroupBreakingBad_Test extends BaseTest {
 
     }
     @Test
-    public void testTatyanaAlexandrova () {
+    public void testTatyanaAlexandrova () throws InterruptedException {
         WebDriver browser = getDriver();
         browser.get("http://selenium.dev");
         WebElement name = browser.findElement(By.id("gsc-i-id1"));
         name.click();
         name.sendKeys("developers", Keys.ENTER);
+        Thread.sleep(2000);
 
-        Assert.assertEquals(browser.getPageSource().contains("About"), true);
+        Assert.assertTrue(browser.getPageSource().contains("About"));
 
     }
 
