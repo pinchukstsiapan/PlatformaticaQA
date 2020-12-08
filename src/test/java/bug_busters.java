@@ -22,6 +22,14 @@ public class bug_busters extends BaseTest{
         driver.quit();
     }
 
+    @Test
+    public void olehOlekshii() {
+        WebDriver driver = getDriver();
+        driver.get("https://github.com/SergeiDemyanenko/PlatformaticaQA");
 
+        WebElement footer_1 = driver.findElement(By.xpath("/html[1]/body[1]/div[5]/div[1]/ul[1]/li[1]"));
+
+        Assert.assertEquals(footer_1.getText(), "© 2020 GitHub, Inc.");
+    }
 
 }

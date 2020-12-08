@@ -42,4 +42,12 @@ public class GroupEastern extends BaseTest {
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.hoteltonight.com/extenuating-circumstances");
 
     }
+
+    @Test
+    public void gennadyGOR(){
+        WebDriver driver = getDriver();
+        driver.get("https://webdriver.io/docs/docs/wdio-slack-service.html");
+        WebElement button = driver.findElement(By.xpath("//a[@class='edit-page-link button']"));
+        Assert.assertEquals(button.getText(), "EDIT");
+    }
 }

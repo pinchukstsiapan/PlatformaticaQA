@@ -120,7 +120,7 @@ public class BraveQA extends BaseTest {
         Assert.assertEquals(browser.findElement(By.xpath("//*[@data-test='numberOfSearchResults']")).getText(), "339 results");
 
     }
-    
+
     @Test
     public void ekaterinaEr() throws InterruptedException{
         WebDriver browser = getDriver();
@@ -136,10 +136,12 @@ public class BraveQA extends BaseTest {
         WebElement name = browser.findElement(By.xpath("//h2[contains(text(),'Fajardo')]"));
 
         Assert.assertEquals(name.getText(), "Fajardo, Puerto Rico");
-    }
 
+    }
+  
     @Test
     public void romanSafarin() throws InterruptedException {
+
         WebDriver browser = getDriver();
         browser.get("https://www.latimes.com/");
         WebElement name = browser.findElement(By.xpath("(//div//a[contains (@aria-label, 'COVID-19')])[1]"));
@@ -148,6 +150,7 @@ public class BraveQA extends BaseTest {
 
         Thread.sleep(3000);
     }
+
 }
 
 

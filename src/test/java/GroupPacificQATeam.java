@@ -87,4 +87,22 @@ public class GroupPacificQATeam extends BaseTest {
         Assert.assertEquals(browser.findElement(By.xpath("//div[contains(@class, 'total-savings-row')]//p[@class='os-price-value']")).getText(), "$24.00");
         Assert.assertEquals(browser.findElement(By.xpath("//div[@class='os-price-holder']/div[2]/p[2]")).getText(), "$399.99");
     }
+
+    @Test
+    public void gulyaFirstTest() throws InterruptedException {
+
+        WebDriver driver = getDriver();
+        driver.get("https://www.udemy.com/");
+
+        Thread.sleep(2000);
+
+        WebElement button = driver.findElement(By.xpath("//a[@data-purpose='header-login']"));
+        button.click();
+
+        Thread.sleep(2000);
+
+
+        Assert.assertEquals(driver.getCurrentUrl(), "https://www.udemy.com/join/login-popup/?locale=en_US&response_type=html&next=https%3A%2F%2Fwww.udemy.com%2F");
+
+    }
 }
