@@ -137,7 +137,7 @@ public class GroupBreakingBad_Test extends BaseTest {
 
         Assert.assertEquals(driver.getCurrentUrl(), "https://3ddd.ru/3dmodels?cat=dekor&subcat=3d_panel&page=2");
     }
-    
+
     @Test
     public void tatyanaPusFourthTest() throws InterruptedException {
 
