@@ -50,5 +50,16 @@ public class GroupSfbaGrizzlies extends BaseTest {
         Thread.sleep(3000);
 
     }
+    @Test
 
+    public void lanaRogova() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://vpl.bibliocommons.com/v2/");
+        WebElement name = browser.findElement(By.id("link_advancedsearch"));
+
+        Assert.assertEquals(name.getText(), "Advanced Search");
+
+        Thread.sleep(2000);
+    }
 }
