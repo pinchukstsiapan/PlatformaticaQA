@@ -6,7 +6,11 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.testng.annotations.TestInstance;
 import runner.BaseTest;
+
+import java.rmi.registry.Registry;
+import java.security.Signature;
 
 public class GroupPacificQATeam extends BaseTest {
 
@@ -24,8 +28,8 @@ public class GroupPacificQATeam extends BaseTest {
         Assert.assertEquals("войти через google", loginWithGoogle.getText().toLowerCase());
     }
 
-      @Test
-      public void VeraK() throws InterruptedException {
+    @Test
+    public void VeraK() throws InterruptedException {
         /*
             Shop at Samsung.com store for a new Samsung Galaxy A51 unlocked and with no trade-in. Stop at cart
          */
@@ -89,6 +93,25 @@ public class GroupPacificQATeam extends BaseTest {
     }
 
     @Test
+    public void liliyaDan() throws InterruptedException {
+        WebDriver browser = getDriver();
+        browser.get("https://www.etsy.com/");
+
+        WebElement signIn = browser.findElement(By.xpath("//nav//button"));
+        signIn.click();
+
+        Thread.sleep(1500);
+
+        WebElement Register = browser.findElement(By.xpath("//div[@id='wt-modal-container']//button[contains(text(), 'Register')]"));
+        Register.click();
+
+        Thread.sleep(1500);
+
+        Assert.assertEquals(browser.findElement(By.xpath("//h1[@id='join-neu-overlay-title']")).getText(), "Create your account");
+
+    }
+
+    @Test
     public void gulyaFirstTest() throws InterruptedException {
 
         WebDriver driver = getDriver();
@@ -106,3 +129,4 @@ public class GroupPacificQATeam extends BaseTest {
 
     }
 }
+
