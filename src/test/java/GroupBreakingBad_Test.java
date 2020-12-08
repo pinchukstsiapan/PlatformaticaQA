@@ -6,6 +6,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.interactions.Actions;
 
 import static org.testng.Assert.assertEquals;
 
@@ -82,6 +84,90 @@ public class GroupBreakingBad_Test extends BaseTest {
         Thread.sleep(2000);
 
         Assert.assertTrue(browser.getPageSource().contains("About"));
+
+    }
+
+    @Test
+    public void tatyanaPusFirstTest() throws InterruptedException {
+
+        WebDriver driver = getDriver();
+        driver.get("https://3ddd.ru/");
+
+        WebElement button = driver.findElement(By.xpath("//*[text()='3D Модели']"));
+        button.click();
+
+        Thread.sleep(2000);
+
+        Assert.assertEquals(driver.getCurrentUrl(), "https://3ddd.ru/3dmodels");
+    }
+
+    @Test
+    public void tatyanaPusSecondTest() throws InterruptedException {
+
+        WebDriver driver = getDriver();
+        driver.get("https://3ddd.ru/");
+
+        WebElement button = driver.findElement(By.xpath("//a[@href = '/login']"));
+        button.click();
+
+        Thread.sleep(2000);
+
+        Assert.assertEquals(driver.getCurrentUrl(), "https://3ddd.ru/login");
+    }
+
+    @Test
+    public void tatyanaPusThirdTest() throws InterruptedException {
+
+        WebDriver driver = getDriver();
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        driver.get("https://3ddd.ru/");
+
+        WebElement button = driver.findElement(By.xpath("//*[text()='3D Модели']"));
+        button.click();
+        Thread.sleep(1000);
+
+        WebElement link = driver.findElement(By.xpath("//div[@class='cat not-real-a']"));
+        link.click();
+        Thread.sleep(1000);
+
+        WebElement checkmark = driver.findElement(By.xpath("//*[@id='collapse-0']/ul/li[1]/div"));
+        checkmark.click();
+        Thread.sleep(1000);
+
+        //This will scroll the web page till end.
+        js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+
+        //Find element by xpath and store in variable "Element"
+        WebElement Element = driver.findElement(By.xpath("//a[@class='sky-btn']"));
+
+
+        //This will scroll the page till the element is found
+        Thread.sleep(3000);
+        Element.click();
+
+        Thread.sleep(3000);
+
+        Assert.assertEquals(driver.getCurrentUrl(), "https://3ddd.ru/3dmodels?cat=dekor&subcat=3d_panel&page=2");
+    }
+
+    @Test
+    public void tatyanaPusFourthTest() throws InterruptedException {
+
+        WebDriver driver = getDriver();
+        driver.get("https://3ddd.ru/");
+
+        WebElement button = driver.findElement(By.xpath("//*[text()='3D Модели']"));
+        button.click();
+
+        Thread.sleep(2000);
+
+        //Instantiate Action Class
+        Actions actions = new Actions(driver);
+        //Retrieve WebElement 'image' to perform mouse hover
+        WebElement menuOption = driver.findElement(By.xpath("//app-models-list/div[1]/div/div[1]/div[1]/a"));
+        //Mouse hover 'image'
+        actions.moveToElement(menuOption).perform();
+        Thread.sleep(3000);
 
     }
 
