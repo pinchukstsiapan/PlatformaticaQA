@@ -3,6 +3,7 @@ package runner;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.AfterMethod;
@@ -41,7 +42,7 @@ public abstract class BaseTest {
 
         if (remoteWebDriver) {
             try {
-                this.driver = new RemoteWebDriver(new URL(HUB_URL), DesiredCapabilities.chrome());
+                this.driver = new RemoteWebDriver(new URL(HUB_URL), new ChromeOptions());
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }
