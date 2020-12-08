@@ -1,4 +1,5 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
@@ -90,4 +91,33 @@ public class GroupJavaBears extends BaseTest {
         WebElement sitemap = browser.findElement(By.xpath("//div[@id='sitemap']"));
         Assert.assertTrue(sitemap.isDisplayed());
     }
+
+    @Test
+    public void IgorTest1() {
+
+        WebDriver browser = getDriver();
+        browser.get("https://us.pandora.net/");
+
+        WebElement shop_bag = browser.findElement(By.xpath("//*[@title='View Bag']"));  //Shopping bag button
+        shop_bag.click();
+
+        Assert.assertEquals(browser.getCurrentUrl(), "https://us.pandora.net/en/shopping-bag");
+    }
+
+    @Test
+    public void IgorTest2() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.planetfitness.com/");
+
+        WebElement search = browser.findElement(By.xpath("//button[contains(text(), 'Search')]"));  //Search field
+        search.click();
+        search.sendKeys("test");
+        search.sendKeys(Keys.ENTER);
+        Thread.sleep(4000);
+
+        WebElement search_result = browser.findElement(By.xpath("//h2[contains(text(), 'Search Results')]"));
+        Assert.assertEquals(search_result.getText(), "SEARCH RESULTS");
+    }
+
 }

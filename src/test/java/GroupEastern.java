@@ -42,4 +42,20 @@ public class GroupEastern extends BaseTest {
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.hoteltonight.com/extenuating-circumstances");
 
     }
+
+    @Test
+    public void gennadyGOR(){
+        WebDriver driver = getDriver();
+        driver.get("https://webdriver.io/docs/docs/wdio-slack-service.html");
+        WebElement button = driver.findElement(By.xpath("//a[@class='edit-page-link button']"));
+        Assert.assertEquals(button.getText(), "EDIT");
+    }
+
+    @Test
+    public void KatyaKishko(){
+        WebDriver browser = getDriver();
+        browser.get("https://www.target.com/");
+        WebElement icon = browser.findElement(By.xpath("//span[@class='styles__AccountName-sc-1kk0q5l-0 hVhJPq']"));
+        Assert.assertEquals(icon.getText(), "Sign in");
+    }
 }

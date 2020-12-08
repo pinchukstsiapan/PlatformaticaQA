@@ -35,7 +35,7 @@ public class BraveQA extends BaseTest {
 
         Thread.sleep(2000);
 
-        Assert.assertEquals(searchLang.isSelected() , true);
+        Assert.assertEquals(searchLang.isSelected(), true);
         Thread.sleep(2000);
 
         WebElement input = browser.findElement(By.xpath("//input[@id='searchInput']"));
@@ -77,7 +77,7 @@ public class BraveQA extends BaseTest {
         browser.get("https://www.wikipedia.org");
         WebElement name = browser.findElement(By.xpath("//h1/span"));
 
-        Assert.assertEquals(name.getText(),"Wikipedia");
+        Assert.assertEquals(name.getText(), "Wikipedia");
 
         Thread.sleep(3000);
     }
@@ -96,6 +96,61 @@ public class BraveQA extends BaseTest {
 
         WebElement framesTab = browser.findElement(By.xpath("//a[.='Frames']"));
         Assert.assertEquals(framesTab.getText(), "FRAMES");
+    }
+
+    @Test
+    public void kateHargreaves() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.target.com/");
+
+        browser.findElement(By.xpath("//div[@data-test='storeId-store-name']")).click();
+        Thread.sleep(1000);
+        browser.findElement(By.xpath("//button[contains(@aria-label, 'Set Lakeland')]")).click();
+
+        Assert.assertEquals(browser.findElement(By.xpath("//div[@data-test='storeId-store-name']")).getText(), "Lakeland South");
+
+        browser.findElement(By.xpath("//*[@id='search']")).sendKeys("Ornament hooks");
+        Thread.sleep(1000);
+
+        browser.findElement(By.xpath("//*[@data-test='btnSearch']")).click();
+
+        Thread.sleep(3000);
+
+        Assert.assertEquals(browser.findElement(By.xpath("//*[@data-test='numberOfSearchResults']")).getText(), "339 results");
+
+    }
+
+    @Test
+    public void ekaterinaEr() throws InterruptedException {
+        WebDriver browser = getDriver();
+        browser.get("https://www.vrbo.com/");
+
+        WebElement tripBroad = browser.findElement(By.xpath(" //span[contains(text(),'Trip Boards')]"));
+        tripBroad.click();
+        WebElement nameTrip = browser.findElement(By.xpath(" //input[@id='create-tripboard-form__input__empty-tripboards']"));
+        nameTrip.sendKeys("Fajardo, Puerto Rico");
+        WebElement but = browser.findElement(By.xpath("//span[contains(text(),'Create Trip Board')]"));
+        but.click();
+        Thread.sleep(3000);
+        WebElement name = browser.findElement(By.xpath("//h2[contains(text(),'Fajardo')]"));
+
+        Assert.assertEquals(name.getText(), "Fajardo, Puerto Rico");
+
+    }
+
+    @Test
+    public void romanSafarin() throws InterruptedException {
+
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.latimes.com/");
+        WebElement name = browser.findElement(By.xpath("(//div//a[contains (@aria-label, 'COVID-19')])[1]"));
+
+        Assert.assertEquals(name.getText(), "COVID-19");
+
+        Thread.sleep(3000);
+
     }
 
 }
