@@ -95,6 +95,7 @@ public class GroupJavaBears_Test extends BaseTest {
         Assert.assertTrue(sitemap.isDisplayed());
     }
 
+    @Ignore
     @Test
     public void IgorTest1() {
 

@@ -21,6 +21,7 @@ public class GroupEastern_Test extends BaseTest {
         Assert.assertEquals(driver.getCurrentUrl(), "https://app.wagwalking.com/signup/welcome?preferred_service=1&utm_campaign=service_carousel_walking&utm_medium=homepage&utm_source=web");
     }
 
+    @Ignore
     @Test
     public void irinaKalinichenko() throws InterruptedException {
         WebDriver driver = getDriver();
