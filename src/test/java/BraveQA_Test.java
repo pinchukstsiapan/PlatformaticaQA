@@ -5,7 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
-public class BraveQA extends BaseTest {
+public class BraveQA_Test extends BaseTest {
 
     @Test
     public void sergeoNevdah() throws InterruptedException {

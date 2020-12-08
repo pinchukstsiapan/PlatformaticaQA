@@ -8,7 +8,7 @@ import runner.BaseTest;
 
 import java.util.concurrent.TimeUnit;
 
-public class GroupTBD extends BaseTest {
+public class GroupTBD_Test extends BaseTest {
 
     @Test
     public void vadimTymeichuk () {

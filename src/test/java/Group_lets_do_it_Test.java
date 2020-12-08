@@ -5,7 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
-public class Group_lets_do_it extends BaseTest {
+public class Group_lets_do_it_Test extends BaseTest {
     @Test
     public void tatianaChueva() throws InterruptedException {
 

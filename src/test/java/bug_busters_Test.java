@@ -5,7 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
-public class bug_busters extends BaseTest{
+public class bug_busters_Test extends BaseTest{
 
     @Test
     public void Denys() throws InterruptedException {

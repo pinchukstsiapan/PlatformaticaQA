@@ -5,7 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
-public class GroupSfbaGrizzlies extends BaseTest {
+public class GroupSfbaGrizzlies_Test extends BaseTest {
 
     @Test
     public void klavdiaGoldshteyn() throws InterruptedException {

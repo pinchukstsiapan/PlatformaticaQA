@@ -5,7 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
-public class Group_of_bug_killers extends BaseTest {
+public class Group_of_bug_killers_Test extends BaseTest {
 
     @Test
     public void simpleTest() throws InterruptedException {

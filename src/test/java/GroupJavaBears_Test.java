@@ -9,7 +9,7 @@ import runner.BaseTest;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-public class GroupJavaBears extends BaseTest {
+public class GroupJavaBears_Test extends BaseTest {
 
     @Test
     public void victoriaRogozhkina() {

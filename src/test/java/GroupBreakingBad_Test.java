@@ -9,7 +9,7 @@ import runner.BaseTest;
 
 import static org.testng.Assert.assertEquals;
 
-public class GroupBreakingBad extends BaseTest {
+public class GroupBreakingBad_Test extends BaseTest {
     @Test
     public void nataliaVats() throws InterruptedException {
 
