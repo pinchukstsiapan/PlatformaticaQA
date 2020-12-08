@@ -72,6 +72,17 @@ public class GroupBreakingBad_Test extends BaseTest {
         assertEquals(getDriver().getTitle(), "Wikipedia, the free encyclopedia");
 
     }
+    @Test
+    public void testTatyanaAlexandrova () {
+        WebDriver browser = getDriver();
+        browser.get("http://selenium.dev");
+        WebElement name = browser.findElement(By.id("gsc-i-id1"));
+        name.click();
+        name.sendKeys("developers", Keys.ENTER);
+
+        Assert.assertEquals(browser.getPageSource().contains("About"), true);
+
+    }
 
 
 }
