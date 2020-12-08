@@ -5,7 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
-public class GroupSfbaNightSky extends BaseTest {
+public class GroupSfbaNightSky_Test extends BaseTest {
 
         @Test
         public void nataliyaStTest() throws InterruptedException {
