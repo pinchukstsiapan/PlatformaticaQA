@@ -77,9 +77,6 @@ public class GroupOfBugKillersTest extends BaseTest {
         WebDriver browser = getDriver();
         browser.get("https://www.colibribookstore.com/");
         WebElement webLabelName = browser.findElement(By.xpath("//img[@class='large']"));
-        boolean checkWebNameExist = webLabelName.isDisplayed();
-          if(checkWebNameExist == true) {
-              System.out.println("Label is displayed");
-          }
+        Assert.assertTrue(webLabelName.isDisplayed());
     }
 }
