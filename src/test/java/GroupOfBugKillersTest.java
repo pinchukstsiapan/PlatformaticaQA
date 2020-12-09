@@ -70,4 +70,26 @@ public class GroupOfBugKillersTest extends BaseTest {
         Assert.assertEquals(phone_field.getText(), "ENTER PHONE");
         Assert.assertEquals(password_field.getText(), "ENTER PASSWORD");
     }
+
+    @Test
+    public void viewHistoryWikipedia () {
+
+        WebDriver browser = getDriver();
+        browser.get("https://en.wikipedia.org/wiki/Main_Page");
+        WebElement name = browser.findElement(By.id("ca-history"));
+
+        Assert.assertEquals(name.getText(), "View history");
+    }
+
+    @Test
+    public void clickBtnViewHistoryWikipedia () {
+
+        WebDriver browser = getDriver();
+        browser.get("https://en.wikipedia.org/wiki/Main_Page");
+        WebElement name = browser.findElement(By.xpath("//*[@id='ca-history']/a"));
+        name.click();
+        WebElement firstHeading = browser.findElement(By.xpath("//*[@id='firstHeading']"));
+
+        Assert.assertEquals(firstHeading.getText(), "Main Page: Revision history");
+    }
 }
