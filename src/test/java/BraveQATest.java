@@ -154,4 +154,14 @@ public class BraveQATest extends BaseTest {
         WebElement header = browser.findElement(By.xpath("(//div//h1[contains(text(),'Bay Area')])"));
         Assert.assertEquals(header.getText(), "Bay Area Limo Service");
     }
+
+    @Test
+    public void gordeyAppleProductsCheck() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://en.wikipedia.org/wiki/Timeline_of_Apple_Inc._products");
+
+        WebElement name = browser.findElement(By.xpath("(//a[contains (text(), 'iPhone 12 Pro')])[1]"));
+        Assert.assertEquals(name.getText(), "iPhone 12 Pro");
+    }
 }
