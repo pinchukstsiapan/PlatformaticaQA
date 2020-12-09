@@ -11,7 +11,7 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
-public class GroupQuiQuaeritReperitTest extends BaseTest {
+public class GroupQQRTest extends BaseTest {
 
     @Test
     public void galinaRuban() throws InterruptedException {
@@ -57,7 +57,7 @@ public class GroupQuiQuaeritReperitTest extends BaseTest {
         // Verify two article headers
         List<WebElement> articleHeadersLstWe = driver.findElements(By.cssSelector("h2.ups-article-header"));
         List<String> articleHeadersLstStr = new ArrayList<>();
-        for(WebElement element : articleHeadersLstWe) {
+        for (WebElement element : articleHeadersLstWe) {
             articleHeadersLstStr.add(element.getText());
         }
 
@@ -82,17 +82,17 @@ public class GroupQuiQuaeritReperitTest extends BaseTest {
 
     @Ignore
     @Test
-    public  void stanMaslov() throws InterruptedException {
+    public void stanMaslov() throws InterruptedException {
         WebDriver driver = getDriver();
         driver.get("https://www.walmart.com/");
-        WebElement header =  driver.findElement(By.cssSelector("h1"));
+        WebElement header = driver.findElement(By.cssSelector("h1"));
         Assert.assertEquals(header.getText(), "Walmart.com - Save Money. Live Better.");
         WebElement logo = driver.findElement(By.cssSelector("[class=\"z_a\"]"));
-        Assert.assertEquals(logo.isDisplayed(),true);
+        Assert.assertEquals(logo.isDisplayed(), true);
     }
 
     @Test
-    public void irinaRizvanovaTest() throws InterruptedException{
+    public void irinaRizvanovaTest() throws InterruptedException {
 
         WebDriver browser = getDriver();
         browser.get("https://udemy.com");
@@ -103,6 +103,16 @@ public class GroupQuiQuaeritReperitTest extends BaseTest {
         Thread.sleep(3000);
 
         WebElement searchResult = browser.findElement(By.xpath("//h1"));
-        Assert.assertEquals(searchResult.getText(),"10,000 results for “java”");
+        Assert.assertEquals(searchResult.getText(), "10,000 results for “java”");
+    }
+
+    @Test
+    public void guramBautsadze() {
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.platformatica.com/");
+        WebElement gettingStarted =
+                browser.findElement(By.xpath("//h1[text()[normalize-space()='Zero Code Automated SAAS To Revolutionize Your Business']]"));
+        Assert.assertEquals(gettingStarted.getText(), "Zero Code Automated SAAS To Revolutionize Your Business");
     }
 }
