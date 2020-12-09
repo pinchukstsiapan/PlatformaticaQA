@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 import org.testng.annotations.TestInstance;
 import runner.BaseTest;
 
+import java.io.InterruptedIOException;
 import java.rmi.registry.Registry;
 import java.security.Signature;
 
@@ -130,5 +131,24 @@ public class GroupPacificQATeam_Test extends BaseTest {
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.udemy.com/join/login-popup/?locale=en_US&response_type=html&next=https%3A%2F%2Fwww.udemy.com%2F");
 
     }
-}
 
+
+    @Test
+    public void Vladfirsttest() throws InterruptedIOException {
+        
+        WebDriver driver = getDriver();
+
+        driver.get("https://www.paypal.com/");
+
+        WebElement button = driver.findElement(By.xpath("//*[@id='signup-button']"));
+
+        button.click();
+
+        String text = driver.findElement(By.xpath("//*[@id=\"main\"]/section/div/div/h3")).getText();
+
+        Assert.assertEquals(text,"PayPal is a secure, easy way to pay and get paid - sign up for free");
+
+
+
+    }
+}
