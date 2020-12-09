@@ -62,6 +62,7 @@ public class GroupBreakingBadTest extends BaseTest {
         Actions actions = new Actions(driver);
         driver.get("https://www.wikipedia.org");
         Thread.sleep(2000);
+
         driver.findElement(By.xpath("//strong[contains(text(),'English')]")).click();
         WebElement search = driver.findElement(By.xpath("//input[@id='searchInput']"));
 
@@ -76,8 +77,10 @@ public class GroupBreakingBadTest extends BaseTest {
 
     @Test
     public void testTatyanaAlexandrova () throws InterruptedException {
+
         WebDriver browser = getDriver();
         browser.get("http://selenium.dev");
+
         WebElement name = browser.findElement(By.id("gsc-i-id1"));
         name.click();
         name.sendKeys("developers", Keys.ENTER);
@@ -137,7 +140,6 @@ public class GroupBreakingBadTest extends BaseTest {
 
         //Find element by xpath and store in variable "Element"
         WebElement element = driver.findElement(By.xpath("//a[@class='sky-btn']"));
-
 
         //This will scroll the page till the element is found
         Thread.sleep(3000);

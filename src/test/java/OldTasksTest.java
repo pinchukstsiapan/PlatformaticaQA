@@ -2,11 +2,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
 public class OldTasksTest extends BaseTest {
 
+    @Ignore
     @Test
     public void denXPathTestForPulls() throws InterruptedException {
         WebDriver driver = getDriver();
@@ -27,6 +29,7 @@ public class OldTasksTest extends BaseTest {
         pullRequestsButton.click();
     }
 
+    @Ignore
     @Test
     public void denXPathTestForIssues() throws InterruptedException {
         WebDriver driver = getDriver();
@@ -47,6 +50,7 @@ public class OldTasksTest extends BaseTest {
         issuesButton.click();
     }
 
+    @Ignore
     @Test
     public void denXPathTestForMarketplace() throws InterruptedException {
         WebDriver driver = getDriver();
@@ -67,6 +71,7 @@ public class OldTasksTest extends BaseTest {
         marketplaceButton.click();
     }
 
+    @Ignore
     @Test
     public void denXPathTestForNotification() throws InterruptedException {
         WebDriver driver = getDriver();
