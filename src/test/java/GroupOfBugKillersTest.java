@@ -32,6 +32,18 @@ public class GroupOfBugKillersTest extends BaseTest {
     }
 
     @Test
+    public void lenaHW13Test() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://coderoad.ru/48259191/%D0%92-Selenium-%D0%BA%D0%B0%D0%BA-%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%B8%D1%82%D1%8C-%D1%87%D1%82%D0%BE-%D0%BF%D1%80%D0%B8-%D0%BD%D0%B0%D0%B6%D0%B0%D1%82%D0%B8%D0%B8-%D0%BD%D0%B0-%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82-%D0%BC%D1%8B-%D1%84%D0%B0%D0%BA%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8-%D0%BF%D0%B5%D1%80%D0%B5%D1%88%D0%BB%D0%B8-%D0%BD%D0%B0");
+        WebElement name = browser.findElement(By.xpath("//a[contains(text(),'О нас')]"));
+        Assert.assertEquals(name.getText(), "О нас");
+        name.click();
+
+        Assert.assertEquals(browser.getCurrentUrl(),"https://coderoad.ru/about.html");
+    }
+
+    @Test
     public void newTest() throws InterruptedException {
 
         WebDriver driver = getDriver();
