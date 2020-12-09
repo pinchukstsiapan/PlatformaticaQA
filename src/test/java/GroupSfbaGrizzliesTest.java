@@ -17,6 +17,7 @@ public class GroupSfbaGrizzliesTest extends BaseTest {
        Assert.assertEquals(title.getText(), "Roger Federer");
     }
 
+    @Ignore
     @Test
     public void gayaneMfirst() throws InterruptedException {
         WebDriver browser = getDriver();
