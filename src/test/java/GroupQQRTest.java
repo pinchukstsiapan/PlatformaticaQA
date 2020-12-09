@@ -6,6 +6,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
@@ -39,23 +41,23 @@ public class GroupQQRTest extends BaseTest {
         Assert.assertEquals(gettingStarted.getText(), "Getting Started");
     }
 
-    @Ignore
     @Test
     public void stanAretinskiy() {
 
         WebDriver driver = getDriver();
         driver.get("https://www.ups.com/us/en");
 
-        WebElement schedulePickupLink =
-                driver.findElement(By.xpath("//a[@class='ups-analytics'][contains(@href, 'pickup.page')]"));
-        schedulePickupLink.click();
-        Assert.assertTrue(driver.getCurrentUrl().contains("www.ups.com/us/en/shipping/services/pickup.page?WT.mc_id="));
+        WebDriverWait wait = new WebDriverWait(driver, 4);
+        String schedulePickupLinkXpath = "//a[@class='ups-analytics'][contains(@href, 'pickup.page')]";
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(schedulePickupLinkXpath))).click();
+        Assert.assertTrue(driver.getCurrentUrl().contains("ups.com/us/en/shipping/services/pickup.page"));
 
-        WebElement pageHeading = driver.findElement(By.cssSelector("h1"));
-        Assert.assertEquals(pageHeading.getText(), "UPS Pickup Options");
+        WebElement pageTitle = wait.until(ExpectedConditions.visibilityOfElementLocated((By.cssSelector("h1"))));
+        Assert.assertEquals(pageTitle.getText(), "UPS Pickup Options");
 
         // Verify two article headers
-        List<WebElement> articleHeadersLstWe = driver.findElements(By.cssSelector("h2.ups-article-header"));
+        List<WebElement> articleHeadersLstWe =
+                wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector("h2.ups-article-header")));
         List<String> articleHeadersLstStr = new ArrayList<>();
         for (WebElement element : articleHeadersLstWe) {
             articleHeadersLstStr.add(element.getText());
