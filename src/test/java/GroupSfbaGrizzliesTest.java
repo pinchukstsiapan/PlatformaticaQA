@@ -46,6 +46,7 @@ public class GroupSfbaGrizzliesTest extends BaseTest {
         Assert.assertEquals(text.getText(),"\"umbrella\"");
     }
 
+    @Ignore
     @Test
     public void lanaRogova() throws InterruptedException {
 
