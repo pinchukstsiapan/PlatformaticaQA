@@ -6,7 +6,7 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
-public class GroupEastern_Test extends BaseTest {
+public class GroupEasternTest extends BaseTest {
 
     @Ignore
     @Test
@@ -31,7 +31,6 @@ public class GroupEastern_Test extends BaseTest {
         text.click();
         //  Let us help you find the perfect gift — without getting up.
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.underarmour.com/en-us/c/top-gifts/");
-        //Thread.sleep(3000);
     }
 
     @Test
@@ -43,7 +42,6 @@ public class GroupEastern_Test extends BaseTest {
         learnMore.click();
 
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.hoteltonight.com/extenuating-circumstances");
-
     }
 
     @Test

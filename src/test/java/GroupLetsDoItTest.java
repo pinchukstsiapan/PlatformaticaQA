@@ -6,17 +6,16 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
-public class Group_lets_do_it_Test extends BaseTest {
+public class GroupLetsDoItTest extends BaseTest {
+
     @Test
     public void tatianaChueva() throws InterruptedException {
 
         WebDriver browser = getDriver();
         browser.get("https://docs.oracle.com/en/java");
+
         WebElement name = browser.findElement(By.xpath("//div[@class='ohc-sidebar hidden-xs'] //a[contains(text(), 'Java')]"));
-
         Assert.assertEquals(name.getText(), "Java");
-
-        Thread.sleep(3000);
     }
 
     @Ignore
@@ -31,9 +30,5 @@ public class Group_lets_do_it_Test extends BaseTest {
 
         WebElement name = driver.findElement(By.xpath("//span[contains(text(),'How can Oracle Cloud Infrastructure products help?')]"));
         Assert.assertEquals(name.getText(), "How can Oracle Cloud Infrastructure products help?");
-
-        Thread.sleep(3000);
     }
-
-
 }

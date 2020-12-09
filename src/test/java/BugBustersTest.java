@@ -5,10 +5,10 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
-public class bug_busters_Test extends BaseTest{
+public class BugBustersTest extends BaseTest {
 
     @Test
-    public void Denys() throws InterruptedException {
+    public void denys() throws InterruptedException {
 
         WebDriver driver = getDriver();
         driver.get("https://github.com/DennorQA/PlatformaticaQA");
@@ -19,7 +19,6 @@ public class bug_busters_Test extends BaseTest{
 
         WebElement depen = driver.findElement(By.xpath("//a[@href='/DennorQA/PlatformaticaQA/network/dependencies']"));
         Assert.assertEquals(depen.getText(), "Dependency graph");
-        driver.quit();
     }
 
     @Test

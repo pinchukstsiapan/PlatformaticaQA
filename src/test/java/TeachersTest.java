@@ -5,12 +5,11 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
-public class Teachers_Test extends BaseTest {
+public class TeachersTest extends BaseTest {
 
     @Test
     public void testSergeiD() {
         WebDriver driver = getDriver();
-
         driver.get("https://github.com/SergeiDemyanenko/PlatformaticaQA");
 
         WebElement elementCode = driver.findElement(By.xpath("//li[@class = 'd-flex']/a[@href = '/SergeiDemyanenko/PlatformaticaQA']"));

@@ -5,7 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
-public class Group_of_bug_killers_Test extends BaseTest {
+public class GroupOfBugKillersTest extends BaseTest {
 
     @Test
     public void simpleTest() throws InterruptedException {
@@ -15,8 +15,6 @@ public class Group_of_bug_killers_Test extends BaseTest {
         WebElement name = browser.findElement(By.xpath("//strong/a"));
 
         Assert.assertEquals(name.getText(), "PlatformaticaQA");
-
-        Thread.sleep(3000);
     }
 
     @Test
@@ -40,7 +38,6 @@ public class Group_of_bug_killers_Test extends BaseTest {
 
         WebElement button = driver.findElement(By.id("branch-select-menu"));
         button.click();
-
         Thread.sleep(2000);
 
         WebElement link = driver.findElement(By.xpath("//footer/a[contains(text(), 'branches')]"));
@@ -48,6 +45,4 @@ public class Group_of_bug_killers_Test extends BaseTest {
 
         Assert.assertEquals(driver.getCurrentUrl(), "https://github.com/SergeiDemyanenko/PlatformaticaQA/branches");
     }
-
-    
 }

@@ -9,25 +9,22 @@ import runner.BaseTest;
 
 import java.util.concurrent.TimeUnit;
 
-public class GroupTBD_Test extends BaseTest {
+public class GroupTBDTest extends BaseTest {
 
     @Ignore
     @Test
-    public void vadimTymeichuk () {
+    public void vadimTymeichuk () throws InterruptedException {
 
         WebDriver driver = getDriver();
-
         driver.get("https://github.com/SergeiDemyanenko/PlatformaticaQA");
 
         WebElement button = driver.findElement(By.xpath("//div/details/*[@class = 'btn css-truncate']"));
         button.click();
-
-        driver.manage().timeouts().implicitlyWait(4, TimeUnit.SECONDS);
+        Thread.sleep(4000);
 
         WebElement button1 = driver.findElement(By.xpath("//*[@data-filter-placeholder = 'Find a tag']"));
         button1.click();
-
-        driver.manage().timeouts().implicitlyWait(4, TimeUnit.SECONDS);
+        Thread.sleep(4000);
 
         WebElement link = driver.findElement(By.linkText("View all tags"));
         link.click();
@@ -38,7 +35,7 @@ public class GroupTBD_Test extends BaseTest {
 
     @Ignore
     @Test
-    public void galinaMelnyk () {
+    public void galinaMelnyk () throws InterruptedException {
         WebDriver driver = getDriver();
         driver.get("https://www.expedia.com/");
 
@@ -47,13 +44,11 @@ public class GroupTBD_Test extends BaseTest {
         WebElement searchField = driver.findElement((By.xpath("//*[@id=\"location-field-destination\"]")));
         searchField.sendKeys("San Francisco");
         searchField.sendKeys(Keys.ENTER);
-
-        driver.manage().timeouts().implicitlyWait(4, TimeUnit.SECONDS);
+        Thread.sleep(4000);
 
         driver.findElement(By.cssSelector(".uitk-layout-grid-item-columnspan-medium-2 > button")).click();
 
         WebElement goingToField = driver.findElement(By.xpath("//*[@id=\"app-layer-base\"]/div/div/div/div[1]/div/section/div/form/div[1]/div/div/button[1]"));
         Assert.assertEquals(goingToField.getText(), "San Francisco (and vicinity), California, United States of America");
-
     }
 }

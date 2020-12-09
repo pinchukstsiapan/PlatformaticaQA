@@ -10,7 +10,7 @@ import runner.BaseTest;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-public class GroupJavaBears_Test extends BaseTest {
+public class GroupJavaBearsTest extends BaseTest {
 
     @Test
     public void victoriaRogozhkina() {
@@ -23,6 +23,7 @@ public class GroupJavaBears_Test extends BaseTest {
 
         Assert.assertEquals(driver.getCurrentUrl(), "https://developer.mozilla.org/en-US/docs/Web/XPath/Functions/contains");
     }
+
     @Test
     public void Alex_Mack() throws InterruptedException {
 
@@ -35,7 +36,7 @@ public class GroupJavaBears_Test extends BaseTest {
 
     @Ignore
     @Test
-    public void Alex_Mack2() throws InterruptedException {
+    public void alexMack2() throws InterruptedException {
 
         WebDriver driver = getDriver();
         driver.get("https://dota2.ru/");
@@ -97,12 +98,12 @@ public class GroupJavaBears_Test extends BaseTest {
 
     @Ignore
     @Test
-    public void IgorTest1() {
+    public void igorTest1() {
 
         WebDriver browser = getDriver();
         browser.get("https://us.pandora.net/");
 
-        WebElement shop_bag = browser.findElement(By.xpath("//*[@title='View Bag']"));  //Shopping bag button
+        WebElement shop_bag = browser.findElement(By.xpath("//*[@title='View Bag']"));
         shop_bag.click();
 
         Assert.assertEquals(browser.getCurrentUrl(), "https://us.pandora.net/en/shopping-bag");
@@ -110,7 +111,7 @@ public class GroupJavaBears_Test extends BaseTest {
 
     @Ignore
     @Test
-    public void IgorTest2() throws InterruptedException {
+    public void igorTest2() throws InterruptedException {
 
         WebDriver browser = getDriver();
         browser.get("https://www.planetfitness.com/");

@@ -2,8 +2,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import org.openqa.selenium.JavascriptExecutor;
@@ -11,7 +13,8 @@ import org.openqa.selenium.interactions.Actions;
 
 import static org.testng.Assert.assertEquals;
 
-public class GroupBreakingBad_Test extends BaseTest {
+public class GroupBreakingBadTest extends BaseTest {
+
     @Test
     public void nataliaVats() throws InterruptedException {
 
@@ -34,12 +37,10 @@ public class GroupBreakingBad_Test extends BaseTest {
 
         WebElement inputSearch = browser.findElement(By.xpath("//input[@id='searchCity']"));
         inputSearch.sendKeys("Rus");
-
         Thread.sleep(3000);
 
         WebElement menuElement = browser.findElement(By.xpath("//*[@id='CityList']/div[1]/div[2]/h4"));
         assertEquals(menuElement.getText().toLowerCase(), "russia");
-
     }
 
     @Test
@@ -52,7 +53,6 @@ public class GroupBreakingBad_Test extends BaseTest {
         link.click();
 
         assertEquals(driver.getCurrentUrl(), "https://en.wikipedia.org/w/index.php?title=List_of_national_parks_of_the_United_States&action=history");
-
     }
 
     @Test
@@ -72,8 +72,8 @@ public class GroupBreakingBad_Test extends BaseTest {
         Thread.sleep(2000);
 
         assertEquals(getDriver().getTitle(), "Wikipedia, the free encyclopedia");
-
     }
+
     @Test
     public void testTatyanaAlexandrova () throws InterruptedException {
         WebDriver browser = getDriver();
@@ -84,7 +84,6 @@ public class GroupBreakingBad_Test extends BaseTest {
         Thread.sleep(2000);
 
         Assert.assertTrue(browser.getPageSource().contains("About"));
-
     }
 
     @Test
@@ -95,7 +94,6 @@ public class GroupBreakingBad_Test extends BaseTest {
 
         WebElement button = driver.findElement(By.xpath("//*[text()='3D Модели']"));
         button.click();
-
         Thread.sleep(2000);
 
         Assert.assertEquals(driver.getCurrentUrl(), "https://3ddd.ru/3dmodels");
@@ -109,12 +107,12 @@ public class GroupBreakingBad_Test extends BaseTest {
 
         WebElement button = driver.findElement(By.xpath("//a[@href = '/login']"));
         button.click();
-
         Thread.sleep(2000);
 
         Assert.assertEquals(driver.getCurrentUrl(), "https://3ddd.ru/login");
     }
 
+    @Ignore
     @Test
     public void tatyanaPusThirdTest() throws InterruptedException {
 
@@ -138,13 +136,12 @@ public class GroupBreakingBad_Test extends BaseTest {
         js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
 
         //Find element by xpath and store in variable "Element"
-        WebElement Element = driver.findElement(By.xpath("//a[@class='sky-btn']"));
+        WebElement element = driver.findElement(By.xpath("//a[@class='sky-btn']"));
 
 
         //This will scroll the page till the element is found
         Thread.sleep(3000);
-        Element.click();
-
+        element.click();
         Thread.sleep(3000);
 
         Assert.assertEquals(driver.getCurrentUrl(), "https://3ddd.ru/3dmodels?cat=dekor&subcat=3d_panel&page=2");
@@ -168,8 +165,17 @@ public class GroupBreakingBad_Test extends BaseTest {
         //Mouse hover 'image'
         actions.moveToElement(menuOption).perform();
         Thread.sleep(3000);
-
     }
 
+    @Ignore
+    @Test
+    public void NataliyaPlatonova() throws InterruptedException{
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://www.hotspringspool.com/");
 
+        WebElement button = driver.findElement(By.xpath("//a[@href='https://reservations.hotspringspool.com/#/roomsBooking']"));
+        button.click();
+
+        Assert.assertEquals(driver.getTitle(),"Glenwood Hot Springs | Reservations");
+    }
 }

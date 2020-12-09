@@ -5,7 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
-public class OldTasks extends BaseTest {
+public class OldTasksTest extends BaseTest {
 
     @Test
     public void denXPathTestForPulls() throws InterruptedException {
@@ -88,6 +88,5 @@ public class OldTasks extends BaseTest {
 
         WebElement unwatchButton = driver.findElement(By.xpath("//notifications-list-subscription-form[contains(@class,'d-flex')]//button[@value='subscribed']"));
         unwatchButton.click();
-
     }
 }

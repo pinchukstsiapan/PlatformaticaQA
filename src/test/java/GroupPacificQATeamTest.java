@@ -13,7 +13,7 @@ import runner.BaseTest;
 import java.rmi.registry.Registry;
 import java.security.Signature;
 
-public class GroupPacificQATeam_Test extends BaseTest {
+public class GroupPacificQATeamTest extends BaseTest {
 
     @Test
     public void alexanderKazakov() throws InterruptedException {
@@ -37,7 +37,6 @@ public class GroupPacificQATeam_Test extends BaseTest {
          */
         WebDriver browser = getDriver();
         browser.get("https://www.samsung.com/us/");
-        browser.manage().window().fullscreen();
 
         browser.findElement(By.xpath("//a[@class='gnb-promo-close']")).click();
         browser.findElement(By.linkText("Accept")).click();
@@ -55,13 +54,11 @@ public class GroupPacificQATeam_Test extends BaseTest {
         actions.moveToElement(galaxyA).click().perform();
 
         Thread.sleep(1500);
-        browser.manage().window().fullscreen();
         WebElement galaxyA51 = browser.findElement(By.xpath("//a[contains(@href, '/galaxy-a/galaxy-a51-unlocked-sm')]"));
         JavascriptExecutor js = ((JavascriptExecutor) browser);
         js.executeScript("arguments[0].scrollIntoView();", galaxyA51);
         actions.moveToElement(galaxyA51).click().perform();
 
-        browser.manage().window().fullscreen();
         Assert.assertEquals(browser.findElement(By.xpath("//h1[@class='product-details__info-title']")).getText(), "Galaxy A51 (Unlocked)");
         Assert.assertNotNull(browser.findElement(By.xpath("//a[@data-current-selected='Galaxy A51']")));
         Assert.assertNotNull(browser.findElement(By.xpath("//a[@data-current-selected='Unlocked']")));
@@ -86,8 +83,6 @@ public class GroupPacificQATeam_Test extends BaseTest {
 
         browser.findElement(By.xpath("//a[@class='skip']")).click();
 
-        browser.manage().window().fullscreen();
-
         Assert.assertEquals(browser.findElement(By.xpath("//div[@class='estimated-ship-holder']//p[@class='os-price-value']")).getText(), "FREE");
         Assert.assertEquals(browser.findElement(By.xpath("//div[contains(@class, 'total-row')]//p[@class='os-price-value']")).getText(), "$399.99");
         Assert.assertEquals(browser.findElement(By.xpath("//div[contains(@class, 'total-savings-row')]//p[@class='os-price-value']")).getText(), "$24.00");
@@ -101,16 +96,13 @@ public class GroupPacificQATeam_Test extends BaseTest {
 
         WebElement signIn = browser.findElement(By.xpath("//nav//button"));
         signIn.click();
-
         Thread.sleep(1500);
 
         WebElement Register = browser.findElement(By.xpath("//div[@id='wt-modal-container']//button[contains(text(), 'Register')]"));
         Register.click();
-
         Thread.sleep(1500);
 
         Assert.assertEquals(browser.findElement(By.xpath("//h1[@id='join-neu-overlay-title']")).getText(), "Create your account");
-
     }
 
     @Test
@@ -118,17 +110,13 @@ public class GroupPacificQATeam_Test extends BaseTest {
 
         WebDriver driver = getDriver();
         driver.get("https://www.udemy.com/");
-
         Thread.sleep(2000);
 
         WebElement button = driver.findElement(By.xpath("//a[@data-purpose='header-login']"));
         button.click();
-
         Thread.sleep(2000);
 
-
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.udemy.com/join/login-popup/?locale=en_US&response_type=html&next=https%3A%2F%2Fwww.udemy.com%2F");
-
     }
 }
 
