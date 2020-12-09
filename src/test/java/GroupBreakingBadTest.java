@@ -170,7 +170,7 @@ public class GroupBreakingBadTest extends BaseTest {
 
     @Ignore
     @Test
-    public void NataliyaPlatonova() throws InterruptedException{
+    public void NataliyaPlatonova() {
         WebDriver driver = new ChromeDriver();
         driver.get("https://www.hotspringspool.com/");
 
@@ -178,5 +178,35 @@ public class GroupBreakingBadTest extends BaseTest {
         button.click();
 
         Assert.assertEquals(driver.getTitle(),"Glenwood Hot Springs | Reservations");
+    }
+
+    @Test
+    public void evgenyLukyanenkoRoyal1() throws InterruptedException {
+        WebDriver browser = getDriver();
+        browser.get("https://www.royal.uk/");
+
+        WebElement button = browser.findElement(By.xpath("(//h2[contains(text(), 'Charities and patronages')])"));
+        button.click();
+        Thread.sleep(1000);
+
+        WebElement dropdown = browser.findElement(By.xpath("//span[contains(@class, 'sod_label')]"));
+        dropdown.click();
+        Thread.sleep(1000);
+
+        WebElement input = browser.findElement(By.xpath("//*[@id=\"edit-mrf-wrapper\"]/div//span[20]"));
+        assertEquals(input.getText(), "Princess Michael of Kent");
+    }
+
+    @Test
+    public void evgenyLukyanenkoRoyal2() throws InterruptedException {
+        WebDriver browser = getDriver();
+        browser.get("https://www.royal.uk/");
+
+        WebElement button = browser.findElement(By.xpath("(//h2[contains(text(), 'Charities and patronages')])"));
+        button.click();
+        Thread.sleep(1000);
+
+        WebElement input = browser.findElement(By.xpath("//span[contains(@class, 'sod_label')]"));
+        assertEquals(input.getText(), "All Members of the Royal Family");
     }
 }
