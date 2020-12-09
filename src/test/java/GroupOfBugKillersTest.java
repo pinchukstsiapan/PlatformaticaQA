@@ -2,6 +2,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
@@ -44,5 +45,17 @@ public class GroupOfBugKillersTest extends BaseTest {
         link.click();
 
         Assert.assertEquals(driver.getCurrentUrl(), "https://github.com/SergeiDemyanenko/PlatformaticaQA/branches");
+    }
+
+    @Test
+    public void vladBezpalko() {
+
+        WebDriver browser = getDriver();
+        browser.get("https://office.ooma.com/");
+        WebElement phone_field = browser.findElement(By.id("phone-label"));
+        WebElement password_field = browser.findElement(By.xpath("//*[@id='password']/../*[@class='input-label']"));
+
+        Assert.assertEquals(phone_field.getText(), "ENTER PHONE");
+        Assert.assertEquals(password_field.getText(), "ENTER PASSWORD");
     }
 }
