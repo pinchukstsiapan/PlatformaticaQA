@@ -21,7 +21,7 @@ public class Group_lets_do_it_Test extends BaseTest {
 
     @Ignore
     @Test
-    public void secondTestChuevaT() throws InterruptedException{
+    public void secondTestChuevaT() throws InterruptedException {
 
         WebDriver driver = getDriver();
         driver.get("https://docs.oracle.com/en/java");
@@ -35,5 +35,15 @@ public class Group_lets_do_it_Test extends BaseTest {
         Thread.sleep(3000);
     }
 
+    @Test
+    public void volgaStaravoitavaTest() {
+        WebDriver driver = getDriver();
+        driver.get("https://www.amazon.com/");
+        WebElement searchInput = driver.findElement(By.xpath("//input[@id='twotabsearchtextbox']"));
+        searchInput.sendKeys("ball");
+        searchInput.submit();
+        WebElement searchResults = driver.findElement(By.xpath("//span[contains(text(),'\"ball\"')]"));
+        Assert.assertTrue(searchResults.isDisplayed());
+    }
 
 }
