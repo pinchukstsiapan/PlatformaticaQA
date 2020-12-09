@@ -178,4 +178,14 @@ public class GroupBreakingBadTest extends BaseTest {
 
         Assert.assertEquals(driver.getTitle(),"Glenwood Hot Springs | Reservations");
     }
+
+    @Test
+    public void aminaB() throws InterruptedException {
+
+        WebDriver driver = getDriver();
+        driver.get("https://www.nba.com/");
+
+        WebElement button = driver.findElement(By.xpath("//*[@id='nbaMenuButton']"));
+        button.click();
+    }
 }
