@@ -70,4 +70,13 @@ public class GroupOfBugKillersTest extends BaseTest {
         Assert.assertEquals(phone_field.getText(), "ENTER PHONE");
         Assert.assertEquals(password_field.getText(), "ENTER PASSWORD");
     }
+
+    @Test
+    public void panteleyeva01 () throws InterruptedException{
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.colibribookstore.com/");
+        WebElement webLabelName = browser.findElement(By.xpath("//img[@class='large']"));
+        boolean checkWebNameExist = webLabelName.isDisplayed();
+    }
 }
