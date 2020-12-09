@@ -8,7 +8,7 @@ import runner.BaseTest;
 
 public class GroupEasternTest extends BaseTest {
 
-    @Ignore
+
     @Test
     public void viktoriiaPrudka() {
 
