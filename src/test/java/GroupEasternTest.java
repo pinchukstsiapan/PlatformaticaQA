@@ -8,7 +8,6 @@ import runner.BaseTest;
 
 public class GroupEasternTest extends BaseTest {
 
-
     @Test
     public void viktoriiaPrudka() {
 
