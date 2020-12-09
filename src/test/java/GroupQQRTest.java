@@ -107,10 +107,12 @@ public class GroupQQRTest extends BaseTest {
     }
 
     @Test
-    public void guramBautsadze() {
+    public void guramBautsadze() throws InterruptedException {
 
         WebDriver browser = getDriver();
         browser.get("https://www.platformatica.com/");
+        Thread.sleep(2000);
+
         WebElement gettingStarted =
                 browser.findElement(By.xpath("//h1[text()[normalize-space()='Zero Code Automated SAAS To Revolutionize Your Business']]"));
         Assert.assertEquals(gettingStarted.getText(), "Zero Code Automated SAAS To Revolutionize Your Business");
