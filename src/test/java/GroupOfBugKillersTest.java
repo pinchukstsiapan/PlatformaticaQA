@@ -72,12 +72,14 @@ public class GroupOfBugKillersTest extends BaseTest {
     }
 
     @Test
-    public void panteleyeva01 () throws InterruptedException{
+    public void panteleyeva01() {
 
         WebDriver browser = getDriver();
-        browser.manage().window().maximize();
         browser.get("https://www.colibribookstore.com/");
         WebElement webLabelName = browser.findElement(By.xpath("//img[@class='large']"));
         boolean checkWebNameExist = webLabelName.isDisplayed();
+          if(checkWebNameExist == true) {
+              System.out.println("Label is displayed");
+          }
     }
 }
