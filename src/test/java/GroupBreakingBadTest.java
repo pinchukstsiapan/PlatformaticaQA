@@ -176,7 +176,6 @@ public class GroupBreakingBadTest extends BaseTest {
         Assert.assertEquals(driver.getTitle(),"Glenwood Hot Springs | Reservations");
     }
 
-    @Ignore
     @Test
     public void evgenyLukyanenkoRoyal1() throws InterruptedException {
 
