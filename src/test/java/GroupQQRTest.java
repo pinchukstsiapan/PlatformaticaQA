@@ -119,4 +119,17 @@ public class GroupQQRTest extends BaseTest {
                 browser.findElement(By.xpath("//h1[text()[normalize-space()='Zero Code Automated SAAS To Revolutionize Your Business']]"));
         Assert.assertEquals(gettingStarted.getText(), "Zero Code Automated SAAS To Revolutionize Your Business");
     }
+
+    @Test
+    public void ludaPetkel() throws InterruptedException {
+        WebDriver browser = getDriver();
+        browser.get("https://www.aafloors.ca/");
+        Thread.sleep(1000);
+
+        browser.findElement(By.linkText("Reviews")).click();
+        Thread.sleep(2000);
+
+        String text = browser.findElement(By.tagName("h4")).getText();
+        Assert.assertEquals(text, "Read Our Customer Reviews");
+    }
 }
