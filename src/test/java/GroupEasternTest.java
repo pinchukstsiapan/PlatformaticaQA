@@ -8,7 +8,6 @@ import runner.BaseTest;
 
 public class GroupEasternTest extends BaseTest {
 
-    @Ignore
     @Test
     public void viktoriiaPrudka() {
 
@@ -18,7 +17,8 @@ public class GroupEasternTest extends BaseTest {
         WebElement button = driver.findElement(By.xpath("//p[text()='Book a walk']"));
         button.click();
 
-        Assert.assertEquals(driver.getCurrentUrl(), "https://app.wagwalking.com/signup/welcome?preferred_service=1&utm_campaign=service_carousel_walking&utm_medium=homepage&utm_source=web");
+        Assert.assertEquals(driver.getCurrentUrl(), "https://app.wagwalking.com/signup/welcome?preferred_" +
+                "service=1&utm_campaign=service_carousel_walking&utm_medium=homepage&utm_source=web");
     }
 
     @Ignore

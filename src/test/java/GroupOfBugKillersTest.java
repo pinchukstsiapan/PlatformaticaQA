@@ -72,6 +72,15 @@ public class GroupOfBugKillersTest extends BaseTest {
     }
 
     @Test
+    public void panteleyeva01() {
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.colibribookstore.com/");
+        WebElement webLabelName = browser.findElement(By.xpath("//img[@class='large']"));
+        Assert.assertTrue(webLabelName.isDisplayed());
+    }
+
+    @Test
     public void viewHistoryWikipedia () {
 
         WebDriver browser = getDriver();
@@ -91,5 +100,19 @@ public class GroupOfBugKillersTest extends BaseTest {
         WebElement firstHeading = browser.findElement(By.xpath("//*[@id='firstHeading']"));
 
         Assert.assertEquals(firstHeading.getText(), "Main Page: Revision history");
+    }
+
+    @Test
+    public void svetlanaGusachenkoTest() {
+
+        WebDriver driver = getDriver();
+        driver.get("https://en.wikipedia.org/wiki/Main_Page");
+
+        WebElement link = driver.findElement(By.id("n-portal"));
+        Assert.assertEquals(link.getText(), "Community portal");
+
+        link.click();
+        WebElement name = driver.findElement(By.xpath("//*[@id=\"Welcome_to_the_Community_portal!\"]"));
+        Assert.assertEquals(name.getText(), "Welcome to the Community portal!");
     }
 }
