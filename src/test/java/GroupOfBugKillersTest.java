@@ -72,6 +72,15 @@ public class GroupOfBugKillersTest extends BaseTest {
     }
 
     @Test
+    public void panteleyeva01() {
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.colibribookstore.com/");
+        WebElement webLabelName = browser.findElement(By.xpath("//img[@class='large']"));
+        Assert.assertTrue(webLabelName.isDisplayed());
+    }
+
+    @Test
     public void viewHistoryWikipedia () {
 
         WebDriver browser = getDriver();
