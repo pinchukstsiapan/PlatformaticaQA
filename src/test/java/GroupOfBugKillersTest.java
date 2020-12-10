@@ -40,7 +40,7 @@ public class GroupOfBugKillersTest extends BaseTest {
         Assert.assertEquals(name.getText(), "О нас");
         name.click();
 
-        Assert.assertEquals(browser.getCurrentUrl(), "https://coderoad.ru/about.html");
+        Assert.assertEquals(browser.getCurrentUrl(),"https://coderoad.ru/about.html");
     }
 
     @Test
@@ -69,6 +69,15 @@ public class GroupOfBugKillersTest extends BaseTest {
 
         Assert.assertEquals(phone_field.getText(), "ENTER PHONE");
         Assert.assertEquals(password_field.getText(), "ENTER PASSWORD");
+    }
+
+    @Test
+    public void panteleyeva01() {
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.colibribookstore.com/");
+        WebElement webLabelName = browser.findElement(By.xpath("//img[@class='large']"));
+        Assert.assertTrue(webLabelName.isDisplayed());
     }
 
     @Test
