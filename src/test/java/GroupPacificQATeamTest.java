@@ -197,5 +197,58 @@ public class GroupPacificQATeamTest extends BaseTest {
 
         Assert.assertEquals(browser.getCurrentUrl(), "https://www.codecademy.com/account/goals_settings");
     }
+
+    @Test
+    public void nataliTverdohlibTask14() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://github.com/SergeiDemyanenko/PlatformaticaQA");
+        WebElement button = browser.findElement(By.xpath("//span[contains(text(), 'Pull request')]"));
+        button.click();
+
+        Thread.sleep(2000);
+
+        Assert.assertEquals(browser.getCurrentUrl(), "https://github.com/SergeiDemyanenko/PlatformaticaQA/pulls");
+    }
+
+    @Test
+    public void nataliaTaskE1() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://github.com/SergeiDemyanenko/PlatformaticaQA");
+        WebElement name = browser.findElement(By.xpath("//*[@data-tab-item='i0code-tab']"));
+
+        Assert.assertEquals(name.getText(), "Code");
+    }
+
+    @Test
+    public void nataliaTaskE2() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://github.com/SergeiDemyanenko/PlatformaticaQA");
+        WebElement name = browser.findElement(By.xpath("//*[@data-tab-item='i1issues-tab']"));
+
+        Assert.assertEquals(name.getText(), "Issues");
+    }
+
+    @Test
+    public void nataliaTaskE3() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://github.com/SergeiDemyanenko/PlatformaticaQA");
+        WebElement name = browser.findElement(By.xpath("//span[@data-content='Pull requests']"));
+
+        Assert.assertEquals(name.getText(), "Pull requests");
+    }
+
+    @Test
+    public void nataliaTaskE5() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://github.com/SergeiDemyanenko/PlatformaticaQA");
+        WebElement name = browser.findElement(By.xpath("//a[text()[normalize-space()='Star']]"));
+
+        Assert.assertEquals(name.getText(), "Star");
+    }
 }
 
