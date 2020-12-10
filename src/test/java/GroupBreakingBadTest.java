@@ -199,6 +199,7 @@ public class GroupBreakingBadTest extends BaseTest {
         assertEquals(input.getText(), "Princess Michael of Kent");
     }
 
+    @Ignore
     @Test
     public void evgenyLukyanenkoRoyal2() throws InterruptedException {
 
