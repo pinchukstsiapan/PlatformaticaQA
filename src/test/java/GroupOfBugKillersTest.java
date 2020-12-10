@@ -92,4 +92,18 @@ public class GroupOfBugKillersTest extends BaseTest {
 
         Assert.assertEquals(firstHeading.getText(), "Main Page: Revision history");
     }
+
+    @Test
+    public void svetlanaGusachenkoTest() {
+
+        WebDriver driver = getDriver();
+        driver.get("https://en.wikipedia.org/wiki/Main_Page");
+
+        WebElement link = driver.findElement(By.id("n-portal"));
+        Assert.assertEquals(link.getText(), "Community portal");
+
+        link.click();
+        WebElement name = driver.findElement(By.xpath("//*[@id=\"Welcome_to_the_Community_portal!\"]"));
+        Assert.assertEquals(name.getText(), "Welcome to the Community portal!");
+    }
 }
