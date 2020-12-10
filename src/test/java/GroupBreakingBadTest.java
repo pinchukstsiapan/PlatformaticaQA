@@ -186,14 +186,9 @@ public class GroupBreakingBadTest extends BaseTest {
         button.click();
         Thread.sleep(500);
 
-        WebElement dropdown = browser.findElement(By.xpath("//span[contains(@class, 'sod_label')]"));
-        dropdown.click();
-        Thread.sleep(500);
-
-        WebElement input = browser.findElement(By.xpath("//*[@id=\"edit-mrf-wrapper\"]/div//span[20]"));
-        assertEquals(input.getText(), "Princess Michael of Kent");
+        WebElement input = browser.findElement(By.xpath("//span[contains(@class, 'sod_label')]"));
+        assertEquals(input.getText(), "All Members of the Royal Family");
     }
-
     @Test
     public void evgenyLukyanenkoRoyal2() throws InterruptedException {
 
@@ -204,9 +199,14 @@ public class GroupBreakingBadTest extends BaseTest {
         button.click();
         Thread.sleep(500);
 
-        WebElement input = browser.findElement(By.xpath("//span[contains(@class, 'sod_label')]"));
-        assertEquals(input.getText(), "All Members of the Royal Family");
+        WebElement dropdown = browser.findElement(By.xpath("//span[contains(@class, 'sod_label')]"));
+        dropdown.click();
+        Thread.sleep(500);
+
+        WebElement input = browser.findElement(By.xpath("//*[@id=\"edit-mrf-wrapper\"]/div//span[20]"));
+        assertEquals(input.getText(), "Princess Michael of Kent");
     }
+
 
     @Test
     public void aminaB() {
