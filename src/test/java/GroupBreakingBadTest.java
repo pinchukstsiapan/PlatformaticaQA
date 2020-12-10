@@ -217,5 +217,18 @@ public class GroupBreakingBadTest extends BaseTest {
         Assert.assertEquals(memberButton.getText(), "Member Center" );
         Assert.assertEquals(meetingsButton.getText(), "Meetings & Events");
         Assert.assertEquals(classifiedsButton.getText(), "Classifieds");
+
+    @Test  
+    public void aminaB() {
+
+        WebDriver driver = getDriver();
+        driver.get("https://www.nba.com/");
+
+        WebElement button = driver.findElement(By.id("nbaMenuButton"));
+        button.click();
+
+        WebElement result = driver.findElement(By.id("nbaMenuNBASignIn"));
+        Assert.assertEquals(result.getText(), "Sign in to NBA Account");
+        main
     }
 }

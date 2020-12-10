@@ -31,4 +31,14 @@ public class GroupLetsDoItTest extends BaseTest {
         WebElement name = driver.findElement(By.xpath("//span[contains(text(),'How can Oracle Cloud Infrastructure products help?')]"));
         Assert.assertEquals(name.getText(), "How can Oracle Cloud Infrastructure products help?");
     }
+
+    @Test
+    public void dmitryTregubovTest() {
+
+        WebDriver browser = getDriver();
+        browser.get("https://kp.org/");
+
+        browser.findElement(By.xpath("//a[text()='Shop Plans']")).click();
+        Assert.assertEquals(browser.getTitle(), "Shop Our Plans| Kaiser Permanente");
+    }
 }
