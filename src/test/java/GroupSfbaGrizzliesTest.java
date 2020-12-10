@@ -57,4 +57,18 @@ public class GroupSfbaGrizzliesTest extends BaseTest {
         WebElement text = browser.findElement(By.xpath("//a[@id='biblionav_account_trigger']"));
         Assert.assertEquals(text.getText(), "Log In / My VPL\nUser Log In / My VPL.");
     }
+
+    @Test
+    public void gayaneMthird() throws InterruptedException {
+        WebDriver browser = getDriver();
+        browser.get("https://www.newyorktheatreguide.com/whats-on/broadway/musicals");
+
+        WebElement input = browser.findElement(By.xpath("//input[@id='edit-search-block-form--2']"));
+        input.sendKeys("Cats");
+
+        WebElement icon = browser.findElement(By.xpath("//input[@id='edit-submit']"));
+        icon.click();
+
+        Assert.assertEquals(browser.getCurrentUrl(),"https://www.newyorktheatreguide.com/search?s=Cats");
+    }
 }
