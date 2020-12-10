@@ -1,15 +1,10 @@
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.interactions.Actions;
 
 import static org.testng.Assert.assertEquals;
 
@@ -188,28 +183,27 @@ public class GroupBreakingBadTest extends BaseTest {
         WebDriver browser = getDriver();
         browser.get("https://www.royal.uk/");
 
-        WebElement button = browser.findElement(By.xpath("//h2[contains(text(), 'Charities and patronages')]"));
+        WebElement button = browser.findElement(By.xpath("//*[@id=\"node-74207\"]//div[2]/a"));
         button.click();
-        Thread.sleep(1000);
+        Thread.sleep(500);
 
         WebElement dropdown = browser.findElement(By.xpath("//span[contains(@class, 'sod_label')]"));
         dropdown.click();
-        Thread.sleep(1000);
+        Thread.sleep(500);
 
         WebElement input = browser.findElement(By.xpath("//*[@id=\"edit-mrf-wrapper\"]/div//span[20]"));
         assertEquals(input.getText(), "Princess Michael of Kent");
     }
 
-    @Ignore
     @Test
     public void evgenyLukyanenkoRoyal2() throws InterruptedException {
 
         WebDriver browser = getDriver();
         browser.get("https://www.royal.uk/");
 
-        WebElement button = browser.findElement(By.xpath("//h2[contains(text(), 'Charities and patronages')]"));
+        WebElement button = browser.findElement(By.xpath("//*[@id=\"node-74207\"]//div[2]/a"));
         button.click();
-        Thread.sleep(1000);
+        Thread.sleep(500);
 
         WebElement input = browser.findElement(By.xpath("//span[contains(@class, 'sod_label')]"));
         assertEquals(input.getText(), "All Members of the Royal Family");
