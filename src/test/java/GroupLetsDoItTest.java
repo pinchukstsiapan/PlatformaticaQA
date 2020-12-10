@@ -32,6 +32,7 @@ public class GroupLetsDoItTest extends BaseTest {
         Assert.assertEquals(name.getText(), "How can Oracle Cloud Infrastructure products help?");
     }
 
+    @Ignore
     @Test
     public void dmitryTregubovTest() {
 
