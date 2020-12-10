@@ -106,7 +106,6 @@ public class GroupOfBugKillersTest extends BaseTest {
         WebElement name = driver.findElement(By.xpath("//*[@id=\"Welcome_to_the_Community_portal!\"]"));
         Assert.assertEquals(name.getText(), "Welcome to the Community portal!");
     }
-}
 
     @Test
     public void denTest() throws InterruptedException {
