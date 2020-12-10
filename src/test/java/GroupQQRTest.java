@@ -13,7 +13,7 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
-public class GroupQQRTest extends BaseTest {
+public class  GroupQQRTest extends BaseTest {
 
     @Test
     public void galinaRuban() throws InterruptedException {
@@ -133,5 +133,28 @@ public class GroupQQRTest extends BaseTest {
 
         String text = browser.findElement(By.tagName("h4")).getText();
         Assert.assertEquals(text, "Read Our Customer Reviews");
+    }
+
+    @Test
+    public void irinaRizvanovaSignUpButton() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://udemy.com");
+        Thread.sleep(2000);
+
+        WebElement signUpButton=browser.findElement(By.xpath("//a[@data-purpose='header-signup']"));
+        signUpButton.click();
+        WebElement loginbox = browser.findElement(By.xpath("//div[@class='loginbox-v4__footer']"));
+        Assert.assertEquals(loginbox.getText(),  "Already have an account? Log In");
+    }
+    @Test
+    public void irinaRizvanovaSignInLink() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.udemy.com/join/signup-popup/?locale=en_US&response_type=html&next=https%3A%2F%2Fwww.udemy.com%2F");
+        Thread.sleep(1000);
+
+        WebElement signInLink = browser.findElement(By.xpath("//a[@class='sign-link']"));
+        Assert.assertTrue(signInLink.isEnabled());
     }
 }
