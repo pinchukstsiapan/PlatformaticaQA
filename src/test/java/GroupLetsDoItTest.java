@@ -42,4 +42,14 @@ public class GroupLetsDoItTest extends BaseTest {
         browser.findElement(By.xpath("//a[text()='Shop Plans']")).click();
         Assert.assertEquals(browser.getTitle(), "Shop Our Plans| Kaiser Permanente");
     }
+
+    @Test
+    public void dmitryTregubovTest2() {
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.star-tavern-belgravia.co.uk/");
+
+        browser.findElement(By.xpath("(//a[(text() = 'History')])[2]")).click();
+        Assert.assertEquals(browser.getTitle(), "Find out more about The Star Tavern - Fuller's Pub in Belgravia");
+    }
 }
