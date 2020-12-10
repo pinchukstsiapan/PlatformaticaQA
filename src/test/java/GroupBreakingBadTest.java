@@ -11,6 +11,8 @@ import runner.BaseTest;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.interactions.Actions;
 
+import javax.inject.Inject;
+
 import static org.testng.Assert.assertEquals;
 
 public class GroupBreakingBadTest extends BaseTest {
@@ -199,6 +201,7 @@ public class GroupBreakingBadTest extends BaseTest {
         assertEquals(input.getText(), "Princess Michael of Kent");
     }
 
+    @Inject
     @Test
     public void evgenyLukyanenkoRoyal2() throws InterruptedException {
 
