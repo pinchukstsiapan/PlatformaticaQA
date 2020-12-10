@@ -52,4 +52,17 @@ public class GroupLetsDoItTest extends BaseTest {
         browser.findElement(By.xpath("(//a[(text() = 'History')])[2]")).click();
         Assert.assertEquals(browser.getTitle(), "Find out more about The Star Tavern - Fuller's Pub in Belgravia");
     }
+
+    @Test
+    public void volgaStaravoitavaTest() {
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.mozilla.org/en-US/");
+
+        WebElement learnMore = browser.findElement(By.xpath("//a[contains(text(), 'Learn more')]"));
+        learnMore.click();
+
+        WebElement privacyTitle = browser.findElement(By.xpath("//h2[contains(text(),'Privacy')]"));
+        Assert.assertTrue(privacyTitle.isDisplayed());
+    }
 }
