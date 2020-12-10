@@ -146,5 +146,55 @@ public class GroupPacificQATeamTest extends BaseTest {
         String actual = driver.findElement(By.xpath("//h3[contains(text(),'Tasks for ')]")).getText();
         Assert.assertEquals(actual, expected);
     }
+
+    @Test
+    public void maxBurdinNootropicsexpert() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://nootropicsexpert.com/");
+
+        WebElement list = browser.findElement(By.xpath("//span[text() = 'List of Nootropics']"));
+        list.click();
+
+        WebElement ashwa = browser.findElement(By.xpath("//a[text() = 'Learn more about Ashwagandha']"));
+        ashwa.click();
+
+        WebElement book = browser.findElement(By.xpath("//a[text() = 'clicking here']"));
+        book.click();
+
+        Thread.sleep(2000);
+
+        WebElement addToBag = browser.findElement(By.xpath("(//button[contains(@class, 'addToBag')])[1]"));
+        addToBag.click();
+
+        Thread.sleep(2000);
+
+        Assert.assertEquals(browser.findElement(By.xpath("//span[contains(@class, 'total')]")).getText(), "$37.00");
+
+    }
+
+    @Test
+    public void maxBurdinCodecademy() {
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.codecademy.com/");
+
+        WebElement logIn = browser.findElement(By.xpath("(//a[@data-testid = 'header-sign-in'])[1]"));
+        logIn.click();
+
+        WebElement userNameField = browser.findElement(By.xpath("//input[@id='user_login']"));
+        userNameField.sendKeys("Test_User_123");
+
+        WebElement passwordField = browser.findElement(By.xpath("//input[@id = 'login__user_password']"));
+        passwordField.sendKeys("tEsTpA$$word");
+
+        WebElement logInButton = browser.findElement(By.xpath("//button[@id = 'user_submit']"));
+        logInButton.click();
+
+        WebElement setTarget = browser.findElement(By.xpath("//a[@data-testid = 'set-target']"));
+        setTarget.click();
+
+        Assert.assertEquals(browser.getCurrentUrl(), "https://www.codecademy.com/account/goals_settings");
+    }
 }
 
