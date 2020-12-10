@@ -33,7 +33,7 @@ public class GroupLetsDoItTest extends BaseTest {
     }
 
     @Test
-    public void dmitryTregubovTest(){
+    public void dmitryTregubovTest() {
 
         WebDriver browser = getDriver();
         browser.get("https://kp.org/");
