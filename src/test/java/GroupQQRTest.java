@@ -78,8 +78,9 @@ public class GroupQQRTest extends BaseTest {
         driver.findElement(By.cssSelector("button[class='SearchInputButton-sc-1opoijs-0 dvBrqq']")).click();
         Thread.sleep(1500);
 
-        driver.findElement(By.xpath("//div[text()='purified waters']")).click();
-        driver.findElement(By.cssSelector("#home")).click();
+        WebElement getTitle = driver.findElement(By.xpath("//div[text()='purified waters']"));
+        getTitle.click();
+        Assert.assertEquals(getTitle.getText(), "purified waters");
     }
 
     @Ignore
