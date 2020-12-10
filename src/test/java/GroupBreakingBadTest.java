@@ -4,6 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
@@ -176,17 +177,20 @@ public class GroupBreakingBadTest extends BaseTest {
         WebElement button = driver.findElement(By.xpath("//a[@href='https://reservations.hotspringspool.com/#/roomsBooking']"));
         button.click();
 
-        Assert.assertEquals(driver.getTitle(),"Glenwood Hot Springs | Reservations");
+        Assert.assertEquals(driver.getTitle(), "Glenwood Hot Springs | Reservations");
     }
 
     @Test
-    public void aminaB() throws InterruptedException {
+    public void aminaB() {
 
         WebDriver driver = getDriver();
         driver.get("https://www.nba.com/");
 
-        WebElement button = driver.findElement(By.xpath("//*[@id='nbaMenuButton']"));
+        WebElement button = driver.findElement(By.id("nbaMenuButton"));
         button.click();
+
+        WebElement result = driver.findElement(By.id("nbaMenuNBASignIn"));
+        Assert.assertEquals(result.getText(), "Sign in to NBA Account");
     }
 
     @Test
