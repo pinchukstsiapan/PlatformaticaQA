@@ -173,6 +173,7 @@ public class GroupPacificQATeamTest extends BaseTest {
 
     }
 
+    @Ignore
     @Test
     public void maxBurdinCodecademy() {
 
