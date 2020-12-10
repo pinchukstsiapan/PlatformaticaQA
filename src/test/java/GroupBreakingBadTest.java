@@ -169,6 +169,7 @@ public class GroupBreakingBadTest extends BaseTest {
         Thread.sleep(3000);
     }
 
+    @Ignore
     @Test
     public void evgenyLukyanenkoRoyal1() throws InterruptedException {
 
@@ -202,8 +203,22 @@ public class GroupBreakingBadTest extends BaseTest {
         assertEquals(input.getText(), "All Members of the Royal Family");
     }
 
+    @Test  
+    public void aminaB() {
+
+        WebDriver driver = getDriver();
+        driver.get("https://www.nba.com/");
+
+        WebElement button = driver.findElement(By.id("nbaMenuButton"));
+        button.click();
+
+        WebElement result = driver.findElement(By.id("nbaMenuNBASignIn"));
+        Assert.assertEquals(result.getText(), "Sign in to NBA Account");
+    }
+
     @Test
     public void nataliyaPlatonova() throws InterruptedException{
+
         WebDriver browser = getDriver();
         browser.get("https://www.cds.org/");
 
@@ -222,19 +237,5 @@ public class GroupBreakingBadTest extends BaseTest {
         Assert.assertEquals(memberButton.getText(), "Member Center" );
         Assert.assertEquals(meetingsButton.getText(), "Meetings & Events");
         Assert.assertEquals(classifiedsButton.getText(), "Classifieds");
-    }
-
-    @Test  
-    public void aminaB() {
-
-        WebDriver driver = getDriver();
-        driver.get("https://www.nba.com/");
-
-        WebElement button = driver.findElement(By.id("nbaMenuButton"));
-        button.click();
-
-        WebElement result = driver.findElement(By.id("nbaMenuNBASignIn"));
-        Assert.assertEquals(result.getText(), "Sign in to NBA Account");
-        main
     }
 }
