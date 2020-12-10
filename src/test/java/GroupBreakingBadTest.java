@@ -180,6 +180,7 @@ public class GroupBreakingBadTest extends BaseTest {
         Assert.assertEquals(driver.getTitle(),"Glenwood Hot Springs | Reservations");
     }
 
+    @Ignore
     @Test
     public void evgenyLukyanenkoRoyal1() throws InterruptedException {
         WebDriver browser = getDriver();
@@ -208,5 +209,18 @@ public class GroupBreakingBadTest extends BaseTest {
 
         WebElement input = browser.findElement(By.xpath("//span[contains(@class, 'sod_label')]"));
         assertEquals(input.getText(), "All Members of the Royal Family");
+    }
+
+    @Test
+    public void aminaB() {
+
+        WebDriver driver = getDriver();
+        driver.get("https://www.nba.com/");
+
+        WebElement button = driver.findElement(By.id("nbaMenuButton"));
+        button.click();
+
+        WebElement result = driver.findElement(By.id("nbaMenuNBASignIn"));
+        Assert.assertEquals(result.getText(), "Sign in to NBA Account");
     }
 }
