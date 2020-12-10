@@ -147,6 +147,7 @@ public class GroupPacificQATeamTest extends BaseTest {
         Assert.assertEquals(actual, expected);
     }
 
+    @Ignore
     @Test
     public void maxBurdinNootropicsexpert() throws InterruptedException {
 

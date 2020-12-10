@@ -126,6 +126,7 @@ public class GroupJavaBearsTest extends BaseTest {
         Assert.assertEquals(search_result.getText(), "SEARCH RESULTS");
     }
 
+    @Ignore
     @Test
     public void olgaV1() {
 
