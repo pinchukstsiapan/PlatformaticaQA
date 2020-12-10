@@ -40,7 +40,7 @@ public class GroupOfBugKillersTest extends BaseTest {
         Assert.assertEquals(name.getText(), "О нас");
         name.click();
 
-        Assert.assertEquals(browser.getCurrentUrl(),"https://coderoad.ru/about.html");
+        Assert.assertEquals(browser.getCurrentUrl(), "https://coderoad.ru/about.html");
     }
 
     @Test
@@ -117,7 +117,7 @@ public class GroupOfBugKillersTest extends BaseTest {
     }
 
     @Test
-    public void svetlanaGusachenkoTest1(){
+    public void svetlanaGusachenkoTest1() {
 
         WebDriver driver = getDriver();
         driver.get("https://www.hccts.org/");
