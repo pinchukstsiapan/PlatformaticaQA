@@ -40,7 +40,7 @@ public class GroupOfBugKillersTest extends BaseTest {
         Assert.assertEquals(name.getText(), "О нас");
         name.click();
 
-        Assert.assertEquals(browser.getCurrentUrl(),"https://coderoad.ru/about.html");
+        Assert.assertEquals(browser.getCurrentUrl(), "https://coderoad.ru/about.html");
     }
 
     @Test
@@ -81,7 +81,7 @@ public class GroupOfBugKillersTest extends BaseTest {
     }
 
     @Test
-    public void viewHistoryWikipedia () {
+    public void viewHistoryWikipedia() {
 
         WebDriver browser = getDriver();
         browser.get("https://en.wikipedia.org/wiki/Main_Page");
@@ -91,7 +91,7 @@ public class GroupOfBugKillersTest extends BaseTest {
     }
 
     @Test
-    public void clickBtnViewHistoryWikipedia () {
+    public void clickBtnViewHistoryWikipedia() {
 
         WebDriver browser = getDriver();
         browser.get("https://en.wikipedia.org/wiki/Main_Page");
@@ -114,5 +114,15 @@ public class GroupOfBugKillersTest extends BaseTest {
         link.click();
         WebElement name = driver.findElement(By.xpath("//*[@id=\"Welcome_to_the_Community_portal!\"]"));
         Assert.assertEquals(name.getText(), "Welcome to the Community portal!");
+    }
+
+    @Test
+    public void svetlanaGusachenkoTest1() {
+
+        WebDriver driver = getDriver();
+        driver.get("https://www.hccts.org/");
+
+        WebElement link = driver.findElement(By.xpath("//span[contains(text(),'Register')]"));
+        Assert.assertEquals(link.getText(), "Register Now!");
     }
 }
