@@ -125,7 +125,6 @@ public class GroupOfBugKillersTest extends BaseTest {
         WebElement link = driver.findElement(By.xpath("//span[contains(text(),'Register')]"));
         Assert.assertEquals(link.getText(), "Register Now!");
     }
-}
 
     @Test
     public void denTest() throws InterruptedException {
