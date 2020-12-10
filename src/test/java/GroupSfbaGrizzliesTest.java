@@ -1,6 +1,7 @@
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
@@ -70,5 +71,16 @@ public class GroupSfbaGrizzliesTest extends BaseTest {
         icon.click();
 
         Assert.assertEquals(browser.getCurrentUrl(),"https://www.newyorktheatreguide.com/search?s=Cats");
+    }
+
+    @Test
+    public void kristinaMarachova() {
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.thesaurus.com/");
+
+        WebElement name = browser.findElement(By.xpath("//a[contains(@id,'thesaurus-nav-tab')]"));
+
+        Assert.assertEquals(name.getText(), "THESAURUS.COM");
     }
 }
