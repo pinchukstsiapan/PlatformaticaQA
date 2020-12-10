@@ -167,6 +167,7 @@ public class GroupBreakingBadTest extends BaseTest {
         actions.moveToElement(menuOption).perform();
         Thread.sleep(3000);
     }
+
     @Test
     public void evgenyLukyanenkoRoyal1() throws InterruptedException {
         WebDriver browser = getDriver();
@@ -217,6 +218,7 @@ public class GroupBreakingBadTest extends BaseTest {
         Assert.assertEquals(memberButton.getText(), "Member Center" );
         Assert.assertEquals(meetingsButton.getText(), "Meetings & Events");
         Assert.assertEquals(classifiedsButton.getText(), "Classifieds");
+    }
 
     @Test  
     public void aminaB() {
