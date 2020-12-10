@@ -181,13 +181,13 @@ public class GroupBreakingBadTest extends BaseTest {
         Assert.assertEquals(driver.getTitle(),"Glenwood Hot Springs | Reservations");
     }
 
-    @Ignore
     @Test
     public void evgenyLukyanenkoRoyal1() throws InterruptedException {
+
         WebDriver browser = getDriver();
         browser.get("https://www.royal.uk/");
 
-        WebElement button = browser.findElement(By.xpath("(//h2[contains(text(), 'Charities and patronages')])"));
+        WebElement button = browser.findElement(By.xpath("//h2[contains(text(), 'Charities and patronages')]"));
         button.click();
         Thread.sleep(1000);
 
@@ -199,13 +199,13 @@ public class GroupBreakingBadTest extends BaseTest {
         assertEquals(input.getText(), "Princess Michael of Kent");
     }
 
-    @Ignore
     @Test
     public void evgenyLukyanenkoRoyal2() throws InterruptedException {
+
         WebDriver browser = getDriver();
         browser.get("https://www.royal.uk/");
 
-        WebElement button = browser.findElement(By.xpath("(//h2[contains(text(), 'Charities and patronages')])"));
+        WebElement button = browser.findElement(By.xpath("//h2[contains(text(), 'Charities and patronages')]"));
         button.click();
         Thread.sleep(1000);
 
