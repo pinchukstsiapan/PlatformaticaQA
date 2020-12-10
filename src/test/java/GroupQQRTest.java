@@ -67,6 +67,7 @@ public class GroupQQRTest extends BaseTest {
         Assert.assertTrue(articleHeadersLstStr.contains("Pick up your packages at thousands of convenient locations"));
     }
 
+    @Ignore
     @Test
     public void seidBayramov() throws InterruptedException {
 
