@@ -167,19 +167,6 @@ public class GroupBreakingBadTest extends BaseTest {
         actions.moveToElement(menuOption).perform();
         Thread.sleep(3000);
     }
-
-    @Ignore
-    @Test
-    public void NataliyaPlatonova() {
-        WebDriver driver = new ChromeDriver();
-        driver.get("https://www.hotspringspool.com/");
-
-        WebElement button = driver.findElement(By.xpath("//a[@href='https://reservations.hotspringspool.com/#/roomsBooking']"));
-        button.click();
-
-        Assert.assertEquals(driver.getTitle(),"Glenwood Hot Springs | Reservations");
-    }
-
     @Test
     public void evgenyLukyanenkoRoyal1() throws InterruptedException {
         WebDriver browser = getDriver();
@@ -208,5 +195,27 @@ public class GroupBreakingBadTest extends BaseTest {
 
         WebElement input = browser.findElement(By.xpath("//span[contains(@class, 'sod_label')]"));
         assertEquals(input.getText(), "All Members of the Royal Family");
+    }
+
+    @Test
+    public void nataliyaPlatonova() throws InterruptedException{
+        WebDriver browser = getDriver();
+        browser.get("https://www.cds.org/");
+
+        WebElement memberButton = browser.findElement(By.xpath("//*[@id='cm-dropdown1']"));
+        memberButton.click();
+        Thread.sleep(1000);
+
+        WebElement meetingsButton = browser.findElement(By.xpath("//*[@id='cm-dropdown2']"));
+        meetingsButton.click();
+        Thread.sleep(1000);
+
+        WebElement classifiedsButton = browser.findElement(By.xpath("//*[@id='cm-dropdown3']"));
+        classifiedsButton.click();
+        Thread.sleep(1000);
+
+        Assert.assertEquals(memberButton.getText(), "Member Center" );
+        Assert.assertEquals(meetingsButton.getText(), "Meetings & Events");
+        Assert.assertEquals(classifiedsButton.getText(), "Classifieds");
     }
 }
