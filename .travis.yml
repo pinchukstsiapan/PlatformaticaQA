@@ -13,6 +13,10 @@ addons:
 services:
   - docker
 
+branches:
+  only:
+    - main
+
 script:
   - export HOST_IP=$(ifconfig docker0 | awk -F"[:, ]+" '/inet/ {print $4}')
   - docker-compose -f ./selenium-grid/docker-compose.yaml up -d

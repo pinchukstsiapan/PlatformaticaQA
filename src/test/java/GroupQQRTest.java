@@ -6,12 +6,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
-public class GroupQuiQuaeritReperitTest extends BaseTest {
+public class GroupQQRTest extends BaseTest {
 
     @Test
     public void galinaRuban() throws InterruptedException {
@@ -39,25 +41,25 @@ public class GroupQuiQuaeritReperitTest extends BaseTest {
         Assert.assertEquals(gettingStarted.getText(), "Getting Started");
     }
 
-    @Ignore
     @Test
     public void stanAretinskiy() {
 
         WebDriver driver = getDriver();
         driver.get("https://www.ups.com/us/en");
 
-        WebElement schedulePickupLink =
-                driver.findElement(By.xpath("//a[@class='ups-analytics'][contains(@href, 'pickup.page')]"));
-        schedulePickupLink.click();
-        Assert.assertTrue(driver.getCurrentUrl().contains("www.ups.com/us/en/shipping/services/pickup.page?WT.mc_id="));
+        WebDriverWait wait = new WebDriverWait(driver, 4);
+        String schedulePickupLinkXpath = "//a[@class='ups-analytics'][contains(@href, 'pickup.page')]";
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(schedulePickupLinkXpath))).click();
+        Assert.assertTrue(driver.getCurrentUrl().contains("ups.com/us/en/shipping/services/pickup.page"));
 
-        WebElement pageHeading = driver.findElement(By.cssSelector("h1"));
-        Assert.assertEquals(pageHeading.getText(), "UPS Pickup Options");
+        WebElement pageTitle = wait.until(ExpectedConditions.visibilityOfElementLocated((By.cssSelector("h1"))));
+        Assert.assertEquals(pageTitle.getText(), "UPS Pickup Options");
 
         // Verify two article headers
-        List<WebElement> articleHeadersLstWe = driver.findElements(By.cssSelector("h2.ups-article-header"));
+        List<WebElement> articleHeadersLstWe =
+                wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector("h2.ups-article-header")));
         List<String> articleHeadersLstStr = new ArrayList<>();
-        for(WebElement element : articleHeadersLstWe) {
+        for (WebElement element : articleHeadersLstWe) {
             articleHeadersLstStr.add(element.getText());
         }
 
@@ -82,17 +84,17 @@ public class GroupQuiQuaeritReperitTest extends BaseTest {
 
     @Ignore
     @Test
-    public  void stanMaslov() throws InterruptedException {
+    public void stanMaslov() throws InterruptedException {
         WebDriver driver = getDriver();
         driver.get("https://www.walmart.com/");
-        WebElement header =  driver.findElement(By.cssSelector("h1"));
+        WebElement header = driver.findElement(By.cssSelector("h1"));
         Assert.assertEquals(header.getText(), "Walmart.com - Save Money. Live Better.");
         WebElement logo = driver.findElement(By.cssSelector("[class=\"z_a\"]"));
-        Assert.assertEquals(logo.isDisplayed(),true);
+        Assert.assertEquals(logo.isDisplayed(), true);
     }
 
     @Test
-    public void irinaRizvanovaTest() throws InterruptedException{
+    public void irinaRizvanovaTest() throws InterruptedException {
 
         WebDriver browser = getDriver();
         browser.get("https://udemy.com");
@@ -103,6 +105,18 @@ public class GroupQuiQuaeritReperitTest extends BaseTest {
         Thread.sleep(3000);
 
         WebElement searchResult = browser.findElement(By.xpath("//h1"));
-        Assert.assertEquals(searchResult.getText(),"10,000 results for “java”");
+        Assert.assertEquals(searchResult.getText(), "10,000 results for “java”");
+    }
+
+    @Test
+    public void guramBautsadze() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.platformatica.com/");
+        Thread.sleep(2000);
+
+        WebElement gettingStarted =
+                browser.findElement(By.xpath("//h1[text()[normalize-space()='Zero Code Automated SAAS To Revolutionize Your Business']]"));
+        Assert.assertEquals(gettingStarted.getText(), "Zero Code Automated SAAS To Revolutionize Your Business");
     }
 }

@@ -118,5 +118,33 @@ public class GroupPacificQATeamTest extends BaseTest {
 
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.udemy.com/join/login-popup/?locale=en_US&response_type=html&next=https%3A%2F%2Fwww.udemy.com%2F");
     }
+
+    @Test
+    public void zedTransformaticaLoginUser4() throws InterruptedException {
+
+        String url = "https://ref.eteam.work";
+        String email = "user4@tester.com";
+        String pass = "CoBX8ym0T7";
+        String expected = "Tasks for User 4";
+
+        WebDriver driver = getDriver();
+        driver.get(url);
+        Thread.sleep(800);
+
+        driver.findElement(By.xpath("//*[contains(@placeholder,'Login name')]")).sendKeys(email);
+        Thread.sleep(500);
+
+        driver.findElement(By.xpath("//*[contains(@placeholder,'Password')]")).sendKeys(pass);
+        Thread.sleep(500);
+
+        driver.findElement(By.xpath("//*[@type='submit']")).click();
+        Thread.sleep(800);
+
+        driver.findElement(By.xpath("//p[contains(text(),'Assignments')]")).click();
+        Thread.sleep(500);
+
+        String actual = driver.findElement(By.xpath("//h3[contains(text(),'Tasks for ')]")).getText();
+        Assert.assertEquals(actual, expected);
+    }
 }
 

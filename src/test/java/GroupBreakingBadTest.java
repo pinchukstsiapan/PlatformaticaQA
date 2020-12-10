@@ -75,13 +75,14 @@ public class GroupBreakingBadTest extends BaseTest {
     }
 
     @Test
-    public void testTatyanaAlexandrova () throws InterruptedException {
+    public void testTatyanaAlexandrova() {
+
         WebDriver browser = getDriver();
         browser.get("http://selenium.dev");
+
         WebElement name = browser.findElement(By.id("gsc-i-id1"));
         name.click();
         name.sendKeys("developers", Keys.ENTER);
-        Thread.sleep(2000);
 
         Assert.assertTrue(browser.getPageSource().contains("About"));
     }
@@ -138,7 +139,6 @@ public class GroupBreakingBadTest extends BaseTest {
         //Find element by xpath and store in variable "Element"
         WebElement element = driver.findElement(By.xpath("//a[@class='sky-btn']"));
 
-
         //This will scroll the page till the element is found
         Thread.sleep(3000);
         element.click();
@@ -169,7 +169,7 @@ public class GroupBreakingBadTest extends BaseTest {
 
     @Ignore
     @Test
-    public void NataliyaPlatonova() throws InterruptedException{
+    public void NataliyaPlatonova() {
         WebDriver driver = new ChromeDriver();
         driver.get("https://www.hotspringspool.com/");
 
@@ -187,5 +187,35 @@ public class GroupBreakingBadTest extends BaseTest {
 
         WebElement button = driver.findElement(By.xpath("//*[@id='nbaMenuButton']"));
         button.click();
+    }
+
+    @Test
+    public void evgenyLukyanenkoRoyal1() throws InterruptedException {
+        WebDriver browser = getDriver();
+        browser.get("https://www.royal.uk/");
+
+        WebElement button = browser.findElement(By.xpath("(//h2[contains(text(), 'Charities and patronages')])"));
+        button.click();
+        Thread.sleep(1000);
+
+        WebElement dropdown = browser.findElement(By.xpath("//span[contains(@class, 'sod_label')]"));
+        dropdown.click();
+        Thread.sleep(1000);
+
+        WebElement input = browser.findElement(By.xpath("//*[@id=\"edit-mrf-wrapper\"]/div//span[20]"));
+        assertEquals(input.getText(), "Princess Michael of Kent");
+    }
+
+    @Test
+    public void evgenyLukyanenkoRoyal2() throws InterruptedException {
+        WebDriver browser = getDriver();
+        browser.get("https://www.royal.uk/");
+
+        WebElement button = browser.findElement(By.xpath("(//h2[contains(text(), 'Charities and patronages')])"));
+        button.click();
+        Thread.sleep(1000);
+
+        WebElement input = browser.findElement(By.xpath("//span[contains(@class, 'sod_label')]"));
+        assertEquals(input.getText(), "All Members of the Royal Family");
     }
 }

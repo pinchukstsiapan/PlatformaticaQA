@@ -1,4 +1,5 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
@@ -143,5 +144,14 @@ public class BraveQATest extends BaseTest {
 
         WebElement name = browser.findElement(By.xpath("(//div//a[contains (@aria-label, 'COVID-19')])[1]"));
         Assert.assertEquals(name.getText(), "COVID-19");
+    }
+    @Test
+    public void erikTest() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.limoxxi.com/");
+
+        WebElement header = browser.findElement(By.xpath("(//div//h1[contains(text(),'Bay Area')])"));
+        Assert.assertEquals(header.getText(), "Bay Area Limo Service");
     }
 }

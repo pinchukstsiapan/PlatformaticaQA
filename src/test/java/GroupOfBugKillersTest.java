@@ -2,6 +2,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
@@ -31,6 +32,18 @@ public class GroupOfBugKillersTest extends BaseTest {
     }
 
     @Test
+    public void lenaHW13Test() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://coderoad.ru/48259191/%D0%92-Selenium-%D0%BA%D0%B0%D0%BA-%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%B8%D1%82%D1%8C-%D1%87%D1%82%D0%BE-%D0%BF%D1%80%D0%B8-%D0%BD%D0%B0%D0%B6%D0%B0%D1%82%D0%B8%D0%B8-%D0%BD%D0%B0-%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82-%D0%BC%D1%8B-%D1%84%D0%B0%D0%BA%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8-%D0%BF%D0%B5%D1%80%D0%B5%D1%88%D0%BB%D0%B8-%D0%BD%D0%B0");
+        WebElement name = browser.findElement(By.xpath("//a[contains(text(),'О нас')]"));
+        Assert.assertEquals(name.getText(), "О нас");
+        name.click();
+
+        Assert.assertEquals(browser.getCurrentUrl(),"https://coderoad.ru/about.html");
+    }
+
+    @Test
     public void newTest() throws InterruptedException {
 
         WebDriver driver = getDriver();
@@ -44,5 +57,53 @@ public class GroupOfBugKillersTest extends BaseTest {
         link.click();
 
         Assert.assertEquals(driver.getCurrentUrl(), "https://github.com/SergeiDemyanenko/PlatformaticaQA/branches");
+    }
+
+    @Test
+    public void vladBezpalko() {
+
+        WebDriver browser = getDriver();
+        browser.get("https://office.ooma.com/");
+        WebElement phone_field = browser.findElement(By.id("phone-label"));
+        WebElement password_field = browser.findElement(By.xpath("//*[@id='password']/../*[@class='input-label']"));
+
+        Assert.assertEquals(phone_field.getText(), "ENTER PHONE");
+        Assert.assertEquals(password_field.getText(), "ENTER PASSWORD");
+    }
+
+    @Test
+    public void viewHistoryWikipedia () {
+
+        WebDriver browser = getDriver();
+        browser.get("https://en.wikipedia.org/wiki/Main_Page");
+        WebElement name = browser.findElement(By.id("ca-history"));
+
+        Assert.assertEquals(name.getText(), "View history");
+    }
+
+    @Test
+    public void clickBtnViewHistoryWikipedia () {
+
+        WebDriver browser = getDriver();
+        browser.get("https://en.wikipedia.org/wiki/Main_Page");
+        WebElement name = browser.findElement(By.xpath("//*[@id='ca-history']/a"));
+        name.click();
+        WebElement firstHeading = browser.findElement(By.xpath("//*[@id='firstHeading']"));
+
+        Assert.assertEquals(firstHeading.getText(), "Main Page: Revision history");
+    }
+
+    @Test
+    public void svetlanaGusachenkoTest() {
+
+        WebDriver driver = getDriver();
+        driver.get("https://en.wikipedia.org/wiki/Main_Page");
+
+        WebElement link = driver.findElement(By.id("n-portal"));
+        Assert.assertEquals(link.getText(), "Community portal");
+
+        link.click();
+        WebElement name = driver.findElement(By.xpath("//*[@id=\"Welcome_to_the_Community_portal!\"]"));
+        Assert.assertEquals(name.getText(), "Welcome to the Community portal!");
     }
 }
