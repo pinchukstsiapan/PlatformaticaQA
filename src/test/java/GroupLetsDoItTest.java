@@ -38,7 +38,7 @@ public class GroupLetsDoItTest extends BaseTest {
         WebDriver browser = getDriver();
         browser.get("https://kp.org/");
 
-        browser.findElement(By.xpath("//li/a[text()='Shop Plans']")).click();
+        browser.findElement(By.xpath("//a[text()='Shop Plans']")).click();
         Assert.assertEquals(browser.getTitle(), "Shop Our Plans| Kaiser Permanente");
     }
 }
