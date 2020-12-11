@@ -14,11 +14,11 @@ public class GroupSfbaGrizzliesTest extends BaseTest {
 
     @Test
     public void klavdiaGoldshteyn() throws InterruptedException {
-       WebDriver browser = getDriver();
-       browser.get("https://en.wikipedia.org/wiki/Roger_Federer");
-       WebElement title = browser.findElement(By.xpath("//h1[@id='firstHeading']"));
+        WebDriver browser = getDriver();
+        browser.get("https://en.wikipedia.org/wiki/Roger_Federer");
+        WebElement title = browser.findElement(By.xpath("//h1[@id='firstHeading']"));
 
-       Assert.assertEquals(title.getText(), "Roger Federer");
+        Assert.assertEquals(title.getText(), "Roger Federer");
     }
 
     @Ignore
@@ -31,7 +31,7 @@ public class GroupSfbaGrizzliesTest extends BaseTest {
         link.click();
         Thread.sleep(2000);
 
-        Assert.assertEquals(browser.getCurrentUrl(),"https://www.elvisthemusic.com/news/");
+        Assert.assertEquals(browser.getCurrentUrl(), "https://www.elvisthemusic.com/news/");
     }
 
     @Ignore
@@ -48,7 +48,7 @@ public class GroupSfbaGrizzliesTest extends BaseTest {
         Thread.sleep(2000);
         WebElement text = driver.findElement(By.xpath("//div//span[3][contains(text(), 'brel')]"));
 
-        Assert.assertEquals(text.getText(),"\"umbrella\"");
+        Assert.assertEquals(text.getText(), "\"umbrella\"");
     }
 
     @Ignore
@@ -73,7 +73,7 @@ public class GroupSfbaGrizzliesTest extends BaseTest {
         WebElement icon = browser.findElement(By.xpath("//input[@id='edit-submit']"));
         icon.click();
 
-        Assert.assertEquals(browser.getCurrentUrl(),"https://www.newyorktheatreguide.com/search?s=Cats");
+        Assert.assertEquals(browser.getCurrentUrl(), "https://www.newyorktheatreguide.com/search?s=Cats");
     }
 
     @Test
@@ -85,5 +85,15 @@ public class GroupSfbaGrizzliesTest extends BaseTest {
         WebElement name = browser.findElement(By.xpath("//a[contains(@id,'thesaurus-nav-tab')]"));
 
         Assert.assertEquals(name.getText(), "THESAURUS.COM");
+    }
+
+    @Test
+    public void lisaJohns() {
+        WebDriver browser = getDriver();
+        browser.get("https://www.rideboreal.com/");
+
+        WebElement title = browser.findElement(By.xpath("//div/h1[text()='HOME AT BOREAL']"));
+
+        Assert.assertEquals(title.getText(), "HOME AT BOREAL");
     }
 }

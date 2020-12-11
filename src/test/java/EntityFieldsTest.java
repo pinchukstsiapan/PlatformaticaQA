@@ -1,13 +1,15 @@
+import java.util.List;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.testng.Assert;
 import runner.BaseTest;
 
-import java.util.List;
 import java.util.UUID;
 
 public class EntityFieldsTest extends BaseTest {
@@ -36,11 +38,8 @@ public class EntityFieldsTest extends BaseTest {
         WebElement numberElement = driver.findElement(By.xpath("//input[@name='entity_form_data[int]']"));
         numberElement.sendKeys(String.valueOf(number));
 
-        By submitBy = By.id("pa-entity-form-save-btn");
-        WebElement submit = driver.findElement(submitBy);
-        WebDriverWait wait = new WebDriverWait(driver, 4);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(submitBy));
-        submit.click();
+        WebElement submit = driver.findElement(By.id("pa-entity-form-save-btn"));
+        ProjectUtils.click(driver, submit);
 
         // validation of record
         String recordTitleXpath = String.format("//div[contains(text(), '%s')]", title);
