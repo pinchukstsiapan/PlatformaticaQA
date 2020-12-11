@@ -149,4 +149,5 @@ public class GroupOfBugKillersTest extends BaseTest {
         WebElement textResult = driver.findElement(By.xpath("//h1[contains(text(), '10,000 results for “java”')]"));
         Assert.assertEquals(textResult.getText(), "10,000 results for “java”");
     }
+    
 }
