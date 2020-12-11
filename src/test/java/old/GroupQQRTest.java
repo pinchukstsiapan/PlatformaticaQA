@@ -1,3 +1,5 @@
+package old;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -13,6 +15,7 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
+@Ignore
 public class  GroupQQRTest extends BaseTest {
 
     @Test

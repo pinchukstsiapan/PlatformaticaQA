@@ -1,3 +1,5 @@
+package old;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -13,6 +15,7 @@ import runner.BaseTest;
 import java.rmi.registry.Registry;
 import java.security.Signature;
 
+@Ignore
 public class GroupPacificQATeamTest extends BaseTest {
 
     @Test
