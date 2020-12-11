@@ -241,4 +241,18 @@ public class GroupBreakingBadTest extends BaseTest {
         Assert.assertEquals(meetingsButton.getText(), "Meetings & Events");
         Assert.assertEquals(classifiedsButton.getText(), "Classifieds");
     }
+
+    @Test
+    public void vitaliiTest() throws InterruptedException {
+
+        WebDriver driver = getDriver();
+        driver.get("https://www.aerotek.com/en/");
+
+        WebElement button = driver.findElement(By.xpath("(//button[contains(text(), 'SEARCH')])[2]"));
+        button.click();
+        Thread.sleep(3000);
+
+        WebElement input = driver.findElement(By.xpath("//input[contains(@class, 'ph-a11y-location-box')]"));
+        assertEquals(input.getAttribute("placeholder"), "Enter City, State or Zip");
+    }
 }
