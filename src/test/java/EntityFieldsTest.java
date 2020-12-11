@@ -51,9 +51,10 @@ public class EntityFieldsTest extends BaseTest {
         WebElement createdRecordComment = driver.findElement(newRecordComment);
         WebElement createdRecordInt = driver.findElement(newRecordInt);
 
-        Assert.assertTrue(createdRecordTitle.isDisplayed());
-        Assert.assertEquals(createdRecordComment.getText(), comment);
-        Assert.assertEquals(createdRecordInt.getText(), Integer.toString(number));
+        Assert.assertTrue(createdRecordTitle.isDisplayed(), "New record not found");
+        Assert.assertEquals(createdRecordComment.getText(), comment, "Problem with comment for new record");
+        Assert.assertEquals(createdRecordInt.getText(), Integer.toString(number),
+                "Problem with int value for new record");
 
         // cleanup, delete created record
         driver.findElement(By.xpath(String.format("%s/../../..//button", recordTitleXpath))).click();
