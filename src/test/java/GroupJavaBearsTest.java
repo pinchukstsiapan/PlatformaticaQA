@@ -126,29 +126,16 @@ public class GroupJavaBearsTest extends BaseTest {
         Assert.assertEquals(search_result.getText(), "SEARCH RESULTS");
     }
 
-    @Ignore
     @Test
-    public void olgaV1() {
-
+    public void bogdanQA() throws InterruptedException {
         WebDriver browser = getDriver();
-        browser.get("https://www.guru99.com/introduction-to-selenium.html");
+        browser.get("https://en.wikipedia.org/wiki/Main_Page");
 
-        WebElement seleniumLink2 = browser.findElement(By.xpath("//a[contains(text(),'Birth of Selenium 2')]"));
-        seleniumLink2.click();
-
-        Assert.assertEquals(browser.getCurrentUrl(), "https://www.guru99.com/introduction-to-selenium.html#8");
+        WebElement button = browser.findElement(By.xpath("//li[@id='ca-view']/a[contains(text(),'Read')]"));
+        Thread.sleep(3000);
+        Assert.assertEquals(button.getText(), "Read");
     }
-
-    @Test
-    public void olgaV2() {
-
-        WebDriver browser = getDriver();
-        browser.get("https://www.recreation.gov/");
-
-        browser.findElement(By.xpath("//div[@class='nav-links-wrap']/a[1]")).click();
-        Assert.assertEquals(browser.getCurrentUrl(), "https://www.recreation.gov/whats-new");
-    }
-
+    
     @Test
     public void farizA() {
         WebDriver driver = getDriver();
