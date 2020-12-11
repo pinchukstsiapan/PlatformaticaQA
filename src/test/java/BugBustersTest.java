@@ -31,4 +31,13 @@ public class BugBustersTest extends BaseTest {
         Assert.assertEquals(footer_1.getText(), "© 2020 GitHub, Inc.");
     }
 
+    @Test
+    public void rustamTest(){
+
+        WebDriver driver = getDriver();
+        driver.get("https://www.w3schools.com/");
+
+        driver.findElement(By.xpath("(//a[text() ='Learn JavaScript'])[1]")).click();
+        Assert.assertTrue(driver.findElement(By.xpath("//span[contains(text(),'Tutorial')]")).isDisplayed());
+    }
 }
