@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 
 public class GroupTBDTest extends BaseTest {
 
-    @Ignore
     @Test
     public void vadimTymeichuk () throws InterruptedException {
 
@@ -20,11 +19,11 @@ public class GroupTBDTest extends BaseTest {
 
         WebElement button = driver.findElement(By.xpath("//div/details/*[@class = 'btn css-truncate']"));
         button.click();
-        Thread.sleep(4000);
+        Thread.sleep(1000);
 
         WebElement button1 = driver.findElement(By.xpath("//*[@data-filter-placeholder = 'Find a tag']"));
         button1.click();
-        Thread.sleep(4000);
+        Thread.sleep(1000);
 
         WebElement link = driver.findElement(By.linkText("View all tags"));
         link.click();
