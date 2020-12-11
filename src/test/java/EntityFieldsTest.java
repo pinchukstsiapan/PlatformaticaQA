@@ -3,15 +3,17 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
+import java.util.List;
 import java.util.UUID;
 
 public class EntityFieldsTest extends BaseTest {
 
     @Test
-    public void newRecord() throws InterruptedException {
+    public void newRecord() {
 
         WebDriver driver = getDriver();
         driver.get("https://ref.eteam.work");
@@ -36,16 +38,35 @@ public class EntityFieldsTest extends BaseTest {
 
         By submitBy = By.id("pa-entity-form-save-btn");
         WebElement submit = driver.findElement(submitBy);
-        WebDriverWait wait = new WebDriverWait(driver, 10);
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(submitBy));
+        WebDriverWait wait = new WebDriverWait(driver, 4);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(submitBy));
         submit.click();
 
         // validation of record
-        //driver.findElement(By.xpath(String.format("//div[contains(text(), '%s')]", title)));
-        driver.findElement(By.xpath("//div[contains(text(), '" + title + "')]"));
+        String recordTitleXpath = String.format("//div[contains(text(), '%s')]", title);
+        By newRecordTitle = By.xpath(recordTitleXpath);
+        By newRecordComment = By.xpath(String.format("%s/../../../td[3]/a/div", recordTitleXpath));
+        By newRecordInt = By.xpath(String.format("%s/../../../td[4]/a/div", recordTitleXpath));
 
-        // add delete
+        WebElement createdRecordTitle = driver.findElement(newRecordTitle);
+        WebElement createdRecordComment = driver.findElement(newRecordComment);
+        WebElement createdRecordInt = driver.findElement(newRecordInt);
+
+        Assert.assertTrue(createdRecordTitle.isDisplayed());
+        Assert.assertEquals(createdRecordComment.getText(), comment);
+        Assert.assertEquals(createdRecordInt.getText(), Integer.toString(number));
+
+        // cleanup, delete created record
+        driver.findElement(By.xpath(String.format("%s/../../..//button", recordTitleXpath))).click();
+        List<WebElement> deleteButtons =
+                driver.findElements(By.xpath(String.format("%s/../../..//a[contains(text(), 'delete')]",
+                        recordTitleXpath)));
+        for (WebElement button : deleteButtons) {
+            if (button.isDisplayed()) {
+                button.click();
+                break;
+            }
+        }
     }
-
 
 }
