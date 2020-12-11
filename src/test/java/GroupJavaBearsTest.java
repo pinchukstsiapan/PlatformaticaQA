@@ -149,4 +149,15 @@ public class GroupJavaBearsTest extends BaseTest {
         Assert.assertEquals(browser.getCurrentUrl(), "https://www.recreation.gov/whats-new");
     }
 
+    @Test
+    public void farizA() {
+        WebDriver driver = getDriver();
+        driver.get("https://id.atlassian.com/signup?application=bitbucket&continue=https%3A//" +
+                "bitbucket.org/account/signin/%3Foptintocst%3D1%26next%3D/%3Faidsignup%3D1");
+
+        WebElement signUpButton = driver.findElement(By.xpath("//button[@id='signup-submit']"));
+        signUpButton.click();
+
+        Assert.assertTrue(driver.findElement(By.xpath("(//span[@aria-label='warning'])[1]")).isDisplayed());
+    }
 }
