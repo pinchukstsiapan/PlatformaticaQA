@@ -35,7 +35,7 @@ public class EntityFieldsTest extends BaseTest {
         numberElement.sendKeys(String.valueOf(number));
 
         WebDriverWait wait = new WebDriverWait(driver, 10);
-        WebElement submit = wait.until(ExpectedConditions.elementToBeClickable(By.id("pa-entity-form-save-btn")));
+        WebElement submit = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("pa-entity-form-save-btn")));
         submit.click();
 
         // validation of record
