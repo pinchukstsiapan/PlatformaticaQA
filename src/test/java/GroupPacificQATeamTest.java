@@ -118,5 +118,138 @@ public class GroupPacificQATeamTest extends BaseTest {
 
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.udemy.com/join/login-popup/?locale=en_US&response_type=html&next=https%3A%2F%2Fwww.udemy.com%2F");
     }
+
+    @Test
+    public void zedTransformaticaLoginUser4() throws InterruptedException {
+
+        String url = "https://ref.eteam.work";
+        String email = "user4@tester.com";
+        String pass = "CoBX8ym0T7";
+        String expected = "Tasks for User 4";
+
+        WebDriver driver = getDriver();
+        driver.get(url);
+        Thread.sleep(800);
+
+        driver.findElement(By.xpath("//*[contains(@placeholder,'Login name')]")).sendKeys(email);
+        Thread.sleep(500);
+
+        driver.findElement(By.xpath("//*[contains(@placeholder,'Password')]")).sendKeys(pass);
+        Thread.sleep(500);
+
+        driver.findElement(By.xpath("//*[@type='submit']")).click();
+        Thread.sleep(800);
+
+        driver.findElement(By.xpath("//p[contains(text(),'Assignments')]")).click();
+        Thread.sleep(500);
+
+        String actual = driver.findElement(By.xpath("//h3[contains(text(),'Tasks for ')]")).getText();
+        Assert.assertEquals(actual, expected);
+    }
+
+    @Ignore
+    @Test
+    public void maxBurdinNootropicsexpert() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://nootropicsexpert.com/");
+
+        WebElement list = browser.findElement(By.xpath("//span[text() = 'List of Nootropics']"));
+        list.click();
+
+        WebElement ashwa = browser.findElement(By.xpath("//a[text() = 'Learn more about Ashwagandha']"));
+        ashwa.click();
+
+        WebElement book = browser.findElement(By.xpath("//a[text() = 'clicking here']"));
+        book.click();
+
+        Thread.sleep(2000);
+
+        WebElement addToBag = browser.findElement(By.xpath("(//button[contains(@class, 'addToBag')])[1]"));
+        addToBag.click();
+
+        Thread.sleep(2000);
+
+        Assert.assertEquals(browser.findElement(By.xpath("//span[contains(@class, 'total')]")).getText(), "$37.00");
+
+    }
+
+    @Ignore
+    @Test
+    public void maxBurdinCodecademy() {
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.codecademy.com/");
+
+        WebElement logIn = browser.findElement(By.xpath("(//a[@data-testid = 'header-sign-in'])[1]"));
+        logIn.click();
+
+        WebElement userNameField = browser.findElement(By.xpath("//input[@id='user_login']"));
+        userNameField.sendKeys("Test_User_123");
+
+        WebElement passwordField = browser.findElement(By.xpath("//input[@id = 'login__user_password']"));
+        passwordField.sendKeys("tEsTpA$$word");
+
+        WebElement logInButton = browser.findElement(By.xpath("//button[@id = 'user_submit']"));
+        logInButton.click();
+
+        WebElement setTarget = browser.findElement(By.xpath("//a[@data-testid = 'set-target']"));
+        setTarget.click();
+
+        Assert.assertEquals(browser.getCurrentUrl(), "https://www.codecademy.com/account/goals_settings");
+    }
+
+    @Test
+    public void nataliTverdohlibTask14() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://github.com/SergeiDemyanenko/PlatformaticaQA");
+        WebElement button = browser.findElement(By.xpath("//span[contains(text(), 'Pull request')]"));
+        button.click();
+
+        Thread.sleep(2000);
+
+        Assert.assertEquals(browser.getCurrentUrl(), "https://github.com/SergeiDemyanenko/PlatformaticaQA/pulls");
+    }
+
+    @Test
+    public void nataliaTaskE1() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://github.com/SergeiDemyanenko/PlatformaticaQA");
+        WebElement name = browser.findElement(By.xpath("//*[@data-tab-item='i0code-tab']"));
+
+        Assert.assertEquals(name.getText(), "Code");
+    }
+
+    @Test
+    public void nataliaTaskE2() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://github.com/SergeiDemyanenko/PlatformaticaQA");
+        WebElement name = browser.findElement(By.xpath("//*[@data-tab-item='i1issues-tab']"));
+
+        Assert.assertEquals(name.getText(), "Issues");
+    }
+
+    @Test
+    public void nataliaTaskE3() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://github.com/SergeiDemyanenko/PlatformaticaQA");
+        WebElement name = browser.findElement(By.xpath("//span[@data-content='Pull requests']"));
+
+        Assert.assertEquals(name.getText(), "Pull requests");
+    }
+
+    @Test
+    public void nataliaTaskE5() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://github.com/SergeiDemyanenko/PlatformaticaQA");
+        WebElement name = browser.findElement(By.xpath("//a[text()[normalize-space()='Star']]"));
+
+        Assert.assertEquals(name.getText(), "Star");
+    }
 }
 

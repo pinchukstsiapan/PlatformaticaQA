@@ -1,6 +1,7 @@
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
@@ -17,6 +18,7 @@ public class GroupSfbaGrizzliesTest extends BaseTest {
        Assert.assertEquals(title.getText(), "Roger Federer");
     }
 
+    @Ignore
     @Test
     public void gayaneMfirst() throws InterruptedException {
         WebDriver browser = getDriver();
@@ -46,6 +48,7 @@ public class GroupSfbaGrizzliesTest extends BaseTest {
         Assert.assertEquals(text.getText(),"\"umbrella\"");
     }
 
+    @Ignore
     @Test
     public void lanaRogova() throws InterruptedException {
 
@@ -54,5 +57,30 @@ public class GroupSfbaGrizzliesTest extends BaseTest {
 
         WebElement text = browser.findElement(By.xpath("//a[@id='biblionav_account_trigger']"));
         Assert.assertEquals(text.getText(), "Log In / My VPL\nUser Log In / My VPL.");
+    }
+
+    @Test
+    public void gayaneMthird() throws InterruptedException {
+        WebDriver browser = getDriver();
+        browser.get("https://www.newyorktheatreguide.com/whats-on/broadway/musicals");
+
+        WebElement input = browser.findElement(By.xpath("//input[@id='edit-search-block-form--2']"));
+        input.sendKeys("Cats");
+
+        WebElement icon = browser.findElement(By.xpath("//input[@id='edit-submit']"));
+        icon.click();
+
+        Assert.assertEquals(browser.getCurrentUrl(),"https://www.newyorktheatreguide.com/search?s=Cats");
+    }
+
+    @Test
+    public void kristinaMarachova() {
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.thesaurus.com/");
+
+        WebElement name = browser.findElement(By.xpath("//a[contains(@id,'thesaurus-nav-tab')]"));
+
+        Assert.assertEquals(name.getText(), "THESAURUS.COM");
     }
 }
