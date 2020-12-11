@@ -15,6 +15,7 @@ import runner.BaseTest;
 import java.rmi.registry.Registry;
 import java.security.Signature;
 
+@Ignore
 public class GroupPacificQATeamTest extends BaseTest {
 
     @Test

@@ -15,6 +15,7 @@ import org.openqa.selenium.interactions.Actions;
 
 import static org.testng.Assert.assertEquals;
 
+@Ignore
 public class GroupBreakingBadTest extends BaseTest {
 
     @Test

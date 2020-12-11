@@ -12,6 +12,7 @@ import runner.BaseTest;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
+@Ignore
 public class GroupJavaBearsTest extends BaseTest {
 
     @Test

@@ -15,6 +15,7 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
+@Ignore
 public class  GroupQQRTest extends BaseTest {
 
     @Test

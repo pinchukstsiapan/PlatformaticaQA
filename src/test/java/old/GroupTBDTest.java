@@ -11,6 +11,7 @@ import runner.BaseTest;
 
 import java.util.concurrent.TimeUnit;
 
+@Ignore
 public class GroupTBDTest extends BaseTest {
 
     @Ignore
