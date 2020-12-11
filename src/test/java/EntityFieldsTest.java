@@ -63,15 +63,9 @@ public class EntityFieldsTest extends BaseTest {
 
         // cleanup, delete created record
         driver.findElement(By.xpath(String.format("%s/../../..//button", recordTitleXpath))).click();
-        List<WebElement> deleteButtons =
-                driver.findElements(By.xpath(String.format("%s/../../..//a[contains(text(), 'delete')]",
-                        recordTitleXpath)));
-        for (WebElement button : deleteButtons) {
-            if (button.isDisplayed()) {
-                button.click();
-                break;
-            }
-        }
+        WebDriverWait wait = new WebDriverWait(getDriver(), 1);
+        String delBtnXpath = String.format("%s/../../..//a[contains(@href, 'delete')]", recordTitleXpath);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(delBtnXpath))).click();
     }
 
 }
