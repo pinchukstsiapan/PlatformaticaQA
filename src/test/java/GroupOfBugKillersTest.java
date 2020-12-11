@@ -59,6 +59,7 @@ public class GroupOfBugKillersTest extends BaseTest {
         Assert.assertEquals(driver.getCurrentUrl(), "https://github.com/SergeiDemyanenko/PlatformaticaQA/branches");
     }
 
+    @Ignore
     @Test
     public void vladBezpalko() {
 
