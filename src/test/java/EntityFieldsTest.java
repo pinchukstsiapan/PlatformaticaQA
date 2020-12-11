@@ -1,6 +1,8 @@
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
@@ -32,7 +34,8 @@ public class EntityFieldsTest extends BaseTest {
         WebElement numberElement = driver.findElement(By.xpath("//input[@name='entity_form_data[int]']"));
         numberElement.sendKeys(String.valueOf(number));
 
-        WebElement submit = driver.findElement(By.id("pa-entity-form-save-btn"));
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        WebElement submit = wait.until(ExpectedConditions.elementToBeClickable(By.id("pa-entity-form-save-btn")));
         submit.click();
 
         // validation of record
