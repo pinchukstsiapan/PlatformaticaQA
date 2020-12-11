@@ -131,7 +131,7 @@ public class GroupOfBugKillersTest extends BaseTest {
 
         WebDriver driver = getDriver();
         driver.get("https://www.udemy.com/");
-        Thread.sleep(1000);
+        Thread.sleep(1100);
 
         WebElement search = driver.findElement(By.xpath("//input[@placeholder='Search for anything']"));
         search.sendKeys("Java");
