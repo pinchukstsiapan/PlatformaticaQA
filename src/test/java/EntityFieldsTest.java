@@ -42,19 +42,24 @@ public class EntityFieldsTest extends BaseTest {
         ProjectUtils.click(driver, submit);
 
         // validation of record
+        int titleMatch = 0;
+        List<WebElement> titlesWe = driver.findElements(By.xpath("//tr/td[2]"));
+        for (WebElement element : titlesWe) {
+            if (element.isDisplayed() && element.getText().equals(title)) {
+            titleMatch++;
+            }
+        }
+        Assert.assertEquals(titleMatch, 1, "Created record not found or found more than one");
+
         String recordTitleXpath = String.format("//div[contains(text(), '%s')]", title);
-        By newRecordTitle = By.xpath(recordTitleXpath);
         By newRecordComment = By.xpath(String.format("%s/../../../td[3]/a/div", recordTitleXpath));
         By newRecordInt = By.xpath(String.format("%s/../../../td[4]/a/div", recordTitleXpath));
-
-        WebElement createdRecordTitle = driver.findElement(newRecordTitle);
         WebElement createdRecordComment = driver.findElement(newRecordComment);
         WebElement createdRecordInt = driver.findElement(newRecordInt);
 
-        Assert.assertTrue(createdRecordTitle.isDisplayed(), "New record not found");
-        Assert.assertEquals(createdRecordComment.getText(), comment, "Problem with comment for new record");
+        Assert.assertEquals(createdRecordComment.getText(), comment, "Created record comment text issue");
         Assert.assertEquals(createdRecordInt.getText(), Integer.toString(number),
-                "Problem with int value for new record");
+                "Created record int value issue");
 
         // cleanup, delete created record
         driver.findElement(By.xpath(String.format("%s/../../..//button", recordTitleXpath))).click();
