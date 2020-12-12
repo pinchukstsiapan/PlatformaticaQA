@@ -11,13 +11,10 @@ public class EntityVisibilityEventsTest extends BaseTest {
 
     private void setUp(WebDriver driver) {
         driver.get("https://ref.eteam.work");
-
         ProjectUtils.login(driver, "user1@tester.com", "ah1QNmgkEO");
-
         WebElement visibilityEventsTab = driver.findElement(
                 By.xpath("//div[@id='menu-list-parent']//li/a[contains(@href,'id=86')]"));
         visibilityEventsTab.click();
-
     }
 
     private void createField(WebDriver driver, CharSequence content, Boolean enabled) {
@@ -40,8 +37,7 @@ public class EntityVisibilityEventsTest extends BaseTest {
     }
 
     private void validateFieldVisibility(WebDriver driver, String content, Boolean expected) throws InterruptedException {
-        WebElement actionButton = driver.findElement(
-                By.xpath("//div[contains(text(), '" + content + "')]/../../../td[4]/div/button"));
+        WebElement actionButton = findActionButtonByContent(driver, content);
         actionButton.click();
 
         Thread.sleep(300); // Wait for CSS animation
@@ -61,9 +57,36 @@ public class EntityVisibilityEventsTest extends BaseTest {
         cancelButton.click();
     }
 
+    private void deleteRecordByTitle(WebDriver driver, String title) throws InterruptedException {
+        WebElement actionButton = findActionButtonByContent(driver, title);
+        actionButton.click();
+
+        Thread.sleep(300); // Wait for CSS animation
+
+        WebElement deleteButton = actionButton.findElement(
+                By.xpath("../ul/li[3]/a[contains(text(), 'delete')]"));
+        deleteButton.click();
+    }
+
+    private WebElement findActionButtonByContent(WebDriver driver, String content) {
+        WebElement searchField = driver.findElement(
+                By.xpath("//input[@placeholder='Search']"));
+        Assert.assertNotNull(searchField);
+        searchField.sendKeys(content);
+
+        final int timeoutSec = 2;
+        final String selector = "//div[contains(text(), '" + content + "')]/ancestor::tr//button[contains(., 'menu')]";
+        new WebDriverWait(driver, timeoutSec).until(
+                ExpectedConditions.presenceOfElementLocated(
+                        By.xpath(selector)));
+
+        WebElement actionButton = driver.findElement(By.xpath(selector));
+        Assert.assertNotNull(actionButton);
+        return actionButton;
+    }
+
     @Test
     public void testFieldVisibility() {
-
         WebDriver driver = getDriver();
         setUp(driver);
 
@@ -83,14 +106,19 @@ public class EntityVisibilityEventsTest extends BaseTest {
 
     @Test
     public void triggerFieldState() throws InterruptedException {
-
         WebDriver driver = getDriver();
         setUp(driver);
 
-        createField(driver, "FieldEnabled", true);
-        createField(driver, "FieldDisabled", false);
+        final String fieldEnabled = TestUtils.getUUID();
+        final String fieldDisabled = TestUtils.getUUID();
 
-        validateFieldVisibility(driver, "FieldEnabled", true);
-        validateFieldVisibility(driver, "FieldDisabled", false);
+        createField(driver, fieldEnabled, true);
+        createField(driver, fieldDisabled, false);
+
+        validateFieldVisibility(driver, fieldEnabled, true);
+        validateFieldVisibility(driver, fieldDisabled, false);
+
+        deleteRecordByTitle(driver, fieldEnabled);
+        deleteRecordByTitle(driver, fieldDisabled);
     }
 }
