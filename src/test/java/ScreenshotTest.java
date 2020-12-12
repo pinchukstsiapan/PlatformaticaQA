@@ -30,7 +30,7 @@ public class ScreenshotTest extends BaseTest {
         Assert.assertTrue(true);
         TestUtils.makeScreenShot(browser, "/tmp/takeScreenshotDemo_01.png");
 
-        // To test screenshot on failure add below assert that would fail. For example, Assert.assertTrue(false);
+        // To test screenshot on failure below add assert that would fail. For example, Assert.assertTrue(false);
     }
 
     /***
