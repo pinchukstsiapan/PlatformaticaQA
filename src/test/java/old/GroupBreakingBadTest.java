@@ -1,3 +1,5 @@
+package old;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -13,6 +15,7 @@ import org.openqa.selenium.interactions.Actions;
 
 import static org.testng.Assert.assertEquals;
 
+@Ignore
 public class GroupBreakingBadTest extends BaseTest {
 
     @Test
@@ -237,5 +240,19 @@ public class GroupBreakingBadTest extends BaseTest {
         Assert.assertEquals(memberButton.getText(), "Member Center" );
         Assert.assertEquals(meetingsButton.getText(), "Meetings & Events");
         Assert.assertEquals(classifiedsButton.getText(), "Classifieds");
+    }
+
+    @Test
+    public void vitaliiTest() throws InterruptedException {
+
+        WebDriver driver = getDriver();
+        driver.get("https://www.aerotek.com/en/");
+
+        WebElement button = driver.findElement(By.xpath("(//button[contains(text(), 'SEARCH')])[2]"));
+        button.click();
+        Thread.sleep(3000);
+
+        WebElement input = driver.findElement(By.xpath("//input[contains(@class, 'ph-a11y-location-box')]"));
+        assertEquals(input.getAttribute("placeholder"), "Enter City, State or Zip");
     }
 }

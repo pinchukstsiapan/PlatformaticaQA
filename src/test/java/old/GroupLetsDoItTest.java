@@ -1,3 +1,5 @@
+package old;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -6,6 +8,7 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
+@Ignore
 public class GroupLetsDoItTest extends BaseTest {
 
     @Test
@@ -64,5 +67,16 @@ public class GroupLetsDoItTest extends BaseTest {
 
         WebElement privacyTitle = browser.findElement(By.xpath("//h2[contains(text(),'Privacy')]"));
         Assert.assertTrue(privacyTitle.isDisplayed());
+    }
+
+    @Test
+    public void annaGerasimova() {
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.w3schools.com/");
+
+        WebElement title = browser.findElement(By.xpath("//a[@class='w3schools-logo notranslate']"));
+
+        Assert.assertEquals(title.getText(), "w3schools.com");
     }
 }
