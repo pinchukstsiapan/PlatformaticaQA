@@ -51,9 +51,9 @@ public class EntityFieldsTest extends BaseTest {
                 if (isTitleFound(title)) {
                     titleFound = true;
                     break;
-                    }
+                }
                 List<WebElement> pagination = driver.findElements(By.cssSelector("a.page-link"));
-                pagination.get(pagination.size() -1).click();
+                pagination.get(pagination.size() - 1).click();
                 WebElement paginationFirstIndexWe = driver.findElements(By.cssSelector("a.page-link")).get(1);
                 String paginationFirstIndex = paginationFirstIndexWe.getText();
                 boolean paginationFirstIndexActive =
@@ -92,6 +92,7 @@ public class EntityFieldsTest extends BaseTest {
         }
         return false;
     }
+
     @Test
     public void deleteRecord() throws InterruptedException {
 
@@ -107,7 +108,7 @@ public class EntityFieldsTest extends BaseTest {
         //CREATE
         for (int i = 0; i < numOfEntities; i++) {
             driver.findElement(By.xpath("//i[contains(text(), 'create_new_folder')]")).click();
-            driver.findElement(By.xpath("//input[@id='title']")).sendKeys("Title number " + (i+1));
+            driver.findElement(By.xpath("//input[@id='title']")).sendKeys("Title number " + (i + 1));
             driver.findElement(By.xpath("//textarea[@id='comments']")).sendKeys("If i left this comment than i did not do my job of deleting");
             driver.findElement(By.xpath("//input[@id='int']")).sendKeys("777");
             driver.findElement(By.xpath("//input[@id='decimal']")).sendKeys("777.7777");
