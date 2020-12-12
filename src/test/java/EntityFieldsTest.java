@@ -46,5 +46,43 @@ public class EntityFieldsTest extends BaseTest {
         // add delete
     }
 
+    @Test
+    public void deleteRecord() throws InterruptedException {
 
+        WebDriver driver = getDriver();
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+
+        driver.get("https://ref.eteam.work");
+        ProjectUtils.login(driver, "user1@tester.com", "ah1QNmgkEO");
+        driver.findElement(By.xpath("//li[@id='pa-menu-item-45']")).click();
+
+        int numOfEntities = 500;
+
+        //CREATE
+        for (int i = 0; i < numOfEntities; i++) {
+            driver.findElement(By.xpath("//i[contains(text(), 'create_new_folder')]")).click();
+            driver.findElement(By.xpath("//input[@id='title']")).sendKeys("Title number " + (i+1));
+            driver.findElement(By.xpath("//textarea[@id='comments']")).sendKeys("If i left this comment than i did not do my job of deleting");
+            driver.findElement(By.xpath("//input[@id='int']")).sendKeys("777");
+            driver.findElement(By.xpath("//input[@id='decimal']")).sendKeys("777.7777");
+            driver.findElement(By.xpath("//input[@id='date']")).click();
+            driver.findElement(By.xpath("//input[@id='datetime']")).click();
+//        Need answer - How to click on the image button and embed an image ??
+//        driver.findElement(By.xpath("//input[@id='file_image']")).click();
+//        js.executeScript("window.scrollBy(0,1000)","");
+            WebElement saveButton = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
+            js.executeScript("arguments[0].scrollIntoView();", saveButton);
+            saveButton.click();
+        }
+
+        //DESTROY
+        for (int i = 0; i < numOfEntities; i++) {
+            driver.findElement(By.xpath("//button[@class='btn btn-round btn-sm btn-primary dropdown-toggle']")).click();
+            driver.findElement(By.xpath("//ul[@class='dropdown-menu dropdown-menu-right show']/li[3]")).click();
+        }
+
+//        Thread.sleep(3000);
+
+
+    }
 }
