@@ -1,3 +1,5 @@
+package old;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -6,6 +8,7 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
+@Ignore
 public class GroupOfBugKillersTest extends BaseTest {
 
     @Test
@@ -131,7 +134,7 @@ public class GroupOfBugKillersTest extends BaseTest {
 
         WebDriver driver = getDriver();
         driver.get("https://www.udemy.com/");
-        Thread.sleep(1000);
+        Thread.sleep(1100);
 
         WebElement search = driver.findElement(By.xpath("//input[@placeholder='Search for anything']"));
         search.sendKeys("Java");

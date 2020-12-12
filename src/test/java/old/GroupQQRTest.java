@@ -1,3 +1,5 @@
+package old;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -13,7 +15,8 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
-public class  GroupQQRTest extends BaseTest {
+@Ignore
+public class GroupQQRTest extends BaseTest {
 
     @Test
     public void galinaRuban() throws InterruptedException {
@@ -142,11 +145,12 @@ public class  GroupQQRTest extends BaseTest {
         browser.get("https://udemy.com");
         Thread.sleep(2000);
 
-        WebElement signUpButton=browser.findElement(By.xpath("//a[@data-purpose='header-signup']"));
+        WebElement signUpButton = browser.findElement(By.xpath("//a[@data-purpose='header-signup']"));
         signUpButton.click();
         WebElement loginbox = browser.findElement(By.xpath("//div[@class='loginbox-v4__footer']"));
-        Assert.assertEquals(loginbox.getText(),  "Already have an account? Log In");
+        Assert.assertEquals(loginbox.getText(), "Already have an account? Log In");
     }
+
     @Test
     public void irinaRizvanovaSignInLink() throws InterruptedException {
 
