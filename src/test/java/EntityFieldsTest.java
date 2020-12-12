@@ -12,7 +12,6 @@ import runner.BaseTest;
 
 public class EntityFieldsTest extends BaseTest {
 
-    @Ignore
     @Test
     public void newRecord() {
 

@@ -11,7 +11,9 @@ import runner.BaseTest;
 public class ScreenshotTest extends BaseTest {
 
     /***
-     * demonstration of how to use makeScreenShot within the test
+     * demonstration of how to use makeScreenShot within the test.
+     * When running this locally make sure you have  /tmp  directory on Linux/Mac
+     * or  c:\tmp  directory on windows assuming you are using disk C: to run your tests
      */
     @Test
     public void takeScreenshotDemo() {
@@ -25,14 +27,10 @@ public class ScreenshotTest extends BaseTest {
         WebElement input = browser.findElement(By.xpath("//input[@id='searchInput']"));
         input.sendKeys("Обеспечение качества");
 
-        // imitate successful assert (happy path)
-        Assert.assertNotEquals(input.getText(), "ZZZZZZZZZ");
+        Assert.assertTrue(true);
+        TestUtils.makeScreenShot(browser, "/tmp/takeScreenshotDemo_01.png");
 
-        // just take screenshot after successful assert (happy path)
-        TestUtils.makeScreenShot(browser, "/tmp/dmitryTestRun_01.png");
-
-        // imitate failed assert to test makeScreenShotAfterTest method
-        //Assert.assertEquals(input.getText(), "Обеспечение качества");
+        // To test screenshot on failure add below assert that would fail. For example, Assert.assertTrue(false);
     }
 
     /***
@@ -41,7 +39,7 @@ public class ScreenshotTest extends BaseTest {
     @AfterMethod
     public void makeScreenShotAfterTest(ITestResult testResult) {
         if (ITestResult.FAILURE == testResult.getStatus()) {
-            TestUtils.makeScreenShot(getDriver(), "/tmp/dmitryTestRun_FAILED.png");
+            TestUtils.makeScreenShot(getDriver(), "/tmp/takeScreenshotDemo_FAILED.png");
         }
     }
 
