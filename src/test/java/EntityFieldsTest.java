@@ -1,4 +1,5 @@
 import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,6 +15,7 @@ public class EntityFieldsTest extends BaseTest {
     public void newRecord() {
 
         WebDriver driver = getDriver();
+        WebDriverWait wait = new WebDriverWait(getDriver(), 1);
         driver.get("https://ref.eteam.work");
 
         ProjectUtils.login(driver, "user1@tester.com", "ah1QNmgkEO");
@@ -38,15 +40,32 @@ public class EntityFieldsTest extends BaseTest {
         ProjectUtils.click(driver, submit);
 
         // validation of record
-        int titleMatch = 0;
-        List<WebElement> titlesWe = driver.findElements(By.xpath("//tr/td[2]"));
-        for (WebElement element : titlesWe) {
-            if (element.isDisplayed() && element.getText().equals(title)) {
-            titleMatch++;
+        boolean titleFound = false;
+        int numOfRecordsOnPage = Integer.parseInt(wait.until(ExpectedConditions.visibilityOfElementLocated(By
+                .xpath("//span[@class='pagination-info']"))).getText().split(" ")[5]);
+        int totalPages = Integer.parseInt(driver.findElement(By.cssSelector("span.page-size")).getText());
+        if (numOfRecordsOnPage > totalPages) {
+            boolean firstRound = true;
+            while (firstRound) {
+                if (isTitleFound(title)) {
+                    titleFound = true;
+                    break;
+                    }
+                List<WebElement> pagination = driver.findElements(By.cssSelector("a.page-link"));
+                pagination.get(pagination.size() -1).click();
+                WebElement paginationFirstIndexWe = driver.findElements(By.cssSelector("a.page-link")).get(1);
+                String paginationFirstIndex = paginationFirstIndexWe.getText();
+                boolean paginationFirstIndexActive =
+                        paginationFirstIndexWe.getCssValue("color").equals("rgba(255, 255, 255, 1)");
+                if (paginationFirstIndex.equals("1") && paginationFirstIndexActive) {
+                    firstRound = false;
+                }
             }
+        } else {
+            titleFound = isTitleFound(title);
         }
-        Assert.assertEquals(titleMatch, 1, "Created record not found or found more than one");
 
+        Assert.assertTrue(titleFound, "Created record not found");
         String recordTitleXpath = String.format("//div[contains(text(), '%s')]", title);
         By newRecordComment = By.xpath(String.format("%s/../../../td[3]/a/div", recordTitleXpath));
         By newRecordInt = By.xpath(String.format("%s/../../../td[4]/a/div", recordTitleXpath));
@@ -59,9 +78,18 @@ public class EntityFieldsTest extends BaseTest {
 
         // cleanup, delete created record
         driver.findElement(By.xpath(String.format("%s/../../..//button", recordTitleXpath))).click();
-        WebDriverWait wait = new WebDriverWait(getDriver(), 1);
         String delBtnXpath = String.format("%s/../../..//a[contains(@href, 'delete')]", recordTitleXpath);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(delBtnXpath))).click();
+    }
+
+    private boolean isTitleFound(String title) {
+        List<WebElement> titlesWe = getDriver().findElements(By.xpath("//tr/td[2]"));
+        for (WebElement we : titlesWe) {
+            if (we.getText().equals(title)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
