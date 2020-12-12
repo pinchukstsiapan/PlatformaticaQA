@@ -41,10 +41,10 @@ public class EntityFieldsTest extends BaseTest {
 
         // validation of record
         boolean titleFound = false;
-        int numOfRecordsOnPage = Integer.parseInt(wait.until(ExpectedConditions.visibilityOfElementLocated(By
+        int numOfAllRecords = Integer.parseInt(wait.until(ExpectedConditions.visibilityOfElementLocated(By
                 .xpath("//span[@class='pagination-info']"))).getText().split(" ")[5]);
-        int totalPages = Integer.parseInt(driver.findElement(By.cssSelector("span.page-size")).getText());
-        if (numOfRecordsOnPage > totalPages) {
+        int rowsPerPage = Integer.parseInt(driver.findElement(By.cssSelector("span.page-size")).getText());
+        if (numOfAllRecords > rowsPerPage) {
             boolean firstRound = true;
             while (firstRound) {
                 if (isTitleFound(title)) {
