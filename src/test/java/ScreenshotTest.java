@@ -29,10 +29,8 @@ public class ScreenshotTest extends BaseTest {
         TestUtils.makeScreenShot(browser, "/tmp/dmitryTestRun_01.png");
 
         // imitate failed assert to test makeScreenShotAfterTest method
-        Assert.assertEquals(input.getText(), "Обеспечение качества");
+        //Assert.assertEquals(input.getText(), "Обеспечение качества");
 
-        // this screenshot shouldn't be taken as previous assert is set to faile
-        TestUtils.makeScreenShot(browser, "/tmp/dmitryTestRun_02.png");
     }
 
     @AfterMethod

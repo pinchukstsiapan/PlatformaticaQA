@@ -22,7 +22,6 @@ public abstract class TestUtils {
         try {
             FileUtils.copyFile(screenshotFile, new File(fileName));
         } catch (IOException e) {
-
             writeTextFile(fileName, e.toString() );
         }
     }
