@@ -7,6 +7,8 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
+import java.util.UUID;
+
 public class EntityVisibilityEventsTest extends BaseTest {
 
     private void setUp(WebDriver driver) {
@@ -109,8 +111,8 @@ public class EntityVisibilityEventsTest extends BaseTest {
         WebDriver driver = getDriver();
         setUp(driver);
 
-        final String fieldEnabled = TestUtils.getUUID();
-        final String fieldDisabled = TestUtils.getUUID();
+        final String fieldEnabled = UUID.randomUUID().toString();
+        final String fieldDisabled = UUID.randomUUID().toString();
 
         createField(driver, fieldEnabled, true);
         createField(driver, fieldDisabled, false);

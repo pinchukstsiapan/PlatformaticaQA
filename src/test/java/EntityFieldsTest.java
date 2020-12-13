@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.UUID;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -27,7 +28,7 @@ public class EntityFieldsTest extends BaseTest {
         WebElement newRecord = driver.findElement(By.xpath("//i[text()='create_new_folder']"));
         newRecord.click();
 
-        final String title = TestUtils.getUUID();
+        final String title = UUID.randomUUID().toString();
         final String comment = "simple text";
         final int number = 10;
 

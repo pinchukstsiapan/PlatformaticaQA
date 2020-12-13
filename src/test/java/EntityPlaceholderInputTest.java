@@ -4,12 +4,14 @@ import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
+import java.util.UUID;
+
 public class EntityPlaceholderInputTest extends BaseTest {
 
     @Test
     public void newRecord() throws InterruptedException {
 
-        final String title = TestUtils.getUUID();
+        final String title = UUID.randomUUID().toString();
 
         WebDriver driver = getDriver();
         driver.get("https://ref.eteam.work");
