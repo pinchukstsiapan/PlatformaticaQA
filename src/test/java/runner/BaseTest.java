@@ -6,6 +6,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -33,7 +34,6 @@ public abstract class BaseTest {
 
         if (!remoteWebDriver) {
             WebDriverManager.chromedriver().setup();
-
         }
     }
 
@@ -59,6 +59,14 @@ public abstract class BaseTest {
     @AfterMethod
     protected void setDownAll() {
         driver.quit();
+    }
+
+    /** Example of how to take a screenshot after assert fails. this should be in the BaseTest class  */
+    @AfterMethod
+    public void makeScreenShotAfterTest(ITestResult testResult) {
+        if (ITestResult.FAILURE == testResult.getStatus()) {
+            TestUtils.takeScreenShot(getDriver(), "takeScreenshotDemo_FAILED.png");
+        }
     }
 
     protected WebDriver getDriver() {

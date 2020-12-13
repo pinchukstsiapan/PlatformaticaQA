@@ -1,3 +1,5 @@
+package runner;
+
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -13,6 +15,7 @@ import java.util.UUID;
 public abstract class TestUtils {
 
     public static final String tempPath = System.getProperty("java.io.tmpdir");
+    public static final String sessionID = UUID.randomUUID().toString();
 
     public static String getUUID() {
         return UUID.randomUUID().toString();
