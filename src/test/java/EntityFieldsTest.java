@@ -6,19 +6,16 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import org.testng.Assert;
 import runner.BaseTest;
 
 public class EntityFieldsTest extends BaseTest {
 
-    @Ignore
     @Test
     public void newRecord() {
 
         WebDriver driver = getDriver();
-        WebDriverWait wait = new WebDriverWait(getDriver(), 1);
         driver.get("https://ref.eteam.work");
 
         ProjectUtils.login(driver, "user1@tester.com", "ah1QNmgkEO");
@@ -43,10 +40,16 @@ public class EntityFieldsTest extends BaseTest {
         ProjectUtils.click(driver, submit);
 
         // validation of record
+        List<WebElement> recordRowsWe = driver.findElements(By.cssSelector("tbody > tr"));
+        if (recordRowsWe.size() == 0) {
+            Assert.fail("No Fields records found after creating one record");
+        }
+
         boolean titleFound = false;
         int rowsPerPage;
-        int numOfAllRecords = Integer.parseInt(wait.until(ExpectedConditions.visibilityOfElementLocated(By
-                .xpath("//span[@class='pagination-info']"))).getText().split(" ")[5]);
+        int numOfAllRecords = Integer.parseInt(getWait(1).until(ExpectedConditions
+                .visibilityOfElementLocated(By.xpath("//span[@class='pagination-info']")))
+                .getText().split(" ")[5]);
         WebElement rowsPerPageWe = driver.findElement(By.cssSelector("span.page-size"));
         if (rowsPerPageWe.isDisplayed()) {
             rowsPerPage = Integer.parseInt(rowsPerPageWe.getText());
@@ -60,8 +63,9 @@ public class EntityFieldsTest extends BaseTest {
                     titleFound = true;
                     break;
                     }
-                List<WebElement> pagination = driver.findElements(By.cssSelector("a.page-link"));
-                pagination.get(pagination.size() -1).click();
+                List<WebElement> paginationButtons = driver.findElements(By.cssSelector("a.page-link"));
+                WebElement paginationNext = paginationButtons.get(paginationButtons.size() -1);
+                paginationNext.click();
                 WebElement paginationFirstIndexWe = driver.findElements(By.cssSelector("a.page-link")).get(1);
                 String paginationFirstIndex = paginationFirstIndexWe.getText();
                 boolean paginationFirstIndexActive =
@@ -75,6 +79,7 @@ public class EntityFieldsTest extends BaseTest {
         }
 
         Assert.assertTrue(titleFound, "Created record not found");
+
         String recordTitleXpath = String.format("//div[contains(text(), '%s')]", title);
         By newRecordComment = By.xpath(String.format("%s/../../../td[3]/a/div", recordTitleXpath));
         By newRecordInt = By.xpath(String.format("%s/../../../td[4]/a/div", recordTitleXpath));
@@ -86,12 +91,11 @@ public class EntityFieldsTest extends BaseTest {
                 "Created record int value issue");
 
         // cleanup, delete created record
-        driver.findElement(By.xpath(String.format("%s/../../..//button", recordTitleXpath))).click();
-        String delBtnXpath = String.format("%s/../../..//a[contains(@href, 'delete')]", recordTitleXpath);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(delBtnXpath))).click();
+        deleteRecordByTitle(title);
     }
 
     private boolean isTitleFound(String title) {
+
         List<WebElement> titlesWe = getDriver().findElements(By.xpath("//tr/td[2]"));
         for (WebElement we : titlesWe) {
             if (we.getText().equals(title)) {
@@ -101,4 +105,19 @@ public class EntityFieldsTest extends BaseTest {
         return false;
     }
 
+    private void deleteRecordByTitle(String title) {
+
+        WebDriver driver = getDriver();
+        String recordTitleXpath = String.format("//div[contains(text(), '%s')]", title);
+
+        By recordMenuButton = By.xpath(String.format("%s/../../..//button", recordTitleXpath));
+        By deleteButton = By.xpath(String.format("%s/../../..//a[contains(@href, 'delete')]", recordTitleXpath));
+
+        driver.findElement(recordMenuButton).click();
+        getWait(2).until(ExpectedConditions.visibilityOfElementLocated(deleteButton)).click();
+    }
+
+    private WebDriverWait getWait(int timeoutSecond) {
+        return new WebDriverWait(getDriver(), timeoutSecond);
+    }
 }
