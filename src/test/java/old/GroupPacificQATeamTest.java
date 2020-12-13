@@ -150,7 +150,6 @@ public class GroupPacificQATeamTest extends BaseTest {
         Assert.assertEquals(actual, expected);
     }
 
-    @Ignore
     @Test
     public void maxBurdinNootropicsexpert() throws InterruptedException {
 
@@ -166,26 +165,26 @@ public class GroupPacificQATeamTest extends BaseTest {
         WebElement book = browser.findElement(By.xpath("//a[text() = 'clicking here']"));
         book.click();
 
-        Thread.sleep(2000);
+        Thread.sleep(1000);
 
         WebElement addToBag = browser.findElement(By.xpath("(//button[contains(@class, 'addToBag')])[1]"));
         addToBag.click();
 
-        Thread.sleep(2000);
+        Thread.sleep(1000);
 
         Assert.assertEquals(browser.findElement(By.xpath("//span[contains(@class, 'total')]")).getText(), "$37.00");
 
     }
 
-    @Ignore
     @Test
-    public void maxBurdinCodecademy() {
+    public void maxBurdinCodecademy() throws InterruptedException {
 
         WebDriver browser = getDriver();
         browser.get("https://www.codecademy.com/");
 
         WebElement logIn = browser.findElement(By.xpath("(//a[@data-testid = 'header-sign-in'])[1]"));
         logIn.click();
+        Thread.sleep(1000);
 
         WebElement userNameField = browser.findElement(By.xpath("//input[@id='user_login']"));
         userNameField.sendKeys("Test_User_123");
