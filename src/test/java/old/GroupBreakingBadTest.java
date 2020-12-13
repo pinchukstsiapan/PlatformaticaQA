@@ -255,4 +255,20 @@ public class GroupBreakingBadTest extends BaseTest {
         WebElement input = driver.findElement(By.xpath("//input[contains(@class, 'ph-a11y-location-box')]"));
         assertEquals(input.getAttribute("placeholder"), "Enter City, State or Zip");
     }
+
+    @Test
+    public void arturTest() throws InterruptedException {
+
+        WebDriver driver = getDriver();
+        driver.get("https://talentbridge.jobs.net/jobs?utm_medium=email&SiteID=TNALERT_JobsNearYou&utm_source=tn-jobs-near-you&utm_campaign=member-real-time-job-recs");
+
+        WebElement button = driver.findElement(By.xpath("//span[contains(text(),'What job do you want?')]"));
+        button.click();
+        Thread.sleep(3000);
+
+        WebElement input = driver.findElement(By.xpath("//input[@id='Keywords']"));
+        assertEquals(input.getAttribute("placeholder"), "Job title, Skill, Industry");
+
+
+    }
 }
