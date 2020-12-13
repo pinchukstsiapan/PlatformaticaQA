@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 public abstract class BaseTest {
 
@@ -51,6 +52,7 @@ public abstract class BaseTest {
             this.driver = new ChromeDriver();
         }
 
+        this.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         this.driver.manage().window().maximize();
     }
 

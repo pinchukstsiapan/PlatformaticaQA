@@ -1,3 +1,5 @@
+package old;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -13,6 +15,7 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
+@Ignore
 public class GroupQQRTest extends BaseTest {
 
     @Test
@@ -67,6 +70,7 @@ public class GroupQQRTest extends BaseTest {
         Assert.assertTrue(articleHeadersLstStr.contains("Pick up your packages at thousands of convenient locations"));
     }
 
+    @Ignore
     @Test
     public void seidBayramov() throws InterruptedException {
 
@@ -78,8 +82,9 @@ public class GroupQQRTest extends BaseTest {
         driver.findElement(By.cssSelector("button[class='SearchInputButton-sc-1opoijs-0 dvBrqq']")).click();
         Thread.sleep(1500);
 
-        driver.findElement(By.xpath("//div[text()='purified waters']")).click();
-        driver.findElement(By.cssSelector("#home")).click();
+        WebElement getTitle = driver.findElement(By.xpath("//div[text()='purified waters']"));
+        getTitle.click();
+        Assert.assertEquals(getTitle.getText(), "purified waters");
     }
 
     @Ignore
@@ -118,5 +123,42 @@ public class GroupQQRTest extends BaseTest {
         WebElement gettingStarted =
                 browser.findElement(By.xpath("//h1[text()[normalize-space()='Zero Code Automated SAAS To Revolutionize Your Business']]"));
         Assert.assertEquals(gettingStarted.getText(), "Zero Code Automated SAAS To Revolutionize Your Business");
+    }
+
+    @Test
+    public void ludaPetkel() throws InterruptedException {
+        WebDriver browser = getDriver();
+        browser.get("https://www.aafloors.ca/");
+        Thread.sleep(1000);
+
+        browser.findElement(By.linkText("Reviews")).click();
+        Thread.sleep(2000);
+
+        String text = browser.findElement(By.tagName("h4")).getText();
+        Assert.assertEquals(text, "Read Our Customer Reviews");
+    }
+
+    @Test
+    public void irinaRizvanovaSignUpButton() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://udemy.com");
+        Thread.sleep(2000);
+
+        WebElement signUpButton = browser.findElement(By.xpath("//a[@data-purpose='header-signup']"));
+        signUpButton.click();
+        WebElement loginbox = browser.findElement(By.xpath("//div[@class='loginbox-v4__footer']"));
+        Assert.assertEquals(loginbox.getText(), "Already have an account? Log In");
+    }
+
+    @Test
+    public void irinaRizvanovaSignInLink() throws InterruptedException {
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.udemy.com/join/signup-popup/?locale=en_US&response_type=html&next=https%3A%2F%2Fwww.udemy.com%2F");
+        Thread.sleep(1000);
+
+        WebElement signInLink = browser.findElement(By.xpath("//a[@class='sign-link']"));
+        Assert.assertTrue(signInLink.isEnabled());
     }
 }

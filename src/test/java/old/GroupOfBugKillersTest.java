@@ -1,3 +1,5 @@
+package old;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -6,6 +8,7 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
+@Ignore
 public class GroupOfBugKillersTest extends BaseTest {
 
     @Test
@@ -124,5 +127,28 @@ public class GroupOfBugKillersTest extends BaseTest {
 
         WebElement link = driver.findElement(By.xpath("//span[contains(text(),'Register')]"));
         Assert.assertEquals(link.getText(), "Register Now!");
+    }
+
+    @Test
+    public void denTest() throws InterruptedException {
+
+        WebDriver driver = getDriver();
+        driver.get("https://www.udemy.com/");
+        Thread.sleep(1100);
+
+        WebElement search = driver.findElement(By.xpath("//input[@placeholder='Search for anything']"));
+        search.sendKeys("Java");
+
+        WebElement text = driver.findElement(By.xpath("//label[contains(text(), 'Search')]"));
+        Assert.assertEquals(text.getText(), "Search for anything");
+        Assert.assertEquals("Online Courses - Learn Anything, On Your Schedule | Udemy", driver.getTitle());
+
+        WebElement submit = driver.findElement(By
+                .xpath("//input[@placeholder='Search for anything']/../button[@type='submit']"));
+        submit.click();
+        Thread.sleep(1000);
+
+        WebElement textResult = driver.findElement(By.xpath("//h1[contains(text(), '10,000 results for “java”')]"));
+        Assert.assertEquals(textResult.getText(), "10,000 results for “java”");
     }
 }

@@ -1,10 +1,14 @@
+package old;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
+@Ignore
 public class BugBustersTest extends BaseTest {
 
     @Test
@@ -31,4 +35,13 @@ public class BugBustersTest extends BaseTest {
         Assert.assertEquals(footer_1.getText(), "© 2020 GitHub, Inc.");
     }
 
+    @Test
+    public void rustamTest(){
+
+        WebDriver driver = getDriver();
+        driver.get("https://www.w3schools.com/");
+
+        driver.findElement(By.xpath("(//a[text() ='Learn JavaScript'])[1]")).click();
+        Assert.assertTrue(driver.findElement(By.xpath("//span[contains(text(),'Tutorial')]")).isDisplayed());
+    }
 }

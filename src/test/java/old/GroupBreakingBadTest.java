@@ -1,3 +1,5 @@
+package old;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -13,6 +15,7 @@ import org.openqa.selenium.interactions.Actions;
 
 import static org.testng.Assert.assertEquals;
 
+@Ignore
 public class GroupBreakingBadTest extends BaseTest {
 
     @Test
@@ -148,6 +151,7 @@ public class GroupBreakingBadTest extends BaseTest {
         Assert.assertEquals(driver.getCurrentUrl(), "https://3ddd.ru/3dmodels?cat=dekor&subcat=3d_panel&page=2");
     }
 
+    @Ignore
     @Test
     public void tatyanaPusFourthTest() throws InterruptedException {
 
@@ -170,23 +174,12 @@ public class GroupBreakingBadTest extends BaseTest {
 
     @Ignore
     @Test
-    public void NataliyaPlatonova() {
-        WebDriver driver = new ChromeDriver();
-        driver.get("https://www.hotspringspool.com/");
-
-        WebElement button = driver.findElement(By.xpath("//a[@href='https://reservations.hotspringspool.com/#/roomsBooking']"));
-        button.click();
-
-        Assert.assertEquals(driver.getTitle(),"Glenwood Hot Springs | Reservations");
-    }
-
-    @Ignore
-    @Test
     public void evgenyLukyanenkoRoyal1() throws InterruptedException {
+
         WebDriver browser = getDriver();
         browser.get("https://www.royal.uk/");
 
-        WebElement button = browser.findElement(By.xpath("(//h2[contains(text(), 'Charities and patronages')])"));
+        WebElement button = browser.findElement(By.xpath("//h2[contains(text(), 'Charities and patronages')]"));
         button.click();
         Thread.sleep(1000);
 
@@ -198,12 +191,14 @@ public class GroupBreakingBadTest extends BaseTest {
         assertEquals(input.getText(), "Princess Michael of Kent");
     }
 
+    @Ignore
     @Test
     public void evgenyLukyanenkoRoyal2() throws InterruptedException {
+
         WebDriver browser = getDriver();
         browser.get("https://www.royal.uk/");
 
-        WebElement button = browser.findElement(By.xpath("(//h2[contains(text(), 'Charities and patronages')])"));
+        WebElement button = browser.findElement(By.xpath("//h2[contains(text(), 'Charities and patronages')]"));
         button.click();
         Thread.sleep(1000);
 
@@ -211,7 +206,7 @@ public class GroupBreakingBadTest extends BaseTest {
         assertEquals(input.getText(), "All Members of the Royal Family");
     }
 
-    @Test
+    @Test  
     public void aminaB() {
 
         WebDriver driver = getDriver();
@@ -222,5 +217,42 @@ public class GroupBreakingBadTest extends BaseTest {
 
         WebElement result = driver.findElement(By.id("nbaMenuNBASignIn"));
         Assert.assertEquals(result.getText(), "Sign in to NBA Account");
+    }
+
+    @Test
+    public void nataliyaPlatonova() throws InterruptedException{
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.cds.org/");
+
+        WebElement memberButton = browser.findElement(By.xpath("//*[@id='cm-dropdown1']"));
+        memberButton.click();
+        Thread.sleep(1000);
+
+        WebElement meetingsButton = browser.findElement(By.xpath("//*[@id='cm-dropdown2']"));
+        meetingsButton.click();
+        Thread.sleep(1000);
+
+        WebElement classifiedsButton = browser.findElement(By.xpath("//*[@id='cm-dropdown3']"));
+        classifiedsButton.click();
+        Thread.sleep(1000);
+
+        Assert.assertEquals(memberButton.getText(), "Member Center" );
+        Assert.assertEquals(meetingsButton.getText(), "Meetings & Events");
+        Assert.assertEquals(classifiedsButton.getText(), "Classifieds");
+    }
+
+    @Test
+    public void vitaliiTest() throws InterruptedException {
+
+        WebDriver driver = getDriver();
+        driver.get("https://www.aerotek.com/en/");
+
+        WebElement button = driver.findElement(By.xpath("(//button[contains(text(), 'SEARCH')])[2]"));
+        button.click();
+        Thread.sleep(3000);
+
+        WebElement input = driver.findElement(By.xpath("//input[contains(@class, 'ph-a11y-location-box')]"));
+        assertEquals(input.getAttribute("placeholder"), "Enter City, State or Zip");
     }
 }
