@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
-public abstract class TestUtils {
+public abstract class ScreenshotUtils {
 
     public static final String tempPath = System.getProperty("java.io.tmpdir");
     public static final String sessionID = UUID.randomUUID().toString();
@@ -41,6 +42,7 @@ public abstract class TestUtils {
        }
     }
 
+    /** to supress error write error into file with the same name and .txt extention */
     private static void writeTextFile(String fileName, String textToWrite) {
         fileName = fileName.substring(0, fileName.lastIndexOf('.')+1) + "txt";
 

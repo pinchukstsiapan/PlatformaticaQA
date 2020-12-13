@@ -8,7 +8,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 import org.testng.Assert;
 import runner.BaseTest;
-import runner.TestUtils;
+import runner.ScreenshotUtils;
 
 public class EntityFieldsTest extends BaseTest {
 
@@ -26,7 +26,7 @@ public class EntityFieldsTest extends BaseTest {
         WebElement newRecord = driver.findElement(By.xpath("//i[text()='create_new_folder']"));
         newRecord.click();
 
-        final String title = TestUtils.getUUID();
+        final String title = ScreenshotUtils.getUUID();
         final String comment = "simple text";
         final int number = 10;
 
