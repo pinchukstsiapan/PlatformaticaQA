@@ -28,7 +28,7 @@ public class ScreenshotTest extends BaseTest {
         input.sendKeys("Обеспечение качества");
 
         Assert.assertTrue(true);
-        TestUtils.makeScreenShot(browser, "/tmp/takeScreenshotDemo_01.png");
+        TestUtils.takeScreenShot(browser, "takeScreenshotDemo_01.png");
 
         // To test screenshot on failure below add assert that would fail. For example, Assert.assertTrue(false);
     }
@@ -39,7 +39,7 @@ public class ScreenshotTest extends BaseTest {
     @AfterMethod
     public void makeScreenShotAfterTest(ITestResult testResult) {
         if (ITestResult.FAILURE == testResult.getStatus()) {
-            TestUtils.makeScreenShot(getDriver(), "/tmp/takeScreenshotDemo_FAILED.png");
+            TestUtils.takeScreenShot(getDriver(), "takeScreenshotDemo_FAILED.png");
         }
     }
 

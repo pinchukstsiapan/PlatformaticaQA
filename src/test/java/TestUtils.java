@@ -12,21 +12,33 @@ import java.util.UUID;
 
 public abstract class TestUtils {
 
+    public static final String tempPath = System.getProperty("java.io.tmpdir");
+
     public static String getUUID() {
         return UUID.randomUUID().toString();
     }
 
-    public static void makeScreenShot(WebDriver driver, String fileName) {
-        TakesScreenshot screenshotDriver = (TakesScreenshot) driver;
-        File screenshotFile = screenshotDriver.getScreenshotAs(OutputType.FILE);
-        try {
-            FileUtils.copyFile(screenshotFile, new File(fileName));
-        } catch (IOException e) {
-            writeTextFile(fileName, e.toString() );
-        }
+    public static void takeScreenShot(WebDriver driver, String fileName) {
+       if (fileName != null) {
+           String separator = "";
+           if ( !fileName.contains(File.separator) ) {
+               if (tempPath.charAt(tempPath.length()-1) != File.separator.charAt(0)) {
+                   separator = File.separator;
+               }
+               fileName = tempPath + separator + fileName;
+           }
+
+           TakesScreenshot screenshotDriver = (TakesScreenshot) driver;
+           File screenshotFile = screenshotDriver.getScreenshotAs(OutputType.FILE);
+           try {
+               FileUtils.copyFile(screenshotFile, new File(fileName));
+           } catch (IOException e) {
+               writeTextFile(fileName, e.toString());
+           }
+       }
     }
 
-    public static void writeTextFile(String fileName, String textToWrite) {
+    private static void writeTextFile(String fileName, String textToWrite) {
         fileName = fileName.substring(0, fileName.lastIndexOf('.')+1) + "txt";
 
         try {
