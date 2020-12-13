@@ -33,7 +33,7 @@ public class ScreenshotTest extends BaseTest {
     }
 
     /** Example of how to take a screenshot after assert fails. this should be in the BaseTest class  */
-    // @ AfterMethod
+//    @AfterMethod
 //    public void makeScreenShotAfterTest(ITestResult testResult) {
 //        if (ITestResult.FAILURE == testResult.getStatus()) {
 //            TestUtils.takeScreenShot(getDriver(), "takeScreenshotDemo_FAILED.png");
