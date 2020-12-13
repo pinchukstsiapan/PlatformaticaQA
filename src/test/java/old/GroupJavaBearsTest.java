@@ -9,10 +9,6 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
-import java.time.Duration;
-import java.util.concurrent.TimeUnit;
-
-@Ignore
 public class GroupJavaBearsTest extends BaseTest {
 
     @Test
@@ -28,7 +24,7 @@ public class GroupJavaBearsTest extends BaseTest {
     }
 
     @Test
-    public void Alex_Mack() throws InterruptedException {
+    public void Alex_Mack() {
 
         WebDriver driver = getDriver();
         driver.get("https://en.wikipedia.org/wiki/Golden_Gate");
@@ -151,6 +147,17 @@ public class GroupJavaBearsTest extends BaseTest {
 
         browser.findElement(By.xpath("//div[@class='nav-links-wrap']/a[1]")).click();
         Assert.assertEquals(browser.getCurrentUrl(), "https://www.recreation.gov/whats-new");
+    }
+
+    @Test
+    public void alexanderDemidionok(){
+
+        WebDriver driver = getDriver();
+        driver.get("https://github.com/assemblyad");
+
+        WebElement homePage = driver.findElement(By.xpath("//a[@href='https://github.com/']"));
+        homePage.click();
+        Assert.assertEquals(getDriver().getCurrentUrl(),"https://github.com/");
     }
 
     @Test
