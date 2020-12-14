@@ -1,8 +1,8 @@
-import org.openqa.selenium.support.ui.Select;
 import runner.BaseTest;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.annotations.Test;
 import org.testng.Assert;
 
@@ -41,8 +41,8 @@ public class EntityFieldOpsTest extends BaseTest {
         By refFilterSelect = By.cssSelector("select#reference_with_filter");
         new Select(driver.findElement(refFilterSelect)).selectByVisibleText(referenceWithFilter);
 
-        By embedFoAdd = By.cssSelector("td > button");
-        driver.findElement(embedFoAdd).click();
+        By embedFoAddButton = By.cssSelector("td > button");
+        driver.findElement(embedFoAddButton).click();
 
         By saveButton = By.cssSelector("button[id*='save']");
         driver.findElement(saveButton).click();
@@ -72,6 +72,7 @@ public class EntityFieldOpsTest extends BaseTest {
         //TODO: - EmbedFO : Reference with filter: Third reference
         //TODO: - EmbedFO : Reference constant: contact@company.com
         //TODO: - EmbedFO : Multireference: None
+        //TODO: CleanUp - delete last record
     }
 
     public void goPageByName(String name) {
@@ -83,4 +84,5 @@ public class EntityFieldOpsTest extends BaseTest {
         ProjectUtils.goAndLogin(driver);
         goPageByName("Fields Ops");
     }
+
 }
