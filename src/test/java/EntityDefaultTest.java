@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 import org.testng.Assert;
 import runner.BaseTest;
 
-public class EntityDeafaultTest extends BaseTest {
+public class EntityDefaultTest extends BaseTest {
 
     private WebDriver driver;
 
