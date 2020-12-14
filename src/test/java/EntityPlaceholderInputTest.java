@@ -88,7 +88,7 @@ public class EntityPlaceholderInputTest extends BaseTest {
         String datetime_ph = datetimeField.getAttribute("placeholder");
         datetimeField.sendKeys(datetime_ph);
 
-        WebElement save = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
+        WebElement save = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']/div"));
         save.click();
 
         WebElement numOfPagesS = driver.findElement(By.xpath("//span[@class='pagination-info']"));
