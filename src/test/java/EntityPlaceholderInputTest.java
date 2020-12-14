@@ -1,9 +1,6 @@
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
@@ -52,7 +49,7 @@ public class EntityPlaceholderInputTest extends BaseTest {
     }
 
     @Test
-    public void newRecordPV () throws InterruptedException {
+    public void newRecordPV () {
 
         int pageNumber;
 
@@ -83,22 +80,8 @@ public class EntityPlaceholderInputTest extends BaseTest {
         String decimal_ph = decimalField.getAttribute("placeholder");
         decimalField.sendKeys(decimal_ph);
 
-//        WebElement dateField = driver.findElement(By.xpath("//input[@name='entity_form_data[date]']"));
-//        String date_ph = dateField.getAttribute("placeholder");
-//        dateField.sendKeys(date_ph);
-//
-//        WebElement datetimeField = driver.findElement(By.xpath("//input[@name='entity_form_data[datetime]']"));
-//        String datetime_ph = datetimeField.getAttribute("placeholder");
-//        datetimeField.sendKeys(datetime_ph);
-
         WebElement save = driver.findElement(By.xpath("//div/button[@id='pa-entity-form-save-btn']"));
-//        Actions actions = new Actions(driver);
-//        actions.moveToElement(save).click().perform();
         ProjectUtils.click(driver, save);
-
-
-//        Thread.sleep(6000);
-//        save.click();
 
         WebElement numOfPagesS = driver.findElement(By.xpath("//span[@class='pagination-info']"));
 
@@ -114,28 +97,18 @@ public class EntityPlaceholderInputTest extends BaseTest {
         // id of the newly created record (the last record)
         int id = numOfRows-1;
 
-//        By page1 = By.xpath("//a[@class='page-link'][@aria-label='to page " + pageNumber + "']");
-//        WebDriverWait wait = new WebDriverWait(driver, 10);
-//
-//        wait.until(ExpectedConditions.visibilityOfElementLocated(page1));
 
         WebElement page = driver.findElement(By.xpath("//a[@class='page-link'][@aria-label='to page " + pageNumber + "']"));
-//        actions.moveToElement(page).click().perform();
         ProjectUtils.click(driver, page);
 
-//        Thread.sleep(2000);
         driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, string_ph)));
         driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, text_ph)));
         driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, int_ph)));
         driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, decimal_ph)));
 
         WebElement actions1 = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//button/i[text()='menu']", id)));
-//        Thread.sleep(2000);
-//        actions1.click();
         ProjectUtils.click(driver, actions1);
         WebElement delete = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div//li/a[text()='delete']", id)));
-//        Thread.sleep(2000);
-//        delete.click();
         ProjectUtils.click(driver, delete);
     }
 }
