@@ -1,11 +1,13 @@
-import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import runner.BaseTest;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.annotations.Test;
 import org.testng.Assert;
+
+import java.util.List;
+import java.util.NoSuchElementException;
 
 public class EntityFieldOpsTest extends BaseTest {
 
@@ -18,18 +20,21 @@ public class EntityFieldOpsTest extends BaseTest {
         WebDriver driver = getDriver();
         setup(driver);
 
+        int numOfPreexistingRecords = getNumberOfRecords();
+
         By createNew = By.xpath("//div[@class='card-icon']/i");
         driver.findElement(createNew).click();
 
         By upperToggle = By.xpath("//div[@class='d-flex']//span");
         driver.findElement(upperToggle).click();
 
+        final String mainDropdown = "Done";
         By dropDown = By.cssSelector("select#dropdown");
-        new Select(driver.findElement(dropDown)).selectByValue("Done");
+        new Select(driver.findElement(dropDown)).selectByValue(mainDropdown);
 
-        String upperReference = driver.findElement(By.cssSelector("select#reference option[value='1']")).getText();
+        String mainReference = driver.findElement(By.cssSelector("select#reference option[value='1']")).getText();
         By refSelect = By.cssSelector("select#reference");
-        new Select(driver.findElement(refSelect)).selectByVisibleText(upperReference);
+        new Select(driver.findElement(refSelect)).selectByVisibleText(mainReference);
 
         By firstRefLabel = By.xpath("//input[@id='multireference-1']/..");
         WebElement firstReferenceLabel = driver.findElement(firstRefLabel);
@@ -58,15 +63,43 @@ public class EntityFieldOpsTest extends BaseTest {
             By pageTitle = By.cssSelector("h3");
             Assert.assertEquals(driver.findElement(pageTitle).getText(), "Fields Ops",
                     "Redirection to wrong page after saving new Fields Ops record");
-        } catch (NoSuchElementException e) {
+        } catch (TimeoutException e) {
             Assert.fail("Redirection to wrong page after saving new Fields Ops record");
         }
 
         //TODO: 10. Observe one record added at the bottom of list with corresponding values from previous steps:
-        //TODO: - Checked checkbox on the left
-        //TODO: - Switch value: 1
-        //TODO: - Dropdown: Done
-        //TODO: - Reference: First reference
+        int numOfRecords = getNumberOfRecords();
+        if (numOfRecords == numOfPreexistingRecords) {
+            Assert.fail("Number of records didn't change after creating new Fields Ops record");
+        } else if (numOfRecords != numOfPreexistingRecords + 1) {
+            String errorMessage = String.format(
+                    "Number of records changed by %s after creating one new Fields Ops record",
+                    String.valueOf(numOfRecords - numOfPreexistingRecords));
+            Assert.fail(errorMessage);
+        }
+
+        getLastPage();
+
+        String lastRecordXpath = "//tbody/tr[last()]";
+        try {
+            By recordCheckbox = By.xpath(String.format("%s/td/i[@class='fa fa-check-square-o']", lastRecordXpath));
+            driver.findElement(recordCheckbox);
+        } catch (TimeoutException e) {
+            Assert.fail("Checkbox not found for new Fields Ops record");
+        }
+
+        By switchValue = By.xpath(String.format("%s/td[2]", lastRecordXpath));
+        Assert.assertEquals(driver.findElement(switchValue).getText(), "1",
+                "Wrong Switch value for new Fields Ops record");
+
+        By dropdownValue = By.xpath(String.format("%s/td[3]", lastRecordXpath));
+        Assert.assertEquals(driver.findElement(dropdownValue).getText(), mainDropdown,
+                "Wrong Switch value for new Fields Ops record");
+
+        By referenceValue = By.xpath(String.format("%s/td[4]", lastRecordXpath));
+        Assert.assertEquals(driver.findElement(referenceValue).getText(), mainReference,
+                "Wrong Reference value for new Fields Ops record");
+
         //TODO: - Multireference: First reference, Second reference
         //TODO: - Reference with filter: Third reference
         //TODO: - Reference constant: contact@company.com
@@ -95,8 +128,35 @@ public class EntityFieldOpsTest extends BaseTest {
     }
 
     private void setup(WebDriver driver) {
-        ProjectUtils.goAndLogin(driver);
+        driver.get("https://ref.eteam.work");
+        ProjectUtils.login(driver, "user1@tester.com", "ah1QNmgkEO");
         goPageByName("Fields Ops");
+    }
+
+    private WebDriverWait getWait(int timeoutSecond) {
+        return new WebDriverWait(getDriver(), timeoutSecond);
+    }
+
+    private int getNumberOfRecords() {
+        int numOfRecords;
+        try {
+            By rowsInfo = By.xpath("//span[@class='pagination-info']");
+            numOfRecords = Integer.parseInt(getWait(1).until(ExpectedConditions
+                    .visibilityOfElementLocated(rowsInfo)).getText().split("of ")[1].split(" ")[0]);
+        } catch (TimeoutException e) {
+            numOfRecords = 0;
+
+        }
+
+        return numOfRecords;
+    }
+
+    private void getLastPage() {
+        if (getNumberOfRecords() > 10) {
+            List<WebElement> paginationButtons = getDriver().findElements(By.cssSelector("a.page-link"));
+            System.out.println(paginationButtons.size() - 2);
+            paginationButtons.get(paginationButtons.size() - 2).click();
+        }
     }
 
 }
