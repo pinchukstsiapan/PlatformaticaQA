@@ -89,7 +89,7 @@ public class EntityPlaceholderInputTest extends BaseTest {
         datetimeField.sendKeys(datetime_ph);
 
         WebElement save = driver.findElement(By.xpath("//div/button[@id='pa-entity-form-save-btn']"));
-        Thread.sleep(3000);
+        Thread.sleep(6000);
         save.click();
 
         WebElement numOfPagesS = driver.findElement(By.xpath("//span[@class='pagination-info']"));
@@ -115,8 +115,10 @@ public class EntityPlaceholderInputTest extends BaseTest {
         driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, decimal_ph)));
 
         WebElement actions = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//button/i[text()='menu']", id)));
+        Thread.sleep(2000);
         actions.click();
         WebElement delete = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div//li/a[text()='delete']", id)));
+        Thread.sleep(2000);
         delete.click();
     }
 }
