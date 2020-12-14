@@ -114,6 +114,7 @@ public class EntityPlaceholderInputTest extends BaseTest {
         WebElement page = driver.findElement(By.xpath("//a[@class='page-link'][@aria-label='to page " + pageNumber + "']"));
         page.click();
 
+        Thread.sleep(2000);
         driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, string_ph)));
         driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, text_ph)));
         driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, int_ph)));
