@@ -91,16 +91,9 @@ public class EntityPlaceholderInputTest extends BaseTest {
         String datetime_ph = datetimeField.getAttribute("placeholder");
         datetimeField.sendKeys(datetime_ph);
 
-
-//        Actions actions = new Actions(driver);
-//        actions.moveToElement(save).click().perform();
-
-        By save1 = By.xpath("//div/button[@id='pa-entity-form-save-btn']");
-        WebDriverWait wait = new WebDriverWait(driver, 10);
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(save1));
         WebElement save = driver.findElement(By.xpath("//div/button[@id='pa-entity-form-save-btn']"));
-        save.click();
+        Actions actions = new Actions(driver);
+        actions.moveToElement(save).click().perform();
 
 
 //        Thread.sleep(6000);
@@ -119,6 +112,11 @@ public class EntityPlaceholderInputTest extends BaseTest {
 
         // id of the newly created record (the last record)
         int id = numOfRows-1;
+
+        By page1 = By.xpath("//a[@class='page-link'][@aria-label='to page " + pageNumber + "']");
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(page1));
 
         WebElement page = driver.findElement(By.xpath("//a[@class='page-link'][@aria-label='to page " + pageNumber + "']"));
 //        actions.moveToElement(page).click().perform();
