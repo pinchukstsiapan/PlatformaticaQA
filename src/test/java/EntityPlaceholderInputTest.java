@@ -2,6 +2,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
@@ -89,10 +91,17 @@ public class EntityPlaceholderInputTest extends BaseTest {
         String datetime_ph = datetimeField.getAttribute("placeholder");
         datetimeField.sendKeys(datetime_ph);
 
-        WebElement save = driver.findElement(By.xpath("//div/button[@id='pa-entity-form-save-btn']"));
-        Actions actions = new Actions(driver);
 
-        actions.moveToElement(save).click().perform();
+//        Actions actions = new Actions(driver);
+//        actions.moveToElement(save).click().perform();
+
+        By save1 = By.xpath("//div/button[@id='pa-entity-form-save-btn']");
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(save1));
+        WebElement save = driver.findElement(By.xpath("//div/button[@id='pa-entity-form-save-btn']"));
+        save.click();
+
 
 //        Thread.sleep(6000);
 //        save.click();
@@ -112,8 +121,8 @@ public class EntityPlaceholderInputTest extends BaseTest {
         int id = numOfRows-1;
 
         WebElement page = driver.findElement(By.xpath("//a[@class='page-link'][@aria-label='to page " + pageNumber + "']"));
-        actions.moveToElement(page).click().perform();
-//        page.click();
+//        actions.moveToElement(page).click().perform();
+        page.click();
 
         Thread.sleep(2000);
         driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, string_ph)));
