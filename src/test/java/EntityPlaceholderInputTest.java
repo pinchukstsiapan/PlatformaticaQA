@@ -88,12 +88,6 @@ public class EntityPlaceholderInputTest extends BaseTest {
         String datetime_ph = datetimeField.getAttribute("placeholder");
         datetimeField.sendKeys(datetime_ph);
 
-        WebElement selectFile = driver.findElement(By.xpath("//input[@id='file']"));
-        selectFile.sendKeys("/Users/vadym.tymeichuk/qa/hw_13.txt");
-
-        WebElement selectFileImg = driver.findElement(By.xpath("//input[@id='file_image']"));
-        selectFileImg.sendKeys("/Users/vadym.tymeichuk/qa/platformatica_qa.png");
-
         WebElement save = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
         save.click();
 
@@ -118,13 +112,6 @@ public class EntityPlaceholderInputTest extends BaseTest {
         driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, text_ph)));
         driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, int_ph)));
         driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, decimal_ph)));
-
-//Date and "datetime" couldn't be verified since input date and "datetime" are substituted by creation date and time of a record
-//        driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, date_ph)));
-//        driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, datetime_ph)));
-
-        driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//td[contains(text(), 'hw_13.txt')]", id)));
-        driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//td[contains(text(), 'platformatica_qa.png')]", id)));
 
         WebElement actions = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//button/i[text()='menu']", id)));
         actions.click();
