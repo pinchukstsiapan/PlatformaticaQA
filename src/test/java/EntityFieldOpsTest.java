@@ -8,6 +8,9 @@ import org.testng.Assert;
 
 public class EntityFieldOpsTest extends BaseTest {
 
+ /*
+    fieldOpsView test: https://trello.com/c/MrpbKi4t/90-entity-fields-ops-view-tc
+ */
     @Test
     public void fieldOpsView() throws InterruptedException {
 
