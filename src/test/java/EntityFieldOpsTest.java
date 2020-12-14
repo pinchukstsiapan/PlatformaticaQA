@@ -1,3 +1,4 @@
+import org.openqa.selenium.NoSuchElementException;
 import runner.BaseTest;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,9 +9,9 @@ import org.testng.Assert;
 
 public class EntityFieldOpsTest extends BaseTest {
 
- /*
+    /*
     fieldOpsView test: https://trello.com/c/MrpbKi4t/90-entity-fields-ops-view-tc
- */
+    */
     @Test
     public void fieldOpsView() throws InterruptedException {
 
@@ -44,13 +45,23 @@ public class EntityFieldOpsTest extends BaseTest {
         By refFilterSelect = By.cssSelector("select#reference_with_filter");
         new Select(driver.findElement(refFilterSelect)).selectByVisibleText(referenceWithFilter);
 
+        By refConstant = By.cssSelector("span[class$='filled'] > input[id$='reference_constant']");
+        String referenceConstant = driver.findElement(refConstant).getAttribute("value");
+
         By embedFoAddButton = By.cssSelector("td > button");
         driver.findElement(embedFoAddButton).click();
 
         By saveButton = By.cssSelector("button[id*='save']");
         driver.findElement(saveButton).click();
 
-        //TODO: 9. Observe user redirected to 'Fields Ops' page
+        try {
+            By pageTitle = By.cssSelector("h3");
+            Assert.assertEquals(driver.findElement(pageTitle).getText(), "Fields Ops",
+                    "Redirection to wrong page after saving new Fields Ops record");
+        } catch (NoSuchElementException e) {
+            Assert.fail("Redirection to wrong page after saving new Fields Ops record");
+        }
+
         //TODO: 10. Observe one record added at the bottom of list with corresponding values from previous steps:
         //TODO: - Checked checkbox on the left
         //TODO: - Switch value: 1
@@ -79,8 +90,8 @@ public class EntityFieldOpsTest extends BaseTest {
     }
 
     public void goPageByName(String name) {
-        By entityIconXpath = By.xpath(String.format("//p[contains(text(), ' %s ')]/..", name));
-        getDriver().findElement(entityIconXpath).click();
+        By entityIcon = By.xpath(String.format("//p[contains(text(), ' %s ')]/..", name));
+        getDriver().findElement(entityIcon).click();
     }
 
     private void setup(WebDriver driver) {
