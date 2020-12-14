@@ -49,7 +49,7 @@ public class EntityPlaceholderInputTest extends BaseTest {
     }
 
     @Test
-    public void newRecordPV () {
+    public void newRecordPV () throws InterruptedException {
 
         int pageNumber;
 
@@ -88,12 +88,13 @@ public class EntityPlaceholderInputTest extends BaseTest {
         String datetime_ph = datetimeField.getAttribute("placeholder");
         datetimeField.sendKeys(datetime_ph);
 
-        WebElement save = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']/div"));
+        WebElement save = driver.findElement(By.xpath("//div/button[@id='pa-entity-form-save-btn']"));
+        Thread.sleep(3000);
         save.click();
 
         WebElement numOfPagesS = driver.findElement(By.xpath("//span[@class='pagination-info']"));
 
-        int numOfRows =  Integer.parseInt(numOfPagesS.getText().substring(19, 21));
+        int numOfRows =  Integer.parseInt(numOfPagesS.getText().substring(19, 22));
         int rowsPerPage =  Integer.parseInt(numOfPagesS.getText().substring(13, 15));
 
         if (numOfRows%rowsPerPage == 0) {
