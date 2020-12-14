@@ -92,8 +92,9 @@ public class EntityPlaceholderInputTest extends BaseTest {
         datetimeField.sendKeys(datetime_ph);
 
         WebElement save = driver.findElement(By.xpath("//div/button[@id='pa-entity-form-save-btn']"));
-        Actions actions = new Actions(driver);
-        actions.moveToElement(save).click().perform();
+//        Actions actions = new Actions(driver);
+//        actions.moveToElement(save).click().perform();
+        ProjectUtils.click(driver, save);
 
 
 //        Thread.sleep(6000);
@@ -113,26 +114,28 @@ public class EntityPlaceholderInputTest extends BaseTest {
         // id of the newly created record (the last record)
         int id = numOfRows-1;
 
-        By page1 = By.xpath("//a[@class='page-link'][@aria-label='to page " + pageNumber + "']");
-        WebDriverWait wait = new WebDriverWait(driver, 10);
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(page1));
+//        By page1 = By.xpath("//a[@class='page-link'][@aria-label='to page " + pageNumber + "']");
+//        WebDriverWait wait = new WebDriverWait(driver, 10);
+//
+//        wait.until(ExpectedConditions.visibilityOfElementLocated(page1));
 
         WebElement page = driver.findElement(By.xpath("//a[@class='page-link'][@aria-label='to page " + pageNumber + "']"));
 //        actions.moveToElement(page).click().perform();
-        page.click();
+        ProjectUtils.click(driver, page);
 
-        Thread.sleep(2000);
+//        Thread.sleep(2000);
         driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, string_ph)));
         driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, text_ph)));
         driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, int_ph)));
         driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, decimal_ph)));
 
         WebElement actions1 = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//button/i[text()='menu']", id)));
-        Thread.sleep(2000);
-        actions1.click();
+//        Thread.sleep(2000);
+//        actions1.click();
+        ProjectUtils.click(driver, actions1);
         WebElement delete = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div//li/a[text()='delete']", id)));
-        Thread.sleep(2000);
-        delete.click();
+//        Thread.sleep(2000);
+//        delete.click();
+        ProjectUtils.click(driver, delete);
     }
 }
