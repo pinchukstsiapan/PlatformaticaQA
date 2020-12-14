@@ -1,3 +1,5 @@
+package old;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -6,9 +8,6 @@ import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
-
-import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 public class GroupJavaBearsTest extends BaseTest {
 
@@ -126,6 +125,20 @@ public class GroupJavaBearsTest extends BaseTest {
         Assert.assertEquals(search_result.getText(), "SEARCH RESULTS");
     }
 
+    @Ignore
+    @Test
+    public void olgaV1() {
+
+        WebDriver browser = getDriver();
+        browser.get("https://www.guru99.com/introduction-to-selenium.html");
+
+        WebElement seleniumLink2 = browser.findElement(By.xpath("//a[contains(text(),'Birth of Selenium 2')]"));
+        seleniumLink2.click();
+
+        Assert.assertEquals(browser.getCurrentUrl(), "https://www.guru99.com/introduction-to-selenium.html#8");
+    }
+
+    @Ignore
     @Test
     public void bogdanQA() throws InterruptedException {
         WebDriver browser = getDriver();
@@ -135,6 +148,36 @@ public class GroupJavaBearsTest extends BaseTest {
         Thread.sleep(3000);
         Assert.assertEquals(button.getText(), "Read");
 
-        button.click();
+    @Test
+    public void alexanderDemidionok(){
+
+        WebDriver driver = getDriver();
+        driver.get("https://github.com/assemblyad");
+
+        WebElement homePage = driver.findElement(By.xpath("//a[@href='https://github.com/']"));
+        homePage.click();
+        Assert.assertEquals(getDriver().getCurrentUrl(),"https://github.com/");
+    }
+
+    @Test
+    public void bogdanQA() throws InterruptedException {
+        WebDriver browser = getDriver();
+        browser.get("https://en.wikipedia.org/wiki/Main_Page");
+
+        WebElement button = browser.findElement(By.xpath("//li[@id='ca-view']/a[contains(text(),'Read')]"));
+        Thread.sleep(3000);
+        Assert.assertEquals(button.getText(), "Read");
+    }
+
+    @Test
+    public void farizA() {
+        WebDriver driver = getDriver();
+        driver.get("https://id.atlassian.com/signup?application=bitbucket&continue=https%3A//" +
+                "bitbucket.org/account/signin/%3Foptintocst%3D1%26next%3D/%3Faidsignup%3D1");
+
+        WebElement signUpButton = driver.findElement(By.xpath("//button[@id='signup-submit']"));
+        signUpButton.click();
+
+        Assert.assertTrue(driver.findElement(By.xpath("(//span[@aria-label='warning'])[1]")).isDisplayed());
     }
 }
