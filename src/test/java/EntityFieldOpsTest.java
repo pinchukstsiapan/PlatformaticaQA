@@ -1,3 +1,4 @@
+import org.openqa.selenium.support.ui.Select;
 import runner.BaseTest;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,22 +12,41 @@ public class EntityFieldOpsTest extends BaseTest {
     public void fieldOpsView() throws InterruptedException {
 
         WebDriver driver = getDriver();
-
-        ProjectUtils.goAndLogin(driver);
-        goPageByName("Fields Ops");
+        setup(driver);
 
         By createNew = By.xpath("//div[@class='card-icon']/i");
         driver.findElement(createNew).click();
 
-        Thread.sleep(3000);
+        By upperToggle = By.xpath("//div[@class='d-flex']//span");
+        driver.findElement(upperToggle).click();
 
-        //TODO: 2. Set 'Switch' to 'On'
-        //TODO: 3. In 'Dropdown' select 'Done'
-        //TODO: 4. In 'Reference' select 'First Reference'
-        //TODO: 5. Check checkboxes for 'First reference' and 'Second reference' in 'Multireference' section
-        //TODO: 6. For 'Reference with filter' select 'THIRD REFERENCE'
-        //TODO: 7. Click '+' button in 'EmbedFO' section and leave all fields default
-        //TODO: 8. Click 'SAVE' button
+        By dropDown = By.cssSelector("select#dropdown");
+        new Select(driver.findElement(dropDown)).selectByValue("Done");
+
+        String upperReference = driver.findElement(By.cssSelector("select#reference option[value='1']")).getText();
+        By refSelect = By.cssSelector("select#reference");
+        new Select(driver.findElement(refSelect)).selectByVisibleText(upperReference);
+
+        By firstRefLabel = By.xpath("//input[@id='multireference-1']/..");
+        WebElement firstReferenceLabel = driver.findElement(firstRefLabel);
+        String multiRefOne = firstReferenceLabel.getText();
+        firstReferenceLabel.click();
+        By secondRefLabel = By.xpath("//input[@id='multireference-2']/..");
+        WebElement secondReferenceLabel = driver.findElement(secondRefLabel);
+        String multiRefTwo = secondReferenceLabel.getText();
+        secondReferenceLabel.click();
+
+        String referenceWithFilter = driver.findElement(By.cssSelector(
+                "select#reference_with_filter option:nth-of-type(2)")).getText();
+        By refFilterSelect = By.cssSelector("select#reference_with_filter");
+        new Select(driver.findElement(refFilterSelect)).selectByVisibleText(referenceWithFilter);
+
+        By embedFoAdd = By.cssSelector("td > button");
+        driver.findElement(embedFoAdd).click();
+
+        By saveButton = By.cssSelector("button[id*='save']");
+        driver.findElement(saveButton).click();
+
         //TODO: 9. Observe user redirected to 'Fields Ops' page
         //TODO: 10. Observe one record added at the bottom of list with corresponding values from previous steps:
         //TODO: - Checked checkbox on the left
@@ -57,5 +77,10 @@ public class EntityFieldOpsTest extends BaseTest {
     public void goPageByName(String name) {
         By entityIconXpath = By.xpath(String.format("//p[contains(text(), ' %s ')]/..", name));
         getDriver().findElement(entityIconXpath).click();
+    }
+
+    private void setup(WebDriver driver) {
+        ProjectUtils.goAndLogin(driver);
+        goPageByName("Fields Ops");
     }
 }
