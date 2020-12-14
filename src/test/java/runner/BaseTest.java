@@ -53,6 +53,9 @@ public abstract class BaseTest {
 
         this.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         this.driver.manage().window().maximize();
+
+        ScreenshotUtils.createScreenshotsDir();
+        System.out.println("Created directory to save screenshots: " + ScreenshotUtils.screenshotDirectoryName);
     }
 
     @AfterMethod
@@ -60,11 +63,11 @@ public abstract class BaseTest {
         driver.quit();
     }
 
-    /** Example of how to take a screenshot after assert fails. this should be in the BaseTest class  */
+    /** Take a screenshot after assert fails. */
     @AfterMethod
     public void makeScreenShotAfterTest(ITestResult testResult) {
         if (ITestResult.FAILURE == testResult.getStatus()) {
-            ScreenshotUtils.takeScreenShot(getDriver(), testResult.getInstanceName() + "-" + testResult.getName() + ".png");
+            ScreenshotUtils.takeScreenShot(getDriver(), testResult.getInstanceName() + "." + testResult.getName() + ".png");
         }
     }
 
