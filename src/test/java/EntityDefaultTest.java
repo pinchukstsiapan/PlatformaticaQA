@@ -37,14 +37,20 @@ public class EntityDefaultTest extends BaseTest {
         editFunction.click();
         //Assert.assertEquals(driver.getCurrentUrl(), "https://ref.eteam.work/index.php?action=action_edit&entity_id=7&row_id=2");
         Thread.sleep(1000);
+    }
+
+    @Test
+    public void editFiels() {
 
         WebElement fieldString = driver.findElement(By.xpath("//input[@id = 'string']"));
-        //fieldString.getAttribute("value")
+        fieldString.getAttribute("value");
+        System.out.println();
+
 
         //System.out.println(fieldString.getText());
 
         WebElement fieldText = driver.findElement(By.xpath("//span//textarea[@id = 'text']"));
-        //System.out.println(fieldText.getText());
+        System.out.println(fieldText.getText());
     }
 }
 
