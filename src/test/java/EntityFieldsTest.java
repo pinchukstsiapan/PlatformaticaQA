@@ -114,7 +114,8 @@ public class EntityFieldsTest extends BaseTest {
         By deleteButton = By.xpath(String.format("%s/../../..//a[contains(@href, 'delete')]", recordTitleXpath));
 
         driver.findElement(recordMenuButton).click();
-        getWait(2).until(ExpectedConditions.visibilityOfElementLocated(deleteButton)).click();
+        ProjectUtils.click(getDriver(),
+                getWait(2).until(ExpectedConditions.elementToBeClickable(deleteButton)));
     }
 
     private WebDriverWait getWait(int timeoutSecond) {
