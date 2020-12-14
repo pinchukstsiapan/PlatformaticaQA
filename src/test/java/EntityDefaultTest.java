@@ -50,7 +50,7 @@ public class EntityDefaultTest extends BaseTest {
         //System.out.println(fieldString.getText());
 
         WebElement fieldText = driver.findElement(By.xpath("//span//textarea[@id = 'text']"));
-        //System.out.println(fieldText.getText());
+        System.out.println(fieldText.getText());
     }
 }
 
