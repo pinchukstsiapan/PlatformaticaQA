@@ -83,13 +83,13 @@ public class EntityPlaceholderInputTest extends BaseTest {
         String decimal_ph = decimalField.getAttribute("placeholder");
         decimalField.sendKeys(decimal_ph);
 
-        WebElement dateField = driver.findElement(By.xpath("//input[@name='entity_form_data[date]']"));
-        String date_ph = dateField.getAttribute("placeholder");
-        dateField.sendKeys(date_ph);
-
-        WebElement datetimeField = driver.findElement(By.xpath("//input[@name='entity_form_data[datetime]']"));
-        String datetime_ph = datetimeField.getAttribute("placeholder");
-        datetimeField.sendKeys(datetime_ph);
+//        WebElement dateField = driver.findElement(By.xpath("//input[@name='entity_form_data[date]']"));
+//        String date_ph = dateField.getAttribute("placeholder");
+//        dateField.sendKeys(date_ph);
+//
+//        WebElement datetimeField = driver.findElement(By.xpath("//input[@name='entity_form_data[datetime]']"));
+//        String datetime_ph = datetimeField.getAttribute("placeholder");
+//        datetimeField.sendKeys(datetime_ph);
 
         WebElement save = driver.findElement(By.xpath("//div/button[@id='pa-entity-form-save-btn']"));
 //        Actions actions = new Actions(driver);
