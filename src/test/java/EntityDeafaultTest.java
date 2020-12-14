@@ -30,7 +30,7 @@ public class EntityDeafaultTest extends BaseTest {
         WebElement editFunction = driver.findElement(By.xpath("//a[text() = 'edit']"));
         System.out.println(editFunction);
         editFunction.click();
-        //Assert.assertEquals(driver.getCurrentUrl(), "https://ref.eteam.work/index.php?action=action_edit&entity_id=7&row_id=2");
+        Assert.assertEquals(driver.getCurrentUrl(), "https://ref.eteam.work/index.php?action=action_edit&entity_id=7&row_id=2");
         Thread.sleep(1000);
 
         WebElement fieldString = driver.findElement(By.xpath("//input[@id = 'string']"));
