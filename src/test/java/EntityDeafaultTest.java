@@ -10,15 +10,20 @@ import runner.BaseTest;
 
 public class EntityDeafaultTest extends BaseTest {
 
-    @Test
-    public void editRecord() throws InterruptedException {
+    private WebDriver driver;
 
-        final String title = UUID.randomUUID().toString();
-
-        WebDriver driver = getDriver();
+    /** initialize driver field and login */
+    private void initTest() {
+        driver = getDriver();
         driver.get("https://ref.eteam.work");
 
         ProjectUtils.login(driver, "user1@tester.com", "ah1QNmgkEO");
+    }
+
+    @Test
+    public void editRecord() throws InterruptedException {
+        initTest();
+        final String title = UUID.randomUUID().toString();
 
         WebElement tab = driver.findElement(By.xpath("//p[contains(text(), 'Default')]"));
         tab.click();
