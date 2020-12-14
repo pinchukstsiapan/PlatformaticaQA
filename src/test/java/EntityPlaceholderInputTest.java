@@ -1,6 +1,7 @@
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
@@ -89,8 +90,12 @@ public class EntityPlaceholderInputTest extends BaseTest {
         datetimeField.sendKeys(datetime_ph);
 
         WebElement save = driver.findElement(By.xpath("//div/button[@id='pa-entity-form-save-btn']"));
-        Thread.sleep(6000);
-        save.click();
+        Actions actions = new Actions(driver);
+
+        actions.moveToElement(save).click().perform();
+
+//        Thread.sleep(6000);
+//        save.click();
 
         WebElement numOfPagesS = driver.findElement(By.xpath("//span[@class='pagination-info']"));
 
@@ -114,9 +119,9 @@ public class EntityPlaceholderInputTest extends BaseTest {
         driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, int_ph)));
         driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, decimal_ph)));
 
-        WebElement actions = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//button/i[text()='menu']", id)));
+        WebElement actions1 = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//button/i[text()='menu']", id)));
         Thread.sleep(2000);
-        actions.click();
+        actions1.click();
         WebElement delete = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div//li/a[text()='delete']", id)));
         Thread.sleep(2000);
         delete.click();
