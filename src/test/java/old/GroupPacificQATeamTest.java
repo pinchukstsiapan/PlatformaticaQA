@@ -275,6 +275,7 @@ public class GroupPacificQATeamTest extends BaseTest {
         Assert.assertTrue(elementFork.getText().contains("Fork"));
 
     }
+
     @Test
     public void getTest2() {
         WebDriver browser = getDriver();
