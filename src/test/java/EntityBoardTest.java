@@ -21,7 +21,7 @@ public class EntityBoardTest extends BaseTest {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         String currentDataEuropean = formatter.format(calendar.getTime());
-        final String text = StringUtils.abbreviate(UUID.randomUUID().toString(), 15);
+        final String text = StringUtils.abbreviate(UUID.randomUUID().toString(), 10);
         final int number = 125;
         final double decimal = 10.25;
         final String pending = "Pending";
