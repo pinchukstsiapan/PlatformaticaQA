@@ -41,16 +41,15 @@ public class EntityDefaultTest extends BaseTest {
 
     @Test
     public void editFiels() {
-
+        initTest();
         WebElement fieldString = driver.findElement(By.xpath("//input[@id = 'string']"));
         fieldString.getAttribute("value");
         System.out.println();
 
-
         //System.out.println(fieldString.getText());
 
         WebElement fieldText = driver.findElement(By.xpath("//span//textarea[@id = 'text']"));
-        System.out.println(fieldText.getText());
+        //System.out.println(fieldText.getText());
     }
 }
 
