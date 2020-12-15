@@ -146,7 +146,7 @@ public class EntityPlaceholderInputTest extends BaseTest {
         WebElement testField = driver.findElement(
                 By.xpath("//div[contains(text(),'Delete Placeholder Test')]"));
 
-        Assert.assertEquals(true, testField.isDisplayed());
+        Assert.assertTrue( testField.isDisplayed());
 
         Thread.sleep(1000);
 
