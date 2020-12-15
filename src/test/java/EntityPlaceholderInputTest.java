@@ -157,8 +157,8 @@ public class EntityPlaceholderInputTest extends BaseTest {
         WebElement deleteButton = actionButton.findElement(
                 By.xpath("//tbody/tr[1]//ul[1]/li[3]/a"));
         deleteButton.click();
-
-        Assert.assertEquals(false, testField.isDisplayed());
+        Thread.sleep(1000);
+        Assert.assertFalse(testField.isDisplayed());
 
         WebElement recycleButton = actionButton.findElement(
                 By.xpath("//i[contains(text(),'delete_outline')]"));
@@ -167,6 +167,6 @@ public class EntityPlaceholderInputTest extends BaseTest {
         WebElement deletedField = driver.findElement(
                 By.xpath("//b[contains(text(),'Delete Placeholder Test')]"));
 
-        Assert.assertEquals(true, deletedField.isDisplayed());
+        Assert.assertTrue( deletedField.isDisplayed());
     }
 }
