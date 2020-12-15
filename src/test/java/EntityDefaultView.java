@@ -44,7 +44,6 @@ public class EntityDefaultView extends BaseTest {
         Assert.assertTrue(dateTimeLineDefaultData.getAttribute("value").equals("01/01/1970 00:00:00"));
 
         WebElement user = driver.findElement(By.xpath("//div[@class='filter-option-inner']/div[.='User 1 Demo']"));
-        System.out.println("User text:" + user.getText());
         Assert.assertTrue(user.getText().equals(userDefault.toUpperCase()));
     }
 }
