@@ -22,7 +22,7 @@ public class EntityBoardTest extends BaseTest {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         String currentDataEuropean = formatter.format(calendar.getTime());
         final String text = StringUtils.abbreviate(UUID.randomUUID().toString(), 10);
-        final int number = 125;
+        final int number = 12;
         final double decimal = 10.25;
         final String pending = "Pending";
         final String user1Demo = "User 1 Demo";
