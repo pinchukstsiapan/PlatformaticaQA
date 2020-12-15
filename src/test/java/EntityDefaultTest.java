@@ -52,7 +52,6 @@ public class EntityDefaultTest extends BaseTest {
         //System.out.println(fieldText.getText());
     }
 
-    @Ignore
     @Test
     public void checkDefaultValueAndUpdateThem() throws InterruptedException {
 
