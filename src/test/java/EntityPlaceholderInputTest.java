@@ -4,6 +4,7 @@ import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
+import java.util.List;
 import java.util.UUID;
 
 public class EntityPlaceholderInputTest extends BaseTest {
@@ -46,6 +47,22 @@ public class EntityPlaceholderInputTest extends BaseTest {
         orderBtn.click();
 
         driver.findElement(By.xpath("//div[contains(text(),'" + title + "')]"));
+
+        String findId = driver.findElement(By.xpath("//div[contains(text(),'" + title + "')]/..")).getAttribute("href");
+        int num = findId.lastIndexOf("id=");
+        String id = findId.substring(num + 3);
+
+        WebElement listBtn = driver.findElement(By.xpath("//ul[@role='tablist']//i[contains(text(),'list')]"));
+        listBtn.click();
+
+        List<WebElement> lastPage = driver.findElements(By.xpath("//a[@class='page-link']"));
+        lastPage.get(lastPage.size() - 2).click();
+
+        WebElement dropdown = driver.findElement(By.xpath("//tr[@data-row_id='" + id + "']//div[@class='dropdown pull-left']"));
+        dropdown.click();
+
+        WebElement delete = driver.findElement(By.xpath("//tr[@data-row_id='" + id + "']//div[@class='dropdown pull-left show']//a[text()='delete']"));
+        ProjectUtils.click(driver, delete);
     }
 
     @Test
