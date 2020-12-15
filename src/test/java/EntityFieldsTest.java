@@ -132,4 +132,21 @@ public class EntityFieldsTest extends BaseTest {
 
 
     }
+
+    @Test
+    public void findExport() throws InterruptedException {
+
+        WebDriver driver = getDriver();
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+
+        driver.get("https://ref.eteam.work");
+        ProjectUtils.login(driver, "user1@tester.com", "ah1QNmgkEO");
+        WebElement exportMenuButton = driver.findElement(By.xpath("//*[@id=\"menu-list-parent\"]/ul/li[8]/a"));
+        // //p[text()=' Export ']/..
+        // //*[@id="menu-list-parent"]/ul/li[8]/a
+        js.executeScript("arguments[0].scrollIntoView();", exportMenuButton);
+        exportMenuButton.click();
+
+      Thread.sleep(3000);
+    }
 }
