@@ -23,6 +23,7 @@ public class EntityDefaultTest extends BaseTest {
         ProjectUtils.login(driver, "user1@tester.com", "ah1QNmgkEO");
     }
 
+    @Ignore
     @Test
     public void createRecord() {
         initTest();
@@ -30,14 +31,13 @@ public class EntityDefaultTest extends BaseTest {
         //Code to create and test new default using value in this.title
     }
 
-
+    @Ignore
     @Test(dependsOnMethods = "editRecord")
     public void deleteRecord() {
         initTest();
 
         //Code to delete default using title value in this.title
     }
-
 
     @Test
     public void editRecord() throws InterruptedException {
@@ -55,7 +55,7 @@ public class EntityDefaultTest extends BaseTest {
 
         WebElement editFunction = driver.findElement(By.xpath("//a[text() = 'edit']"));
         System.out.println(editFunction);
-        editFunction.click();
+        ProjectUtils.click(driver, editFunction);
 
         WebElement fieldString = driver.findElement(By.xpath("//input[@id = 'string']"));
         fieldString.clear();
@@ -97,8 +97,7 @@ public class EntityDefaultTest extends BaseTest {
     private void ClickSaveButton(WebDriver driver) throws InterruptedException {
         WebElement saveButton = driver.findElement(By.xpath("//button[text() = 'Save']"));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", saveButton);
-        saveButton.click();
-        Thread.sleep(100);
+        ProjectUtils.click(driver, saveButton);
     }
 
 }
