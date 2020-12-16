@@ -4,6 +4,7 @@ import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
+
 import java.util.UUID;
 
 public class EntityPlaceholderTest extends BaseTest {
@@ -29,23 +30,23 @@ public class EntityPlaceholderTest extends BaseTest {
 
         WebElement titleElement = driver.findElement(By.xpath("//input[@placeholder='String placeholder']"));
         titleElement.sendKeys(title);
-        WebElement commentsElement= driver.findElement(By.xpath("//textarea[@placeholder='Text placeholder']"));
+        WebElement commentsElement = driver.findElement(By.xpath("//textarea[@placeholder='Text placeholder']"));
         commentsElement.sendKeys((comments));
         WebElement numberElement = driver.findElement(By.xpath("//input[@id='int']"));
         numberElement.sendKeys(String.valueOf(number));
         WebElement valueElement = driver.findElement(By.xpath("//input[@id='decimal']"));
         valueElement.sendKeys(String.valueOf(value));
         WebElement userSelection = driver.findElement(By.xpath("//div[contains(text(),'Demo')]"));
-        ProjectUtils.click(driver,userSelection);
-        WebElement newUser= driver.findElement(By.xpath("//span[text()='User 2']"));
-        ProjectUtils.click(driver,newUser);
+        ProjectUtils.click(driver, userSelection);
+        WebElement newUser = driver.findElement(By.xpath("//span[text()='User 2']"));
+        ProjectUtils.click(driver, newUser);
 
         WebElement submit = driver.findElement(By.id("pa-entity-form-save-btn"));
-        ProjectUtils.click(driver,submit);
+        ProjectUtils.click(driver, submit);
 
         WebElement paginator = driver.findElement(By.xpath("//li[@class='page-item page-last-separator disabled']/following-sibling::li"));
         Thread.sleep(1000);
-        ProjectUtils.click(driver,paginator);
+        ProjectUtils.click(driver, paginator);
 
         String recordTitleXpath = String.format("//div[contains(text(), '%s')]", title);
         By newRecordComments = By.xpath(String.format(" %s/../../../td[3]/a/div", recordTitleXpath));
@@ -55,8 +56,33 @@ public class EntityPlaceholderTest extends BaseTest {
         WebElement createdRecordInt = driver.findElement(newRecordInt);
         WebElement createdRecordVal = driver.findElement(newRecordVal);
 
-        Assert.assertEquals(createdRecordComments.getText(),comments);
-        Assert.assertEquals(createdRecordInt.getText(),Integer.toString(number));
-        Assert.assertEquals(createdRecordVal.getText(),Double.toString(value));
+        Assert.assertEquals(createdRecordComments.getText(), comments);
+        Assert.assertEquals(createdRecordInt.getText(), Integer.toString(number));
+        Assert.assertEquals(createdRecordVal.getText(), Double.toString(value));
+    }
+
+    @Test
+    public void view02Test() throws InterruptedException {
+
+        WebDriver driver = getDriver();
+        driver.get("https://ref.eteam.work/");
+
+        ProjectUtils.login(driver, "user1@tester.com", "ah1QNmgkEO");
+
+        WebElement placeholderBtn = driver.findElement(By.xpath("//p[contains(text(),'Placeholder')]"));
+
+        ProjectUtils.click(driver, placeholderBtn);
+
+
+        Thread.sleep(1000);
+
+//        кликаем по order
+//        WebElement order = driver.findElement(By.xpath("//a[@href='index.php?action=action_list&list_type=table&entity_id=8&draggable=1']"));
+//        order.click();
+
+        WebElement listActive = driver.findElement(By.xpath("//a[@class='nav-link active']/i[contains(text(), 'list')]"));
+        Assert.assertEquals(listActive.isDisplayed(), true);
+
+
     }
 }

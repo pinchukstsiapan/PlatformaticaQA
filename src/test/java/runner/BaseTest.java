@@ -15,7 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-public abstract class BaseTest {
+public abstract class  BaseTest {
 
     public static final String HUB_URL = "http://localhost:4444/wd/hub";
 
