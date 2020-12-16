@@ -64,6 +64,7 @@ public abstract class ProjectUtils {
         login(driver, getLogin(), getPassword());
     }
 
+    @Deprecated
     public static void login(WebDriver driver, String login, String pas) {
         WebElement loginElement = driver.findElement(By.xpath("//input[@name='login_name']"));
         loginElement.sendKeys(login);
