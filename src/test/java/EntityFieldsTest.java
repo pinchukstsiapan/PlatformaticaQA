@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import org.testng.Assert;
 import runner.BaseTest;
@@ -122,6 +123,7 @@ public class EntityFieldsTest extends BaseTest {
         return new WebDriverWait(getDriver(), timeoutSecond);
     }
 
+    @Ignore
     @Test
     public void editForm() throws InterruptedException {
 
@@ -188,6 +190,7 @@ public class EntityFieldsTest extends BaseTest {
                 getText(),String.valueOf(newDecimal));
     }
 
+    @Ignore
     @Test
     public void saveDraft() throws InterruptedException {
 
@@ -233,6 +236,7 @@ public class EntityFieldsTest extends BaseTest {
         Assert.assertTrue(pencil.isDisplayed());
     }
 
+    @Ignore
     @Test
     public void invalidEditEntry() throws InterruptedException {
 
