@@ -235,6 +235,7 @@ public class EntityFieldsTest extends BaseTest {
         Assert.assertTrue(pencil.isDisplayed());
     }
 
+    @Ignore
     @Test
     public void invalidEditEntry() throws InterruptedException {
 
