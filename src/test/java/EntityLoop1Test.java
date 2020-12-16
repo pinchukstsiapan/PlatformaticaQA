@@ -4,6 +4,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import java.util.List;
@@ -97,11 +98,12 @@ public class EntityLoop1Test extends BaseTest {
         }
     }
 
+    @Ignore
     @Test
     public void loop1Stops() throws InterruptedException {
 
         WebDriver driver = getDriver();
-        ProjectUtils.goAndLogin(driver);
+        ProjectUtils.loginProcedure(driver);
 
         WebElement loop_1 = driver.findElement(By.xpath("//p[contains(text(),'Loop 1')]"));
         ProjectUtils.click(driver, loop_1);
