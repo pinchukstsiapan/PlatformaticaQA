@@ -6,12 +6,14 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import org.testng.Assert;
 
 
 public class EntityFieldOpsTest extends BaseTest {
 
+    @Ignore
     @Test
     public void fieldOpsView() {
 
