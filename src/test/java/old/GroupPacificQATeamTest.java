@@ -284,5 +284,29 @@ public class GroupPacificQATeamTest extends BaseTest {
         WebElement text = browser.findElement(By.xpath("//div/h1"));
         Assert.assertEquals(text.getText(), "Home Inspection Tool Kit - Deluxe");
     }
+
+    @Test
+    public void vaheTest(){
+
+        WebDriver driver = getDriver();
+
+        driver.get("https://github.com/SergeiDemyanenko/PlatformaticaQA");
+        WebElement elementCode = driver.findElement(By.xpath("//li[@class = 'd-flex']/a[@href = '/SergeiDemyanenko/PlatformaticaQA']"));
+        WebElement elementIssues = driver.findElement(By.xpath("//li[@class = 'd-flex']/a[@href = '/SergeiDemyanenko/PlatformaticaQA/issues']"));
+        WebElement elementPR = driver.findElement(By.xpath("//li[@class = 'd-flex']/a[@href = '/SergeiDemyanenko/PlatformaticaQA/pulls']"));
+
+        WebElement elementWatch = driver.findElement(By.xpath("(//li/a[@href = '/login?return_to=%2FSergeiDemyanenko%2FPlatformaticaQA'])[1]"));
+        WebElement elementStar = driver.findElement(By.xpath("(//li/a[@href = '/login?return_to=%2FSergeiDemyanenko%2FPlatformaticaQA'])[2]"));
+        WebElement elementFork = driver.findElement(By.xpath("(//li/a[@href = '/login?return_to=%2FSergeiDemyanenko%2FPlatformaticaQA'])[3]"));
+
+        Assert.assertEquals(elementCode.getText(), "Code");
+        Assert.assertEquals(elementIssues.getText(), "Issues");
+        Assert.assertTrue(elementPR.getText().contains("Pull requests"));
+
+        Assert.assertEquals(elementWatch.getText(), "Watch");
+        Assert.assertEquals(elementStar.getText(), "Star");
+        Assert.assertEquals(elementFork.getText(), "Fork");
+
+    }
 }
 
