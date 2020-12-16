@@ -190,6 +190,7 @@ public class EntityFieldsTest extends BaseTest {
                 getText(),String.valueOf(newDecimal));
     }
 
+    @Ignore
     @Test
     public void saveDraft() throws InterruptedException {
 
