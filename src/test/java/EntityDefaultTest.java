@@ -1,10 +1,7 @@
 import java.util.List;
 import java.util.UUID;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
@@ -15,7 +12,9 @@ public class EntityDefaultTest extends BaseTest {
 
     private WebDriver driver;
 
-    /** initialize driver field and login */
+    /**
+     * initialize driver field and login
+     */
     private void initTest() {
         driver = getDriver();
         driver.get("https://ref.eteam.work");
@@ -27,7 +26,10 @@ public class EntityDefaultTest extends BaseTest {
     public void editRecord() throws InterruptedException {
         initTest();
 
-        final String title = UUID.randomUUID().toString();
+        //final String title = UUID.randomUUID().toString();
+        final String editedTitle = UUID.randomUUID().toString();
+        final String editedText = "Edited Text Value";
+        final int editedInt = 10;
 
         WebElement tab = driver.findElement(By.xpath("//p[contains(text(), 'Default')]"));
         tab.click();
@@ -43,15 +45,69 @@ public class EntityDefaultTest extends BaseTest {
         Thread.sleep(1000);
 
         WebElement fieldString = driver.findElement(By.xpath("//input[@id = 'string']"));
-        fieldString.getAttribute("value");
-        System.out.println();
+        fieldString.clear();
+        Thread.sleep(2000);
+        fieldString.sendKeys(editedTitle);
+        Thread.sleep(2000);
+        //System.out.println(fieldString.getAttribute("value"));
 
         //System.out.println(fieldString.getText());
 
         WebElement fieldText = driver.findElement(By.xpath("//span//textarea[@id = 'text']"));
-        //System.out.println(fieldText.getText());
+        fieldText.clear();
+        fieldText.sendKeys(editedText);
+        Thread.sleep(2000);
+        //abrakadabraOE
+
+        WebElement fieldInt = driver.findElement(By.xpath("//input[@id = 'int']"));
+        fieldInt.clear();
+        fieldInt.sendKeys(String.valueOf(editedInt));
+
+//        JavascriptExecutor jse6 = (JavascriptExecutor) driver;
+//        jse6.executeScript("window.scrollBy(0,500)", "");
+//        //driver.findElement(By.cssSelector("body")).sendKeys(Keys.END);
+//        Thread.sleep(100);
+
+        ClickSaveButton(driver);
+
+        //Assert.assertTrue(stringLineDefaultData.getAttribute("value").equals(stringLineDefaultText));
+//        List<WebElement> fieldsValues = driver.findElements(By.xpath("//div[contains(text(), 'abrakadabraOE')]/../../.."));
+//        String[] values = fieldsValues.get(0).getText().split("\n");
+//        Assert.assertEquals(values[0], "abrakadabraOE");
+
+        List<WebElement> rows = driver.findElements(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr"));
+
+        boolean isFailed = true;
+        for (WebElement row: rows) {
+            String value = row.findElements(By.cssSelector("td")).get(1).getText();
+            //System.out.println("value");
+            if (editedTitle.equals(value)) {
+                //System.out.println("Found it!");
+                //Assert.assertEquals(row.findElements(By.cssSelector("td")).get(1).getText(), editedTitle);
+                Assert.assertEquals(row.findElements(By.cssSelector("td")).get(2).getText(), editedText);
+                Assert.assertEquals(row.findElements(By.cssSelector("td")).get(3).getText(), String.valueOf(editedInt));
+                isFailed = false;
+                break;
+            }
+        }
+
+        if (isFailed) {
+            Assert.fail("Didn't find updated Default Entity");
+        }
+
+        /** Validating changed fields of the record */
+        // private void validateChangedRecord(WebDriver driver, String fieldTitle, String fieldText, int fInt ) {
     }
 
+    /** scroll down to the Save button and click on it */
+    private void ClickSaveButton(WebDriver driver) throws InterruptedException {
+        WebElement saveButton = driver.findElement(By.xpath("//button[text() = 'Save']"));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", saveButton);
+        saveButton.click();
+        Thread.sleep(100);
+    }
+
+    @Ignore
     @Test
     public void checkDefaultValueAndUpdateThem() throws InterruptedException {
 
@@ -144,11 +200,6 @@ public class EntityDefaultTest extends BaseTest {
         dateTimeLineDefaultData.clear();
         dateTimeLineDefaultData.sendKeys(dateTimeLineNew);
 
-        //upload file and pics test passes on my local PC, I commented it cause I don't think it will pass on other PCs
-        //driver.findElement(By.id("file")).sendKeys("C:\\Users\\Galina\\Desktop\\IMG_8992.JPG");
-        //WebElement uploadPicture = driver.findElement(By.xpath("//input[@id='file_image']"));
-        //uploadPicture.sendKeys("C:\\Users\\Galina\\Desktop\\IMG_8992.JPG");
-
         WebElement dropdownUsers = driver.findElement(By.xpath("//button[@data-id='user']"));
         dropdownUsers.click();
 
@@ -221,15 +272,6 @@ public class EntityDefaultTest extends BaseTest {
         ourRecord.click();
         Thread.sleep(500);
 
-//        Ask proficient users why its not working
-//        String[] textArray = {stringLineNewText, textLineNewText, intLineNew +"", decimalLineNew +"", dateLineNew, dateTimeLineNew};
-//        List<WebElement> myList = driver.findElements(By.className("pa-view-field"));
-//        List<String> allElementsText = new ArrayList<>();
-//        for (int i = 0; i < myList.size(); i++) {
-//            allElementsText.add(myList.get(i).getText());
-//            System.out.println(myList.get(i).getText());
-//            Assert.assertEquals(allElementsText, textArray);
-
         //check all lines new values
         List<WebElement> listOfNewValues = driver.findElements(By.xpath("//span[@class='pa-view-field']"));
         Assert.assertEquals(listOfNewValues.get(0).getText(), stringLineNewText);
@@ -250,3 +292,4 @@ public class EntityDefaultTest extends BaseTest {
         Assert.assertEquals(embedDArrayOfNewValues.get(9).getText(), userEmbedDSelected);
     }
 }
+
