@@ -113,6 +113,7 @@ public class EntityDefaultTest extends BaseTest {
         ProjectUtils.click(driver, saveButton);
     }
 
+    @Ignore
     @Test
     public void checkDefaultValueAndUpdateThem() throws InterruptedException {
 
