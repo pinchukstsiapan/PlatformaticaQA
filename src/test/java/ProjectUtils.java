@@ -47,11 +47,17 @@ public abstract class ProjectUtils {
         return password;
     }
 
-    public static WebDriver goAndLogin(WebDriver driver) {
+    public static WebDriver loginProcedure(WebDriver driver) {
         driver.get(URL);
         login(driver);
+        reset(driver);
 
         return driver;
+    }
+
+    public static void reset(WebDriver driver) {
+        driver.findElement(By.id("navbarDropdownProfile")).click();
+        driver.findElement(By.xpath("//a[contains(text(), 'Reset')]")).click();
     }
 
     public static void login(WebDriver driver) {

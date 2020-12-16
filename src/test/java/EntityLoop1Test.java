@@ -103,7 +103,7 @@ public class EntityLoop1Test extends BaseTest {
     public void loop1Stops() throws InterruptedException {
 
         WebDriver driver = getDriver();
-        ProjectUtils.goAndLogin(driver);
+        ProjectUtils.loginProcedure(driver);
 
         WebElement loop_1 = driver.findElement(By.xpath("//p[contains(text(),'Loop 1')]"));
         ProjectUtils.click(driver, loop_1);

@@ -14,7 +14,7 @@ public class EntityReadonlyTest extends BaseTest {
 
         WebDriver driver = getDriver();
 
-        ProjectUtils.goAndLogin(driver);
+        ProjectUtils.loginProcedure(driver);
 
         driver.findElement(By.xpath("//p[contains(text(), 'Readonly')]")).click();
         driver.findElement(By.xpath("//i[contains(text(), 'create_new_folder')]")).click();

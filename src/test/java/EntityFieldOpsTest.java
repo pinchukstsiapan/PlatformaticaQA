@@ -159,7 +159,7 @@ public class EntityFieldOpsTest extends BaseTest {
     }
 
     private void setup() {
-        ProjectUtils.goAndLogin(getDriver());
+        ProjectUtils.loginProcedure(getDriver());
         goPageByName("Fields Ops");
     }
 
