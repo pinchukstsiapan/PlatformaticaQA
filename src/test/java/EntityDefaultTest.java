@@ -53,15 +53,7 @@ public class EntityDefaultTest extends BaseTest {
         ProjectUtils.click(driver, saveBtn);
     }
 
-    @Ignore
-    @Test(dependsOnMethods = "editRecord")
-    public void deleteRecord() {
-        initTest();
-
-        //Code to delete default using title value in this.title
-    }
-
-    @Test(dependsOnMethods = "createRecord")
+        @Test(dependsOnMethods = "createRecord")
     public void editRecord() throws InterruptedException {
         initTest();
 
@@ -89,6 +81,13 @@ public class EntityDefaultTest extends BaseTest {
 
         ClickSaveButton(driver);
 
+        WebElement row = searchCorrectRow(driver, currentValues.fieldString);
+        validateRowFields(row);
+
+    }
+
+    private WebElement searchCorrectRow(WebDriver driver, String searchValue) {
+
         List<WebElement> rows = driver.findElements(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr"));
 
         boolean isFailed = true;
@@ -96,27 +95,34 @@ public class EntityDefaultTest extends BaseTest {
             WebElement field = row.findElements(By.xpath("//td")).get(1);
             String valueString = field.getText();
 
-            if (currentValues.fieldString.equals(valueString)) {
-                Assert.assertEquals(row.findElements(By.cssSelector("td")).get(2).getText(), currentValues.fieldText);
-                Assert.assertEquals(row.findElements(By.cssSelector("td")).get(3).getText(), String.valueOf(currentValues.fieldInt));
-                isFailed = false;
-                break;
+            if (searchValue.equals(valueString)) {
+                return row;
             }
         }
-
-        if (isFailed) {
-            Assert.fail("Didn't find updated Default Entity");
-        }
-
-        // Validating changed fields of the record
-
+        Assert.fail("Didn't find updated Default Entity");
+        return null;
     }
+
+    private void validateRowFields(WebElement row) {
+
+        Assert.assertEquals(row.findElements(By.cssSelector("td")).get(2).getText(), currentValues.fieldText);
+        Assert.assertEquals(row.findElements(By.cssSelector("td")).get(3).getText(), String.valueOf(currentValues.fieldInt));
+    }
+
 
     /** scroll down to the Save button and click on it */
     private void ClickSaveButton(WebDriver driver) throws InterruptedException {
         WebElement saveButton = driver.findElement(By.xpath("//button[text() = 'Save']"));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", saveButton);
         ProjectUtils.click(driver, saveButton);
+    }
+
+    @Ignore
+    @Test(dependsOnMethods = "editRecord")
+    public void deleteRecord() {
+        initTest();
+
+        //Code to delete default using title value in this.title
     }
 
     @Ignore
