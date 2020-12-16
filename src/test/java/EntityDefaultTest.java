@@ -13,7 +13,16 @@ import org.openqa.selenium.WebElement;
 public class EntityDefaultTest extends BaseTest {
 
     private WebDriver driver;
-    private final DefaultValues expectedValues = new DefaultValues();
+    private final DefaultValues defaultValues = new DefaultValues();
+    private DefaultValues currentValues = new DefaultValues(
+                                 UUID.randomUUID().toString(),
+                                "Some random text as Edited Text Value",
+                                (int) Math.random()*100,
+                                Math.random()*200,
+                                "12/23/2021",
+                                "12/23/2021 12:34:56",
+                                "User X Demo",
+                                9);
 
     /**
      * initialize driver field and login
@@ -36,7 +45,7 @@ public class EntityDefaultTest extends BaseTest {
         ProjectUtils.click(driver,createFolder);
 
         WebElement stringLineDefaultData = driver.findElement(By.xpath("//input[@id='string']"));
-        Assert.assertEquals(stringLineDefaultData.getAttribute("value"), expectedValues.fieldString);
+        Assert.assertEquals(stringLineDefaultData.getAttribute("value"), defaultValues.fieldString);
 
         //save new record
         WebElement saveBtn = driver.findElement(By.xpath("//button[.='Save']"));
@@ -56,10 +65,6 @@ public class EntityDefaultTest extends BaseTest {
     public void editRecord() throws InterruptedException {
         initTest();
 
-        final String editedTitle = UUID.randomUUID().toString();
-        final String editedText = "Edited Text Value";
-        final int editedInt = 10;
-
         WebElement tab = driver.findElement(By.xpath("//p[contains(text(), 'Default')]"));
         tab.click();
 
@@ -72,15 +77,15 @@ public class EntityDefaultTest extends BaseTest {
 
         WebElement fieldString = driver.findElement(By.xpath("//input[@id = 'string']"));
         fieldString.clear();
-        fieldString.sendKeys(editedTitle);
+        fieldString.sendKeys(currentValues.fieldString);
 
         WebElement fieldText = driver.findElement(By.xpath("//span//textarea[@id = 'text']"));
         fieldText.clear();
-        fieldText.sendKeys(editedText);
+        fieldText.sendKeys(currentValues.fieldText);
 
         WebElement fieldInt = driver.findElement(By.xpath("//input[@id = 'int']"));
         fieldInt.clear();
-        fieldInt.sendKeys(String.valueOf(editedInt));
+        fieldInt.sendKeys(String.valueOf(currentValues.fieldInt));
 
         ClickSaveButton(driver);
 
@@ -88,11 +93,12 @@ public class EntityDefaultTest extends BaseTest {
 
         boolean isFailed = true;
         for (WebElement row: rows) {
-            String value = row.findElements(By.cssSelector("td")).get(1).getText();
+            WebElement field = row.findElements(By.xpath("//td")).get(1);
+            String valueString = field.getText();
 
-            if (editedTitle.equals(value)) {
-                Assert.assertEquals(row.findElements(By.cssSelector("td")).get(2).getText(), editedText);
-                Assert.assertEquals(row.findElements(By.cssSelector("td")).get(3).getText(), String.valueOf(editedInt));
+            if (currentValues.fieldString.equals(valueString)) {
+                Assert.assertEquals(row.findElements(By.cssSelector("td")).get(2).getText(), currentValues.fieldText);
+                Assert.assertEquals(row.findElements(By.cssSelector("td")).get(3).getText(), String.valueOf(currentValues.fieldInt));
                 isFailed = false;
                 break;
             }
