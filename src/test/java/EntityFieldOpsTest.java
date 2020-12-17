@@ -18,6 +18,36 @@ import java.util.List;
 
 public class EntityFieldOpsTest extends BaseTest {
 
+    @Test
+    public void newRecord() throws InterruptedException {
+        WebDriver driver = getDriver();
+        ProjectUtils.loginProcedure(driver);
+        driver.get("https://ref.eteam.work");
+
+        WebElement tab = driver.findElement(By.xpath("//p[contains(text(),'Fields Ops')]"));
+        tab.click();
+
+        WebElement createNewFolder = driver.findElement(By.xpath("//i[contains(text(),'create_new_folder')]"));
+        createNewFolder.click();
+
+        WebElement checkbox = driver.findElement(By.xpath("//div[@class='d-flex']//span"));
+        checkbox.click();
+
+        Select dropdownMenu = new Select(driver.findElement(By.xpath("//select[@name='entity_form_data[dropdown]']")));
+        dropdownMenu.selectByValue("Done");
+
+        WebElement saveBtn = driver.findElement(By.id("pa-entity-form-save-btn"));
+        ProjectUtils.click(driver,saveBtn);
+
+        try {
+            WebElement pageTitle = driver.findElement(By.className("card-title"));
+            Assert.assertEquals(pageTitle.getText(), "Fields Ops",
+                    "Redirection works incorrectly");
+        } catch (TimeoutException e) {
+            Assert.fail("Redirection works incorrectly");
+        }
+    }
+
     @Ignore
     @Test
     public void fieldOpsView() {
