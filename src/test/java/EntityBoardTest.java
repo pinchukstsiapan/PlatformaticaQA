@@ -1,4 +1,4 @@
-import org.apache.commons.lang3.StringUtils;
+
 import org.openqa.selenium.*;
 import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -18,12 +18,12 @@ public class EntityBoardTest extends BaseTest {
 
     @Ignore
     @Test
-    public void newRecord() throws IOException, InterruptedException {
+    public void inputTest() throws IOException {
 
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         String currentDataEuropean = formatter.format(calendar.getTime());
-        final String text = StringUtils.abbreviate(UUID.randomUUID().toString(), 10);
+        final String text = UUID.randomUUID().toString();
         final int number = 12;
         final double decimal = 10.25;
         final String pending = "Pending";
