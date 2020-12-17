@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public abstract class BaseTest {
+public abstract class  BaseTest {
 
     public static final String HUB_URL = "http://localhost:4444/wd/hub";
 
