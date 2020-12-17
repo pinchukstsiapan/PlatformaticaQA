@@ -65,24 +65,17 @@ public class EntityPlaceholderTest extends BaseTest {
         Assert.assertEquals(createdRecordVal.getText(), Double.toString(value));
     }
 
-    // TC: https://trello.com/c/SnEQAe5S/196-entity-placeholder-view-tc06-verify-that-viewer-can-see-common-and-specific-ui-elements-on-the-page-placeholder-list
     @Test
-    public void view02Test() throws InterruptedException {
+    public void view02Test() {
+
         final String textLinkPlaceholder = "Placeholder";
         final String textFirstElementMenu = "delete_outline";
         final String textSecondElementMenu = "notifications_none";
         final String textThirdElementMenu = "person";
         final String textCreateNewBtn = "create_new_folder";
         final String textHeader = "Placeholder";
-        final String attributeInputSearch = "placeholder";
-        final String textInputSearch = "Search";
-        final String attributeToggleBtn = "name";
-        final String textToggleBtn = "toggle";
-        final String[] headersOfColumns = new String[]{"String", "String", "Text", "Int", "Decimal", "Date", "Datetime", "File", "File image", "User", "Actions"};
 
-        WebDriver driver = getDriver();
-        driver.get("https://ref.eteam.work/");
-        ProjectUtils.login(driver, "user1@tester.com", "ah1QNmgkEO");
+        WebDriver driver = ProjectUtils.loginProcedure(getDriver());
 
         WebElement placeholderBtn = driver.findElement(By.xpath("//p[contains(text(),'Placeholder')]"));
         ProjectUtils.click(driver, placeholderBtn);
@@ -99,16 +92,6 @@ public class EntityPlaceholderTest extends BaseTest {
         WebElement header = driver.findElement(By.xpath("//div[@class='d-flex justify-content-between']/h3"));
         List<WebElement> tabListOrder = driver.findElements(By.xpath("//ul[@role='tablist']/li"));
 
-        WebElement inputSearch = driver.findElement(By.cssSelector("input"));
-        WebElement toggleBtn = driver.findElement(By.xpath("//button[@class='btn btn-secondary']"));
-
-        List<WebElement> columns = driver.findElements(By.xpath("//table[@id='pa-all-entities-table']//th/div[contains(@class, 'th-inner')]"));
-
-        for (int i = 1; i < columns.size(); i++) {
-            String headers = columns.get(i).getText();
-            Assert.assertEquals(headers, headersOfColumns[i]);
-        }
-
         Assert.assertTrue(listActive.isDisplayed());
         Assert.assertEquals(linkPlaceholder.getText(), textLinkPlaceholder);
 
@@ -121,11 +104,5 @@ public class EntityPlaceholderTest extends BaseTest {
         Assert.assertTrue(createNewBtn.isEnabled());
         Assert.assertEquals(header.getText(), textHeader);
         Assert.assertEquals(tabListOrder.size(), 2);
-
-        Assert.assertTrue(inputSearch.isDisplayed());
-        Assert.assertEquals(inputSearch.getAttribute(attributeInputSearch), textInputSearch);
-        Assert.assertEquals(toggleBtn.getAttribute(attributeToggleBtn), textToggleBtn);
-
-        Assert.assertEquals(columns.size(), 11);
     }
 }
