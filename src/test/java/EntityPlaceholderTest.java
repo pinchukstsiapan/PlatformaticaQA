@@ -2,6 +2,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import java.util.UUID;
@@ -11,16 +12,12 @@ public class EntityPlaceholderTest extends BaseTest {
     @Test
     public void inputTest() throws InterruptedException {
 
-        WebDriver driver = getDriver();
-        driver.get("https://ref.eteam.work");
-
-        ProjectUtils.login(driver, "user1@tester.com", "ah1QNmgkEO");
+        WebDriver driver = ProjectUtils.loginProcedure(getDriver());
 
         WebElement tab = driver.findElement(By.xpath("//p[contains(text(),'Placeholder')]/preceding-sibling::i"));
         ProjectUtils.click(driver, tab);
-
         WebElement icon = driver.findElement(By.xpath("//i[contains(text(),'create_new_folder')]"));
-        icon.click();
+        ProjectUtils.click(driver,icon);
 
         final String title = UUID.randomUUID().toString();
         final String comments = "my pretty simple text";
@@ -42,10 +39,6 @@ public class EntityPlaceholderTest extends BaseTest {
 
         WebElement submit = driver.findElement(By.id("pa-entity-form-save-btn"));
         ProjectUtils.click(driver,submit);
-
-        WebElement paginator = driver.findElement(By.xpath("//li[@class='page-item page-last-separator disabled']/following-sibling::li"));
-        Thread.sleep(1000);
-        ProjectUtils.click(driver,paginator);
 
         String recordTitleXpath = String.format("//div[contains(text(), '%s')]", title);
         By newRecordComments = By.xpath(String.format(" %s/../../../td[3]/a/div", recordTitleXpath));
