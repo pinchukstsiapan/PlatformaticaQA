@@ -17,7 +17,7 @@ public class EntityImportTest extends BaseTest {
 
         WebDriver driver = getDriver();
         driver.get(url);
-        ProjectUtils.login(driver, "user1@tester.com", "ah1QNmgkEO");
+        ProjectUtils.loginProcedure(driver);
 
         WebElement importValuesTab = driver.findElement(By.xpath("//p[contains(text(),'Import values')]"));
         importValuesTab.click();
