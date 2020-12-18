@@ -64,7 +64,12 @@ public abstract class ProjectUtils {
         Properties properties = new Properties();
         try {
             if (!BaseTest.isRemoteWebDriver()) {
-                properties.load(ProjectUtils.class.getClassLoader().getResourceAsStream("local.properties"));
+                InputStream inputStream = ProjectUtils.class.getClassLoader().getResourceAsStream("local.properties");
+                if (inputStream == null) {
+                    throw new RuntimeException("Copy and paste the local.properties.TEMPLATE file to local.properties");
+                }
+
+                properties.load(inputStream);
                 return properties;
             }
         } catch (IOException ignore) {}
