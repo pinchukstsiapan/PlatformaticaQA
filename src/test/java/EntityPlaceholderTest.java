@@ -138,4 +138,53 @@ public class EntityPlaceholderTest extends BaseTest {
         Assert.assertEquals(header.getText(), textHeader);
         Assert.assertEquals(tabListOrder.size(), 2);
     }
+
+    @Test
+    public void view01Test() {
+        WebDriver driver = getDriver();
+        ProjectUtils.loginProcedure(driver);
+
+        WebElement tab = driver.findElement(By.xpath("//p[contains(text(),'Placeholder')]"));
+        ProjectUtils.click(driver, tab);
+
+        WebElement newRecord = driver.findElement(By.xpath("//i[contains(text(),'create_new_folder')]/../.."));
+        ProjectUtils.click(driver, newRecord);
+
+        final String title = "TestPlaceholderView";
+        final String text = "PlaceholderViewText";
+        final int number = 11;
+        final double decimal = 11.65;
+
+        WebElement titleElement = driver.findElement(By.xpath("//input[@name='entity_form_data[string]']"));
+        titleElement.sendKeys(title);
+        WebElement textElement = driver.findElement(By.xpath("//textarea[@name='entity_form_data[text]']"));
+        textElement.sendKeys(text);
+        WebElement numberElement = driver.findElement(By.xpath("//input[@name='entity_form_data[int]']"));
+        numberElement.sendKeys(String.valueOf(number));
+        WebElement decimalElement = driver.findElement(By.xpath("//input[@name='entity_form_data[decimal]']"));
+        decimalElement.sendKeys(String.valueOf(decimal));
+        WebElement submit = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
+        ProjectUtils.click(driver, submit);
+
+        WebElement openRecord = driver.findElement(By.xpath("//div[contains(text(),'" + title + "')]"));
+        ProjectUtils.click(driver, openRecord);
+        WebElement newWindow = driver.findElement(By.xpath("//h4[contains(text(),'Placeholder')]"));
+        Assert.assertEquals(newWindow.getText(), "Placeholder");
+        WebElement newTitle = driver.findElement(By.xpath("//span[contains(text(),'" + title + "')]"));
+        Assert.assertEquals(newTitle.getText(), title);
+        WebElement newText = driver.findElement(By.xpath("//span[contains(text(),'" + text + "')]"));
+        Assert.assertEquals(newText.getText(), text);
+        WebElement newInt = driver.findElement(By.xpath("//span[contains(text(),'" + number + "')]"));
+        Assert.assertEquals(newInt.getText(), String.valueOf(number));
+        WebElement newDecimal = driver.findElement(By.xpath("//span[contains(text(),'" + decimal + "')]"));
+        Assert.assertEquals(newDecimal.getText(), String.valueOf(decimal));
+
+        WebElement returnTab = driver.findElement(By.xpath("//p[contains(text(),'Placeholder')]"));
+        ProjectUtils.click(driver, returnTab);
+
+        WebElement menuButton = driver.findElement(By.xpath("//button[@class='btn btn-round btn-sm btn-primary dropdown-toggle']"));
+        ProjectUtils.click(driver, menuButton);
+        WebElement menuDelete = driver.findElement(By.xpath("//a[contains(text(),'delete')]"));
+        ProjectUtils.click(driver, menuDelete);
+    }
 }
