@@ -4,6 +4,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import java.util.List;
@@ -28,6 +29,7 @@ public class EntityEventsChain2Test extends BaseTest {
     By f9 = By.cssSelector("#f9");
     By f10 = By.cssSelector("#f10");
 
+    @Ignore
     @Test
     public void createSaveAssertNewRecord() throws InterruptedException {
         final int f1Value = 1;
@@ -83,6 +85,7 @@ public class EntityEventsChain2Test extends BaseTest {
         assertValuesPopulatedAsExpected(expectedValuesF1ToF10);
     }
 
+    @Ignore
     @Test
     public void replaceWithInvalidValuesAssertError() throws InterruptedException {
         final int f1Value = 415;

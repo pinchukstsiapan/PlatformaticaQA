@@ -47,6 +47,7 @@ public class EntityDefaultTest extends BaseTest {
         //Code to delete default using title value in this.title
     }
 
+    @Ignore
     @Test
     public void editRecord() throws InterruptedException {
         initTest();
@@ -110,6 +111,7 @@ public class EntityDefaultTest extends BaseTest {
         ProjectUtils.click(driver, saveButton);
     }
 
+    @Ignore
     @Test
     public void checkDefaultValueAndUpdateThem() throws InterruptedException {
 
