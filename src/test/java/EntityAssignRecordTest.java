@@ -4,7 +4,8 @@ import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
-
+import runner.TestUtils;
+import runner.type.ProfileType;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,10 +14,7 @@ public class EntityAssignRecordTest extends BaseTest {
     @Test
     public void newRecord() throws InterruptedException {
         WebDriver driver = getDriver();
-        String url = "https://ref.eteam.work";
-        String user = "user116@tester.com";
-        driver.get(url);
-        ProjectUtils.login(driver, user, "Dfp3BMkaLi");
+        String user = TestUtils.getProfileType(this, ProfileType.DEFAULT).getUserName();
 
         WebElement assignBtn = driver.findElement(By.xpath("//*[@id='menu-list-parent']/ul/li/a[contains(@href,'id=37')]"));
         assignBtn.click();
