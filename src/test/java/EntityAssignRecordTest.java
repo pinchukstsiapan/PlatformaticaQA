@@ -51,10 +51,9 @@ public class EntityAssignRecordTest extends BaseTest {
 
         WebElement searchField = driver.findElement(By.xpath("//input"));
         searchField.sendKeys(testId);
-        Thread.sleep(500);
+        Thread.sleep(1000);
 
         String template = String.format("//select/option[text()='%s']", user);
-        System.out.println(template);
         List<WebElement> rows = driver.findElements(By.xpath(template));
         Assert.assertEquals(rows.size(), 1);
         for (WebElement row : rows) {
@@ -66,10 +65,9 @@ public class EntityAssignRecordTest extends BaseTest {
 
         WebElement searchField2 = driver.findElement(By.xpath("//input"));
         searchField2.sendKeys(testId);
-        Thread.sleep(500);
+        Thread.sleep(1000);
 
         template = String.format("//tbody/tr[descendant::div[contains(text(), '%s')] and descendant::td[text()='%s']]", testId, user);
-        System.out.println(template);
         rows = driver.findElements(By.xpath(template));
         Assert.assertEquals(rows.size(), 1);
     }
