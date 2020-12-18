@@ -275,5 +275,38 @@ public class GroupPacificQATeamTest extends BaseTest {
         Assert.assertTrue(elementFork.getText().contains("Fork"));
 
     }
+
+    @Test
+    public void vaheTest(){
+
+        WebDriver driver = getDriver();
+
+        driver.get("https://github.com/SergeiDemyanenko/PlatformaticaQA");
+        WebElement elementCode = driver.findElement(By.xpath("//li[@class = 'd-flex']/a[@href = '/SergeiDemyanenko/PlatformaticaQA']"));
+        WebElement elementIssues = driver.findElement(By.xpath("//li[@class = 'd-flex']/a[@href = '/SergeiDemyanenko/PlatformaticaQA/issues']"));
+        WebElement elementPR = driver.findElement(By.xpath("//li[@class = 'd-flex']/a[@href = '/SergeiDemyanenko/PlatformaticaQA/pulls']"));
+
+        WebElement elementWatch = driver.findElement(By.xpath("(//li/a[@href = '/login?return_to=%2FSergeiDemyanenko%2FPlatformaticaQA'])[1]"));
+        WebElement elementStar = driver.findElement(By.xpath("(//li/a[@href = '/login?return_to=%2FSergeiDemyanenko%2FPlatformaticaQA'])[2]"));
+        WebElement elementFork = driver.findElement(By.xpath("(//li/a[@href = '/login?return_to=%2FSergeiDemyanenko%2FPlatformaticaQA'])[3]"));
+
+        Assert.assertEquals(elementCode.getText(), "Code");
+        Assert.assertEquals(elementIssues.getText(), "Issues");
+        Assert.assertTrue(elementPR.getText().contains("Pull requests"));
+
+        Assert.assertEquals(elementWatch.getText(), "Watch");
+        Assert.assertEquals(elementStar.getText(), "Star");
+        Assert.assertEquals(elementFork.getText(), "Fork");
+
+    }
+
+    @Test
+    public void getTest2() {
+        WebDriver browser = getDriver();
+        browser.get("https://www.toolexperts.com/home-inspection-tool-kit-deluxe-with-tool-bag.html?gclid=CjwKCAiAiML-BRAAEiwAuWVggsQWhIb1Vx-epi_iWKBW64c_WVekdNUsb3rVxOBVc6L8orx_IBLfNxoCocAQAvD_BwE");
+
+        WebElement text = browser.findElement(By.xpath("//div/h1"));
+        Assert.assertEquals(text.getText(), "Home Inspection Tool Kit - Deluxe");
+    }
 }
 

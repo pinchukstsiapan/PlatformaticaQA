@@ -10,14 +10,19 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public abstract class BaseTest {
+public abstract class  BaseTest {
 
     public static final String HUB_URL = "http://localhost:4444/wd/hub";
+
+    private static final Logger logger = Logger.getLogger("BaseLogger");
 
     private static boolean remoteWebDriver = false;
     static {
@@ -36,12 +41,16 @@ public abstract class BaseTest {
         }
     }
 
+    public static boolean isRemoteWebDriver() {
+        return remoteWebDriver;
+    }
+
     private WebDriver driver;
 
     @BeforeMethod
     protected void setUpAll() {
 
-        if (remoteWebDriver) {
+        if (isRemoteWebDriver()) {
             try {
                 this.driver = new RemoteWebDriver(new URL(HUB_URL), new ChromeOptions());
             } catch (MalformedURLException e) {
@@ -59,8 +68,12 @@ public abstract class BaseTest {
     }
 
     @AfterMethod
-    protected void setDownAll() {
+    protected void setDownAll(Method method, ITestResult tr) {
         driver.quit();
+
+        long executionTime = (tr.getEndMillis() - tr.getStartMillis()) / 1000;
+        log(String.format("\u001B[33m%s.%s() Execution time: %ds\u001B[0m",
+            getClass(), method.getName(), executionTime));
     }
 
     /** Take a screenshot after assert fails. */
@@ -73,5 +86,9 @@ public abstract class BaseTest {
 
     protected WebDriver getDriver() {
         return driver;
+    }
+
+    protected void log(String message) {
+        logger.log(Level.INFO, message);
     }
 }
