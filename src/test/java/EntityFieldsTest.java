@@ -11,6 +11,7 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import org.testng.Assert;
 import runner.BaseTest;
+import runner.ProjectUtils;
 
 public class EntityFieldsTest extends BaseTest {
 

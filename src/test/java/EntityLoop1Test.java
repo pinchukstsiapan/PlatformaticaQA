@@ -7,6 +7,8 @@ import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
+import runner.ProjectUtils;
+
 import java.util.List;
 
 public class EntityLoop1Test extends BaseTest {
