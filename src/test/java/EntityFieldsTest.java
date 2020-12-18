@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import org.testng.Assert;
 import runner.BaseTest;
@@ -122,6 +123,7 @@ public class EntityFieldsTest extends BaseTest {
         return new WebDriverWait(getDriver(), timeoutSecond);
     }
 
+    @Ignore
     @Test
     public void editForm() throws InterruptedException {
 
@@ -188,6 +190,7 @@ public class EntityFieldsTest extends BaseTest {
                 getText(),String.valueOf(newDecimal));
     }
 
+    @Ignore
     @Test
     public void saveDraft() throws InterruptedException {
 
@@ -233,6 +236,7 @@ public class EntityFieldsTest extends BaseTest {
         Assert.assertTrue(pencil.isDisplayed());
     }
 
+    @Ignore
     @Test
     public void invalidEditEntry() throws InterruptedException {
 
@@ -277,5 +281,49 @@ public class EntityFieldsTest extends BaseTest {
         WebElement error = driver.findElement(By.xpath("//div[text()='Error saving entity']"));
 
         Assert.assertTrue(error.isDisplayed());
+    }
+
+    @Ignore
+    @Test
+    public void fieldsEditTest() {
+
+        final String newTitle = "Ky";
+        final String newComments = "Goooood";
+        final int newInt = 222;
+        final double newDecimal = 222.33;
+
+        WebDriver driver = getDriver();
+        ProjectUtils.loginProcedure(driver);
+
+        WebElement sideBarField = driver.findElement(By.xpath("//body/div[1]/div[1]/div[2]/ul[1]/li[4]/a[1]/p[1]"));
+        sideBarField.click();
+
+        WebElement createdRecordSandwich = driver.findElement(By.xpath("//tbody/tr[1]/td[11]/div[1]/button[1]"));
+        createdRecordSandwich.click();
+
+        WebElement editField = driver.findElement(By.xpath("//tbody/tr[1]/td[11]/div[1]/ul[1]/li[2]/a[1]"));
+        editField.click();
+
+        WebElement titleField = driver.findElement(By.xpath("//input[@id='title']"));
+        titleField.clear();
+        titleField.sendKeys(newTitle);
+
+        WebElement commentsField = driver.findElement(By.xpath("//textarea[@id='comments']"));
+        commentsField.clear();
+        commentsField.sendKeys(newComments);
+
+        WebElement intField = driver.findElement(By.xpath("//input[@id='int']"));
+        intField .clear();
+        intField .sendKeys(String.valueOf(newInt));
+
+        WebElement decimalField = driver.findElement(By.xpath("//input[@id='decimal']"));
+        decimalField.clear();
+        decimalField.sendKeys(String.valueOf(newDecimal));
+
+        WebElement saveButton = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
+        ProjectUtils.click(driver, saveButton);
+
+        Assert.assertEquals(driver.getCurrentUrl(),
+                "https://ref.eteam.work/index.php?action=action_list&entity_id=5&filter");
     }
 }

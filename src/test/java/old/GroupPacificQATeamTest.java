@@ -299,5 +299,14 @@ public class GroupPacificQATeamTest extends BaseTest {
         Assert.assertEquals(elementFork.getText(), "Fork");
 
     }
+
+    @Test
+    public void getTest2() {
+        WebDriver browser = getDriver();
+        browser.get("https://www.toolexperts.com/home-inspection-tool-kit-deluxe-with-tool-bag.html?gclid=CjwKCAiAiML-BRAAEiwAuWVggsQWhIb1Vx-epi_iWKBW64c_WVekdNUsb3rVxOBVc6L8orx_IBLfNxoCocAQAvD_BwE");
+
+        WebElement text = browser.findElement(By.xpath("//div/h1"));
+        Assert.assertEquals(text.getText(), "Home Inspection Tool Kit - Deluxe");
+    }
 }
 
