@@ -3,4 +3,4 @@
 *.class
 target/
 *.DS_Store
-src/test/resources/local.properties
+local.properties
