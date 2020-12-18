@@ -49,7 +49,11 @@ public class EntityAssignRecordTest extends BaseTest {
         WebElement saveBtn = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
         saveBtn.click();
 
-        String template = String.format("//tbody/tr/td/a/div[contains(text(), '%s')]//following::td/select/option[text()='%s']", testId, user);
+        WebElement searchField = driver.findElement(By.xpath("//input"));
+        searchField.sendKeys(testId);
+        Thread.sleep(500);
+
+        String template = String.format("//select/option[text()='%s']", user);
         System.out.println(template);
         List<WebElement> rows = driver.findElements(By.xpath(template));
         Assert.assertEquals(rows.size(), 1);
@@ -59,6 +63,11 @@ public class EntityAssignRecordTest extends BaseTest {
 
         WebElement myAssignments = driver.findElement(By.xpath("//*[@id='pa-menu-item-41']/a/p"));
         myAssignments.click();
+
+        WebElement searchField2 = driver.findElement(By.xpath("//input"));
+        searchField2.sendKeys(testId);
+        Thread.sleep(500);
+
         template = String.format("//tbody/tr[descendant::div[contains(text(), '%s')] and descendant::td[text()='%s']]", testId, user);
         System.out.println(template);
         rows = driver.findElements(By.xpath(template));
