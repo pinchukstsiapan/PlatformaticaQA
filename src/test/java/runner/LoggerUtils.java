@@ -9,37 +9,25 @@ public class LoggerUtils {
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_YELLOW = "\u001B[33m";
 
-    private static final Logger logger = Logger.getLogger("ColoredLogger");
+    private static final Logger logger = Logger.getLogger("BaseLogger");
 
-    public void log(Level level, String message) {
+    public static void log(Level level, String message) {
         logger.log(level, message);
     }
 
-    public void log(String message) {
+    public static void log(String message) {
         logger.info(message);
     }
 
-    public void logRed(String message) {
+    public static void logRed(String message) {
         logger.log(Level.INFO, ANSI_RED + message + ANSI_RESET);
     }
 
-    public void logYellow(String message) {
+    public static void logYellow(String message) {
         logger.log(Level.INFO, ANSI_YELLOW + message + ANSI_RESET);
     }
 
-    public void logGreen(String message) {
+    public static void logGreen(String message) {
         logger.log(Level.INFO, ANSI_GREEN + message + ANSI_RESET);
-    }
-
-    public void logInfo(String message) {
-        logger.info(ANSI_GREEN + message + ANSI_RESET);
-    }
-
-    public void logError(String message) {
-        logger.severe(ANSI_RED + message + ANSI_RESET);
-    }
-
-    public void logWarning(String message) {
-        logger.warning(ANSI_YELLOW + message + ANSI_RESET);
     }
 }

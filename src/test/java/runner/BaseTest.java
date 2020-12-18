@@ -20,7 +20,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-public abstract class  BaseTest extends LoggerUtils {
+public abstract class  BaseTest {
 
     public static final String HUB_URL = "http://localhost:4444/wd/hub";
 
@@ -102,8 +102,8 @@ public abstract class  BaseTest extends LoggerUtils {
         }
         driver.quit();
         long executionTime = (tr.getEndMillis() - tr.getStartMillis()) / 1000;
-        logInfo(String.format("%s.%s() Execution time: %ds",
-            this.getClass(), method.getName(), executionTime));
+        LoggerUtils.logGreen(String.format("%s.%s() Execution time: %ds",
+            this.getClass().getName(), method.getName(), executionTime));
     }
 
     @AfterClass
