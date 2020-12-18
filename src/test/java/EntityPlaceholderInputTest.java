@@ -16,7 +16,6 @@ public class EntityPlaceholderInputTest extends BaseTest {
         final String title = UUID.randomUUID().toString();
 
         WebDriver driver = getDriver();
-        ProjectUtils.loginProcedure(driver);
 
         WebElement tab = driver.findElement(By.xpath("//p[contains(text(),'Placeholder')]"));
         tab.click();
