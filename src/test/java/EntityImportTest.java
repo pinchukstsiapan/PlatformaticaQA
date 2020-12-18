@@ -1,25 +1,25 @@
-import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
-
+import runner.type.Profile;
+import runner.type.ProfileType;
 import java.util.List;
+import java.util.UUID;
 
 public class EntityImportTest extends BaseTest {
 
-    String url = "https://ref.eteam.work";
-    boolean flag = false;
-
     @Test
+    @Profile(profile = ProfileType.DEFAULT)
     public void deleteRecordFromEntityImport() throws InterruptedException {
 
         WebDriver driver = getDriver();
-        driver.get(url);
-        ProjectUtils.loginProcedure(driver);
+        WebDriverWait wait = new WebDriverWait(driver,3);
 
         WebElement importValuesTab = driver.findElement(By.xpath("//p[contains(text(),'Import values')]"));
         importValuesTab.click();
@@ -29,6 +29,7 @@ public class EntityImportTest extends BaseTest {
         List<WebElement> paginationNums = driver.findElements(By.xpath("//ul[@class='pagination'] //li //a[contains(@aria-label, 'to page')]"));
         int countPages = 0;
 
+        boolean flag = false;
         do {
             List<WebElement> stringsOfImportValues = driver.findElements(By.xpath("//table[@id='pa-all-entities-table'] // tbody //tr //td[2] //a //div"));
             List<WebElement> actionsDropDownImportValues = driver.findElements(By.xpath("//table[@id='pa-all-entities-table'] // tbody //tr //td[10] //div //button"));
@@ -61,9 +62,7 @@ public class EntityImportTest extends BaseTest {
         WebElement userButton = driver.findElement((By.xpath("//a[@id='navbarDropdownProfile']")));
         userButton.click();
 
-        Thread.sleep(1000);
-
-        WebElement logoutButton = driver.findElement((By.xpath("//a[contains(text(),'Log out')]")));
+        WebElement logoutButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(text(),'Log out')]")));
         logoutButton.click();
     }
 
@@ -72,13 +71,9 @@ public class EntityImportTest extends BaseTest {
         WebElement createImportValuesIcon = driver.findElement(By.xpath("//i[contains(text(),'create_new_folder')]"));
         createImportValuesIcon.click();
 
-        Thread.sleep(2000);
-
-        String randomString = RandomStringUtils.randomAlphanumeric(10);
+        String randomString= UUID.randomUUID().toString();
         WebElement stringInImportValueField = driver.findElement(By.xpath("//input[@id='string']"));
         stringInImportValueField.sendKeys(randomString);
-
-        Thread.sleep(1000);
 
         WebElement saveButton = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
         ProjectUtils.click(driver, saveButton);
