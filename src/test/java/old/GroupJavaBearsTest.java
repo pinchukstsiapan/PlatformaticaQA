@@ -9,10 +9,12 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
+@Ignore
 public class GroupJavaBearsTest extends BaseTest {
 
+    @Ignore
     @Test
-    public void victoriaRogozhkina() {
+    public void victoriaRogozhkina() throws InterruptedException {
 
         WebDriver driver = getDriver();
         driver.get("https://developer.mozilla.org/en-US/docs/Web/XPath/Functions");
@@ -57,7 +59,7 @@ public class GroupJavaBearsTest extends BaseTest {
     }
 
     @Test
-    public void olgaGTest1() {
+    public void olgaGTest1() throws InterruptedException {
 
         WebDriver browser = getDriver();
         browser.get("https://korrespondent.net/");
@@ -68,7 +70,7 @@ public class GroupJavaBearsTest extends BaseTest {
 
     @Ignore
     @Test
-    public void olgaGTest2() {
+    public void olgaGTest2() throws InterruptedException {
 
         WebDriver browser = getDriver();
         browser.get("https://korrespondent.net/");
@@ -82,7 +84,7 @@ public class GroupJavaBearsTest extends BaseTest {
     }
 
     @Test
-    public void olgaGTest3() {
+    public void olgaGTest3() throws InterruptedException {
 
         WebDriver browser = getDriver();
         browser.get("https://korrespondent.net/");
@@ -97,7 +99,7 @@ public class GroupJavaBearsTest extends BaseTest {
 
     @Ignore
     @Test
-    public void igorTest1() {
+    public void igorTest1() throws InterruptedException{
 
         WebDriver browser = getDriver();
         browser.get("https://us.pandora.net/");

@@ -1,6 +1,7 @@
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 
@@ -14,9 +15,7 @@ public class EntityPlaceholderInputTest extends BaseTest {
         final String title = UUID.randomUUID().toString();
 
         WebDriver driver = getDriver();
-        driver.get("https://ref.eteam.work");
-
-        ProjectUtils.login(driver,"user1@tester.com", "ah1QNmgkEO");
+        ProjectUtils.loginProcedure(driver);
 
         WebElement tab = driver.findElement(By.xpath("//p[contains(text(),'Placeholder')]"));
         tab.click();
@@ -48,6 +47,7 @@ public class EntityPlaceholderInputTest extends BaseTest {
         driver.findElement(By.xpath("//div[contains(text(),'" + title + "')]"));
     }
 
+    @Ignore
     @Test
     public void newRecordPV () {
 

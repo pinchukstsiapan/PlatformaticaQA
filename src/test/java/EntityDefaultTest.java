@@ -1,21 +1,23 @@
 import java.util.List;
 import java.util.UUID;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import org.testng.Assert;
 import runner.BaseTest;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 public class EntityDefaultTest extends BaseTest {
 
     private WebDriver driver;
+    private final String title = UUID.randomUUID().toString();
 
-    /** initialize driver field and login */
+    /**
+     * initialize driver field and login
+     */
     private void initTest() {
         driver = getDriver();
         driver.get("https://ref.eteam.work");
@@ -23,40 +25,86 @@ public class EntityDefaultTest extends BaseTest {
         ProjectUtils.login(driver, "user1@tester.com", "ah1QNmgkEO");
     }
 
+    @Ignore
+    @Test
+    public void createRecord() {
+        initTest();
+
+        //Code to create and test new default using value in this.title
+    }
+
+    @Ignore
+    @Test(dependsOnMethods = "editRecord")
+    public void deleteRecord() {
+        initTest();
+
+        //Code to delete default using title value in this.title
+    }
+
     @Test
     public void editRecord() throws InterruptedException {
         initTest();
 
-        final String title = UUID.randomUUID().toString();
+        final String editedTitle = UUID.randomUUID().toString();
+        final String editedText = "Edited Text Value";
+        final int editedInt = 10;
 
         WebElement tab = driver.findElement(By.xpath("//p[contains(text(), 'Default')]"));
         tab.click();
 
         WebElement recordMenu = driver.findElement(By.xpath("//button[contains(@data-toggle, 'dropdown')] "));
         recordMenu.click();
-        Thread.sleep(150);
 
         WebElement editFunction = driver.findElement(By.xpath("//a[text() = 'edit']"));
         System.out.println(editFunction);
-        editFunction.click();
-        //Assert.assertEquals(driver.getCurrentUrl(), "https://ref.eteam.work/index.php?action=action_edit&entity_id=7&row_id=2");
-        Thread.sleep(1000);
+        ProjectUtils.click(driver, editFunction);
 
         WebElement fieldString = driver.findElement(By.xpath("//input[@id = 'string']"));
-        fieldString.getAttribute("value");
-        System.out.println();
-
-        //System.out.println(fieldString.getText());
+        fieldString.clear();
+        fieldString.sendKeys(editedTitle);
 
         WebElement fieldText = driver.findElement(By.xpath("//span//textarea[@id = 'text']"));
-        //System.out.println(fieldText.getText());
+        fieldText.clear();
+        fieldText.sendKeys(editedText);
+
+        WebElement fieldInt = driver.findElement(By.xpath("//input[@id = 'int']"));
+        fieldInt.clear();
+        fieldInt.sendKeys(String.valueOf(editedInt));
+
+        ClickSaveButton(driver);
+
+        List<WebElement> rows = driver.findElements(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr"));
+
+        boolean isFailed = true;
+        for (WebElement row: rows) {
+            String value = row.findElements(By.cssSelector("td")).get(1).getText();
+
+            if (editedTitle.equals(value)) {
+                Assert.assertEquals(row.findElements(By.cssSelector("td")).get(2).getText(), editedText);
+                Assert.assertEquals(row.findElements(By.cssSelector("td")).get(3).getText(), String.valueOf(editedInt));
+                isFailed = false;
+                break;
+            }
+        }
+
+        if (isFailed) {
+            Assert.fail("Didn't find updated Default Entity");
+        }
+
+        // Validating changed fields of the record
+
     }
 
-    @Ignore
-    @Test
+    /** scroll down to the Save button and click on it */
+    private void ClickSaveButton(WebDriver driver) throws InterruptedException {
+        WebElement saveButton = driver.findElement(By.xpath("//button[text() = 'Save']"));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", saveButton);
+        ProjectUtils.click(driver, saveButton);
+    }
+
+ @Test
     public void checkDefaultValueAndUpdateThem() throws InterruptedException {
 
-        //lines data, default and updated
         final String stringLineDefaultText = "DEFAULT STRING VALUE";
         final String textLineDefaultText = "DEFAULT TEXT VALUE";
         final int intLineDefault = 55;
@@ -73,7 +121,6 @@ public class EntityDefaultTest extends BaseTest {
         final String dateLineNew = "11/11/2011";
         final String dateTimeLineNew = "11/11/2011 11:11:11";
 
-        //embedD lines data, default and updated
         final String stringEmbedLineDefaultString = "Default String";
         final String textEmbedLineDefaultText = "Default text";
         final int intEmbedLineDefault = 77;
@@ -99,13 +146,13 @@ public class EntityDefaultTest extends BaseTest {
 
         driver.findElement(By.xpath("//a[@href='#menu-list-parent']")).click();
         driver.findElement(By.xpath("//i/following-sibling::p[contains (text(), 'Default')]")).click();
-        driver.findElement(By.xpath("//div/i[.='create_new_folder']")).click();
+        WebElement createFolder = driver.findElement(By.xpath("//i[.='create_new_folder']/ancestor::a"));
+        ProjectUtils.click(driver,createFolder);
         WebElement saveBtn = driver.findElement(By.xpath("//button[.='Save']"));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", saveBtn);
         Assert.assertTrue(saveBtn.isDisplayed());
 
         int count = driver.findElements(By.xpath("//div/label")).size();
-        System.out.println("The default lines count is:" + count);
         Assert.assertTrue(count == defaultLinesQty);
 
         WebElement stringLineDefaultData = driver.findElement(By.xpath("//input[@id='string']"));
@@ -128,10 +175,8 @@ public class EntityDefaultTest extends BaseTest {
         Assert.assertTrue(dateTimeLineDefaultData.getAttribute("value").equals(dateTimeLineDefault));
 
         WebElement user = driver.findElement(By.xpath("//div[@class='filter-option-inner']/div[.='User 1 Demo']"));
-        System.out.println("User text:" + user.getText());
         Assert.assertTrue(user.getText().equals(userDefault.toUpperCase()));
 
-        //replacing default data with new data
         stringLineDefaultData.clear();
         stringLineDefaultData.sendKeys(stringLineNewText);
         textLineDefaultData.clear();
@@ -145,11 +190,6 @@ public class EntityDefaultTest extends BaseTest {
         dateTimeLineDefaultData.clear();
         dateTimeLineDefaultData.sendKeys(dateTimeLineNew);
 
-        //upload file and pics test passes on my local PC, I commented it cause I don't think it will pass on other PCs
-        //driver.findElement(By.id("file")).sendKeys("C:\\Users\\Galina\\Desktop\\IMG_8992.JPG");
-        //WebElement uploadPicture = driver.findElement(By.xpath("//input[@id='file_image']"));
-        //uploadPicture.sendKeys("C:\\Users\\Galina\\Desktop\\IMG_8992.JPG");
-
         WebElement dropdownUsers = driver.findElement(By.xpath("//button[@data-id='user']"));
         dropdownUsers.click();
 
@@ -157,9 +197,9 @@ public class EntityDefaultTest extends BaseTest {
         WebElement listOfUsers = driver.findElement(By.xpath("//span[.='User 4']/ancestor::a"));
         listOfUsers.click();
 
-        //EmbedD default values check
+        Thread.sleep(500);
         WebElement greenPlus = driver.findElement(By.xpath("//button[@data-table_id='11']"));
-        greenPlus.click();
+        ProjectUtils.click(driver,greenPlus);
 
         WebElement lineNumber = driver.findElement(By.xpath("//input[@id='t-undefined-r-1-_line_number']"));
         Assert.assertEquals(lineNumber.getAttribute("data-row"), "1");
@@ -185,7 +225,6 @@ public class EntityDefaultTest extends BaseTest {
         WebElement embedDUser = driver.findElement(By.xpath("//select[@id='t-11-r-1-user']/option[@value='0']"));
         Assert.assertEquals(embedDUser.getText(), userEmbedNotSelected);
 
-        //embedD values change
         embedDString.clear();
         embedDString.sendKeys(stringEmbedLineNewText);
 
@@ -209,7 +248,7 @@ public class EntityDefaultTest extends BaseTest {
         Select embedDUserSelect = new Select(driver.findElement(By.xpath("//select[@id='t-11-r-1-user']")));
         embedDUserSelect.selectByVisibleText(userEmbedDSelected);
 
-        saveBtn.click();
+        ProjectUtils.click(driver,saveBtn);
 
         WebElement orderBtn = driver.findElement(By.xpath("//a[contains(string(), 'Order')]"));
         orderBtn.click();
@@ -222,16 +261,6 @@ public class EntityDefaultTest extends BaseTest {
         ourRecord.click();
         Thread.sleep(500);
 
-//        Ask proficient users why its not working
-//        String[] textArray = {stringLineNewText, textLineNewText, intLineNew +"", decimalLineNew +"", dateLineNew, dateTimeLineNew};
-//        List<WebElement> myList = driver.findElements(By.className("pa-view-field"));
-//        List<String> allElementsText = new ArrayList<>();
-//        for (int i = 0; i < myList.size(); i++) {
-//            allElementsText.add(myList.get(i).getText());
-//            System.out.println(myList.get(i).getText());
-//            Assert.assertEquals(allElementsText, textArray);
-
-        //check all lines new values
         List<WebElement> listOfNewValues = driver.findElements(By.xpath("//span[@class='pa-view-field']"));
         Assert.assertEquals(listOfNewValues.get(0).getText(), stringLineNewText);
         Assert.assertEquals(listOfNewValues.get(1).getText(), textLineNewText);
@@ -240,7 +269,6 @@ public class EntityDefaultTest extends BaseTest {
         Assert.assertEquals(listOfNewValues.get(4).getText(), dateLineNew);
         Assert.assertEquals(listOfNewValues.get(5).getText(), dateTimeLineNew);
 
-        //check EmbedD lines new values
         List<WebElement> embedDArrayOfNewValues = driver.findElements(By.xpath("//table/tbody/tr/td"));
         Assert.assertEquals(embedDArrayOfNewValues.get(1).getText(), stringEmbedLineNewText);
         Assert.assertEquals(embedDArrayOfNewValues.get(2).getText(), textEmbedLineNewText);
