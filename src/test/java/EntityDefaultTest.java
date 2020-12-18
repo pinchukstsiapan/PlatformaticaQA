@@ -283,7 +283,7 @@ public class EntityDefaultTest extends BaseTest {
     public void defaultChange() throws InterruptedException {
         WebDriver driver = getDriver();
         driver.get("https://ref.eteam.work");
-        ProjectUtils.loginProcedure(driver);
+        ProjectUtils.login(driver, "user132@tester.com", "mhBHKTYWEs");
 
         WebElement entities = driver.findElement(By.xpath("//p[contains(text(),'Entities')]"));
         entities.click();
@@ -331,6 +331,20 @@ public class EntityDefaultTest extends BaseTest {
         inputString = driver.findElement(By.xpath("//input[@id='string']"));
         Assert.assertEquals(inputString.getAttribute("value"),"edited default string value");
 
+        inputText = driver.findElement(By.xpath("//textarea[@id='text']"));
+        Assert.assertEquals(inputText.getAttribute("value"),"edited default text value");
+
+        inputInt = driver.findElement(By.xpath("//input[@id='int']"));
+        Assert.assertEquals(inputInt.getAttribute("value"),"34");
+
+        inputDecimal = driver.findElement(By.xpath("//input[@id='decimal']"));
+        Assert.assertEquals(inputDecimal.getAttribute("value"),"110.54");
+
+        inputDate = driver.findElement(By.xpath("//input[@id='date']"));
+        Assert.assertEquals(inputDate.getAttribute("value"),"12/12/2020");
+
+        inputDateTime = driver.findElement(By.xpath("//input[@id='datetime']"));
+        Assert.assertEquals(inputDateTime.getAttribute("value"),"21/11/2020 13:59:00");
     }
 
 }
