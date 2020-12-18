@@ -7,13 +7,11 @@ import runner.BaseTest;
 
 public class EntityReferenceValuesTest extends BaseTest {
 
-    @Ignore
     @Test
     public void newRecord(){
 
         WebDriver driver = getDriver();
-        driver.get("https://ref.eteam.work");
-        ProjectUtils.login(driver,"user1@tester.com", "ah1QNmgkEO");
+        ProjectUtils.loginProcedure(driver);
 
         final String Label="Automation label - do not delete";
         final String Filter_1="Filter 1";
@@ -36,9 +34,11 @@ public class EntityReferenceValuesTest extends BaseTest {
 
         //validation
         WebElement numOfPagesS = driver.findElement(By.xpath("//span[@class='pagination-info']"));
+        String str = numOfPagesS.getText();
+        String[] arrOfStr = str.split(" ");
 
-        int numOfRows =  Integer.parseInt(numOfPagesS.getText().substring(19, 21));
-        int rowsPerPage =  Integer.parseInt(numOfPagesS.getText().substring(13, 15));
+        int numOfRows =  Integer.parseInt(arrOfStr[5]);
+        int rowsPerPage =  Integer.parseInt(arrOfStr[3]);
         int pageNumber;
 
         if (numOfRows%rowsPerPage == 0) {
@@ -56,14 +56,6 @@ public class EntityReferenceValuesTest extends BaseTest {
         WebElement labelInList = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, Label)));
         WebElement filter1_InList = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, Filter_1)));
         WebElement filter2_InList = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, Filter_2)));
-        WebElement filter3_InList = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, Filter_2)));
-
-
-
-
-
-
-
     }
 
 }
