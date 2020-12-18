@@ -16,7 +16,7 @@ public class EntityExportTest extends BaseTest {
 
         WebDriver driver = getDriver();
         driver.get("https://ref.eteam.work");
-        ProjectUtils.login(driver, "user165@tester.com", "8hB1dqiyQC");
+        ProjectUtils.loginProcedure(driver);
         WebDriverWait wait = new WebDriverWait(driver,4);
 
         WebElement exportButton = driver.findElement(By.xpath("//div[@id= 'menu-list-parent']/ul/li[8]/a"));
