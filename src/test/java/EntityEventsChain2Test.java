@@ -94,9 +94,6 @@ public class EntityEventsChain2Test extends BaseTest {
         final int elementInLastRecord = 3-1;
         final By elementToReplace = f3;
 
-        WebDriver driver = getDriver();
-        WebDriverWait wait = new WebDriverWait(driver,5);
-
         createNewEntityEventsChain2Record(f1Value);
 
         clickOn(edit);
@@ -126,6 +123,7 @@ public class EntityEventsChain2Test extends BaseTest {
 
         driver.findElement(entityEventsChain2Tab).click();
         driver.findElement(createNewRecord).click();
+        sleep(1000);
         driver.findElement(f1).sendKeys(String.valueOf(f1Value));
         sleep(2000);
         clickOnSave();
@@ -138,6 +136,7 @@ public class EntityEventsChain2Test extends BaseTest {
 
         driver.findElement(elementToReplace).click();
         driver.findElement(elementToReplace).clear();
+        sleep(1000);
         driver.findElement(elementToReplace).sendKeys(String.valueOf(newValue));
         sleep(2000);
     }
@@ -148,6 +147,7 @@ public class EntityEventsChain2Test extends BaseTest {
 
         driver.findElement(elementToReplace).click();
         driver.findElement(elementToReplace).clear();
+        sleep(1000);
         driver.findElement(elementToReplace).sendKeys(String.valueOf(newValue));
         sleep(2000);
     }
