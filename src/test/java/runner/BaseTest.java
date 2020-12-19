@@ -79,6 +79,7 @@ public abstract class  BaseTest {
     protected void beforeClass() {
         profileType = TestUtils.getProfileType(this, ProfileType.DEFAULT);
         runType = TestUtils.getRunType(this);
+
         if (runType == RunType.Multiple) {
             driver = createBrowser();
             startTest(driver, profileType);
@@ -90,7 +91,7 @@ public abstract class  BaseTest {
         if (runType == RunType.Single) {
             driver = createBrowser();
             startTest(driver, TestUtils.getProfileType(method, profileType));
-        } else if (!driver.getCurrentUrl().startsWith(profileType.getUrl())) {
+        } else {
             driver.get(profileType.getUrl());
         }
     }
@@ -100,7 +101,7 @@ public abstract class  BaseTest {
         if (runType == RunType.Single) {
             getDriver().quit();
         }
-        driver.quit();
+
         long executionTime = (tr.getEndMillis() - tr.getStartMillis()) / 1000;
         LoggerUtils.logGreen(String.format("%s.%s() Execution time: %ds",
             this.getClass().getName(), method.getName(), executionTime));
