@@ -15,6 +15,7 @@ import java.util.UUID;
 
 public class EntityImportTest extends BaseTest {
 
+    @Ignore
     @Test
     @Profile(profile = ProfileType.DEFAULT)
     public void deleteRecordFromEntityImport() throws InterruptedException {
