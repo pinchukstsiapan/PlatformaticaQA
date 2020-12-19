@@ -417,6 +417,7 @@ public class EntityDefaultTest extends BaseTest {
         clickOnLastElementInTable();
     }
 
+    @Ignore
     @Test(enabled = true)
     public void validateEntityDefaultValuesCreation() {
 
