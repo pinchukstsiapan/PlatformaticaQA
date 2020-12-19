@@ -4,13 +4,16 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.annotations.Test;
 import runner.BaseTest;
+import runner.ProjectUtils;
+import runner.type.Run;
+import runner.type.RunType;
+
 import java.util.UUID;
 
+@Run(run = RunType.Multiple)
 public class EntityCalendarTest extends BaseTest {
 
-    public void inputCalendar(WebDriver driver) throws InterruptedException {
-        driver.get("https://ref.eteam.work");
-        ProjectUtils.loginProcedure(getDriver());
+    public void inputCalendar(WebDriver driver) {
 
         WebElement calendar = driver.findElement(By.xpath("//p[contains(text(),'Calendar')]"));
         ProjectUtils.click(driver, calendar);
@@ -58,6 +61,5 @@ public class EntityCalendarTest extends BaseTest {
         number.sendKeys("585");
         WebElement save = driver.findElement(By.xpath("//button[normalize-space()='Save']"));
         ProjectUtils.click(driver, save);
-
     }
 }
