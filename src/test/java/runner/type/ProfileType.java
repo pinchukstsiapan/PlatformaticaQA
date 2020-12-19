@@ -33,8 +33,16 @@ public enum ProfileType {
         return url;
     }
 
+    public void setUserName(String userName) {
+        credentials.setProperty(userNameKey, userName);
+    }
+
     public String getUserName() {
         return credentials.getProperty(userNameKey);
+    }
+
+    public void setPassword(String password) {
+        credentials.setProperty(passwordKey, password);
     }
 
     public String getPassword() {
