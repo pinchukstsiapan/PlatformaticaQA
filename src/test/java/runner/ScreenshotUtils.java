@@ -1,44 +1,25 @@
 package runner;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
+import com.beust.jcommander.Parameter;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.UUID;
 
 public abstract class ScreenshotUtils {
 
-    public static final String sessionID = UUID.randomUUID().toString();
-
-    public static final String screenshotDirectoryName;
-
-    private static final String tempPath;
-
-    static {
-        tempPath = System.getProperty("java.io.tmpdir");
-        screenshotDirectoryName = tempPath + (new SimpleDateFormat("YYYY-MM-dd-kk-mm-").format(new Date())) + sessionID;
-    }
-
-
     /** Take screenshot and save it to path/file of your choosing -
      * @param driver WebDriver to control browser
-     * @param fileName name of the file to save. If path is missing then save to temporary directory.
+     * @param fullPath full path and name of the file to save.
      */
-    public static void takeScreenShot(WebDriver driver, String fileName) {
-       if (fileName != null) {
-           String fullPath = convertFileToFullPath(fileName);
+    public static void takeScreenShot(WebDriver driver, String fullPath) {
+       if (fullPath != null) {
            TakesScreenshot screenshotDriver = (TakesScreenshot) driver;
            File screenshotFile = screenshotDriver.getScreenshotAs(OutputType.FILE);
            try {
@@ -49,25 +30,16 @@ public abstract class ScreenshotUtils {
        }
     }
 
-    /** Convert file name in to full temp path */
-    private static String convertFileToFullPath(String fileName) {
-        String fullPath = null;
-        if (fileName != null) {
-            fullPath = screenshotDirectoryName + File.separator + fileName;
-        }
-        return fullPath;
-    }
-
     /** create directory with name dirName inside of the temp */
-    public static void createScreenshotsDir() {
-        Path dirFullPath = Paths.get(screenshotDirectoryName);
-        if(Files.exists(dirFullPath)) {
-            System.out.println(String.format("WARNING: Directory %s already exists!", dirFullPath));
+    public static void createScreenshotsDir(String fullPath) {
+        Path dirFullPath = Paths.get(fullPath);
+        if (Files.exists(dirFullPath)) {
+            System.out.printf("WARNING: Directory %s already exists!%n", dirFullPath);
         } else {
             try {
                 Files.createDirectories(dirFullPath);
             } catch (IOException ioExceptionObj) {
-                System.out.println("ERROR: while creating directory " + dirFullPath + ioExceptionObj.getMessage());
+                System.out.println("ERROR: while creating directory " + fullPath + "\n" + ioExceptionObj.getMessage());
             }
         }
     }
@@ -82,6 +54,23 @@ public abstract class ScreenshotUtils {
         } catch (IOException e) {
             System.out.printf("ERROR: unable to save text file %s . \nError message:\n%s%n", fileName, textToWrite);
         }
+    }
+
+    /** delete directory with name fullPath */
+    public static void deleteScreenshotsDir(String fullPath) {
+        Path dirFullPath = Paths.get(fullPath);
+        try {
+            Files.deleteIfExists(dirFullPath);
+            System.out.println("Deleted directory used to save screenshots: " + fullPath);
+        } catch (IOException ioExceptionObj) {
+            System.out.println("ERROR: while deleting directory " + fullPath + "\n" + ioExceptionObj.getMessage());
+        }
+    }
+
+    /** upload directory with name fullPath to Google Drive*/
+    public static void uploadScreenshotsDir(String fullDirPath) {
+        System.out.println("Uploading directory with files to google Drive of the PlatformaticaQA@gmail.com");
+        //for each file delete it after upload is done
     }
 
 }

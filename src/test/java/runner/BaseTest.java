@@ -6,18 +6,19 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.ITestResult;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.*;
 import runner.type.ProfileType;
 import runner.type.RunType;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -79,6 +80,19 @@ public abstract class  BaseTest {
         ProjectUtils.reset(driver);
     }
 
+    private static final String screenshotDirectoryName;
+    static {
+        screenshotDirectoryName = System.getProperty("java.io.tmpdir")
+                + (new SimpleDateFormat("YYYY-MM-dd-kk-mm-").format(new Date()))
+                + UUID.randomUUID().toString();
+    }
+
+    @BeforeSuite
+    protected void beforeSuite() {
+        ScreenshotUtils.createScreenshotsDir(screenshotDirectoryName);
+        System.out.println("Created directory to save screenshots: " + screenshotDirectoryName);
+    }
+
     @BeforeClass
     protected void beforeClass() {
         profileType = TestUtils.getProfileType(this, ProfileType.DEFAULT);
@@ -100,12 +114,15 @@ public abstract class  BaseTest {
         this.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         this.driver.manage().window().maximize();
 
-        ScreenshotUtils.createScreenshotsDir();
-        System.out.println("Created directory to save screenshots: " + ScreenshotUtils.screenshotDirectoryName);
     }
 
     @AfterMethod
     protected void afterMethod(Method method, ITestResult tr) {
+        if (ITestResult.FAILURE == tr.getStatus()) {
+            ScreenshotUtils.takeScreenShot(getDriver(),
+                    screenshotDirectoryName + File.separator + tr.getInstanceName() + "." + tr.getName() + ".png");
+        }
+
         if (runType == RunType.Single) {
             getDriver().quit();
         }
@@ -122,12 +139,11 @@ public abstract class  BaseTest {
         }
     }
 
-    /** Take a screenshot after assert fails. */
-    @AfterMethod
-    public void makeScreenShotAfterTest(ITestResult testResult) {
-        if (ITestResult.FAILURE == testResult.getStatus()) {
-            ScreenshotUtils.takeScreenShot(getDriver(), testResult.getInstanceName() + "." + testResult.getName() + ".png");
-        }
+
+    @AfterSuite
+    protected void afterSuite() {
+        ScreenshotUtils.uploadScreenshotsDir(screenshotDirectoryName);
+        ScreenshotUtils.deleteScreenshotsDir(screenshotDirectoryName);
     }
 
     protected WebDriver getDriver() {
