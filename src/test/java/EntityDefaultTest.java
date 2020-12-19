@@ -288,212 +288,13 @@ public class EntityDefaultTest extends BaseTest {
         List<WebElement> deleteBtns = driver.findElements(By.xpath("//a[.='delete']"));
 
         if (deleteBtns.size() == 1){
-         lastRecordDeleteBtn = deleteBtns.get(0);
+            lastRecordDeleteBtn = deleteBtns.get(0);
         } else {
-         lastRecordDeleteBtn = deleteBtns.get(deleteBtns.size() - 1);
+            lastRecordDeleteBtn = deleteBtns.get(deleteBtns.size() - 1);
         }
         ProjectUtils.click(driver, lastRecordDeleteBtn);
     }
 
-    private void accessToEntityDefaultScreen(WebDriver driver) {
-
-        WebElement tab = driver.findElement(By.xpath("//a[@href='#menu-list-parent']/i"));
-        tab.click();
-
-        WebElement entityOpenList= driver.findElement(By.xpath("//div[@id='menu-list-parent']"));
-        entityOpenList.click();
-
-        WebElement entityTab = driver.findElement(By.xpath("//a[@href='index.php?action=action_list&entity_id=7']"));
-
-        entityTab.click();
-    }
-    private void createDefaultEntity(WebDriver driver){
-
-        WebElement newRecord = driver.findElement(By.xpath("//i[text()='create_new_folder']"));
-        newRecord.click();
-    }
-
-    public void entityCreation() {
-
-        WebDriver driver = getDriver();
-        ProjectUtils.loginProcedure(driver);
-        accessToEntityDefaultScreen(driver);
-        createDefaultEntity(driver);
-    }
-
-
-
-    public boolean isInt(String str){
-
-        try
-        {
-            Integer.parseInt(str);
-            return  true;
-        }
-        catch (NumberFormatException e)
-        {
-            return false;
-        }
-    }
-
-    private boolean isDouble(String str) {
-
-        try {
-            Double.parseDouble(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-
-    public boolean isValidDateFormat(String dateStr) {
-
-        DateFormat sdf = new SimpleDateFormat(dateStr);
-        sdf.setLenient(false);
-        try {
-            sdf.parse(dateStr);
-        } catch (ParseException e) {
-            return false;
-        }
-        return true;
-    }
-
-    private void clickOnLastElementInTable() {
-
-        List<WebElement> titlesWe = getDriver().findElements(By.xpath("//tr/td[2]"));
-        titlesWe.get(titlesWe.size()-1).click();
-    }
-
-    private void goToLastPage(WebDriver driver){
-
-        WebDriverWait wait = new WebDriverWait(getDriver(), 1);
-        // boolean titleFound = false;
-        int rowsPerPage;
-        int numOfAllRecords = Integer.parseInt(wait.until(ExpectedConditions.visibilityOfElementLocated(By
-                .xpath("//span[@class='pagination-info']"))).getText().split(" ")[5]);
-        WebElement rowsPerPageWe = driver.findElement(By.cssSelector("span.page-size"));
-        if (rowsPerPageWe.isDisplayed()) {
-            rowsPerPage = Integer.parseInt(rowsPerPageWe.getText());
-        } else {
-            rowsPerPage = 26;
-        }
-        if (numOfAllRecords > rowsPerPage) {
-            boolean firstRound = true;
-            while (firstRound) {
-                if (getDriver().findElements(By.xpath("//a[@href='javascript:void(0)']")).size()<=3) {
-                    break;
-                }
-                List<WebElement> pagination = driver.findElements(By.cssSelector("a.page-link"));
-                pagination.get(pagination.size() -2).click();
-                WebElement paginationLastIndexWe = driver.findElements(By.cssSelector("a.page-link")).get(pagination.size() -2);
-                boolean paginationLastIndexActive =
-                        paginationLastIndexWe.getCssValue("color").equals("rgba(255, 255, 255, 1)");
-                if ( paginationLastIndexActive) {
-                    firstRound = false;
-                }
-            }
-        }
-
-        clickOnLastElementInTable();
-    }
-
-    @Test(enabled = true)
-    public void validateEntityDefaultValuesCreation() {
-
-        WebDriver driver = getDriver();
-        entityCreation();
-
-        Assert.assertEquals(driver.findElement(By.xpath("//div[@id='_field_container-string']//span//input")).getAttribute("value")
-                ,"DEFAULT STRING VALUE");
-
-        String attributeTextValueToCompare= driver.findElement(By.xpath("//div[@id='_field_container-text']//p//span")).getText();
-        Assert.assertEquals(attributeTextValueToCompare,"DEFAULT TEXT VALUE");
-
-        boolean isInt = isInt(driver.findElement(By.xpath("//div[@id='_field_container-int']//span//input")).getAttribute("value"));
-        Assert.assertTrue(isInt);
-
-        boolean isDouble = isDouble(driver.findElement(By.xpath("//div[@id='_field_container-int']//span//input")).getAttribute("value"));
-        Assert.assertTrue(isDouble);
-
-        boolean isValidDate = isValidDateFormat(driver.findElement(By.xpath("//div[@id='_field_container-date']//input")).getAttribute("value"));
-        Assert.assertTrue(isValidDate);
-
-        boolean isValidDateTime = isValidDateFormat(driver.findElement(By.xpath("//div[@id='_field_container-datetime']//input")).getAttribute("value"));
-        Assert.assertTrue(isValidDateTime);
-
-        String userName= driver.findElement(By.xpath("//button[@data-id='user']")).getAttribute("title").toUpperCase();
-        String userNameExpected= driver.findElement(By.xpath("//button[@data-id='user']//div//div//div[@class='filter-option-inner-inner']")).getText().toUpperCase();
-        Assert.assertEquals(userName,userNameExpected);
-
-        WebElement saveBtn = driver.findElement(By.xpath("//button[.='Save']"));
-
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", saveBtn);
-        Assert.assertTrue(saveBtn.isDisplayed());
-
-        driver.findElement(By.xpath("//table[@id='table-11']//button[@data-table_id='11']")).click();
-
-        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='table-11']//tbody//tr[2]//td[3]")).getText()
-                ,"Default String");
-
-        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='table-11']//tbody//tr[2]//td[4]")).getText()
-                ,"Default text");
-
-        Assert.assertTrue(isInt(driver.findElement(By.xpath("//table[@id='table-11']//tbody//tr[2]//td[5]")).getText()));
-
-        Assert.assertTrue(isDouble(driver.findElement(By.xpath("//table[@id='table-11']//tbody//tr[2]//td[6]")).getText()));
-
-        WebElement saveButton = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
-        ProjectUtils.click(driver, saveButton);
-    }
-
-    @Test(enabled = true)
-    public void validateEntityDefaultValuesRecord() {
-
-        WebDriver driver = getDriver();
-        entityCreation();
-        WebElement saveButton = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", saveButton);
-        Assert.assertTrue(saveButton.isDisplayed());
-
-        driver.findElement(By.xpath("//table[@id='table-11']//button[@data-table_id='11']")).click();
-        ProjectUtils.click(driver, saveButton);
-        clickOnLastElementInTable();
-
-        List<WebElement> objectValidation = driver.findElements(By.xpath("//span[@class='pa-view-field']"));
-
-        Assert.assertEquals((objectValidation.get(0).getText()),"DEFAULT STRING VALUE");
-
-        Assert.assertEquals((objectValidation.get(1).getText()),"DEFAULT TEXT VALUE");
-
-        boolean isInt = isInt(objectValidation.get(2).getText());
-        Assert.assertTrue(isInt);
-
-        boolean isDouble = isDouble(objectValidation.get(3).getText());
-        Assert.assertTrue(isDouble);
-
-        boolean isValidDate = isValidDateFormat(objectValidation.get(3).getText());
-        Assert.assertTrue(isValidDate);
-
-        boolean isValidDateTime = isValidDateFormat(objectValidation.get(5).getText());
-        Assert.assertTrue(isValidDateTime);
-
-        String userName= "USER 1 DEMO".toUpperCase();
-        String userNameExpected= driver.findElement(By.xpath("//label[text()='User']/following-sibling::p")).getText().toUpperCase();
-        Assert.assertEquals(userName,userNameExpected);
-
-        List<WebElement> allCells = driver.findElements(By.xpath("//table[@id='pa-all-entities-table']//tr//td"));
-
-        Assert.assertEquals(allCells.get(1).getText()
-                ,"Default String");
-
-        Assert.assertEquals(allCells.get(2).getText()
-                ,"Default text");
-
-        Assert.assertTrue(isInt(allCells.get(3).getText()));
-
-        Assert.assertTrue(isDouble(allCells.get(4).getText()));
-    }
     private void login(WebDriver driver){
 
         WebDriverWait wait = new WebDriverWait(getDriver(), 1);
@@ -513,6 +314,7 @@ public class EntityDefaultTest extends BaseTest {
 
         entityTab.click();
     }
+
     private void createDefaultEntity(WebDriver driver){
 
         WebElement newRecord = driver.findElement(By.xpath("//i[text()='create_new_folder']"));
@@ -664,6 +466,7 @@ public class EntityDefaultTest extends BaseTest {
         ProjectUtils.click(driver, saveButton);
     }
 
+    @Ignore
     @Test(dependsOnMethods ="validateEntityDefaultValuesCreation")
     public void validateEntityDefaultValuesRecord() {
 

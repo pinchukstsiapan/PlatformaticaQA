@@ -104,9 +104,10 @@ public class EntityAssignTest extends BaseTest {
     public void setUp() {
         WebDriver driver = getDriver();
         driver.get("https://ref.eteam.work");
-        ProjectUtils.login(driver, "user4@tester.com", "CoBX8ym0T7");
+        //ProjectUtils.login(driver, "user4@tester.com", "CoBX8ym0T7");
     }
 
+    @Ignore
     @Test
     public void assignTest() {
 
@@ -154,7 +155,7 @@ public class EntityAssignTest extends BaseTest {
         Assert.assertFalse(checkIfIsAssigned(TASK_TITLE));
 
         getDriver().get("https://ref.eteam.work/index.php?action=login");
-        ProjectUtils.login(getDriver(), "user3@tester.com", "SXGJhNd1aM");
+        //ProjectUtils.login(getDriver(), "user3@tester.com", "SXGJhNd1aM");
 
         Assert.assertTrue(checkIfIsAssigned(TASK_TITLE), "Task is not on the list");
 
@@ -163,6 +164,7 @@ public class EntityAssignTest extends BaseTest {
         deleteTask(rowCells);
     }
 
+    @Ignore
     @Test
     public void deleteTest() {
 
