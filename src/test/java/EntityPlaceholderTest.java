@@ -188,4 +188,45 @@ public class EntityPlaceholderTest extends BaseTest {
         WebElement menuDelete = driver.findElement(By.xpath("//a[contains(text(),'delete')]"));
         ProjectUtils.click(driver, menuDelete);
     }
+
+    @Test
+    public void deleteRecord() {
+
+        final String id = UUID.randomUUID().toString();
+
+        WebDriver driver = getDriver();
+
+        WebElement tab = driver.findElement(By.xpath("//p[text()=' Placeholder ']"));
+        ProjectUtils.click(driver,tab);
+
+        WebElement createNewFolder = driver.findElement(By.xpath("//i[contains(text(),'create_new_folder')]"));
+        createNewFolder.click();
+
+        WebElement titleElement = driver.findElement(By.xpath("//input[@name='entity_form_data[string]']"));
+        titleElement.sendKeys(id);
+
+        WebElement saveBtn = driver.findElement(By.id("pa-entity-form-save-btn"));
+        ProjectUtils.click(driver,saveBtn);
+
+        WebElement list = driver.findElement(By.xpath("(//div[1]/div/ul/li[1]/a/i)[3]"));
+        list.click();
+
+        WebElement firstColumn = driver.findElement(By.xpath("(//td/a/div)[1]"));
+        Assert.assertEquals(firstColumn.getText(),id);
+
+        WebElement menuAction = driver.findElement(By.xpath("//i[text() = 'menu']/.."));
+        menuAction.click();
+
+        WebElement deleteButton = driver.findElement(By.xpath("//a[contains(text(),'delete')]"));
+        deleteButton.click();
+
+        List<WebElement> listOfElements = driver.findElements(By.xpath("//tbody/tr/.."));
+        Assert.assertEquals(listOfElements.size(), 0);
+
+        WebElement recycleButton = driver.findElement(By.xpath("//i[contains(text(),'delete_outline')]/.."));//
+        recycleButton.click();
+
+        WebElement deletedField = driver.findElement(By.xpath("//b[contains(text(),'" + id + "')]"));
+        Assert.assertEquals(deletedField.getText(), id);
+    }
 }
