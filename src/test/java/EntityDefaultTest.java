@@ -466,6 +466,7 @@ public class EntityDefaultTest extends BaseTest {
         ProjectUtils.click(driver, saveButton);
     }
 
+    @Ignore
     @Test(dependsOnMethods ="validateEntityDefaultValuesCreation")
     public void validateEntityDefaultValuesRecord() {
 

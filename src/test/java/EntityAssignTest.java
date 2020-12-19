@@ -107,6 +107,7 @@ public class EntityAssignTest extends BaseTest {
         //ProjectUtils.login(driver, "user4@tester.com", "CoBX8ym0T7");
     }
 
+    @Ignore
     @Test
     public void assignTest() {
 
@@ -163,6 +164,7 @@ public class EntityAssignTest extends BaseTest {
         deleteTask(rowCells);
     }
 
+    @Ignore
     @Test
     public void deleteTest() {
 
