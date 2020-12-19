@@ -56,7 +56,8 @@ public class EntityLoop1Test extends BaseTest {
             }
         }
     }
-
+    
+    @Ignore("The test is good, but too long. Let it be ignored until we switch to parallel execution")
     @Test
     public void loop1Stops() {
 
