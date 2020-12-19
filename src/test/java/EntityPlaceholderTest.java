@@ -5,6 +5,8 @@ import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
+import runner.ProjectUtils;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -13,7 +15,7 @@ public class EntityPlaceholderTest extends BaseTest {
     @Test
     public void inputTest() throws InterruptedException {
 
-        WebDriver driver = ProjectUtils.loginProcedure(getDriver());
+        WebDriver driver = getDriver();
 
         WebElement tab = driver.findElement(By.xpath("//p[contains(text(),'Placeholder')]/preceding-sibling::i"));
         ProjectUtils.click(driver, tab);
@@ -57,7 +59,7 @@ public class EntityPlaceholderTest extends BaseTest {
     @Test
     public void verifyDecimal() throws InterruptedException {
 
-        WebDriver driver = ProjectUtils.loginProcedure(getDriver());
+        WebDriver driver = getDriver();
 
         WebElement tab = driver.findElement(By.xpath("//p[contains(text(),'Placeholder')]/preceding-sibling::i"));
         ProjectUtils.click(driver, tab);
@@ -108,7 +110,7 @@ public class EntityPlaceholderTest extends BaseTest {
         final String textCreateNewBtn = "create_new_folder";
         final String textHeader = "Placeholder";
 
-        WebDriver driver = ProjectUtils.loginProcedure(getDriver());
+        WebDriver driver = getDriver();
 
         WebElement placeholderBtn = driver.findElement(By.xpath("//p[contains(text(),'Placeholder')]"));
         ProjectUtils.click(driver, placeholderBtn);
@@ -142,7 +144,6 @@ public class EntityPlaceholderTest extends BaseTest {
     @Test
     public void view01Test() {
         WebDriver driver = getDriver();
-        ProjectUtils.loginProcedure(driver);
 
         WebElement tab = driver.findElement(By.xpath("//p[contains(text(),'Placeholder')]"));
         ProjectUtils.click(driver, tab);

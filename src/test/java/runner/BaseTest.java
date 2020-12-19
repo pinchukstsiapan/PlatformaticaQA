@@ -6,8 +6,12 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.ITestResult;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
+import runner.type.ProfileType;
+import runner.type.RunType;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -47,30 +51,70 @@ public abstract class  BaseTest {
 
     private WebDriver driver;
 
-    @BeforeMethod
-    protected void setUpAll() {
+    private RunType runType = RunType.Single;
+    private ProfileType profileType = ProfileType.DEFAULT;
+
+    private WebDriver createBrowser() {
+        WebDriver result;
 
         if (isRemoteWebDriver()) {
             try {
-                this.driver = new RemoteWebDriver(new URL(HUB_URL), new ChromeOptions());
+                result = new RemoteWebDriver(new URL(HUB_URL), new ChromeOptions());
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }
         } else {
-            this.driver = new ChromeDriver();
+            result = new ChromeDriver();
         }
 
-        this.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        this.driver.manage().window().maximize();
+        result.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        result.manage().window().maximize();
+
+        return result;
+    }
+
+    private void startTest(WebDriver driver, ProfileType profileType) {
+        driver.get(profileType.getUrl());
+        ProjectUtils.login(driver, profileType);
+        ProjectUtils.reset(driver);
+    }
+
+    @BeforeClass
+    protected void beforeClass() {
+        profileType = TestUtils.getProfileType(this, ProfileType.DEFAULT);
+        runType = TestUtils.getRunType(this);
+        if (runType == RunType.Multiple) {
+            driver = createBrowser();
+            startTest(driver, profileType);
+        }
+    }
+
+    @BeforeMethod
+    protected void beforeMethod(Method method) {
+        if (runType == RunType.Single) {
+            driver = createBrowser();
+            startTest(driver, TestUtils.getProfileType(method, profileType));
+        } else if (!driver.getCurrentUrl().startsWith(profileType.getUrl())) {
+            driver.get(profileType.getUrl());
+        }
     }
 
     @AfterMethod
-    protected void setDownAll(Method method, ITestResult tr) {
-        driver.quit();
+    protected void afterMethod(Method method, ITestResult tr) {
+        if (runType == RunType.Single) {
+            getDriver().quit();
+        }
 
         long executionTime = (tr.getEndMillis() - tr.getStartMillis()) / 1000;
         log(String.format("\u001B[33m%s.%s() Execution time: %ds\u001B[0m",
             getClass(), method.getName(), executionTime));
+    }
+
+    @AfterClass
+    protected void afterClass() {
+        if (runType == RunType.Multiple) {
+            getDriver().quit();
+        }
     }
 
     protected WebDriver getDriver() {

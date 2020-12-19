@@ -6,14 +6,15 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
+import runner.ProjectUtils;
 
 import java.util.UUID;
 
 public class EntityVisibilityEventsTest extends BaseTest {
 
-    private void setUp(WebDriver driver) {
-        driver.get("https://ref.eteam.work");
-        ProjectUtils.login(driver, "user1@tester.com", "ah1QNmgkEO");
+    private void setUp() {
+        WebDriver driver = getDriver();
+        ProjectUtils.loginProcedure(driver);
         WebElement visibilityEventsTab = driver.findElement(
                 By.xpath("//div[@id='menu-list-parent']//li/a[contains(@href,'id=86')]"));
         visibilityEventsTab.click();
@@ -90,7 +91,7 @@ public class EntityVisibilityEventsTest extends BaseTest {
     @Test
     public void testFieldVisibility() {
         WebDriver driver = getDriver();
-        setUp(driver);
+        setUp();
 
         WebElement createButton = driver.findElement(By.xpath("//div/i[contains(text(), 'create_new_folder')]"));
         createButton.click();
@@ -109,7 +110,7 @@ public class EntityVisibilityEventsTest extends BaseTest {
     @Test
     public void triggerFieldState() throws InterruptedException {
         WebDriver driver = getDriver();
-        setUp(driver);
+        setUp();
 
         final String fieldEnabled = UUID.randomUUID().toString();
         final String fieldDisabled = UUID.randomUUID().toString();

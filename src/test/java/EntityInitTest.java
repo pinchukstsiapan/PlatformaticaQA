@@ -4,6 +4,8 @@ import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
+import runner.ProjectUtils;
+
 import java.util.List;
 
 public class EntityInitTest extends BaseTest {

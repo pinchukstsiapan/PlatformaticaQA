@@ -15,6 +15,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import runner.ProjectUtils;
 
 public class EntityDefaultTest extends BaseTest {
 
@@ -47,6 +48,7 @@ public class EntityDefaultTest extends BaseTest {
         //Code to delete default using title value in this.title
     }
 
+    @Ignore
     @Test
     public void editRecord() throws InterruptedException {
         initTest();
@@ -110,6 +112,7 @@ public class EntityDefaultTest extends BaseTest {
         ProjectUtils.click(driver, saveButton);
     }
 
+    @Ignore
     @Test
     public void checkDefaultValueAndUpdateThem() throws InterruptedException {
 
@@ -285,11 +288,18 @@ public class EntityDefaultTest extends BaseTest {
         List<WebElement> deleteBtns = driver.findElements(By.xpath("//a[.='delete']"));
 
         if (deleteBtns.size() == 1){
-         lastRecordDeleteBtn = deleteBtns.get(0);
+            lastRecordDeleteBtn = deleteBtns.get(0);
         } else {
-         lastRecordDeleteBtn = deleteBtns.get(deleteBtns.size() - 1);
+            lastRecordDeleteBtn = deleteBtns.get(deleteBtns.size() - 1);
         }
         ProjectUtils.click(driver, lastRecordDeleteBtn);
+    }
+
+    private void login(WebDriver driver){
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), 1);
+        driver.get("https://ref.eteam.work");
+        ProjectUtils.login(driver, "user200@tester.com", "l2zszAyRih");
     }
 
     private void accessToEntityDefaultScreen(WebDriver driver) {
@@ -304,6 +314,7 @@ public class EntityDefaultTest extends BaseTest {
 
         entityTab.click();
     }
+
     private void createDefaultEntity(WebDriver driver){
 
         WebElement newRecord = driver.findElement(By.xpath("//i[text()='create_new_folder']"));
@@ -313,7 +324,7 @@ public class EntityDefaultTest extends BaseTest {
     public void entityCreation() {
 
         WebDriver driver = getDriver();
-        ProjectUtils.loginProcedure(driver);
+        login(driver);
         accessToEntityDefaultScreen(driver);
         createDefaultEntity(driver);
     }
@@ -354,6 +365,17 @@ public class EntityDefaultTest extends BaseTest {
             return false;
         }
         return true;
+    }
+
+    private boolean isTitleFound(String title) {
+
+        List<WebElement> titlesWe = getDriver().findElements(By.xpath("//tr/td[2]"));
+        for (WebElement we : titlesWe) {
+            if (we.getText().equals(title)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void clickOnLastElementInTable() {
@@ -444,18 +466,14 @@ public class EntityDefaultTest extends BaseTest {
         ProjectUtils.click(driver, saveButton);
     }
 
-    @Test(enabled = true)
+    @Ignore
+    @Test(dependsOnMethods ="validateEntityDefaultValuesCreation")
     public void validateEntityDefaultValuesRecord() {
 
         WebDriver driver = getDriver();
-        entityCreation();
-        WebElement saveButton = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", saveButton);
-        Assert.assertTrue(saveButton.isDisplayed());
-
-        driver.findElement(By.xpath("//table[@id='table-11']//button[@data-table_id='11']")).click();
-        ProjectUtils.click(driver, saveButton);
-        clickOnLastElementInTable();
+        login(driver);
+        accessToEntityDefaultScreen(driver);
+        goToLastPage(driver);
 
         List<WebElement> objectValidation = driver.findElements(By.xpath("//span[@class='pa-view-field']"));
 
