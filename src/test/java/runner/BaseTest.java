@@ -78,8 +78,12 @@ public abstract class  BaseTest {
 
     private static final String screenshotDirectoryName;
     static {
-        screenshotDirectoryName = System.getProperty("java.io.tmpdir")
-                + (new SimpleDateFormat("YYYY-MM-dd-kk-mm-").format(new Date()))
+        String tempPath = System.getProperty("java.io.tmpdir");
+        // on windows last char is '\', on Linux is 'p' so need to add separator
+        if (tempPath.charAt(tempPath.length()-1) != File.separator.charAt(0)) {
+            tempPath += File.separator;
+        }
+        screenshotDirectoryName = tempPath + (new SimpleDateFormat("YYYY-MM-dd-kk-mm-").format(new Date()))
                 + UUID.randomUUID().toString();
     }
 
