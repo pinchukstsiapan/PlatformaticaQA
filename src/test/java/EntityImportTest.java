@@ -4,6 +4,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
@@ -96,6 +97,7 @@ public class EntityImportTest extends BaseTest {
         }while(flag == false);
     }
 
+    @Ignore
     @Test
     public void doImportButton() throws InterruptedException{
 
@@ -141,6 +143,7 @@ public class EntityImportTest extends BaseTest {
         Assert.assertEquals(fieldUser.getText(), user);
     }
 
+    @Ignore
     @Test
     public void customImportButton() throws InterruptedException{
 
