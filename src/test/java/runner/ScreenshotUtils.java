@@ -8,6 +8,8 @@ import org.openqa.selenium.WebDriver;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,12 +36,12 @@ public abstract class ScreenshotUtils {
     public static void createScreenshotsDir(String fullPath) {
         Path dirFullPath = Paths.get(fullPath);
         if (Files.exists(dirFullPath)) {
-            System.out.printf("WARNING: Directory %s already exists!%n", dirFullPath);
+            LoggerUtils.logYellow(String.format("WARNING: Directory %s already exists!", dirFullPath));
         } else {
             try {
                 Files.createDirectories(dirFullPath);
             } catch (IOException ioExceptionObj) {
-                System.out.println("ERROR: while creating directory " + fullPath + "\n" + ioExceptionObj.getMessage());
+                LoggerUtils.logRed(String.format("ERROR: while creating directory %s\n%s", fullPath, ioExceptionObj.getMessage()));
             }
         }
     }
@@ -52,7 +54,7 @@ public abstract class ScreenshotUtils {
             Path path = Paths.get(fileName);
             Files.write(path, textToWrite.getBytes());
         } catch (IOException e) {
-            System.out.printf("ERROR: unable to save text file %s . \nError message:\n%s%n", fileName, textToWrite);
+            LoggerUtils.logRed(String.format("ERROR: unable to save text file %s . \nError message:\n%s", fileName, textToWrite));
         }
     }
 
@@ -61,16 +63,19 @@ public abstract class ScreenshotUtils {
         Path dirFullPath = Paths.get(fullPath);
         try {
             Files.deleteIfExists(dirFullPath);
-            System.out.println("Deleted directory used to save screenshots: " + fullPath);
         } catch (IOException ioExceptionObj) {
-            System.out.println("ERROR: while deleting directory " + fullPath + "\n" + ioExceptionObj.getMessage());
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            ioExceptionObj.printStackTrace(pw);
+            String sStackTrace = sw.toString(); // stack trace as a string
+            LoggerUtils.logRed(String.format("ERROR: while deleting directory %s\n%s", fullPath, sw.toString() ));
         }
     }
 
     /** upload directory with name fullPath to Google Drive*/
     public static void uploadScreenshotsDir(String fullDirPath) {
-        System.out.println("Uploading directory with files to google Drive of the PlatformaticaQA@gmail.com");
-        //for each file delete it after upload is done
+        LoggerUtils.logYellow("Uploading directory with files to google Drive of the PlatformaticaQA@gmail.com");
+        LoggerUtils.logYellow("for each file delete it after upload is done");
     }
 
 }

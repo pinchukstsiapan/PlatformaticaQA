@@ -90,7 +90,7 @@ public abstract class  BaseTest {
     @BeforeSuite
     protected void beforeSuite() {
         ScreenshotUtils.createScreenshotsDir(screenshotDirectoryName);
-        System.out.println("Created directory to save screenshots: " + screenshotDirectoryName);
+        LoggerUtils.log("Created directory to save screenshots: " + screenshotDirectoryName);
     }
 
     @BeforeClass
