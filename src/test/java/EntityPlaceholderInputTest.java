@@ -16,7 +16,6 @@ public class EntityPlaceholderInputTest extends BaseTest {
         final String title = UUID.randomUUID().toString();
 
         WebDriver driver = getDriver();
-        ProjectUtils.loginProcedure(driver);
 
         WebElement tab = driver.findElement(By.xpath("//p[contains(text(),'Placeholder')]"));
         tab.click();
@@ -48,16 +47,12 @@ public class EntityPlaceholderInputTest extends BaseTest {
         driver.findElement(By.xpath("//div[contains(text(),'" + title + "')]"));
     }
 
-    @Ignore
+
     @Test
     public void newRecordPV () {
 
-        int pageNumber;
-
         WebDriver driver = getDriver();
-        driver.get("https://ref.eteam.work/");
-
-        ProjectUtils.login(driver, "user1@tester.com", "ah1QNmgkEO");
+        ProjectUtils.loginProcedure(driver);
 
         WebElement placeholder = driver.findElement(By.xpath("//p[text()=' Placeholder ']"));
         placeholder.click();
@@ -84,32 +79,14 @@ public class EntityPlaceholderInputTest extends BaseTest {
         WebElement save = driver.findElement(By.xpath("//div/button[@id='pa-entity-form-save-btn']"));
         ProjectUtils.click(driver, save);
 
-        WebElement numOfPagesS = driver.findElement(By.xpath("//span[@class='pagination-info']"));
+        driver.findElement(By.xpath(String.format("//div[contains(text(), '%s')]", string_ph)));
+        driver.findElement(By.xpath(String.format("//div[contains(text(), '%s')]", text_ph)));
+        driver.findElement(By.xpath(String.format("//div[contains(text(), '%s')]", int_ph)));
+        driver.findElement(By.xpath(String.format("//div[contains(text(), '%s')]", decimal_ph)));
 
-        int numOfRows =  Integer.parseInt(numOfPagesS.getText().substring(19, 22));
-        int rowsPerPage =  Integer.parseInt(numOfPagesS.getText().substring(13, 15));
-
-        if (numOfRows%rowsPerPage == 0) {
-            pageNumber = numOfRows/rowsPerPage;
-        } else {
-            pageNumber = numOfRows/rowsPerPage + 1;
-        }
-
-        // id of the newly created record (the last record)
-        int id = numOfRows-1;
-
-
-        WebElement page = driver.findElement(By.xpath("//a[@class='page-link'][@aria-label='to page " + pageNumber + "']"));
-        ProjectUtils.click(driver, page);
-
-        driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, string_ph)));
-        driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, text_ph)));
-        driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, int_ph)));
-        driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", id, decimal_ph)));
-
-        WebElement actions1 = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//button/i[text()='menu']", id)));
+        WebElement actions1 = driver.findElement(By.xpath(String.format("//tr[@data-index='0']//button/i[text()='menu']")));
         ProjectUtils.click(driver, actions1);
-        WebElement delete = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div//li/a[text()='delete']", id)));
+        WebElement delete = driver.findElement(By.xpath(String.format("//tr[@data-index='0']//div//li/a[text()='delete']")));
         ProjectUtils.click(driver, delete);
     }
 }
