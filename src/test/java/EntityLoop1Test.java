@@ -23,41 +23,40 @@ public class EntityLoop1Test extends BaseTest {
             getWait(1).until(ExpectedConditions.visibilityOfElementLocated(By.linkText(mode))).click();
             int f1 = Integer.parseInt(getWait(1).until(ExpectedConditions.visibilityOfElementLocated
                     (By.xpath("//label[(text()='F1')]/following-sibling::div/child::div/child::span"))).getText());
-            Assert.assertEquals(value, f1);
+            Assert.assertEquals(f1, value);
 
             int f2 = Integer.parseInt(driver.findElement
                     (By.xpath("//label[(text()='F2')]/following-sibling::div/child::div/child::span")).getText());
             value += 1;
-            Assert.assertEquals(value, f2);
+            Assert.assertEquals(f2, value);
 
             int f3 = Integer.parseInt(driver.findElement
                     (By.xpath("//label[(text()='F3')]/following-sibling::div/child::div/child::span")).getText());
             value += 1;
-            Assert.assertEquals(value, f3);
+            Assert.assertEquals(f3, value);
             driver.navigate().back();
         } else {
             if (mode.equals("edit")) {
                 getWait(1).until(ExpectedConditions.visibilityOfElementLocated(By.linkText(mode))).click();
                 int f1 = Integer.parseInt(getWait(1).until(ExpectedConditions.visibilityOfElementLocated
                         (By.xpath("//div[@id='_field_container-f1']/child::span/child::input"))).getAttribute("value"));
-                Assert.assertEquals(value, f1);
+                Assert.assertEquals(f1, value);
 
                 int f2 = Integer.parseInt(driver.findElement
                         (By.xpath("//div[@id='_field_container-f2']/child::span/child::input")).getAttribute("value"));
                 value += 1;
-                Assert.assertEquals(value, f2);
+                Assert.assertEquals(f2, value);
 
                 int f3 = Integer.parseInt(driver.findElement
                         (By.xpath("//div[@id='_field_container-f3']/child::span/child::input")).getAttribute("value"));
                 value += 1;
-                Assert.assertEquals(value, f3);
+                Assert.assertEquals(f3, value);
                 ProjectUtils.click(driver, driver.findElement(By.xpath("//button[text()='Cancel']/parent::a")));
             } else {
                 Assert.fail("Wrong mode provided to assert loop values (accepted values: view or edit)");
             }
         }
     }
-    
     @Ignore("The test is good, but too long. Let it be ignored until we switch to parallel execution")
     @Test
     public void loop1Stops() {
@@ -78,7 +77,7 @@ public class EntityLoop1Test extends BaseTest {
         f1_element.sendKeys(String.valueOf(number_1));
 
         getWait(200).until(ExpectedConditions.attributeContains(f3_element, "value", "1002"));
-        Assert.assertEquals("1000", f1_element.getAttribute("value"));
+        Assert.assertEquals(f1_element.getAttribute("value"),"1000");
 
         ProjectUtils.click(driver, driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']")));
         assertLoopValues(driver, 1000, "view");
