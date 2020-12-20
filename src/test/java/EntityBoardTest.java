@@ -53,6 +53,7 @@ public class EntityBoardTest extends BaseTest {
 
         WebElement decimalPlaceholder = driver.findElement(By.id("decimal"));
         decimalPlaceholder.sendKeys(String.valueOf(decimal));
+        wait.until(ExpectedConditions.attributeContains(decimalPlaceholder, "value", String.valueOf(decimal)));
 
         WebElement date = driver.findElement(By.id("date"));
         date.click();
@@ -62,7 +63,6 @@ public class EntityBoardTest extends BaseTest {
 
         WebElement saveBtn = driver.findElement(By.id("pa-entity-form-save-btn"));
         ProjectUtils.click(driver, saveBtn);
-
 
         String recordTitleXpath = String.format("//div[contains(text(), '%s')]", text);
         By newRecordStringPending = By.xpath(String.format("%s/../../../td[2]/a/div", recordTitleXpath));
