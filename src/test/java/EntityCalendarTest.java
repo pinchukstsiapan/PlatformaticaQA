@@ -9,6 +9,8 @@ import runner.ProjectUtils;
 import runner.type.Run;
 import runner.type.RunType;
 
+import java.util.UUID;
+
 @Run(run = RunType.Multiple)
 public class EntityCalendarTest extends BaseTest {
 
@@ -21,7 +23,7 @@ public class EntityCalendarTest extends BaseTest {
         WebElement newCalendar = driver.findElement(By.xpath("//div[@class='card-icon']/i"));
         newCalendar.click();
 
-        final String string = "New Text Imported";
+        final String string = UUID.randomUUID().toString();
         final String textArea = "Simple Test";
         final int num = 256;
 
