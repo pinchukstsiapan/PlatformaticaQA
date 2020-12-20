@@ -17,7 +17,7 @@ public class EntityBoardTest extends BaseTest {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         String currentDataEuropean = formatter.format(calendar.getTime());
-        final String text = "Test";
+        final String text = UUID.randomUUID().toString();
         final int number = 12;
         final double decimal = 10.25;
         final String pending = "Pending";
@@ -43,9 +43,9 @@ public class EntityBoardTest extends BaseTest {
         stringPending.click();
 
         WebElement textPlaceholder = driver.findElement(By.xpath("//textarea[@name='entity_form_data[text]']"));
-        textPlaceholder.sendKeys(text);
+        textPlaceholder.sendKeys(text.trim());
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//textarea[@name='entity_form_data[text]']")));
-        wait.until(ExpectedConditions.attributeContains(textPlaceholder, "value", text));
+        wait.until(ExpectedConditions.attributeContains(textPlaceholder, "value", text.trim()));
 
         WebElement intPlaceholder = driver.findElement(By.xpath("//input[@name='entity_form_data[int]']"));
         intPlaceholder.sendKeys(String.valueOf(number));
