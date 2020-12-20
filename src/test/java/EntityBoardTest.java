@@ -86,16 +86,6 @@ public class EntityBoardTest extends BaseTest {
         Assert.assertEquals(createdRecordDecimal.getText(), Double.toString(decimal), "Created record decimal issue");
         Assert.assertEquals(createdRecordDate.getText(), currentDataEuropean, "Created date issue");
         Assert.assertEquals(createdRecordUser1Demo.getText(), user1Demo, "Created user issue");
-        deleteRecordByTitle(text);
     }
 
-    private void deleteRecordByTitle(String text) {
-
-        WebDriver driver = getDriver();
-        String recordTitleXpath = String.format("//div[contains(text(), '%s')]", text);
-        By recordMenuButton = By.xpath(String.format("%s/../../..//button", recordTitleXpath));
-        WebElement deleteButton = driver.findElement(By.xpath(String.format("%s/../../..//a[contains(@href, 'delete')]", recordTitleXpath)));
-        driver.findElement(recordMenuButton).click();
-        ProjectUtils.click(driver, deleteButton);
-    }
 }
