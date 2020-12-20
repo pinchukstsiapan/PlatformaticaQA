@@ -1,4 +1,7 @@
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
@@ -65,7 +68,9 @@ public class EntityBoardTest extends BaseTest {
         By newRecordUser1Demo = By.xpath(String.format("%s/../../../td[9]", recordTitleXpath));
 
         By createdRecordText = By.xpath(recordTitleXpath);
-        WebElement newCreatedRecordText = driver.findElement(createdRecordText);
+        WebDriverWait wait = new WebDriverWait(driver,4);
+        WebElement newCreatedRecordText = wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(createdRecordText)));
+      //  WebElement newCreatedRecordText = driver.findElement(createdRecordText);
 
 
         WebElement createdRecordStringPending = driver.findElement(newRecordStringPending);
