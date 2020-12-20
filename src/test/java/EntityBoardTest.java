@@ -34,6 +34,7 @@ public class EntityBoardTest extends BaseTest {
 
         WebElement createNew = driver.findElement(By.xpath("//div[@class = 'card-icon']"));
         createNew.click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//textarea[@name='entity_form_data[text]']")));
 
         WebElement stringDropdown = driver.findElement(By.xpath("//div[text()= 'Pending']/.."));
         stringDropdown.click();
@@ -45,7 +46,7 @@ public class EntityBoardTest extends BaseTest {
         textPlaceholder.sendKeys(text);
         wait.until(ExpectedConditions.attributeContains(textPlaceholder, "value", text));
 
-        WebElement intPlaceholder = driver.findElement(By.id("int"));
+        WebElement intPlaceholder = driver.findElement(By.xpath("//input[@name='entity_form_data[int]']"));
         intPlaceholder.sendKeys(String.valueOf(number));
         wait.until(ExpectedConditions.attributeContains(intPlaceholder, "value", "12"));
 
