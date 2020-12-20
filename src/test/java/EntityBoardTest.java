@@ -38,7 +38,7 @@ public class EntityBoardTest extends BaseTest {
         WebElement stringPending = driver.findElement(By.xpath("//div[text()= 'Pending']"));
         stringPending.click();
 
-        WebElement textPlaceholder = driver.findElement(By.id("text"));
+        WebElement textPlaceholder = driver.findElement(By.xpath("//textarea[@name='entity_form_data[text]']"));
         textPlaceholder.sendKeys(text);
 
         WebElement intPlaceholder = driver.findElement(By.id("int"));
