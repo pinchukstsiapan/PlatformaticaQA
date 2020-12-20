@@ -63,6 +63,7 @@ public class EntityBoardTest extends BaseTest {
         WebElement saveBtn = driver.findElement(By.id("pa-entity-form-save-btn"));
         ProjectUtils.click(driver, saveBtn);
 
+
         String recordTitleXpath = String.format("//div[contains(text(), '%s')]", text);
         By newRecordStringPending = By.xpath(String.format("%s/../../../td[2]/a/div", recordTitleXpath));
         By newRecordInt = By.xpath(String.format("%s/../../../td[4]/a/div", recordTitleXpath));
