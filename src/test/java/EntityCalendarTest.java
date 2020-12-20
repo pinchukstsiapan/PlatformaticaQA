@@ -12,10 +12,10 @@ import runner.type.RunType;
 @Run(run = RunType.Multiple)
 public class EntityCalendarTest extends BaseTest {
 
-    @Test
-    public void inputCalendar() {
 
-        WebDriver driver = getDriver();
+    public void inputCalendar(WebDriver driver) {
+
+
         WebElement calendar = driver.findElement(By.xpath("//p[contains(text(),'Calendar')]"));
         ProjectUtils.click(driver, calendar);
         WebElement newCalendar = driver.findElement(By.xpath("//div[@class='card-icon']/i"));
@@ -44,10 +44,11 @@ public class EntityCalendarTest extends BaseTest {
         ProjectUtils.click(driver, save);
     }
 
-    @Test(dependsOnMethods = "inputCalendar")
+    @Test
     public void editCalendar() throws InterruptedException {
 
         WebDriver driver = getDriver();
+        inputCalendar(getDriver());
         WebElement calendar = driver.findElement(By.xpath("//p[contains(text(),'Calendar')]"));
         ProjectUtils.click(driver, calendar);
         WebElement list = driver.findElement(By.xpath("//div[@class='content']//li[2]"));
