@@ -69,9 +69,8 @@ public class EntityBoardTest extends BaseTest {
 
         By createdRecordText = By.xpath(recordTitleXpath);
         WebDriverWait wait = new WebDriverWait(driver,4);
-        WebElement newCreatedRecordText = wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(createdRecordText)));
-      //  WebElement newCreatedRecordText = driver.findElement(createdRecordText);
-
+        wait.until(ExpectedConditions.attributeContains(createdRecordText, "innerText", text));
+        WebElement newCreatedRecordText = driver.findElement(createdRecordText);
 
         WebElement createdRecordStringPending = driver.findElement(newRecordStringPending);
         WebElement createdRecordInt = driver.findElement(newRecordInt);
