@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class EntityBoardTest extends BaseTest {
 
-    @Test
+    @Test(invocationCount = 15)
     public void inputTest() {
 
         Calendar calendar = Calendar.getInstance();
@@ -44,7 +44,7 @@ public class EntityBoardTest extends BaseTest {
 
         WebElement textPlaceholder = driver.findElement(By.xpath("//textarea[@name='entity_form_data[text]']"));
         textPlaceholder.sendKeys(text);
-        wait.until(ExpectedConditions.attributeContains(textPlaceholder, "value", text));
+        //wait.until(ExpectedConditions.attributeContains(textPlaceholder, "value", text));
 
         WebElement intPlaceholder = driver.findElement(By.xpath("//input[@name='entity_form_data[int]']"));
         intPlaceholder.sendKeys(String.valueOf(number));
