@@ -24,6 +24,7 @@ public class EntityBoardTest extends BaseTest {
         final String user1Demo = "User 1 Demo";
 
         WebDriver driver = getDriver();
+        WebDriverWait wait = new WebDriverWait(driver,4);
 
         WebElement tabBoard = driver.findElement(By.xpath("//p[contains(text(),'Board')]"));
         ProjectUtils.click(driver, tabBoard);
@@ -45,6 +46,7 @@ public class EntityBoardTest extends BaseTest {
 
         WebElement intPlaceholder = driver.findElement(By.id("int"));
         intPlaceholder.sendKeys(String.valueOf(number));
+        wait.until(ExpectedConditions.attributeContains(intPlaceholder, "value", "12"));
 
         WebElement decimalPlaceholder = driver.findElement(By.id("decimal"));
         decimalPlaceholder.sendKeys(String.valueOf(decimal));
@@ -67,9 +69,7 @@ public class EntityBoardTest extends BaseTest {
         By newRecordUser1Demo = By.xpath(String.format("%s/../../../td[9]", recordTitleXpath));
 
         By createdRecordText = By.xpath(recordTitleXpath);
-        WebDriverWait wait = new WebDriverWait(driver,4);
-        wait.until(ExpectedConditions.elementToBeClickable(createdRecordText));
-        WebElement newCreatedRecordText = driver.findElement(createdRecordText);
+        WebElement newCreatedRecordText = wait.until(ExpectedConditions.visibilityOfElementLocated(createdRecordText));
 
         WebElement createdRecordStringPending = driver.findElement(newRecordStringPending);
         WebElement createdRecordInt = driver.findElement(newRecordInt);
