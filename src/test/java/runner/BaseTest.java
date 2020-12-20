@@ -88,6 +88,9 @@ public abstract class  BaseTest {
 
     @BeforeMethod
     protected void beforeMethod(Method method) {
+        LoggerUtils.logGreen(String.format("%s.%s()",
+            this.getClass().getName(), method.getName()));
+
         if (runType == RunType.Single) {
             driver = createBrowser();
             startTest(driver, TestUtils.getProfileType(method, profileType));
