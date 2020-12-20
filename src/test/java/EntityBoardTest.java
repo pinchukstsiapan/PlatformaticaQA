@@ -24,7 +24,7 @@ public class EntityBoardTest extends BaseTest {
         final String user1Demo = "User 1 Demo";
 
         WebDriver driver = getDriver();
-        WebDriverWait wait = new WebDriverWait(driver,4);
+        WebDriverWait wait = new WebDriverWait(driver,6);
 
         WebElement tabBoard = driver.findElement(By.xpath("//p[contains(text(),'Board')]"));
         ProjectUtils.click(driver, tabBoard);
