@@ -10,7 +10,10 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
+import runner.ProjectUtils;
+
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class EntityAssignTest extends BaseTest {
@@ -183,5 +186,79 @@ public class EntityAssignTest extends BaseTest {
                 .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//table")));
 
         Assert.assertTrue(table2.getText().contains(TASK_TITLE));
+    }
+
+    @Test
+    public void assignTest1() {
+
+        final String stringInp = UUID.randomUUID().toString();
+        final String textInp = "mb--simple text";
+        final int intInp = 10;
+        final double decimalInp = 13.5;
+        final String myAssignmentsTabLink = "https://ref.eteam.work/index.php?action=screen&screen_id=40&filter";
+
+        WebDriver driver = getDriver();
+
+        WebElement assignTab = driver.findElement(By.xpath("//a[contains(@href, 'id=37')]"));
+        ProjectUtils.click(driver, assignTab);
+
+        WebElement newRecord = driver.findElement(By.xpath("//a[contains(@href, 'create&entity_id=37')]"));
+        ProjectUtils.click(driver, newRecord);
+
+        WebElement stringInput = driver.findElement(By.xpath("//input[@id='string']"));
+        stringInput.sendKeys(stringInp);
+
+        WebElement textInput = driver.findElement(By.xpath("//textarea[@id='text']"));
+        textInput.sendKeys(textInp);
+
+        WebElement intInput = driver.findElement(By.xpath("//input[@id='int']"));
+        intInput.sendKeys(String.valueOf(intInp));
+
+        WebElement decimalInput = driver.findElement(By.xpath("//input[@id='decimal']"));
+        decimalInput.sendKeys(String.valueOf(decimalInp));
+
+        WebElement dateInput = driver.findElement(By.xpath("//input[@id='date']"));
+        dateInput.click();
+
+        WebElement datetimeInput = driver.findElement(By.xpath("//input[@id='datetime']"));
+        datetimeInput.click();
+
+        WebElement saveButton = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
+        ProjectUtils.click(driver, saveButton);
+
+        String loggedInUser = driver.findElement(By.xpath("//a[@id='navbarDropdownProfile']")).getText().substring(7);
+        String[] listOfUsers = driver.findElement(By.xpath("//select")).getText().split("\n|\\                ");
+        String currentUser = determineCurrentUser(listOfUsers, loggedInUser);
+
+        WebElement userSelect = driver.findElement(By.xpath("//div[contains(text(),'mb--simple text')]" +
+                "/../../..//option[normalize-space(text())='" + currentUser + "']"));
+        userSelect.click();
+
+        driver.navigate().refresh();
+
+        WebElement selectedUser = driver.findElement(By.xpath("//div[contains(text(),'mb--simple text')]" +
+                "/../../..//option[@selected and normalize-space(text())='" + currentUser + "']"));
+
+        Assert.assertTrue(selectedUser.isDisplayed());
+
+        WebElement myAssignmentsTab = driver.findElement(By.xpath("//li[@id='pa-menu-item-41']"));
+        myAssignmentsTab.click();
+
+        Assert.assertEquals(driver.getCurrentUrl(), myAssignmentsTabLink);
+
+        Assert.assertTrue(driver.findElement(By.xpath("//div[contains(text(),'mb--simple text')]")).isDisplayed());
+    }
+
+    public String determineCurrentUser(String[] users, String user) {
+
+        String currentUser = "";
+
+        for (int i = 0; i < users.length; i++) {
+            if (user.equalsIgnoreCase(users[i])) {
+                currentUser = users[i];
+            }
+        }
+
+        return currentUser;
     }
 }
