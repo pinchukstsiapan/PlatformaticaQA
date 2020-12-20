@@ -148,7 +148,7 @@ public class EntityDefaultTest extends BaseTest {
 
     private void changeUser(WebDriver driver) {
 
-        WebElement fieldUser = driver.findElement(By.xpath("//div[text() = 'User 1 Demo']"));
+        WebElement fieldUser = driver.findElement(By.xpath("//div[@id='_field_container-user']//button']"));
         ProjectUtils.click(driver, fieldUser);
 
         WebElement scrollDownMenuField = driver.findElement(By.xpath("//span[text() = 'user100@tester.com']"));
