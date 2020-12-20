@@ -72,7 +72,7 @@ public abstract class  BaseTest {
     private void startTest(WebDriver driver, ProfileType profileType) {
         driver.get(profileType.getUrl());
         ProjectUtils.login(driver, profileType);
-       // ProjectUtils.reset(driver);
+        ProjectUtils.reset(driver);
     }
 
     @BeforeClass
