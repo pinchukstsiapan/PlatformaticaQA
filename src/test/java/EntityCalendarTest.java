@@ -14,9 +14,7 @@ import java.util.UUID;
 @Run(run = RunType.Multiple)
 public class EntityCalendarTest extends BaseTest {
 
-
     public void inputCalendar(WebDriver driver) {
-
 
         WebElement calendar = driver.findElement(By.xpath("//p[contains(text(),'Calendar')]"));
         ProjectUtils.click(driver, calendar);
