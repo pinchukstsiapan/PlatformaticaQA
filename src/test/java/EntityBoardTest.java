@@ -89,4 +89,5 @@ public class EntityBoardTest extends BaseTest {
         Assert.assertEquals(createdRecordDate.getText(), currentDataEuropean, "Created date issue");
         Assert.assertEquals(createdRecordUser1Demo.getText(), user1Demo, "Created user issue");
     }
+
 }
