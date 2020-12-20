@@ -1,5 +1,4 @@
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
@@ -58,7 +57,6 @@ public class EntityBoardTest extends BaseTest {
         ProjectUtils.click(driver, saveBtn);
 
         String recordTitleXpath = String.format("//div[contains(text(), '%s')]", text);
-        //By stringText = By.xpath(String.format("%s", recordTitleXpath));
         By newRecordStringPending = By.xpath(String.format("%s/../../../td[2]/a/div", recordTitleXpath));
         By newRecordInt = By.xpath(String.format("%s/../../../td[4]/a/div", recordTitleXpath));
         By newRecordDecimal = By.xpath(String.format("%s/../../../td[5]/a/div", recordTitleXpath));
@@ -66,7 +64,10 @@ public class EntityBoardTest extends BaseTest {
         By newRecordDateTime = By.xpath(String.format("%s/../../../td[7]/a/div", recordTitleXpath));
         By newRecordUser1Demo = By.xpath(String.format("%s/../../../td[9]", recordTitleXpath));
 
-        WebElement createdRecordText =  driver.findElement(By.xpath(String.format("//div[contains(text(), '%s')]", text)));
+        By createdRecordText = By.xpath(recordTitleXpath);
+        WebElement newCreatedRecordText = driver.findElement(createdRecordText);
+
+
         WebElement createdRecordStringPending = driver.findElement(newRecordStringPending);
         WebElement createdRecordInt = driver.findElement(newRecordInt);
         WebElement createdRecordDecimal = driver.findElement(newRecordDecimal);
@@ -74,7 +75,7 @@ public class EntityBoardTest extends BaseTest {
         WebElement createdRecordDateTime = driver.findElement(newRecordDateTime);
         WebElement createdRecordUser1Demo = driver.findElement(newRecordUser1Demo);
 
-        Assert.assertEquals(createdRecordText.getText(), text, "Created record text issue");
+        Assert.assertEquals(newCreatedRecordText.getText(), text, "Created record text issue");
         Assert.assertEquals(createdRecordStringPending.getText(), pending, "Created record Pending issue");
         Assert.assertEquals(createdRecordInt.getText(), Integer.toString(number), "Created record number issue");
         Assert.assertEquals(createdRecordDecimal.getText(), Double.toString(decimal), "Created record decimal issue");
@@ -91,9 +92,5 @@ public class EntityBoardTest extends BaseTest {
         WebElement deleteButton = driver.findElement(By.xpath(String.format("%s/../../..//a[contains(@href, 'delete')]", recordTitleXpath)));
         driver.findElement(recordMenuButton).click();
         ProjectUtils.click(driver, deleteButton);
-    }
-
-    private WebDriverWait getWait(int timeoutSecond) {
-        return new WebDriverWait(getDriver(), timeoutSecond);
     }
 }
