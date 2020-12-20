@@ -19,14 +19,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public abstract class  BaseTest {
 
     public static final String HUB_URL = "http://localhost:4444/wd/hub";
-
-    private static final Logger logger = Logger.getLogger("BaseLogger");
 
     private static boolean remoteWebDriver = false;
     static {
@@ -83,6 +79,7 @@ public abstract class  BaseTest {
     protected void beforeClass() {
         profileType = TestUtils.getProfileType(this, ProfileType.DEFAULT);
         runType = TestUtils.getRunType(this);
+
         if (runType == RunType.Multiple) {
             driver = createBrowser();
             startTest(driver, profileType);
@@ -94,7 +91,7 @@ public abstract class  BaseTest {
         if (runType == RunType.Single) {
             driver = createBrowser();
             startTest(driver, TestUtils.getProfileType(method, profileType));
-        } else if (!driver.getCurrentUrl().startsWith(profileType.getUrl())) {
+        } else {
             driver.get(profileType.getUrl());
         }
     }
@@ -106,8 +103,8 @@ public abstract class  BaseTest {
         }
 
         long executionTime = (tr.getEndMillis() - tr.getStartMillis()) / 1000;
-        log(String.format("\u001B[33m%s.%s() Execution time: %ds\u001B[0m",
-            getClass(), method.getName(), executionTime));
+        LoggerUtils.logGreen(String.format("%s.%s() Execution time: %ds",
+            this.getClass().getName(), method.getName(), executionTime));
     }
 
     @AfterClass
@@ -119,9 +116,5 @@ public abstract class  BaseTest {
 
     protected WebDriver getDriver() {
         return driver;
-    }
-
-    protected void log(String message) {
-        logger.log(Level.INFO, message);
     }
 }
