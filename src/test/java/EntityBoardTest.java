@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class EntityBoardTest extends BaseTest {
 
-    @Test(invocationCount = 15)
+    @Test
     public void inputTest() {
 
         Calendar calendar = Calendar.getInstance();
