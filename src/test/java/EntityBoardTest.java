@@ -43,6 +43,7 @@ public class EntityBoardTest extends BaseTest {
 
         WebElement textPlaceholder = driver.findElement(By.xpath("//textarea[@name='entity_form_data[text]']"));
         textPlaceholder.sendKeys(text);
+        wait.until(ExpectedConditions.attributeContains(textPlaceholder, "value", text));
 
         WebElement intPlaceholder = driver.findElement(By.id("int"));
         intPlaceholder.sendKeys(String.valueOf(number));
