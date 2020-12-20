@@ -48,7 +48,7 @@ public class EntityBoardTest extends BaseTest {
 
         WebElement intPlaceholder = driver.findElement(By.xpath("//input[@name='entity_form_data[int]']"));
         intPlaceholder.sendKeys(String.valueOf(number));
-        wait.until(ExpectedConditions.attributeContains(intPlaceholder, "value", "12"));
+        wait.until(ExpectedConditions.attributeContains(intPlaceholder, "value", String.valueOf(number)));
 
         WebElement decimalPlaceholder = driver.findElement(By.id("decimal"));
         decimalPlaceholder.sendKeys(String.valueOf(decimal));
