@@ -144,7 +144,6 @@ public abstract class  BaseTest {
     @AfterSuite
     protected void afterSuite() {
         ScreenshotUtils.uploadScreenshotsDir(screenshotDirectoryName);
-        ScreenshotUtils.deleteScreenshotsDir(screenshotDirectoryName);
     }
 
     protected WebDriver getDriver() {
