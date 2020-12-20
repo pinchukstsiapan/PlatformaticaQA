@@ -1,18 +1,15 @@
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.UUID;
 
 public class EntityBoardTest extends BaseTest {
 
-    @Ignore
     @Test
     public void inputTest() {
 
@@ -26,7 +23,6 @@ public class EntityBoardTest extends BaseTest {
         final String user1Demo = "User 1 Demo";
 
         WebDriver driver = getDriver();
-        ProjectUtils.loginProcedure(driver);
 
         WebElement tabBoard = driver.findElement(By.xpath("//p[contains(text(),'Board')]"));
         ProjectUtils.click(driver, tabBoard);
@@ -62,7 +58,7 @@ public class EntityBoardTest extends BaseTest {
         ProjectUtils.click(driver, saveBtn);
 
         String recordTitleXpath = String.format("//div[contains(text(), '%s')]", text);
-        By stringText = By.xpath(String.format("%s", recordTitleXpath));
+        //By stringText = By.xpath(String.format("%s", recordTitleXpath));
         By newRecordStringPending = By.xpath(String.format("%s/../../../td[2]/a/div", recordTitleXpath));
         By newRecordInt = By.xpath(String.format("%s/../../../td[4]/a/div", recordTitleXpath));
         By newRecordDecimal = By.xpath(String.format("%s/../../../td[5]/a/div", recordTitleXpath));
@@ -70,7 +66,7 @@ public class EntityBoardTest extends BaseTest {
         By newRecordDateTime = By.xpath(String.format("%s/../../../td[7]/a/div", recordTitleXpath));
         By newRecordUser1Demo = By.xpath(String.format("%s/../../../td[9]", recordTitleXpath));
 
-        WebElement createdRecordText = driver.findElement(stringText);
+        WebElement createdRecordText =  driver.findElement(By.xpath(String.format("//div[contains(text(), '%s')]", text)));
         WebElement createdRecordStringPending = driver.findElement(newRecordStringPending);
         WebElement createdRecordInt = driver.findElement(newRecordInt);
         WebElement createdRecordDecimal = driver.findElement(newRecordDecimal);
