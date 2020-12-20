@@ -63,13 +63,16 @@ public abstract class ScreenshotUtils {
         Path dirFullPath = Paths.get(fullPath);
         try {
             Files.deleteIfExists(dirFullPath);
-        } catch (IOException ioExceptionObj) {
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            ioExceptionObj.printStackTrace(pw);
-            String sStackTrace = sw.toString(); // stack trace as a string
-            LoggerUtils.logRed(String.format("ERROR: while deleting directory %s\n%s", fullPath, sw.toString() ));
+        } catch (IOException ioException) {
+            LoggerUtils.logRed(String.format("ERROR: unable to delete directory %s\n%s", fullPath, getStackTrace(ioException)));
         }
+    }
+
+    private static String getStackTrace(Exception ex) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        ex.printStackTrace(pw);
+        return sw.toString();
     }
 
     /** upload directory with name fullPath to Google Drive*/
