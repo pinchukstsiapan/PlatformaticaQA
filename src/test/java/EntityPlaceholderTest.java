@@ -223,7 +223,7 @@ public class EntityPlaceholderTest extends BaseTest {
         List<WebElement> listOfElements = driver.findElements(By.xpath("//tbody/tr/.."));
         Assert.assertEquals(listOfElements.size(), 0);
 
-        WebElement recycleButton = driver.findElement(By.xpath("//i[contains(text(),'delete_outline')]/.."));//
+        WebElement recycleButton = driver.findElement(By.xpath("//i[contains(text(),'delete_outline')]/.."));
         recycleButton.click();
 
         WebElement deletedField = driver.findElement(By.xpath("//b[contains(text(),'" + id + "')]"));
