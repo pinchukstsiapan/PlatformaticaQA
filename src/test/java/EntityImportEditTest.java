@@ -1,3 +1,4 @@
+import org.testng.annotations.Ignore;
 import runner.BaseTest;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -15,15 +16,11 @@ public class EntityImportEditTest extends BaseTest {
     final String text = "Text new Added";
     final int integer = 123;
     final double decimal = 23.4;
-    final String date = "14122020";
-    final String dateTime = "14/19/2020 12:33:05";
 
     final String titleEdit = "String new Added Edit";
     final String textEdit = "Text new Added Edit";
     final int integerEdit = 1234;
     final double decimalEdit = 33.4;
-    final String dateEdit = "14123020";
-    final String dateTimeEdit = "14/19/2020 12:33:05";
 
     final String viewValue = "view";
     final String editValue = "edit";
@@ -35,12 +32,6 @@ public class EntityImportEditTest extends BaseTest {
     final String filteredImport3 = "Filtered Import3";
 
     final String filteredImportResult = "This is a custom TEXT";
-
-    private void saveButton(WebDriver driver, WebElement element) {
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].scrollIntoView();", element);
-        element.click();
-    }
 
     private void clickImportValues(WebDriver driver) {
         JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -88,8 +79,8 @@ public class EntityImportEditTest extends BaseTest {
         ProjectUtils.click(driver, save);
     }
 
-    public void userEdit(WebDriver driver) {
-        WebDriverWait wait = new WebDriverWait(driver, 4);
+    public void userEdit(WebDriver driver) throws InterruptedException {
+        WebDriverWait wait = new WebDriverWait(driver, 3);
 
         WebElement stringElement = driver.findElement(By.id("string"));
         wait.until(ExpectedConditions.elementToBeClickable(stringElement));
@@ -105,10 +96,10 @@ public class EntityImportEditTest extends BaseTest {
         integerElement.sendKeys(String.valueOf(integerEdit));
 
         WebElement decimalElement = driver.findElement(By.id("decimal"));
-        wait.until(ExpectedConditions.elementToBeClickable(decimalElement));
         decimalElement.clear();
         decimalElement.sendKeys(String.valueOf(decimalEdit));
 
+        Thread.sleep(3000);
         WebElement save = driver.findElement(By.id("pa-entity-form-save-btn"));
         ProjectUtils.click(driver, save);
     }
@@ -124,12 +115,12 @@ public class EntityImportEditTest extends BaseTest {
     }
 
     @Test
-    public void importEditManually() {
+    public void importEditManually() throws InterruptedException {
 
         WebDriver driver = getDriver();
         ProjectUtils.reset(driver);
         clickImport(driver);
-        WebDriverWait wait = new WebDriverWait(driver, 4);
+        WebDriverWait wait = new WebDriverWait(driver, 3);
         userCreate(driver);
 
         WebElement result = driver.findElement(By.xpath("//div[contains(text(),'" + title + "')]"));
@@ -146,6 +137,76 @@ public class EntityImportEditTest extends BaseTest {
         WebElement resultEdit = driver.findElement(By.xpath("//div[contains(text(),'" + titleEdit + "')]"));
         Assert.assertEquals(resultEdit.getText(), titleEdit);
 
+        userDelete(driver);
+    }
+
+    @Test
+    public void importEditDoImport() throws InterruptedException {
+        WebDriver driver = getDriver();
+        clickImportValues(driver);
+        userCreate(driver);
+        clickImport(driver);
+        clickImportTag(driver);
+        WebElement doImportBtn = driver.findElement(By.xpath("//input[@value='" + doImport + "']"));
+        doImportBtn.click();
+
+        WebDriverWait wait = new WebDriverWait(driver, 3);
+        WebElement greenImport = driver.findElement(By.xpath("//i[contains(text(),'done_all')]"));
+        wait.until(ExpectedConditions.elementToBeClickable(greenImport));
+        greenImport.click();
+
+        Thread.sleep(2000);
+        userEdit(driver);
+        WebElement resultEdit = driver.findElement(By.xpath("//div[contains(text() , '" + titleEdit + "')]"));
+        Assert.assertEquals(resultEdit.getText(), titleEdit);
+
+        userDelete(driver);
+    }
+
+    @Test
+    public void importEditCustomImport() throws InterruptedException {
+        WebDriver driver = getDriver();
+        clickImportValues(driver);
+        userCreate(driver);
+        clickImport(driver);
+        clickImportTag(driver);
+        WebElement doImportBtn = driver.findElement(By.xpath("//input[@value='" + customImport + "']"));
+        doImportBtn.click();
+
+        WebDriverWait wait = new WebDriverWait(driver, 3);
+        WebElement greenImport = driver.findElement(By.xpath("//i[contains(text(),'done_all')]"));
+        wait.until(ExpectedConditions.elementToBeClickable(greenImport));
+        greenImport.click();
+
+        Thread.sleep(2000);
+        userEdit(driver);
+        WebElement resultEdit = driver.findElement(By.xpath("//div[contains(text() , '" + titleEdit + "')]"));
+        Assert.assertEquals(resultEdit.getText(), titleEdit);
+
+        userDelete(driver);
+    }
+
+    @Ignore
+    @Test
+    public void importEditFilteredImport3() throws InterruptedException {
+        WebDriver driver = getDriver();
+        clickImportValues(driver);
+        userCreate(driver);
+        clickImport(driver);
+        clickImportTag(driver);
+        WebElement doImportBtn = driver.findElement(By.xpath("//input[@value='" + filteredImport3 + "']"));
+        doImportBtn.click();
+
+        WebDriverWait wait = new WebDriverWait(driver, 3);
+        WebElement greenImport = driver.findElement(By.xpath("//i[contains(text(),'done_all')]"));
+        wait.until(ExpectedConditions.elementToBeClickable(greenImport));
+        greenImport.click();
+
+        userEdit(driver);
+        WebElement resultEdit = driver.findElement(By.xpath("//div[contains(text() , '" + filteredImportResult + "')]"));
+        Assert.assertEquals(resultEdit.getText(), filteredImportResult);
+
+        Thread.sleep(2000);
         userDelete(driver);
     }
 
