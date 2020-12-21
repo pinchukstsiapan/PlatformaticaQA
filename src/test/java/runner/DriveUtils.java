@@ -180,6 +180,12 @@ public class DriveUtils {
         return file.getId();
     }
 
+    /** Login and then upload the whole directory to drive */
+    public static void uploadWholeFolder(String directoryPath) {
+        Drive drive = DriveUtils.login();
+        uploadWholeFolder(drive, directoryPath);
+    }
+
     public static void uploadWholeFolder(Drive drive, String directoryPath) {
         java.io.File dir = new java.io.File(directoryPath);
 
@@ -256,5 +262,38 @@ public class DriveUtils {
         PrintWriter pw = new PrintWriter(sw);
         ex.printStackTrace(pw);
         return sw.toString();
+    }
+
+    /* ---------------------------------------------------------------------------------------------------------------*/
+    public static void main(String[] args) {
+        Drive drive = login();
+
+        // CREATE Base Folder and share it with PlatformaticaQA@gmail.com
+        // String folderID = createFolder(drive, null, "ScreenShots");
+        // System.out.println("Base Folder ID: " + folderID);
+        // setPermissions(drive, baseFolderID);
+
+//        String newFolderID = "1jnbdA5u3Cv4hxxafLXPUN2L1VqDSfHrh";
+//        String newFolderID = createFolder(drive, baseFolderID,"2020-12-19-14-15-77093ec5-4ecf-4e88-ac95-5878a48495c5");
+//        System.out.println("new folder ID: " + newFolderID);
+
+        String path =  "c:\\Users\\DmitryErmolaev\\AppData\\Local\\Temp\\2020-12-20-18-40-b028dec4-20a5-4703-bb4d-d29fd65a50e5";
+        uploadWholeFolder(drive, path);
+
+        deleteFile(drive, "14x75IGgGakobeCaXQPTbvOEXgemSXvcB");
+
+        List<File> files =  getFilesListInFolder(drive, DriveUtils.baseFolderID);
+        printFilesInFolder(files);
+
+//        for (File file : files) {
+//            if ( !file.getId().equals(baseFolderID) ) {
+//                deleteFile(drive, file);
+//            }
+//        }
+//        deleteFolder(drive, newFolderID);
+//
+//        System.out.println("---------------------------------------------------------------------------------------");
+//        files =  getFilesListInFolder(drive, DriveUtils.baseFolderID);
+//        printFilesInFolder(files);
     }
 }
