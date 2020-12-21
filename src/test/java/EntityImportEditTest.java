@@ -114,6 +114,7 @@ public class EntityImportEditTest extends BaseTest {
         delete.click();
     }
 
+    @Ignore
     @Test
     public void importEditManually() throws InterruptedException {
 
