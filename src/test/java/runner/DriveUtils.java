@@ -145,27 +145,4 @@ public class DriveUtils {
         }
     }
 
-    /* ---------------------------------------------------------------------------------------------------------------*/
-    public static void main(String[] args) {
-        Drive drive = login();
-
-        // String newID = createFolder(drive, baseFolderID,"2020-12-19-14-15-77093ec5-4ecf-4e88-ac95-5878a48495c5");
-        // System.out.println("new folder ID: " + newID);
-
-        deleteFolder(drive, "1gKVBWUafL4BmK49DpzqznQlPhmoMaD8h");
-
-        List<File> files = getFilesList(drive, "nextPageToken, files(id, name, mimeType, permissions)", "*");
-
-        // show files
-        if (files == null || files.isEmpty()) {
-            System.out.println("No files found.");
-        } else {
-            System.out.println("\nFiles:");
-            for (File file : files) {
-                System.out.printf("%s [%s]\nmime type: %s\npermissions: %s\n\n", file.getName(),
-                        file.getId(), file.getMimeType(), file.getPermissions());
-
-            }
-        }
-    }
 }
