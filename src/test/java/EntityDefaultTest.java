@@ -567,9 +567,6 @@ public class EntityDefaultTest extends BaseTest {
     @Test
     public void defaultChange() throws InterruptedException {
         WebDriver driver = getDriver();
-        driver.get("https://ref.eteam.work");
-        ProjectUtils.login(driver, "user132@tester.com", "mhBHKTYWEs");
-
 
         WebElement entities = driver.findElement(By.xpath("//p[contains(text(),'Entities')]"));
         entities.click();
