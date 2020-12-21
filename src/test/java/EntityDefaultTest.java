@@ -68,6 +68,7 @@ public class EntityDefaultTest extends BaseTest {
         ProjectUtils.click(driver, saveBtn);
     }
 
+    @Ignore
     @ Test
     public void editRecord() {
 
@@ -165,7 +166,6 @@ public class EntityDefaultTest extends BaseTest {
         //Code to delete default using title value in this.title
     }
 
-    @Ignore
     @Test
     public void checkDefaultValueAndUpdateThem() throws InterruptedException {
 
@@ -203,8 +203,10 @@ public class EntityDefaultTest extends BaseTest {
 
         driver.findElement(By.xpath("//a[@href='#menu-list-parent']")).click();
         driver.findElement(By.xpath("//i/following-sibling::p[contains (text(), 'Default')]")).click();
+
         WebElement createFolder = driver.findElement(By.xpath("//i[.='create_new_folder']/ancestor::a"));
         ProjectUtils.click(driver, createFolder);
+
         WebElement saveBtn = driver.findElement(By.xpath("//button[.='Save']"));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", saveBtn);
         Assert.assertTrue(saveBtn.isDisplayed());
