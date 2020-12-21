@@ -12,16 +12,16 @@ import org.testng.annotations.Test;
 import org.testng.Assert;
 import runner.BaseTest;
 import runner.ProjectUtils;
+import runner.type.Run;
+import runner.type.RunType;
 
+@Run(run = RunType.Multiple)
 public class EntityFieldsTest extends BaseTest {
 
     @Test
     public void newRecord() {
 
         WebDriver driver = getDriver();
-        driver.get("https://ref.eteam.work");
-
-        ProjectUtils.login(driver, "user1@tester.com", "ah1QNmgkEO");
 
         WebElement tab = driver.findElement(By.xpath("//li[@id='pa-menu-item-45']/a"));
         tab.click();
@@ -134,9 +134,6 @@ public class EntityFieldsTest extends BaseTest {
         final double newDecimal = 101.25;
 
         WebDriver driver = getDriver();
-        driver.get("https://ref.eteam.work");
-
-        ProjectUtils.login(driver, "user1@tester.com", "ah1QNmgkEO");
 
         WebElement fieldsMenu = driver.findElement(By.xpath("//li[@id='pa-menu-item-45']/a"));
         fieldsMenu.click();
@@ -201,9 +198,6 @@ public class EntityFieldsTest extends BaseTest {
         final double newDecimal = 101.25;
 
         WebDriver driver = getDriver();
-        driver.get("https://ref.eteam.work");
-
-        ProjectUtils.login(driver, "user1@tester.com", "ah1QNmgkEO");
 
         WebElement fieldsMenu = driver.findElement(By.xpath("//li[@id='pa-menu-item-45']/a"));
         fieldsMenu.click();
@@ -244,9 +238,6 @@ public class EntityFieldsTest extends BaseTest {
         final String invalidEntry = "test";
 
         WebDriver driver = getDriver();
-        driver.get("https://ref.eteam.work");
-
-        ProjectUtils.login(driver, "user1@tester.com", "ah1QNmgkEO");
 
         WebElement fieldsMenu = driver.findElement(By.xpath("//li[@id='pa-menu-item-45']/a"));
         fieldsMenu.click();
@@ -284,9 +275,46 @@ public class EntityFieldsTest extends BaseTest {
         Assert.assertTrue(error.isDisplayed());
     }
 
-    @Ignore
     @Test
-    public void fieldsEditTest() {
+    public void fieldInputNewRecordTest() {
+
+        final String title = "KyKy";
+        final String comments = "Good";
+        final int number = 555;
+        final double decimal = 555.33;
+
+        WebDriver driver = getDriver();
+
+        WebElement sideBarField = driver.findElement(By.xpath("//body/div[1]/div[1]/div[2]/ul[1]/li[4]/a[1]/p[1]"));
+        sideBarField.click();
+
+        WebElement buttonField = driver.findElement(By.xpath("//i[contains(text(),'create_new_folder')]"));
+        buttonField.click();
+
+        WebElement titleInput = driver.findElement(By.xpath("//input[@id='title']"));
+        titleInput.clear();
+        titleInput.sendKeys(title);
+
+        WebElement commentsInput = driver.findElement(By.xpath("//textarea[@id='comments']"));
+        commentsInput.clear();
+        commentsInput.sendKeys(comments);
+
+        WebElement numberInput = driver.findElement(By.xpath("//input[@id='int']"));
+        numberInput.clear();
+        numberInput.sendKeys(String.valueOf(number));
+
+        WebElement decimalInput = driver.findElement(By.xpath("//input[@id='decimal']"));
+        decimalInput.clear();
+        decimalInput.sendKeys(String.valueOf(decimal));
+
+        WebElement saveButton = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
+        ProjectUtils.click(driver, saveButton);
+
+        Assert.assertEquals(driver.getCurrentUrl(),"https://ref.eteam.work/index.php?action=action_list&entity_id=5&filter");
+    }
+
+    @Test(dependsOnMethods = "fieldInputNewRecordTest")
+    public void fieldsEditTest() throws InterruptedException {
 
         final String newTitle = "Ky";
         final String newComments = "Goooood";
@@ -294,18 +322,21 @@ public class EntityFieldsTest extends BaseTest {
         final double newDecimal = 222.33;
 
         WebDriver driver = getDriver();
-        ProjectUtils.loginProcedure(driver);
 
         WebElement sideBarField = driver.findElement(By.xpath("//body/div[1]/div[1]/div[2]/ul[1]/li[4]/a[1]/p[1]"));
         sideBarField.click();
 
-        WebElement createdRecordSandwich = driver.findElement(By.xpath("//tbody/tr[1]/td[11]/div[1]/button[1]"));
-        createdRecordSandwich.click();
+        WebElement createdRecordSandwich = getWait(5)
+                .until(ExpectedConditions.elementToBeClickable(By.xpath("//table//button[@aria-expanded='false']")));
+        ProjectUtils.click(driver, createdRecordSandwich);
+        Thread.sleep(500);
 
-        WebElement editField = driver.findElement(By.xpath("//tbody/tr[1]/td[11]/div[1]/ul[1]/li[2]/a[1]"));
+        WebElement editField = getWait(5)
+                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[@aria-expanded='true']/..//a[text() = 'edit']")));
         editField.click();
 
-        WebElement titleField = driver.findElement(By.xpath("//input[@id='title']"));
+        WebElement titleField = getWait(5)
+                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='title']")));
         titleField.clear();
         titleField.sendKeys(newTitle);
 
