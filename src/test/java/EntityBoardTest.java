@@ -11,8 +11,16 @@ import java.util.UUID;
 
 public class EntityBoardTest extends BaseTest {
 
-    @Test
-    public void inputTest() {
+    private void sendKeys(WebElement element, String keys) throws InterruptedException {
+        for (int i =0; i< keys.length(); i++)
+        {
+            element.sendKeys(keys.substring(i, i+1));
+            Thread.sleep(100);
+        }
+    }
+
+    @Test(invocationCount = 35)
+    public void inputTest() throws InterruptedException {
 
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -43,7 +51,8 @@ public class EntityBoardTest extends BaseTest {
         stringPending.click();
 
         WebElement textPlaceholder = driver.findElement(By.xpath("//textarea[@name='entity_form_data[text]']"));
-        textPlaceholder.sendKeys(text.trim());
+        //textPlaceholder.sendKeys(text.trim());
+        sendKeys(textPlaceholder, text);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//textarea[@name='entity_form_data[text]']")));
         wait.until(ExpectedConditions.attributeContains(textPlaceholder, "value", text));
 
