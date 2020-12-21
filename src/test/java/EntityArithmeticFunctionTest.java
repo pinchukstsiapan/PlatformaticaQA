@@ -2,8 +2,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
+import runner.ProjectUtils;
 
 import java.util.List;
 
@@ -135,6 +137,7 @@ public class EntityArithmeticFunctionTest extends BaseTest {
         clickSaveButton(driver);
     }
 
+    @Ignore
     @Test
     public void tc002 () {
 
@@ -149,6 +152,7 @@ public class EntityArithmeticFunctionTest extends BaseTest {
         valuesAssertViewMode(driver, f1, f2);
     }
 
+    @Ignore
     @Test
     public void tc003() throws InterruptedException {
 
@@ -169,6 +173,7 @@ public class EntityArithmeticFunctionTest extends BaseTest {
         clickSaveButton(driver);
     }
 
+    @Ignore
     @Test
     public void tc004() {
 
@@ -183,6 +188,7 @@ public class EntityArithmeticFunctionTest extends BaseTest {
         valuesAssertViewMode(driver, f1, f2);
     }
 
+    @Ignore
     @Test
     public void tc005() {
 
@@ -197,6 +203,7 @@ public class EntityArithmeticFunctionTest extends BaseTest {
         valuesAssertEditMode(driver, f1, f2);
     }
 
+    @Ignore
     @Test
     public void tc006() {
 
@@ -216,6 +223,7 @@ public class EntityArithmeticFunctionTest extends BaseTest {
         Assert.assertEquals(error.getText(), "Error saving entity");
     }
 
+    @Ignore
     @Test(priority=2)
     public void recordDelete(){
 

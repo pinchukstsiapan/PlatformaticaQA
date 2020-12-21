@@ -1,6 +1,12 @@
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.UUID;
+
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import org.testng.Assert;
@@ -9,35 +15,27 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import runner.ProjectUtils;
+import runner.type.Run;
+import runner.type.RunType;
 
+@Run(run = RunType.Single)
 public class EntityDefaultTest extends BaseTest {
 
-    private WebDriver driver;
     private final DefaultValues defaultValues = new DefaultValues();
     private DefaultValues currentValues = new DefaultValues(
                                  UUID.randomUUID().toString(),
                                 "Some random text as Edited Text Value",
                                 (int) Math.random()*100,
-                                Math.random()*200,
-                                "12/23/2021",
-                                "12/23/2021 12:34:56",
-                                "User X Demo",
+                            (int) (Math.random()*20000) / 100.0,
+                                "23/12/2021",
+                                "23/12/2021 12:34:56",
+                                "user100@tester.com",
                                 9);
 
-    /**
-     * initialize driver field and login
-     */
-    private void initTest() {
-        driver = getDriver();
-        driver.get("https://ref.eteam.work");
 
-        ProjectUtils.login(driver, "user1@tester.com", "ah1QNmgkEO");
-    }
-
-    @Test
     /** create and test new default record and save Title value in this.title */
-    public void createRecord() {
-        initTest();
+    public void createRecord(WebDriver driver) {
 
         driver.findElement(By.xpath("//a[@href='#menu-list-parent']")).click();
         driver.findElement(By.xpath("//i/following-sibling::p[contains (text(), 'Default')]")).click();
@@ -47,15 +45,37 @@ public class EntityDefaultTest extends BaseTest {
         WebElement stringLineDefaultData = driver.findElement(By.xpath("//input[@id='string']"));
         Assert.assertEquals(stringLineDefaultData.getAttribute("value"), defaultValues.fieldString);
 
+        WebElement textLineDefaultData = driver.findElement(By.xpath("//textarea[@id='text']"));
+        Assert.assertEquals(textLineDefaultData.getText(),(defaultValues.fieldText));
+
+        WebElement intLineDefaultData = driver.findElement(By.xpath("//input[@id='int']"));
+        Assert.assertEquals(intLineDefaultData.getAttribute("value"),(String.valueOf(defaultValues.fieldInt)));
+
+        WebElement decimalLineDefaultData = driver.findElement(By.xpath("//input[@id='decimal']"));
+        Assert.assertEquals(decimalLineDefaultData.getAttribute("value"),(String.valueOf(defaultValues.fieldDecimal)));
+
+        WebElement dateLineDefaultData = driver.findElement(By.xpath("//input[@id='date']"));
+        Assert.assertEquals(dateLineDefaultData.getAttribute("value"),(defaultValues.fieldDate));
+
+        WebElement dateTimeLineDefaultData = driver.findElement(By.xpath("//input[@id='datetime']"));
+        Assert.assertEquals(dateTimeLineDefaultData.getAttribute("value"),(defaultValues.fieldDateTime));
+
+        WebElement user = driver.findElement(By.xpath("//div[@class='filter-option-inner']/div[.='User 1 Demo']"));
+        Assert.assertEquals(user.getText(),(defaultValues.fieldUser.toUpperCase()));
+
         //save new record
         WebElement saveBtn = driver.findElement(By.xpath("//button[.='Save']"));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", saveBtn);
         ProjectUtils.click(driver, saveBtn);
     }
 
-        @Test(dependsOnMethods = "createRecord")
-    public void editRecord() throws InterruptedException {
-        initTest();
+    @ Test
+    public void editRecord() {
+
+        WebDriver driver = getDriver();
+
+        createRecord(driver);
+
+        driver.get("https://ref.eteam.work/");
 
         WebElement tab = driver.findElement(By.xpath("//p[contains(text(), 'Default')]"));
         tab.click();
@@ -79,18 +99,31 @@ public class EntityDefaultTest extends BaseTest {
         fieldInt.clear();
         fieldInt.sendKeys(String.valueOf(currentValues.fieldInt));
 
-        ClickSaveButton(driver);
+        WebElement fieldDecimal = driver.findElement(By.xpath("//input[@id='decimal']"));
+        fieldDecimal.clear();
+        fieldDecimal.sendKeys(String.valueOf(currentValues.fieldDecimal));
+
+        WebElement fieldDate = driver.findElement(By.xpath("//input[@id='date']"));
+        fieldDate.clear();
+        fieldDate.sendKeys(String.valueOf(currentValues.fieldDate));
+
+        WebElement fieldDateTime = driver.findElement(By.xpath("//input[@id='datetime']"));
+        fieldDateTime.clear();
+        fieldDateTime.sendKeys(String.valueOf(currentValues.fieldDateTime));
+
+        changeUser(driver);
+
+        WebElement saveButton = driver.findElement(By.xpath("//button[text() = 'Save']"));
+        ProjectUtils.click(driver, saveButton);
 
         WebElement row = searchCorrectRow(driver, currentValues.fieldString);
         validateRowFields(row);
-
     }
 
     private WebElement searchCorrectRow(WebDriver driver, String searchValue) {
 
         List<WebElement> rows = driver.findElements(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr"));
 
-        boolean isFailed = true;
         for (WebElement row: rows) {
             WebElement field = row.findElements(By.xpath("//td")).get(1);
             String valueString = field.getText();
@@ -107,20 +140,27 @@ public class EntityDefaultTest extends BaseTest {
 
         Assert.assertEquals(row.findElements(By.cssSelector("td")).get(2).getText(), currentValues.fieldText);
         Assert.assertEquals(row.findElements(By.cssSelector("td")).get(3).getText(), String.valueOf(currentValues.fieldInt));
+        Assert.assertEquals(row.findElements(By.cssSelector("td")).get(4).getText(), String.valueOf(currentValues.fieldDecimal));
+        Assert.assertEquals(row.findElements(By.cssSelector("td")).get(5).getText(), String.valueOf(currentValues.fieldDate));
+        Assert.assertEquals(row.findElements(By.cssSelector("td")).get(6).getText(), String.valueOf(currentValues.fieldDateTime));
+        Assert.assertEquals(row.findElements(By.cssSelector("td")).get(9).getText().toLowerCase(), String.valueOf(currentValues.fieldUser));
     }
 
+    private void changeUser(WebDriver driver) {
 
-    /** scroll down to the Save button and click on it */
-    private void ClickSaveButton(WebDriver driver) throws InterruptedException {
-        WebElement saveButton = driver.findElement(By.xpath("//button[text() = 'Save']"));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", saveButton);
-        ProjectUtils.click(driver, saveButton);
+        WebElement fieldUser = driver.findElement(By.xpath("//div[text() = 'User 1 Demo']"));
+        ProjectUtils.click(driver, fieldUser);
+
+        WebElement scrollDownMenuField = driver.findElement(By.xpath("//span[text() = 'user100@tester.com']"));
+        ProjectUtils.click(driver, scrollDownMenuField);
+
+        fieldUser = driver.findElement(By.xpath("//button[@data-id = 'user']/div/div/div"));
+        Assert.assertEquals(fieldUser.getText().toLowerCase(), currentValues.fieldUser);
     }
 
     @Ignore
     @Test(dependsOnMethods = "editRecord")
     public void deleteRecord() {
-        initTest();
 
         //Code to delete default using title value in this.title
     }
@@ -159,19 +199,12 @@ public class EntityDefaultTest extends BaseTest {
         final String dateTimeEmbedLineNew = "12/12/2020 00:22:22";
         final String userEmbedDSelected = "User 4";
 
-        final String login = "user1@tester.com";
-        final String password = "ah1QNmgkEO";
-        final String URL = "https://ref.eteam.work";
-
         WebDriver driver = getDriver();
-        driver.get(URL);
-
-        ProjectUtils.login(driver, login, password);
 
         driver.findElement(By.xpath("//a[@href='#menu-list-parent']")).click();
         driver.findElement(By.xpath("//i/following-sibling::p[contains (text(), 'Default')]")).click();
         WebElement createFolder = driver.findElement(By.xpath("//i[.='create_new_folder']/ancestor::a"));
-        ProjectUtils.click(driver,createFolder);
+        ProjectUtils.click(driver, createFolder);
         WebElement saveBtn = driver.findElement(By.xpath("//button[.='Save']"));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", saveBtn);
         Assert.assertTrue(saveBtn.isDisplayed());
@@ -217,13 +250,12 @@ public class EntityDefaultTest extends BaseTest {
         WebElement dropdownUsers = driver.findElement(By.xpath("//button[@data-id='user']"));
         dropdownUsers.click();
 
-        Thread.sleep(1000);
+        Thread.sleep(700);
         WebElement listOfUsers = driver.findElement(By.xpath("//span[.='User 4']/ancestor::a"));
         listOfUsers.click();
 
-        Thread.sleep(500);
         WebElement greenPlus = driver.findElement(By.xpath("//button[@data-table_id='11']"));
-        ProjectUtils.click(driver,greenPlus);
+        ProjectUtils.click(driver, greenPlus);
 
         WebElement lineNumber = driver.findElement(By.xpath("//input[@id='t-undefined-r-1-_line_number']"));
         Assert.assertEquals(lineNumber.getAttribute("data-row"), "1");
@@ -272,18 +304,16 @@ public class EntityDefaultTest extends BaseTest {
         Select embedDUserSelect = new Select(driver.findElement(By.xpath("//select[@id='t-11-r-1-user']")));
         embedDUserSelect.selectByVisibleText(userEmbedDSelected);
 
-        ProjectUtils.click(driver,saveBtn);
+        ProjectUtils.click(driver, saveBtn);
 
         WebElement orderBtn = driver.findElement(By.xpath("//a[contains(string(), 'Order')]"));
         orderBtn.click();
 
         WebElement searchInput = driver.findElement(By.xpath("//input[@placeholder='Search']"));
         searchInput.sendKeys(stringLineNewText);
-        Thread.sleep(500);
 
         WebElement ourRecord = driver.findElement(By.xpath("//div[contains (text(), 'Updated String Value For Checking Purposes')]/ancestor::a"));
         ourRecord.click();
-        Thread.sleep(500);
 
         List<WebElement> listOfNewValues = driver.findElements(By.xpath("//span[@class='pa-view-field']"));
         Assert.assertEquals(listOfNewValues.get(0).getText(), stringLineNewText);
@@ -301,6 +331,237 @@ public class EntityDefaultTest extends BaseTest {
         Assert.assertEquals(embedDArrayOfNewValues.get(5).getText(), dateEmbedLineNew);
         Assert.assertEquals(embedDArrayOfNewValues.get(6).getText(), dateTimeEmbedLineNew);
         Assert.assertEquals(embedDArrayOfNewValues.get(9).getText(), userEmbedDSelected);
+
+
+        driver.navigate().back();
+        driver.navigate().back();
+
+        WebElement lastRecordDeleteBtn = null;
+
+        List<WebElement> deleteBtns = driver.findElements(By.xpath("//a[.='delete']"));
+
+        if (deleteBtns.size() == 1){
+            lastRecordDeleteBtn = deleteBtns.get(0);
+        } else {
+            lastRecordDeleteBtn = deleteBtns.get(deleteBtns.size() - 1);
+        }
+        ProjectUtils.click(driver, lastRecordDeleteBtn);
+    }
+
+    private void login(WebDriver driver){
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), 1);
+        driver.get("https://ref.eteam.work");
+        ProjectUtils.login(driver, "user200@tester.com", "l2zszAyRih");
+    }
+
+    private void accessToEntityDefaultScreen(WebDriver driver) {
+
+        WebElement tab = driver.findElement(By.xpath("//a[@href='#menu-list-parent']/i"));
+        tab.click();
+
+        WebElement entityOpenList= driver.findElement(By.xpath("//div[@id='menu-list-parent']"));
+        entityOpenList.click();
+
+        WebElement entityTab = driver.findElement(By.xpath("//a[@href='index.php?action=action_list&entity_id=7']"));
+
+        entityTab.click();
+    }
+
+    private void createDefaultEntity(WebDriver driver){
+
+        WebElement newRecord = driver.findElement(By.xpath("//i[text()='create_new_folder']"));
+        newRecord.click();
+    }
+
+    public void entityCreation() {
+
+        WebDriver driver = getDriver();
+        login(driver);
+        accessToEntityDefaultScreen(driver);
+        createDefaultEntity(driver);
+    }
+
+
+
+    public boolean isInt(String str){
+
+        try
+        {
+            Integer.parseInt(str);
+            return  true;
+        }
+        catch (NumberFormatException e)
+        {
+            return false;
+        }
+    }
+
+    private boolean isDouble(String str) {
+
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+
+    public boolean isValidDateFormat(String dateStr) {
+
+        DateFormat sdf = new SimpleDateFormat(dateStr);
+        sdf.setLenient(false);
+        try {
+            sdf.parse(dateStr);
+        } catch (ParseException e) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isTitleFound(String title) {
+
+        List<WebElement> titlesWe = getDriver().findElements(By.xpath("//tr/td[2]"));
+        for (WebElement we : titlesWe) {
+            if (we.getText().equals(title)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void clickOnLastElementInTable() {
+
+        List<WebElement> titlesWe = getDriver().findElements(By.xpath("//tr/td[2]"));
+        titlesWe.get(titlesWe.size()-1).click();
+    }
+
+    private void goToLastPage(WebDriver driver){
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), 1);
+        // boolean titleFound = false;
+        int rowsPerPage;
+        int numOfAllRecords = Integer.parseInt(wait.until(ExpectedConditions.visibilityOfElementLocated(By
+                .xpath("//span[@class='pagination-info']"))).getText().split(" ")[5]);
+        WebElement rowsPerPageWe = driver.findElement(By.cssSelector("span.page-size"));
+        if (rowsPerPageWe.isDisplayed()) {
+            rowsPerPage = Integer.parseInt(rowsPerPageWe.getText());
+        } else {
+            rowsPerPage = 26;
+        }
+        if (numOfAllRecords > rowsPerPage) {
+            boolean firstRound = true;
+            while (firstRound) {
+                if (getDriver().findElements(By.xpath("//a[@href='javascript:void(0)']")).size()<=3) {
+                    break;
+                }
+                List<WebElement> pagination = driver.findElements(By.cssSelector("a.page-link"));
+                pagination.get(pagination.size() -2).click();
+                WebElement paginationLastIndexWe = driver.findElements(By.cssSelector("a.page-link")).get(pagination.size() -2);
+                boolean paginationLastIndexActive =
+                        paginationLastIndexWe.getCssValue("color").equals("rgba(255, 255, 255, 1)");
+                if ( paginationLastIndexActive) {
+                    firstRound = false;
+                }
+            }
+        }
+
+        clickOnLastElementInTable();
+    }
+
+    @Ignore
+    @Test(enabled = true)
+    public void validateEntityDefaultValuesCreation() {
+
+        WebDriver driver = getDriver();
+        entityCreation();
+
+        Assert.assertEquals(driver.findElement(By.xpath("//div[@id='_field_container-string']//span//input")).getAttribute("value")
+                ,"DEFAULT STRING VALUE");
+
+        String attributeTextValueToCompare= driver.findElement(By.xpath("//div[@id='_field_container-text']//p//span")).getText();
+        Assert.assertEquals(attributeTextValueToCompare,"DEFAULT TEXT VALUE");
+
+        boolean isInt = isInt(driver.findElement(By.xpath("//div[@id='_field_container-int']//span//input")).getAttribute("value"));
+        Assert.assertTrue(isInt);
+
+        boolean isDouble = isDouble(driver.findElement(By.xpath("//div[@id='_field_container-int']//span//input")).getAttribute("value"));
+        Assert.assertTrue(isDouble);
+
+        boolean isValidDate = isValidDateFormat(driver.findElement(By.xpath("//div[@id='_field_container-date']//input")).getAttribute("value"));
+        Assert.assertTrue(isValidDate);
+
+        boolean isValidDateTime = isValidDateFormat(driver.findElement(By.xpath("//div[@id='_field_container-datetime']//input")).getAttribute("value"));
+        Assert.assertTrue(isValidDateTime);
+
+        String userName= driver.findElement(By.xpath("//button[@data-id='user']")).getAttribute("title").toUpperCase();
+        String userNameExpected= driver.findElement(By.xpath("//button[@data-id='user']//div//div//div[@class='filter-option-inner-inner']")).getText().toUpperCase();
+        Assert.assertEquals(userName,userNameExpected);
+
+        WebElement saveBtn = driver.findElement(By.xpath("//button[.='Save']"));
+
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", saveBtn);
+        Assert.assertTrue(saveBtn.isDisplayed());
+
+        driver.findElement(By.xpath("//table[@id='table-11']//button[@data-table_id='11']")).click();
+
+        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='table-11']//tbody//tr[2]//td[3]")).getText()
+                ,"Default String");
+
+        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='table-11']//tbody//tr[2]//td[4]")).getText()
+                ,"Default text");
+
+        Assert.assertTrue(isInt(driver.findElement(By.xpath("//table[@id='table-11']//tbody//tr[2]//td[5]")).getText()));
+
+        Assert.assertTrue(isDouble(driver.findElement(By.xpath("//table[@id='table-11']//tbody//tr[2]//td[6]")).getText()));
+
+        WebElement saveButton = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
+        ProjectUtils.click(driver, saveButton);
+    }
+
+    @Ignore
+    @Test(dependsOnMethods ="validateEntityDefaultValuesCreation")
+    public void validateEntityDefaultValuesRecord() {
+
+        WebDriver driver = getDriver();
+        login(driver);
+        accessToEntityDefaultScreen(driver);
+        goToLastPage(driver);
+
+        List<WebElement> objectValidation = driver.findElements(By.xpath("//span[@class='pa-view-field']"));
+
+        Assert.assertEquals((objectValidation.get(0).getText()),"DEFAULT STRING VALUE");
+
+        Assert.assertEquals((objectValidation.get(1).getText()),"DEFAULT TEXT VALUE");
+
+        boolean isInt = isInt(objectValidation.get(2).getText());
+        Assert.assertTrue(isInt);
+
+        boolean isDouble = isDouble(objectValidation.get(3).getText());
+        Assert.assertTrue(isDouble);
+
+        boolean isValidDate = isValidDateFormat(objectValidation.get(3).getText());
+        Assert.assertTrue(isValidDate);
+
+        boolean isValidDateTime = isValidDateFormat(objectValidation.get(5).getText());
+        Assert.assertTrue(isValidDateTime);
+
+        String userName= "USER 1 DEMO".toUpperCase();
+        String userNameExpected= driver.findElement(By.xpath("//label[text()='User']/following-sibling::p")).getText().toUpperCase();
+        Assert.assertEquals(userName,userNameExpected);
+
+        List<WebElement> allCells = driver.findElements(By.xpath("//table[@id='pa-all-entities-table']//tr//td"));
+
+        Assert.assertEquals(allCells.get(1).getText()
+                ,"Default String");
+
+        Assert.assertEquals(allCells.get(2).getText()
+                ,"Default text");
+
+        Assert.assertTrue(isInt(allCells.get(3).getText()));
+
+        Assert.assertTrue(isDouble(allCells.get(4).getText()));
     }
 
     @Test
@@ -372,7 +633,7 @@ public class EntityDefaultTest extends BaseTest {
     }
 }
 
- class DefaultValues {
+class DefaultValues {
     String fieldString;
     String fieldText;
     int fieldInt;
@@ -396,27 +657,27 @@ public class EntityDefaultTest extends BaseTest {
 
     /** setting arbitrary values */
     public DefaultValues(String fieldString, String fieldText, int fieldInt, double fieldDecimal, String fieldDate, String fieldDateTime, String fieldUser, int linesQty) {
-     this.fieldString = fieldString;
-     this.fieldText = fieldText;
-     this.fieldInt = fieldInt;
-     this.fieldDecimal = fieldDecimal;
-     this.fieldDate = fieldDate;
-     this.fieldDateTime = fieldDateTime;
-     this.fieldUser = fieldUser;
-     this.linesQty = linesQty;
+        this.fieldString = fieldString;
+        this.fieldText = fieldText;
+        this.fieldInt = fieldInt;
+        this.fieldDecimal = fieldDecimal;
+        this.fieldDate = fieldDate;
+        this.fieldDateTime = fieldDateTime;
+        this.fieldUser = fieldUser;
+        this.linesQty = linesQty;
     }
 
-     @Override
-     public String toString() {
-         return "DefaultValues{" +
-                 "fieldString='" + fieldString + '\'' +
-                 ", fieldText='" + fieldText + '\'' +
-                 ", fieldInt=" + fieldInt +
-                 ", fieldDecimal=" + fieldDecimal +
-                 ", fieldDate='" + fieldDate + '\'' +
-                 ", fieldDateTime='" + fieldDateTime + '\'' +
-                 ", fieldUser='" + fieldUser + '\'' +
-                 ", linesQty=" + linesQty +
-                 '}';
-     }
- }
+    @Override
+    public String toString() {
+        return "DefaultValues{" +
+                "fieldString='" + fieldString + '\'' +
+                ", fieldText='" + fieldText + '\'' +
+                ", fieldInt=" + fieldInt +
+                ", fieldDecimal=" + fieldDecimal +
+                ", fieldDate='" + fieldDate + '\'' +
+                ", fieldDateTime='" + fieldDateTime + '\'' +
+                ", fieldUser='" + fieldUser + '\'' +
+                ", linesQty=" + linesQty +
+                '}';
+    }
+}
