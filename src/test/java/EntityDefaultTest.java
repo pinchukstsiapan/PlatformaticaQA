@@ -13,7 +13,16 @@ import org.openqa.selenium.WebElement;
 public class EntityDefaultTest extends BaseTest {
 
     private WebDriver driver;
-    private final String title = UUID.randomUUID().toString();
+    private final DefaultValues defaultValues = new DefaultValues();
+    private DefaultValues currentValues = new DefaultValues(
+                                 UUID.randomUUID().toString(),
+                                "Some random text as Edited Text Value",
+                                (int) Math.random()*100,
+                                Math.random()*200,
+                                "12/23/2021",
+                                "12/23/2021 12:34:56",
+                                "User X Demo",
+                                9);
 
     /**
      * initialize driver field and login
@@ -25,29 +34,28 @@ public class EntityDefaultTest extends BaseTest {
         ProjectUtils.login(driver, "user1@tester.com", "ah1QNmgkEO");
     }
 
-    @Ignore
     @Test
+    /** create and test new default record and save Title value in this.title */
     public void createRecord() {
         initTest();
 
-        //Code to create and test new default using value in this.title
+        driver.findElement(By.xpath("//a[@href='#menu-list-parent']")).click();
+        driver.findElement(By.xpath("//i/following-sibling::p[contains (text(), 'Default')]")).click();
+        WebElement createFolder = driver.findElement(By.xpath("//i[.='create_new_folder']/ancestor::a"));
+        ProjectUtils.click(driver,createFolder);
+
+        WebElement stringLineDefaultData = driver.findElement(By.xpath("//input[@id='string']"));
+        Assert.assertEquals(stringLineDefaultData.getAttribute("value"), defaultValues.fieldString);
+
+        //save new record
+        WebElement saveBtn = driver.findElement(By.xpath("//button[.='Save']"));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", saveBtn);
+        ProjectUtils.click(driver, saveBtn);
     }
 
-    @Ignore
-    @Test(dependsOnMethods = "editRecord")
-    public void deleteRecord() {
-        initTest();
-
-        //Code to delete default using title value in this.title
-    }
-
-    @Test
+        @Test(dependsOnMethods = "createRecord")
     public void editRecord() throws InterruptedException {
         initTest();
-
-        final String editedTitle = UUID.randomUUID().toString();
-        final String editedText = "Edited Text Value";
-        final int editedInt = 10;
 
         WebElement tab = driver.findElement(By.xpath("//p[contains(text(), 'Default')]"));
         tab.click();
@@ -61,39 +69,46 @@ public class EntityDefaultTest extends BaseTest {
 
         WebElement fieldString = driver.findElement(By.xpath("//input[@id = 'string']"));
         fieldString.clear();
-        fieldString.sendKeys(editedTitle);
+        fieldString.sendKeys(currentValues.fieldString);
 
         WebElement fieldText = driver.findElement(By.xpath("//span//textarea[@id = 'text']"));
         fieldText.clear();
-        fieldText.sendKeys(editedText);
+        fieldText.sendKeys(currentValues.fieldText);
 
         WebElement fieldInt = driver.findElement(By.xpath("//input[@id = 'int']"));
         fieldInt.clear();
-        fieldInt.sendKeys(String.valueOf(editedInt));
+        fieldInt.sendKeys(String.valueOf(currentValues.fieldInt));
 
         ClickSaveButton(driver);
+
+        WebElement row = searchCorrectRow(driver, currentValues.fieldString);
+        validateRowFields(row);
+
+    }
+
+    private WebElement searchCorrectRow(WebDriver driver, String searchValue) {
 
         List<WebElement> rows = driver.findElements(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr"));
 
         boolean isFailed = true;
         for (WebElement row: rows) {
-            String value = row.findElements(By.cssSelector("td")).get(1).getText();
+            WebElement field = row.findElements(By.xpath("//td")).get(1);
+            String valueString = field.getText();
 
-            if (editedTitle.equals(value)) {
-                Assert.assertEquals(row.findElements(By.cssSelector("td")).get(2).getText(), editedText);
-                Assert.assertEquals(row.findElements(By.cssSelector("td")).get(3).getText(), String.valueOf(editedInt));
-                isFailed = false;
-                break;
+            if (searchValue.equals(valueString)) {
+                return row;
             }
         }
-
-        if (isFailed) {
-            Assert.fail("Didn't find updated Default Entity");
-        }
-
-        // Validating changed fields of the record
-
+        Assert.fail("Didn't find updated Default Entity");
+        return null;
     }
+
+    private void validateRowFields(WebElement row) {
+
+        Assert.assertEquals(row.findElements(By.cssSelector("td")).get(2).getText(), currentValues.fieldText);
+        Assert.assertEquals(row.findElements(By.cssSelector("td")).get(3).getText(), String.valueOf(currentValues.fieldInt));
+    }
+
 
     /** scroll down to the Save button and click on it */
     private void ClickSaveButton(WebDriver driver) throws InterruptedException {
@@ -102,7 +117,16 @@ public class EntityDefaultTest extends BaseTest {
         ProjectUtils.click(driver, saveButton);
     }
 
- @Test
+    @Ignore
+    @Test(dependsOnMethods = "editRecord")
+    public void deleteRecord() {
+        initTest();
+
+        //Code to delete default using title value in this.title
+    }
+
+    @Ignore
+    @Test
     public void checkDefaultValueAndUpdateThem() throws InterruptedException {
 
         final String stringLineDefaultText = "DEFAULT STRING VALUE";
@@ -348,3 +372,52 @@ public class EntityDefaultTest extends BaseTest {
     }
 
 }
+
+ class DefaultValues {
+    String fieldString;
+    String fieldText;
+    int fieldInt;
+    double fieldDecimal;
+    String fieldDate;
+    String fieldDateTime;
+    String fieldUser;
+    int linesQty;
+
+    /** set default values */
+    public DefaultValues() {
+        this.fieldString = "DEFAULT STRING VALUE";
+        this.fieldText = "DEFAULT TEXT VALUE";
+        this.fieldInt = 55;
+        this.fieldDecimal = 110.32;
+        this.fieldDate = "01/01/1970";
+        this.fieldDateTime = "01/01/1970 00:00:00";
+        this.fieldUser = "User 1 Demo";
+        this.linesQty = 9;
+    }
+
+    /** setting arbitrary values */
+    public DefaultValues(String fieldString, String fieldText, int fieldInt, double fieldDecimal, String fieldDate, String fieldDateTime, String fieldUser, int linesQty) {
+     this.fieldString = fieldString;
+     this.fieldText = fieldText;
+     this.fieldInt = fieldInt;
+     this.fieldDecimal = fieldDecimal;
+     this.fieldDate = fieldDate;
+     this.fieldDateTime = fieldDateTime;
+     this.fieldUser = fieldUser;
+     this.linesQty = linesQty;
+    }
+
+     @Override
+     public String toString() {
+         return "DefaultValues{" +
+                 "fieldString='" + fieldString + '\'' +
+                 ", fieldText='" + fieldText + '\'' +
+                 ", fieldInt=" + fieldInt +
+                 ", fieldDecimal=" + fieldDecimal +
+                 ", fieldDate='" + fieldDate + '\'' +
+                 ", fieldDateTime='" + fieldDateTime + '\'' +
+                 ", fieldUser='" + fieldUser + '\'' +
+                 ", linesQty=" + linesQty +
+                 '}';
+     }
+ }
