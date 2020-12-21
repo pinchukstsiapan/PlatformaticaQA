@@ -19,12 +19,12 @@ import runner.ProjectUtils;
 import runner.type.Run;
 import runner.type.RunType;
 
-@Run(run = RunType.Single)
+@Run(run = RunType.Multiple)
 public class EntityDefaultTest extends BaseTest {
 
     private final DefaultValues defaultValues = new DefaultValues();
     private DefaultValues currentValues = new DefaultValues(
-                                 UUID.randomUUID().toString(),
+                               "Updated String Value For Checking Purposes",
                                 "Some random text as Edited Text Value",
                                 (int) Math.random()*100,
                             (int) (Math.random()*20000) / 100.0,
@@ -68,12 +68,12 @@ public class EntityDefaultTest extends BaseTest {
         ProjectUtils.click(driver, saveBtn);
     }
 
-    @ Test
+    @ Test(dependsOnMethods = "checkDefaultValueAndUpdateThem")
     public void editRecord() {
 
         WebDriver driver = getDriver();
 
-        createRecord(driver);
+        //createRecord(driver);
 
         driver.get("https://ref.eteam.work/");
 
@@ -111,7 +111,7 @@ public class EntityDefaultTest extends BaseTest {
         fieldDateTime.clear();
         fieldDateTime.sendKeys(String.valueOf(currentValues.fieldDateTime));
 
-        changeUser(driver);
+        changeFieldUser(driver);
 
         WebElement saveButton = driver.findElement(By.xpath("//button[text() = 'Save']"));
         ProjectUtils.click(driver, saveButton);
@@ -146,7 +146,7 @@ public class EntityDefaultTest extends BaseTest {
         Assert.assertEquals(row.findElements(By.cssSelector("td")).get(9).getText().toLowerCase(), String.valueOf(currentValues.fieldUser));
     }
 
-    private void changeUser(WebDriver driver) {
+    private void changeFieldUser(WebDriver driver) {
 
         WebElement fieldUser = driver.findElement(By.xpath("//div[@id='_field_container-user']/div/button"));
         ProjectUtils.click(driver, fieldUser);
@@ -165,7 +165,6 @@ public class EntityDefaultTest extends BaseTest {
         //Code to delete default using title value in this.title
     }
 
-    @Ignore
     @Test
     public void checkDefaultValueAndUpdateThem() throws InterruptedException {
 
@@ -333,7 +332,7 @@ public class EntityDefaultTest extends BaseTest {
         Assert.assertEquals(embedDArrayOfNewValues.get(9).getText(), userEmbedDSelected);
 
 
-        driver.navigate().back();
+     /*   driver.navigate().back();
         driver.navigate().back();
 
         WebElement lastRecordDeleteBtn = null;
@@ -345,7 +344,7 @@ public class EntityDefaultTest extends BaseTest {
         } else {
             lastRecordDeleteBtn = deleteBtns.get(deleteBtns.size() - 1);
         }
-        ProjectUtils.click(driver, lastRecordDeleteBtn);
+        ProjectUtils.click(driver, lastRecordDeleteBtn); */
     }
 
     private void login(WebDriver driver){
