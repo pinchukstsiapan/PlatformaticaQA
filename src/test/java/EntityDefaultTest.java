@@ -309,6 +309,7 @@ public class EntityDefaultTest extends BaseTest {
         driver.get("https://ref.eteam.work");
         ProjectUtils.login(driver, "user132@tester.com", "mhBHKTYWEs");
 
+
         WebElement entities = driver.findElement(By.xpath("//p[contains(text(),'Entities')]"));
         entities.click();
         WebElement defaultMenu = driver.findElement(By.xpath("//p[contains(text(),'Default')]"));
@@ -349,7 +350,6 @@ public class EntityDefaultTest extends BaseTest {
         recordMenu.click();
 
         WebElement editFunction = driver.findElement(By.xpath("//a[text() = 'edit']"));
-        System.out.println(editFunction);
         editFunction.click();
 
         inputString = driver.findElement(By.xpath("//input[@id='string']"));
@@ -370,7 +370,6 @@ public class EntityDefaultTest extends BaseTest {
         inputDateTime = driver.findElement(By.xpath("//input[@id='datetime']"));
         Assert.assertEquals(inputDateTime.getAttribute("value"),"21/11/2020 13:59:00");
     }
-
 }
 
  class DefaultValues {
