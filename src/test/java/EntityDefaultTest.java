@@ -601,7 +601,7 @@ public class EntityDefaultTest extends BaseTest {
         inputDateTime.sendKeys("21/11/2020 13:59:00");
 
         WebElement saveButton = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
-        saveButton.click();
+        ProjectUtils.click(driver,saveButton);
 
         //Validation
         WebElement recordMenu = driver.findElement(By.xpath("//button[contains(@data-toggle, 'dropdown')] "));
