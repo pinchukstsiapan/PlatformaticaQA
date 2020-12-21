@@ -1,6 +1,11 @@
 package runner;
 
+import com.google.api.client.googleapis.batch.BatchRequest;
+import com.google.api.client.googleapis.batch.json.JsonBatchCallback;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.googleapis.json.GoogleJsonError;
+import com.google.api.client.http.FileContent;
+import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -11,6 +16,7 @@ import com.google.api.services.drive.DriveScopes;
 
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import com.google.api.services.drive.model.Permission;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
 
@@ -29,7 +35,8 @@ public class DriveUtils {
 
     public static final String appName = "PlatfromaticaQA";
 
-    private static final String baseFolderID = "1n0GPe676ldpnQ34bCVZ6KhlWdEtau6Ma";
+    // ScreenShots [1UHAsw6L5h5_yBBxaembAw-QVf7cIaG_f]  mimeType: application/vnd.google-apps.folder
+    private static final String baseFolderID = "1UHAsw6L5h5_yBBxaembAw-QVf7cIaG_f";
 
     /** get files list matching pattern with requested fields */
     private static List<File> getFilesList(Drive drive, String fields, String searchPattern) {
@@ -103,23 +110,12 @@ public class DriveUtils {
         return driveService;
     }
 
-    private static String getStackTrace(Exception ex) {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        ex.printStackTrace(pw);
-        return sw.toString();
-    }
-
     public static String createFolder(Drive drive, String parentID, String folderName) {
-        if (drive == null || parentID == null) {
-            return null;
-        }
-
         File fileMetadata = new File();
         fileMetadata.setName(folderName);
         fileMetadata.setMimeType("application/vnd.google-apps.folder");
 
-        if (parentID == null || parentID.isEmpty()) {
+        if (parentID != null && !parentID.isEmpty()) {
             fileMetadata.setParents(Collections.singletonList(parentID));
         }
 
@@ -135,9 +131,11 @@ public class DriveUtils {
         return file.getId();
     }
 
+    public static void deleteFolder(Drive drive, String folderID){
+        deleteFile(drive, folderID);
+    }
 
-
-    public static void deleteFolder(Drive drive, String fileID){
+    public static void deleteFile(Drive drive, String fileID){
         try {
             drive.files().delete(fileID).execute();
         } catch (IOException ioException) {
@@ -145,4 +143,118 @@ public class DriveUtils {
         }
     }
 
+    public static void deleteFile(Drive drive, File file){
+        try {
+            if (!baseFolderID.equals(file.getId())) {
+                drive.files().delete(file.getId()).execute();
+            }
+            System.out.printf("deleting file [%s] %s\n", file.getId(), file.getName());
+        } catch (IOException ioException) {
+            LoggerUtils.logRed(String.format("unable to delete folder/file [%s] %s\n%s",
+                    file.getId(), file.getName(), getStackTrace(ioException)));
+        }
+    }
+
+    public static void deleteFileInFolder(Drive drive, String folderID) {
+
+    }
+
+    //java.io.File filePath = new java.io.File("files/photo.jpg");
+    public static String uploadFile(Drive drive, String folderID, java.io.File filePath) {
+        if (filePath == null) {
+            return null;
+        }
+        File fileMetadata = new File();
+        fileMetadata.setName(filePath.getName());
+        fileMetadata.setParents(Collections.singletonList(folderID));
+        FileContent mediaContent = new FileContent("image/png", filePath);
+        File file = null;
+        try {
+            file = drive.files().create(fileMetadata, mediaContent)
+                    .setFields("id, parents")
+                    .execute();
+        } catch (IOException ioException) {
+            LoggerUtils.logRed(String.format("unable to upload file %s\n%s", filePath.toString(), getStackTrace(ioException)));
+        }
+        LoggerUtils.log(String.format("uploaded file %s with id %s", filePath.toString(), file.getId()));
+        return file.getId();
+    }
+
+    public static void uploadWholeFolder(Drive drive, String directoryPath) {
+        java.io.File dir = new java.io.File(directoryPath);
+
+        // Create folder on Drive
+        String newFolderID = createFolder(drive, baseFolderID, dir.getName());
+        java.io.File[] files = dir.listFiles();
+        if (files.length == 0) {
+            LoggerUtils.logYellow(String.format("The directory %s is empty", directoryPath));
+        } else {
+            for (java.io.File aFile : files) {
+                System.out.println(aFile.getName() + " - " + aFile.length());
+                uploadFile(drive, newFolderID, aFile);
+            }
+        }
+    }
+
+    public static List<File> getFilesListInFolder(Drive drive, String folderID) {
+        List<File> files = getFilesList(drive, "nextPageToken, files(id, name, size, mimeType, permissions)", "*");
+        return files;
+    }
+
+    public static void printFilesInFolder(List<File> files) {
+        System.out.println("\nFiles:");
+        for (File file : files) {
+            if (file.getSize() != null) {
+                System.out.printf("[%s]  %6.2fK  %s%n", file.getId(),
+                        ((int) 100 * file.getSize() / 1024) / 100.0,
+                        file.getName());
+            } else {
+                System.out.printf("[%s]  -------  %s%n", file.getId(), file.getName());
+            }
+        }
+    }
+
+    /** set permissions required to share files with PlatformaticaQA@gmail.com */
+    private static void setPermissions(Drive drive, String fileId) {
+        JsonBatchCallback<Permission> callback = new JsonBatchCallback<Permission>() {
+            @Override
+            public void onFailure(GoogleJsonError e,
+                                  HttpHeaders responseHeaders)
+                    throws IOException {
+                // Handle error
+                System.err.println(e.getMessage());
+            }
+
+            @Override
+            public void onSuccess(Permission permission,
+                                  HttpHeaders responseHeaders)
+                    throws IOException {
+                System.out.println("Permission ID: " + permission.getId());
+            }
+        };
+        BatchRequest batch = drive.batch();
+
+        Permission userPermission = new Permission()
+                .setType("user")
+                .setRole("writer")
+                .setEmailAddress("PlatformaticaQA@gmail.com");
+
+        try {
+            drive.permissions().create(fileId, userPermission)
+                    .setFields("id")
+                    .queue(batch, callback);
+
+            batch.execute();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+
+    }
+
+    private static String getStackTrace(Exception ex) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        ex.printStackTrace(pw);
+        return sw.toString();
+    }
 }
