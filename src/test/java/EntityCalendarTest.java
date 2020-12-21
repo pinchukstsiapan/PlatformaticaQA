@@ -14,8 +14,10 @@ import java.util.UUID;
 @Run(run = RunType.Multiple)
 public class EntityCalendarTest extends BaseTest {
 
-    public void inputCalendar(WebDriver driver) {
+    @Test
+    public void inputCalendar() {
 
+        WebDriver driver = getDriver();
         WebElement calendar = driver.findElement(By.xpath("//p[contains(text(),'Calendar')]"));
         ProjectUtils.click(driver, calendar);
         WebElement newCalendar = driver.findElement(By.xpath("//div[@class='card-icon']/i"));
@@ -42,13 +44,17 @@ public class EntityCalendarTest extends BaseTest {
         dateTimeElement.click();
         WebElement save = driver.findElement(By.xpath("//button[normalize-space()='Save']"));
         ProjectUtils.click(driver, save);
+        WebElement list = driver.findElement(By.xpath("//div[@class='content']//li[2]"));
+        list.click();
+
+        WebElement inputEdit = driver.findElement(By.xpath("//div[normalize-space()='Simple Test']"));
+        Assert.assertEquals(inputEdit.getText(), textArea);
     }
 
-    @Test
+    @Test(dependsOnMethods = "inputCalendar")
     public void editCalendar() throws InterruptedException {
 
         WebDriver driver = getDriver();
-        inputCalendar(getDriver());
         WebElement calendar = driver.findElement(By.xpath("//p[contains(text(),'Calendar')]"));
         ProjectUtils.click(driver, calendar);
         WebElement list = driver.findElement(By.xpath("//div[@class='content']//li[2]"));
