@@ -11,15 +11,7 @@ import java.util.UUID;
 
 public class EntityBoardTest extends BaseTest {
 
-    private void sendKeys(WebElement element, String keys) throws InterruptedException {
-        for (int i =0; i< keys.length(); i++)
-        {
-            element.sendKeys(keys.substring(i, i+1));
-            Thread.sleep(100);
-        }
-    }
-
-    @Test(invocationCount = 35)
+    @Test
     public void inputTest() throws InterruptedException {
 
         Calendar calendar = Calendar.getInstance();
@@ -51,17 +43,16 @@ public class EntityBoardTest extends BaseTest {
         stringPending.click();
 
         WebElement textPlaceholder = driver.findElement(By.xpath("//textarea[@name='entity_form_data[text]']"));
-        //textPlaceholder.sendKeys(text.trim());
-        sendKeys(textPlaceholder, text);
+        ProjectUtils.sendKeys(textPlaceholder, text);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//textarea[@name='entity_form_data[text]']")));
         wait.until(ExpectedConditions.attributeContains(textPlaceholder, "value", text));
 
         WebElement intPlaceholder = driver.findElement(By.xpath("//input[@name='entity_form_data[int]']"));
-        intPlaceholder.sendKeys(String.valueOf(number));
+        ProjectUtils.sendKeys(intPlaceholder, number);
         wait.until(ExpectedConditions.attributeContains(intPlaceholder, "value", String.valueOf(number)));
 
         WebElement decimalPlaceholder = driver.findElement(By.id("decimal"));
-        decimalPlaceholder.sendKeys(String.valueOf(decimal));
+        ProjectUtils.sendKeys(decimalPlaceholder, decimal);
         wait.until(ExpectedConditions.attributeContains(decimalPlaceholder, "value", String.valueOf(decimal)));
 
         WebElement date = driver.findElement(By.id("date"));
