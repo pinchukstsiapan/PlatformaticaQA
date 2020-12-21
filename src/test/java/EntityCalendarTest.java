@@ -82,6 +82,5 @@ public class EntityCalendarTest extends BaseTest {
 
         WebElement deleteRecord = driver.findElement(By.xpath("//b[contains(text(),'" + titleFieldNew + "')]"));
         deleteRecord.isDisplayed();
-
     }
 }
