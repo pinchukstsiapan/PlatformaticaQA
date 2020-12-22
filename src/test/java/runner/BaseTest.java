@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 import runner.type.ProfileType;
@@ -44,6 +45,7 @@ public abstract class  BaseTest {
     }
 
     private WebDriver driver;
+    private WebDriverWait webDriverWait;
 
     private RunType runType = RunType.Single;
     private ProfileType profileType = ProfileType.DEFAULT;
@@ -125,5 +127,13 @@ public abstract class  BaseTest {
 
     protected WebDriver getDriver() {
         return driver;
+    }
+
+    protected WebDriverWait getWebDriverWait() {
+        if (webDriverWait == null) {
+            webDriverWait = new WebDriverWait(driver, 10);
+        }
+
+        return webDriverWait;
     }
 }
