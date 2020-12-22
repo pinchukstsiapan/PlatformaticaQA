@@ -166,17 +166,13 @@ public class EntityDefaultTest extends BaseTest {
         //Code to delete default using title value in this.title
     }
 
+    private void navigateToEntityDefaultPage(WebDriver driver) {
+        //driver.findElement(By.xpath("//a[@href='#menu-list-parent']")).click();
+        driver.findElement(By.xpath("//i/following-sibling::p[contains (text(), 'Default')]")).click();
+    }
+
     @Test
     public void checkDefaultValueAndUpdateThem() throws InterruptedException {
-
-        final String stringLineDefaultText = "DEFAULT STRING VALUE";
-        final String textLineDefaultText = "DEFAULT TEXT VALUE";
-        final int intLineDefault = 55;
-        final double decimalLineDefault = 110.32;
-        final String dateLineDefault = "01/01/1970";
-        final String dateTimeLineDefault = "01/01/1970 00:00:00";
-        final int defaultLinesQty = 9;
-        final String userDefault = "User 1 Demo";
 
         final String stringLineNewText = "Updated String Value For Checking Purposes";
         final String textLineNewText = "Updated Text Value";
@@ -201,7 +197,6 @@ public class EntityDefaultTest extends BaseTest {
 
         WebDriver driver = getDriver();
 
-        //driver.findElement(By.xpath("//a[@href='#menu-list-parent']")).click();
         driver.findElement(By.xpath("//i/following-sibling::p[contains (text(), 'Default')]")).click();
 
         WebElement createFolder = driver.findElement(By.xpath("//i[.='create_new_folder']/ancestor::a"));
@@ -212,29 +207,28 @@ public class EntityDefaultTest extends BaseTest {
         Assert.assertTrue(saveBtn.isDisplayed());
 
         int count = driver.findElements(By.xpath("//div/label")).size();
-        Assert.assertTrue(count == defaultLinesQty);
+        Assert.assertEquals(count, defaultValues.linesQty);
 
         WebElement stringLineDefaultData = driver.findElement(By.xpath("//input[@id='string']"));
-        Assert.assertTrue(stringLineDefaultData.getAttribute("value").equals(stringLineDefaultText));
-
+        Assert.assertEquals(stringLineDefaultData.getAttribute("value"), defaultValues.fieldString);
 
         WebElement textLineDefaultData = driver.findElement(By.xpath("//textarea[@id='text']"));
-        Assert.assertTrue(textLineDefaultData.getText().equals(textLineDefaultText));
+        Assert.assertEquals(textLineDefaultData.getText(), defaultValues.fieldText);
 
         WebElement intLineDefaultData = driver.findElement(By.xpath("//input[@id='int']"));
-        Assert.assertTrue(intLineDefaultData.getAttribute("value").equals(intLineDefault + ""));
+        Assert.assertEquals(intLineDefaultData.getAttribute("value"), (String.valueOf(defaultValues.fieldInt)));
 
         WebElement decimalLineDefaultData = driver.findElement(By.xpath("//input[@id='decimal']"));
-        Assert.assertTrue(decimalLineDefaultData.getAttribute("value").equals(decimalLineDefault + ""));
+        Assert.assertEquals(decimalLineDefaultData.getAttribute("value"), String.valueOf(defaultValues.fieldDecimal));
 
         WebElement dateLineDefaultData = driver.findElement(By.xpath("//input[@id='date']"));
-        Assert.assertTrue(dateLineDefaultData.getAttribute("value").equals(dateLineDefault));
+        Assert.assertEquals(dateLineDefaultData.getAttribute("value"), defaultValues.fieldDate);
 
         WebElement dateTimeLineDefaultData = driver.findElement(By.xpath("//input[@id='datetime']"));
-        Assert.assertTrue(dateTimeLineDefaultData.getAttribute("value").equals(dateTimeLineDefault));
+        Assert.assertEquals(dateTimeLineDefaultData.getAttribute("value"), defaultValues.fieldDateTime);
 
         WebElement user = driver.findElement(By.xpath("//div[@class='filter-option-inner']/div[.='User 1 Demo']"));
-        Assert.assertTrue(user.getText().equals(userDefault.toUpperCase()));
+        Assert.assertEquals(user.getText(), (defaultValues.fieldUser.toUpperCase()));
 
         stringLineDefaultData.clear();
         stringLineDefaultData.sendKeys(stringLineNewText);
