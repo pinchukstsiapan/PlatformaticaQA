@@ -8,10 +8,14 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
+import runner.type.Run;
+import runner.type.RunType;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+@Run(run = RunType.Multiple)
 public class EntityExportTest extends BaseTest {
     public String exportString = "My String";
     public String exportText = "New text with 1234";
@@ -151,14 +155,14 @@ public class EntityExportTest extends BaseTest {
     }
 
 
-    @Test
+    @Test (dependsOnMethods = "inputTest")
     public void viewTest() throws InterruptedException {
 
         WebDriver driver = getDriver();
 
         WebElement exportButton = driver.findElement(By.xpath("//div[@id= 'menu-list-parent']/ul/li[8]/a"));
         ProjectUtils.click(driver, exportButton);
-        WebElement actionsButton = driver.findElement(By.xpath("//tbody/tr[1]/td[10]/div[1]/button[1]"));
+        WebElement actionsButton = driver.findElement(By.xpath("//tbody/tr[1]/td[10]/div[1]/button[1]/i[1]"));
         actionsButton.click();
         WebElement viewButton = driver.findElement(By.xpath("//a[contains(text(),'view')]"));
         viewButton.click();
