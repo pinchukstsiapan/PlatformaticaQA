@@ -68,7 +68,6 @@ public class EntityDefaultTest extends BaseTest {
         ProjectUtils.click(driver, saveBtn);
     }
 
-    @Ignore
     @ Test
     public void editRecord() {
 
