@@ -241,6 +241,34 @@ public class EntityAssignTest extends BaseTest {
         Assert.assertTrue(driver.findElements(By.xpath("//div[contains(text(),'mb--simple text')]")).isEmpty());
     }
 
+    @Test
+    public void deleteTest1() {
+
+        createRecord();
+
+        WebDriver driver = getDriver();
+
+        WebElement deleteRecord = driver.findElement(By.xpath("//a[text()='delete']"));
+        ProjectUtils.click(driver, deleteRecord);
+
+        Assert.assertTrue(driver.findElements(By.xpath("//div[contains(text(),'mb--simple text')]")).isEmpty());
+
+        WebElement recycleBin = driver.findElement(By.xpath("//a[contains(@href,'recycle_bin')]"));
+        ProjectUtils.click(driver, recycleBin);
+
+        WebElement deletedRecord = driver.findElement(By.xpath
+                ("//td[text()='Assign']/..//b[contains(text(),'mb--simple text')]"));
+
+        Assert.assertTrue(deletedRecord.isDisplayed());
+
+        WebElement myAssignmentsTab = driver.findElement(By.xpath("//li[@id='pa-menu-item-41']"));
+        myAssignmentsTab.click();
+
+        Assert.assertEquals(driver.getCurrentUrl(), myAssignmentsTabLink);
+
+        Assert.assertTrue(driver.findElements(By.xpath("//div[contains(text(),'mb--simple text')]")).isEmpty());
+    }
+
     public void createRecord() {
 
         final String stringInp = UUID.randomUUID().toString();
