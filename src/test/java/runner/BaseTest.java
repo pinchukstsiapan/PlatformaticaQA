@@ -66,7 +66,15 @@ public abstract class  BaseTest {
         result.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         result.manage().window().maximize();
 
+        LoggerUtils.log("Browser opened");
+
         return result;
+    }
+
+    private void quitBrowser() {
+        getDriver().quit();
+
+        LoggerUtils.log("Browser closed");
     }
 
     private void startTest(WebDriver driver, ProfileType profileType) {
@@ -102,7 +110,7 @@ public abstract class  BaseTest {
     @AfterMethod
     protected void afterMethod(Method method, ITestResult tr) {
         if (runType == RunType.Single) {
-            getDriver().quit();
+            quitBrowser();
         }
 
         long executionTime = (tr.getEndMillis() - tr.getStartMillis()) / 1000;
@@ -113,7 +121,7 @@ public abstract class  BaseTest {
     @AfterClass
     protected void afterClass() {
         if (runType == RunType.Multiple) {
-            getDriver().quit();
+            quitBrowser();
         }
     }
 

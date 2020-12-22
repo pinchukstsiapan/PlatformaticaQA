@@ -1,20 +1,18 @@
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.UUID;
 
 public class EntityBoardTest extends BaseTest {
 
-    @Ignore
     @Test
-    public void inputTest() {
+    public void inputTest() throws InterruptedException {
 
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -26,7 +24,7 @@ public class EntityBoardTest extends BaseTest {
         final String user1Demo = "User 1 Demo";
 
         WebDriver driver = getDriver();
-        ProjectUtils.loginProcedure(driver);
+        WebDriverWait wait = new WebDriverWait(driver,30);
 
         WebElement tabBoard = driver.findElement(By.xpath("//p[contains(text(),'Board')]"));
         ProjectUtils.click(driver, tabBoard);
@@ -36,6 +34,7 @@ public class EntityBoardTest extends BaseTest {
 
         WebElement createNew = driver.findElement(By.xpath("//div[@class = 'card-icon']"));
         createNew.click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//textarea[@name='entity_form_data[text]']")));
 
         WebElement stringDropdown = driver.findElement(By.xpath("//div[text()= 'Pending']/.."));
         stringDropdown.click();
@@ -43,14 +42,18 @@ public class EntityBoardTest extends BaseTest {
         WebElement stringPending = driver.findElement(By.xpath("//div[text()= 'Pending']"));
         stringPending.click();
 
-        WebElement textPlaceholder = driver.findElement(By.id("text"));
-        textPlaceholder.sendKeys(text);
+        WebElement textPlaceholder = driver.findElement(By.xpath("//textarea[@name='entity_form_data[text]']"));
+        ProjectUtils.sendKeys(textPlaceholder, text);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//textarea[@name='entity_form_data[text]']")));
+        wait.until(ExpectedConditions.attributeContains(textPlaceholder, "value", text));
 
-        WebElement intPlaceholder = driver.findElement(By.id("int"));
-        intPlaceholder.sendKeys(String.valueOf(number));
+        WebElement intPlaceholder = driver.findElement(By.xpath("//input[@name='entity_form_data[int]']"));
+        ProjectUtils.sendKeys(intPlaceholder, number);
+        wait.until(ExpectedConditions.attributeContains(intPlaceholder, "value", String.valueOf(number)));
 
         WebElement decimalPlaceholder = driver.findElement(By.id("decimal"));
-        decimalPlaceholder.sendKeys(String.valueOf(decimal));
+        ProjectUtils.sendKeys(decimalPlaceholder, decimal);
+        wait.until(ExpectedConditions.attributeContains(decimalPlaceholder, "value", String.valueOf(decimal)));
 
         WebElement date = driver.findElement(By.id("date"));
         date.click();
@@ -62,7 +65,6 @@ public class EntityBoardTest extends BaseTest {
         ProjectUtils.click(driver, saveBtn);
 
         String recordTitleXpath = String.format("//div[contains(text(), '%s')]", text);
-        By stringText = By.xpath(String.format("%s", recordTitleXpath));
         By newRecordStringPending = By.xpath(String.format("%s/../../../td[2]/a/div", recordTitleXpath));
         By newRecordInt = By.xpath(String.format("%s/../../../td[4]/a/div", recordTitleXpath));
         By newRecordDecimal = By.xpath(String.format("%s/../../../td[5]/a/div", recordTitleXpath));
@@ -70,7 +72,9 @@ public class EntityBoardTest extends BaseTest {
         By newRecordDateTime = By.xpath(String.format("%s/../../../td[7]/a/div", recordTitleXpath));
         By newRecordUser1Demo = By.xpath(String.format("%s/../../../td[9]", recordTitleXpath));
 
-        WebElement createdRecordText = driver.findElement(stringText);
+        By createdRecordText = By.xpath(recordTitleXpath);
+        WebElement newCreatedRecordText = wait.until(ExpectedConditions.visibilityOfElementLocated(createdRecordText));
+
         WebElement createdRecordStringPending = driver.findElement(newRecordStringPending);
         WebElement createdRecordInt = driver.findElement(newRecordInt);
         WebElement createdRecordDecimal = driver.findElement(newRecordDecimal);
@@ -78,26 +82,12 @@ public class EntityBoardTest extends BaseTest {
         WebElement createdRecordDateTime = driver.findElement(newRecordDateTime);
         WebElement createdRecordUser1Demo = driver.findElement(newRecordUser1Demo);
 
-        Assert.assertEquals(createdRecordText.getText(), text, "Created record text issue");
+        Assert.assertEquals(newCreatedRecordText.getText(), text, "Created record text issue");
         Assert.assertEquals(createdRecordStringPending.getText(), pending, "Created record Pending issue");
         Assert.assertEquals(createdRecordInt.getText(), Integer.toString(number), "Created record number issue");
         Assert.assertEquals(createdRecordDecimal.getText(), Double.toString(decimal), "Created record decimal issue");
         Assert.assertEquals(createdRecordDate.getText(), currentDataEuropean, "Created date issue");
         Assert.assertEquals(createdRecordUser1Demo.getText(), user1Demo, "Created user issue");
-        deleteRecordByTitle(text);
     }
 
-    private void deleteRecordByTitle(String text) {
-
-        WebDriver driver = getDriver();
-        String recordTitleXpath = String.format("//div[contains(text(), '%s')]", text);
-        By recordMenuButton = By.xpath(String.format("%s/../../..//button", recordTitleXpath));
-        WebElement deleteButton = driver.findElement(By.xpath(String.format("%s/../../..//a[contains(@href, 'delete')]", recordTitleXpath)));
-        driver.findElement(recordMenuButton).click();
-        ProjectUtils.click(driver, deleteButton);
-    }
-
-    private WebDriverWait getWait(int timeoutSecond) {
-        return new WebDriverWait(getDriver(), timeoutSecond);
-    }
 }
