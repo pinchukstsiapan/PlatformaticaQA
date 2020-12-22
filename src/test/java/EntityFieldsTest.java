@@ -2,7 +2,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -18,6 +17,15 @@ import runner.type.RunType;
 @Run(run = RunType.Multiple)
 public class EntityFieldsTest extends BaseTest {
 
+    final String title = UUID.randomUUID().toString();
+    final String comment = "simple text";
+    final int number = 10;
+    final String newTitle = title + " has been edited";
+    final String newComment = comment + " has been edited";
+    final int newNumber = 102;
+    final double newDecimal = 101.25;
+    final String invalidEntry = "test";
+
     @Test
     public void newRecord() {
 
@@ -27,10 +35,6 @@ public class EntityFieldsTest extends BaseTest {
         tab.click();
         WebElement newRecord = driver.findElement(By.xpath("//i[text()='create_new_folder']"));
         newRecord.click();
-
-        final String title = UUID.randomUUID().toString();
-        final String comment = "simple text";
-        final int number = 10;
 
         WebElement titleElement = driver.findElement(By.xpath("//input[@name='entity_form_data[title]']"));
         titleElement.sendKeys(title);
@@ -92,9 +96,6 @@ public class EntityFieldsTest extends BaseTest {
         Assert.assertEquals(createdRecordComment.getText(), comment, "Created record comment text issue");
         Assert.assertEquals(createdRecordInt.getText(), Integer.toString(number),
                 "Created record int value issue");
-
-        // cleanup, delete created record
-        deleteRecordByTitle(title);
     }
 
     private boolean isTitleFound(String title) {
@@ -108,44 +109,22 @@ public class EntityFieldsTest extends BaseTest {
         return false;
     }
 
-    private void deleteRecordByTitle(String title) {
-
-        WebDriver driver = getDriver();
-        String recordTitleXpath = String.format("//div[contains(text(), '%s')]", title);
-
-        By recordMenuButton = By.xpath(String.format("%s/../../..//button", recordTitleXpath));
-        By deleteButton = By.xpath(String.format("%s/../../..//a[contains(@href, 'delete')]", recordTitleXpath));
-
-        driver.findElement(recordMenuButton).click();
-        ProjectUtils.click(getDriver(),
-                getWait(2).until(ExpectedConditions.elementToBeClickable(deleteButton)));
-    }
     private WebDriverWait getWait(int timeoutSecond) {
         return new WebDriverWait(getDriver(), timeoutSecond);
     }
 
-    @Ignore
-    @Test
-    public void editForm() throws InterruptedException {
-
-        final String newTitle = "A-12/12/2020 has been edited";
-        final String newComment = "Entry is created to test Edit functionality. Please do not delete.(Edited)";
-        final int newNumber = 102;
-        final double newDecimal = 101.25;
+    @Test(dependsOnMethods = "newRecord")
+    public void editForm() {
 
         WebDriver driver = getDriver();
 
         WebElement fieldsMenu = driver.findElement(By.xpath("//li[@id='pa-menu-item-45']/a"));
         fieldsMenu.click();
-        WebElement hamburgerMenu = driver.findElement(By.xpath("//tr[@data-row_id='473']/td[11]//button"));
+        WebElement hamburgerMenu =
+                driver.findElement(By.xpath("//button[@class='btn btn-round btn-sm btn-primary dropdown-toggle']"));
         hamburgerMenu.click();
-        Thread.sleep(500);
-        WebElement editButton =
-                driver.findElement(By.xpath("//a[@href='index.php?action=action_edit&entity_id=5&row_id=473']"));
-        editButton.click();
-
-        Assert.assertEquals(driver.getCurrentUrl(),
-                "https://ref.eteam.work/index.php?action=action_edit&entity_id=5&row_id=473");
+        WebElement editButton = driver.findElement(By.xpath("//a[contains(@href,'action_edit&entity')]"));
+        ProjectUtils.click(driver,editButton);
 
         WebElement editTitle = driver.findElement(By.xpath("//input[@name='entity_form_data[title]']"));
         editTitle.clear();
@@ -160,56 +139,33 @@ public class EntityFieldsTest extends BaseTest {
         editDecimal.clear();
         editDecimal.sendKeys(String.valueOf(newDecimal));
 
-        WebElement tableString = driver.findElement(By.xpath("//textarea[@name='t-9-r-1-data[string]']"));
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].scrollIntoView();", tableString);
-        tableString.clear();
-        tableString.sendKeys(newTitle);
-        WebElement tableText = driver.findElement(By.xpath("//textarea[@name='t-9-r-1-data[text]']"));
-        tableText.clear();
-        tableText.sendKeys(newComment);
-        WebElement tableInt = driver.findElement(By.xpath("//textarea[@name='t-9-r-1-data[int]']"));
-        tableInt.clear();
-        tableInt.sendKeys(String.valueOf(newNumber));
-        WebElement tableDecimal = driver.findElement(By.xpath("//textarea[@name='t-9-r-1-data[decimal]']"));
-        tableDecimal.clear();
-        tableDecimal.sendKeys(String.valueOf(newDecimal));
-
         WebElement saveButton = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
         ProjectUtils.click(driver, saveButton);
 
         Assert.assertEquals(driver.getCurrentUrl(),
                 "https://ref.eteam.work/index.php?action=action_list&entity_id=5&filter");
-        Assert.assertEquals(driver.findElement(By.xpath("//tr[@data-row_id='473']/td[2]/a/div")).getText(),newTitle);
-        Assert.assertEquals(driver.findElement(By.xpath("//tr[@data-row_id='473']/td[3]/a/div")).getText(),newComment);
-        Assert.assertEquals(driver.findElement(By.xpath("//tr[@data-row_id='473']/td[4]/a/div"))
+        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/..//../..//a/div"))
+                .getText(), newTitle);
+        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr/td[3]/a"))
+                .getText(),newComment);
+        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr/td[4]/a"))
                 .getText(),String.valueOf(newNumber));
-        Assert.assertEquals(driver.findElement(By.xpath("//tr[@data-row_id='473']/td[5]/a/div")).
-                getText(),String.valueOf(newDecimal));
+        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr/td[5]/a"))
+                .getText(),String.valueOf(newDecimal));
     }
 
-    @Ignore
-    @Test
-    public void saveDraft() throws InterruptedException {
-
-        final String newTitle = "A-12/12/2020 has been edited";
-        final String newComment = "Entry is created to test Edit functionality. Please do not delete.(Edited)";
-        final int newNumber = 102;
-        final double newDecimal = 101.25;
+    @Test(dependsOnMethods = {"newRecord","editForm"})
+    public void saveDraft() {
 
         WebDriver driver = getDriver();
 
         WebElement fieldsMenu = driver.findElement(By.xpath("//li[@id='pa-menu-item-45']/a"));
         fieldsMenu.click();
-        WebElement hamburgerMenu = driver.findElement(By.xpath("//tr[@data-row_id='473']/td[11]//button"));
+        WebElement hamburgerMenu =
+                driver.findElement(By.xpath("//button[@class='btn btn-round btn-sm btn-primary dropdown-toggle']"));
         hamburgerMenu.click();
-        Thread.sleep(500);
-        WebElement editButton =
-                driver.findElement(By.xpath("//a[@href='index.php?action=action_edit&entity_id=5&row_id=473']"));
-        editButton.click();
-
-        Assert.assertEquals(driver.getCurrentUrl(),
-                "https://ref.eteam.work/index.php?action=action_edit&entity_id=5&row_id=473");
+        WebElement editButton = driver.findElement(By.xpath("//a[contains(@href,'action_edit&entity')]"));
+        ProjectUtils.click(driver,editButton);
 
         WebElement editTitle = driver.findElement(By.xpath("//input[@name='entity_form_data[title]']"));
         editTitle.clear();
@@ -226,30 +182,23 @@ public class EntityFieldsTest extends BaseTest {
 
         WebElement saveDraft = driver.findElement(By.xpath("//button[@id='pa-entity-form-draft-btn']"));
         ProjectUtils.click(driver, saveDraft);
-        WebElement pencil = driver.findElement(By.xpath("//tr[@data-row_id='473']/td/i[@class='fa fa-pencil']"));
+        WebElement pencil = driver.findElement(By.xpath("//i[@class='fa fa-pencil']"));
 
         Assert.assertTrue(pencil.isDisplayed());
     }
 
-    @Ignore
-    @Test
-    public void invalidEditEntry() throws InterruptedException {
-
-        final String invalidEntry = "test";
+    @Test(dependsOnMethods = {"newRecord","editForm","saveDraft"})
+    public void invalidEditEntry() {
 
         WebDriver driver = getDriver();
 
         WebElement fieldsMenu = driver.findElement(By.xpath("//li[@id='pa-menu-item-45']/a"));
         fieldsMenu.click();
-        WebElement hamburgerMenu = driver.findElement(By.xpath("//tr[@data-row_id='473']/td[11]//button"));
+        WebElement hamburgerMenu =
+                driver.findElement(By.xpath("//button[@class='btn btn-round btn-sm btn-primary dropdown-toggle']"));
         hamburgerMenu.click();
-        Thread.sleep(500);
-        WebElement editButton =
-                driver.findElement(By.xpath("//a[@href='index.php?action=action_edit&entity_id=5&row_id=473']"));
-        editButton.click();
-
-        Assert.assertEquals(driver.getCurrentUrl(),
-                "https://ref.eteam.work/index.php?action=action_edit&entity_id=5&row_id=473");
+        WebElement editButton = driver.findElement(By.xpath("//a[contains(@href,'action_edit&entity')]"));
+        ProjectUtils.click(driver,editButton);
 
         WebElement editInt = driver.findElement(By.xpath("//input[@name='entity_form_data[int]']"));
         editInt.clear();
@@ -258,18 +207,8 @@ public class EntityFieldsTest extends BaseTest {
         editDecimal.clear();
         editDecimal.sendKeys(invalidEntry);
 
-        WebElement tableInt = driver.findElement(By.xpath("//textarea[@name='t-9-r-1-data[int]']"));
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].scrollIntoView();", tableInt);
-        tableInt.clear();
-        tableInt.sendKeys(invalidEntry);
-        WebElement tableDecimal = driver.findElement(By.xpath("//textarea[@name='t-9-r-1-data[decimal]']"));
-        tableDecimal.clear();
-        tableDecimal.sendKeys(invalidEntry);
-
         WebElement saveButton = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
         ProjectUtils.click(driver, saveButton);
-
         WebElement error = driver.findElement(By.xpath("//div[text()='Error saving entity']"));
 
         Assert.assertTrue(error.isDisplayed());
