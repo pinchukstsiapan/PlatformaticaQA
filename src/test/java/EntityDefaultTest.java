@@ -23,6 +23,7 @@ import runner.type.RunType;
 public class EntityDefaultTest extends BaseTest {
 
     private final DefaultValues defaultValues = new DefaultValues();
+
     private DefaultValues currentValues = new DefaultValues(
                                  UUID.randomUUID().toString(),
                                 "Some random text as Edited Text Value",
@@ -33,8 +34,10 @@ public class EntityDefaultTest extends BaseTest {
                                 "user100@tester.com",
                                 9);
 
-
-
+    /**
+     * Implementation of the User Story "Entity = Default: Edit (Existing record)"
+     * https://trello.com/c/MYJS5EMR/223-entity-default-edit-existing-record
+     */
     @ Test
     public void editRecord() {
 
@@ -51,34 +54,8 @@ public class EntityDefaultTest extends BaseTest {
         recordMenu.click();
 
         WebElement editFunction = driver.findElement(By.xpath("//a[text() = 'edit']"));
-        System.out.println(editFunction);
         ProjectUtils.click(driver, editFunction);
 
-       /* WebElement fieldString = driver.findElement(By.xpath("//input[@id = 'string']"));
-        fieldString.clear();
-        fieldString.sendKeys(currentValues.fieldString);
-
-        WebElement fieldText = driver.findElement(By.xpath("//span//textarea[@id = 'text']"));
-        fieldText.clear();
-        fieldText.sendKeys(currentValues.fieldText);
-
-        WebElement fieldInt = driver.findElement(By.xpath("//input[@id = 'int']"));
-        fieldInt.clear();
-        fieldInt.sendKeys(String.valueOf(currentValues.fieldInt));
-
-        WebElement fieldDecimal = driver.findElement(By.xpath("//input[@id='decimal']"));
-        fieldDecimal.clear();
-        fieldDecimal.sendKeys(String.valueOf(currentValues.fieldDecimal));
-
-        WebElement fieldDate = driver.findElement(By.xpath("//input[@id='date']"));
-        fieldDate.clear();
-        fieldDate.sendKeys(String.valueOf(currentValues.fieldDate));
-
-        WebElement fieldDateTime = driver.findElement(By.xpath("//input[@id='datetime']"));
-        fieldDateTime.clear();
-        fieldDateTime.sendKeys(String.valueOf(currentValues.fieldDateTime));
-
-        changeUser(driver); */
         validateAndUpdateFields(driver, defaultValues, currentValues);
 
         WebElement saveButton = driver.findElement(By.xpath("//button[text() = 'Save']"));
@@ -326,7 +303,7 @@ public class EntityDefaultTest extends BaseTest {
         newRecord.click();
     }
 
-    public void entityCreation() {
+    private void entityCreation() {
 
         WebDriver driver = getDriver();
         login(driver);
@@ -336,7 +313,7 @@ public class EntityDefaultTest extends BaseTest {
 
 
 
-    public boolean isInt(String str){
+    private boolean isInt(String str){
 
         try
         {
@@ -360,7 +337,7 @@ public class EntityDefaultTest extends BaseTest {
     }
 
 
-    public boolean isValidDateFormat(String dateStr) {
+    private boolean isValidDateFormat(String dateStr) {
 
         DateFormat sdf = new SimpleDateFormat(dateStr);
         sdf.setLenient(false);
@@ -518,7 +495,7 @@ public class EntityDefaultTest extends BaseTest {
 
 
     /** create and test new default record and save Title value in this.title */
-    public void createRecord(WebDriver driver) {
+    private void createRecord(WebDriver driver) {
 
         driver.findElement(By.xpath("//a[@href='#menu-list-parent']")).click();
         driver.findElement(By.xpath("//i/following-sibling::p[contains (text(), 'Default')]")).click();
@@ -549,13 +526,6 @@ public class EntityDefaultTest extends BaseTest {
         //save new record
         WebElement saveBtn = driver.findElement(By.xpath("//button[.='Save']"));
         ProjectUtils.click(driver, saveBtn);
-    }
-
-    @Ignore
-    @Test(dependsOnMethods = "editRecord")
-    public void deleteRecord() {
-
-        //Code to delete default using title value in this.title
     }
 }
 
