@@ -201,7 +201,7 @@ public class EntityDefaultTest extends BaseTest {
 
         WebDriver driver = getDriver();
 
-        driver.findElement(By.xpath("//a[@href='#menu-list-parent']")).click();
+        //driver.findElement(By.xpath("//a[@href='#menu-list-parent']")).click();
         driver.findElement(By.xpath("//i/following-sibling::p[contains (text(), 'Default')]")).click();
 
         WebElement createFolder = driver.findElement(By.xpath("//i[.='create_new_folder']/ancestor::a"));
