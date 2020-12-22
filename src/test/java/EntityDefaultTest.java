@@ -609,7 +609,6 @@ public class EntityDefaultTest extends BaseTest {
 
         WebElement editFunction = driver.findElement(By.xpath("//a[text() = 'edit']"));
         editFunction.click();
-        Thread.sleep(500);
 
         inputString = driver.findElement(By.xpath("//input[@id='string']"));
         Assert.assertEquals(inputString.getAttribute("value"),"edited default string value");
