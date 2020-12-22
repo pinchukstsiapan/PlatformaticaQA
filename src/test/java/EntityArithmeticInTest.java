@@ -63,11 +63,11 @@ public class EntityArithmeticInTest extends BaseTest {
 
 
         WebElement findNCheckSub =
-                driver.findElement(By.xpath("/html/body/div/div[2]/div[1]/div/div/div/div/div[2]/div/div/div/div[4]/div"));
+                driver.findElement(By.xpath("//div[4]/div"));
         WebElement findNCheckMul =
-                driver.findElement(By.xpath("/html/body/div/div[2]/div[1]/div/div/div/div/div[2]/div/div/div/div[5]/div"));
+                driver.findElement(By.xpath("//div[5]/div"));
         WebElement findNCheckDiv =
-                driver.findElement(By.xpath("/html/body/div/div[2]/div[1]/div/div/div/div/div[2]/div/div/div/div[6]/div"));
+                driver.findElement(By.xpath("/v/div[6]/div"));
 
 
         Assert.assertEquals(findNCheckSub.getText(), Integer.toString(sub));
