@@ -1,6 +1,9 @@
 package runner;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public class LoggerUtils {
@@ -10,7 +13,16 @@ public class LoggerUtils {
     private static final String ANSI_GREEN = "\u001B[32m";
     private static final String ANSI_YELLOW = "\u001B[33m";
 
-    private static final Logger logger = Logger.getLogger("BaseLogger");
+    private static final Logger logger;
+    static {
+        try (FileInputStream fileInputStream = new FileInputStream("src/test/resources/log.properties")) {
+            LogManager.getLogManager().readConfiguration(fileInputStream);
+        } catch (IOException ex) {
+            throw new ExceptionInInitializerError(ex);
+        }
+
+        logger =  Logger.getLogger("BaseLogger");
+    }
 
     public static void log(Level level, String message) {
         logger.log(level, message);
