@@ -6,10 +6,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.ITestResult;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.*;
 import runner.type.ProfileType;
 import runner.type.RunType;
 
@@ -20,6 +17,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
+@Listeners(TestOrder.class)
 public abstract class  BaseTest {
 
     public static final String HUB_URL = "http://localhost:4444/wd/hub";
@@ -66,7 +64,15 @@ public abstract class  BaseTest {
         result.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         result.manage().window().maximize();
 
+        LoggerUtils.log("Browser opened");
+
         return result;
+    }
+
+    private void quitBrowser() {
+        getDriver().quit();
+
+        LoggerUtils.log("Browser closed");
     }
 
     private void startTest(WebDriver driver, ProfileType profileType) {
@@ -102,7 +108,7 @@ public abstract class  BaseTest {
     @AfterMethod
     protected void afterMethod(Method method, ITestResult tr) {
         if (runType == RunType.Single) {
-            getDriver().quit();
+            quitBrowser();
         }
 
         long executionTime = (tr.getEndMillis() - tr.getStartMillis()) / 1000;
@@ -113,7 +119,7 @@ public abstract class  BaseTest {
     @AfterClass
     protected void afterClass() {
         if (runType == RunType.Multiple) {
-            getDriver().quit();
+            quitBrowser();
         }
     }
 

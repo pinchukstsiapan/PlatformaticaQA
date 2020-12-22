@@ -50,4 +50,24 @@ public abstract class ProjectUtils {
         JavascriptExecutor executor = (JavascriptExecutor)driver;
         executor.executeScript("arguments[0].click()", element);
     }
+
+    public static void sendKeys(WebElement element, String keys) throws InterruptedException {
+        for (int i = 0; i< keys.length(); i++) {
+            element.sendKeys(keys.substring(i, i + 1));
+            Thread.sleep(100);
+        }
+    }
+
+    public static void sendKeys(WebElement element, int keys) throws InterruptedException {
+        sendKeys(element, String.valueOf(keys));
+    }
+
+    public static void sendKeys(WebElement element, double keys) throws InterruptedException {
+        sendKeys(element, String.valueOf(keys));
+    }
+
+    public static void setAttribute(WebDriver driver, WebElement element, String attName, String attValue) {
+        JavascriptExecutor executor = (JavascriptExecutor)driver;
+        executor.executeScript("arguments[0].setAttribute(arguments[1], arguments[2]);", element, attName, attValue);
+    }
 }
