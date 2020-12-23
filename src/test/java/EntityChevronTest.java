@@ -5,13 +5,15 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 import org.testng.Assert;
 import runner.ProjectUtils;
+import runner.type.Run;
+import runner.type.RunType;
 
 import java.util.List;
 import java.util.UUID;
 
 import static java.lang.Thread.sleep;
 
-
+@Run(run = RunType.Multiple)
 public class EntityChevronTest extends BaseTest {
 
     final private String TITLE = UUID.randomUUID().toString();
@@ -23,7 +25,7 @@ public class EntityChevronTest extends BaseTest {
     @Test
     public void findChevron() throws InterruptedException {
 
-        WebDriver driver = ProjectUtils.loginProcedure(getDriver());
+        WebDriver driver = getDriver();
 
         WebElement clickChevron = driver.findElement(By.xpath("//p[contains(text(),'Chevron')]"));
         ProjectUtils.click(driver, clickChevron);
@@ -114,8 +116,6 @@ public class EntityChevronTest extends BaseTest {
 
         WebDriver driver = getDriver();
 
-        addRecord();
-
         goMenuPage("Chevron");
 
         WebElement editMenu = driver.findElement(By.xpath("//a[contains(@href, 'action_edit')][1]"));
@@ -139,7 +139,7 @@ public class EntityChevronTest extends BaseTest {
         Assert.assertNotNull(row, "Title hasn't been found in the filtered list");
 
         WebElement viewMenu = row.findElement(By.xpath("//a[contains(@href, 'action_view')]"));
-        ProjectUtils.click(driver, editMenu);
+        ProjectUtils.click(driver, viewMenu);
 
         Assert.assertEquals(driver.findElement(By.xpath("//div[@id='crumbs']//a[@class='pa-chev-active']")).getText(), STATUS_EDITED, "New status is not equal");
     }
