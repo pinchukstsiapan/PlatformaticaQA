@@ -115,7 +115,7 @@ public class EntityCalendarTest extends BaseTest {
         dropdownDelete.click();
 
         WebElement deleteBtn = driver.findElement(By.xpath("//a[contains(text(),'delete')]"));
-        deleteBtn.click();
+        ProjectUtils.click(driver,deleteBtn);
 
         WebElement RecycleBin = driver.findElement(By.xpath("//i[contains(text(),'delete_outline')]"));
         RecycleBin.click();
