@@ -604,11 +604,11 @@ public class EntityDefaultTest extends BaseTest {
         ProjectUtils.click(driver,saveButton);
 
         //Validation
-        WebElement recordMenu = driver.findElement(By.xpath("//button[contains(@data-toggle, 'dropdown')] "));
+        WebElement recordMenu = driver.findElement(By.xpath("//tbody/tr[1]/td[11]/div[1]/button[1]"));
         recordMenu.click();
 
         WebElement editFunction = driver.findElement(By.xpath("//a[text() = 'edit']"));
-        editFunction.click();
+        ProjectUtils.click(driver, editFunction);
 
         inputString = driver.findElement(By.xpath("//input[@id='string']"));
         Assert.assertEquals(inputString.getAttribute("value"),"edited default string value");
