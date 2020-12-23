@@ -11,18 +11,71 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
-import java.util.List;
 
 public class EntityFieldOpsTest extends BaseTest {
+
+    private WebDriverWait getWait(int timeoutSecond) {
+        return new WebDriverWait(getDriver(), timeoutSecond);
+    }
+
+    private void goPageByName(String name) {
+        WebDriver driver = getDriver();
+        ProjectUtils.click(driver, driver.findElement(By.xpath(String.format("//p[contains(text(), ' %s ')]/..", name))));
+    }
+
+    private int getNumberOfRecords() {
+        int numOfRecords;
+        try {
+            By rowsInfo = By.xpath("//span[@class='pagination-info']");
+            numOfRecords = Integer.parseInt(getWait(1).until(ExpectedConditions
+                    .visibilityOfElementLocated(rowsInfo)).getText().split("of ")[1].split(" ")[0]);
+        } catch (TimeoutException e) {
+            numOfRecords = 0;
+        }
+
+        return numOfRecords;
+    }
+
+    private void deleteLastRecord() {
+        WebDriver driver = getDriver();
+        String lastRecordRowXpath = "//tbody/tr[last()]";
+        By recordMenuButton = By.xpath(String.format("%s//button", lastRecordRowXpath));
+        By deleteButton = By.xpath(String.format("%s//a[contains(@href, 'delete')]", lastRecordRowXpath));
+        driver.findElement(recordMenuButton).click();
+        ProjectUtils.click(driver, getWait(2).until(ExpectedConditions.elementToBeClickable(deleteButton)));
+    }
+
+    private void scrollToElement(WebElement element) {
+        Actions actions = new Actions(getDriver());
+        actions.moveToElement(element);
+        actions.perform();
+    }
+
+    private void createReferenceValue(String referenceValue) {
+        goPageByName("Reference values");
+        getDriver().findElement(By.xpath("//i[contains(text(),'create_new_folder')]")).click();
+        WebElement labelInput = getDriver().findElement(By.xpath("//input[@id='label']"));
+        labelInput.sendKeys(referenceValue);
+        WebElement saveButton = getDriver().findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
+        ProjectUtils.click(getDriver(), saveButton);
+    }
+
+    private void createFieldOpsToDelete(String referenceValue) throws InterruptedException {
+        goPageByName("Fields Ops");
+        getDriver().findElement(By.xpath("//i[contains(text(),'create_new_folder')]")).click();
+        Thread.sleep(5000);
+        WebElement deleteReferenceCheckBox = getDriver().findElement(By.xpath(String.format("//label[contains(text(), '%s')]", referenceValue)));
+        scrollToElement(deleteReferenceCheckBox);
+        deleteReferenceCheckBox.click();
+        WebElement saveButton = getDriver().findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
+        scrollToElement(saveButton);
+        ProjectUtils.click(getDriver(), saveButton);
+    }
 
     @Test
     public void newRecord() throws InterruptedException {
         WebDriver driver = getDriver();
-        ProjectUtils.loginProcedure(driver);
-        driver.get("https://ref.eteam.work");
-
-        WebElement tab = driver.findElement(By.xpath("//p[contains(text(),'Fields Ops')]"));
-        tab.click();
+        goPageByName("Fields Ops");
 
         WebElement createNewFolder = driver.findElement(By.xpath("//i[contains(text(),'create_new_folder')]"));
         createNewFolder.click();
@@ -101,54 +154,12 @@ public class EntityFieldOpsTest extends BaseTest {
         Assert.assertEquals(viewReferenceConstant, expReferenceConstant);
     }
 
-    private WebDriverWait getWait(int timeoutSecond) {
-        return new WebDriverWait(getDriver(), timeoutSecond);
-    }
-
-    private void setup() {
-        ProjectUtils.loginProcedure(getDriver());
-        goPageByName("Fields Ops");
-    }
-
-    public void goPageByName(String name) {
-        WebElement iconElement = getDriver().findElement(By.xpath(String.format("//p[contains(text(), ' %s ')]/..", name)));
-
-        if (!iconElement.isDisplayed()) {
-            scrollToElement(iconElement);
-        }
-        iconElement.click();
-    }
-
-    private int getNumberOfRecords() {
-        int numOfRecords;
-        try {
-            By rowsInfo = By.xpath("//span[@class='pagination-info']");
-            numOfRecords = Integer.parseInt(getWait(1).until(ExpectedConditions
-                    .visibilityOfElementLocated(rowsInfo)).getText().split("of ")[1].split(" ")[0]);
-        } catch (TimeoutException e) {
-            numOfRecords = 0;
-
-        }
-
-        return numOfRecords;
-    }
-
-    private void deleteLastRecord() {
-        WebDriver driver = getDriver();
-        String lastRecordRowXpath = "//tbody/tr[last()]";
-        By recordMenuButton = By.xpath(String.format("%s//button", lastRecordRowXpath));
-        By deleteButton = By.xpath(String.format("%s//a[contains(@href, 'delete')]", lastRecordRowXpath));
-        driver.findElement(recordMenuButton).click();
-        ProjectUtils.click(driver, getWait(2).until(ExpectedConditions.elementToBeClickable(deleteButton)));
-    }
-
-
     @Test
     @Ignore("https://trello.com/c/dG6yE2lf/35-fields-ops-deleted-record-isnt-present-in-the-recycle-bin")
     public void fieldOpsDeleteTest() throws InterruptedException {
         String referenceValue = "Delete Reference";
 
-        setup();
+        goPageByName("Fields Ops");
 
         createReferenceValue(referenceValue);
 
@@ -179,30 +190,4 @@ public class EntityFieldOpsTest extends BaseTest {
         Assert.assertTrue(firstRow.getText().contains("Delete Reference"));
     }
 
-    private void scrollToElement(WebElement element) {
-        Actions actions = new Actions(getDriver());
-        actions.moveToElement(element);
-        actions.perform();
-    }
-
-    private void createReferenceValue(String referenceValue) {
-        goPageByName("Reference values");
-        getDriver().findElement(By.xpath("//i[contains(text(),'create_new_folder')]")).click();
-        WebElement labelInput = getDriver().findElement(By.xpath("//input[@id='label']"));
-        labelInput.sendKeys(referenceValue);
-        WebElement saveButton = getDriver().findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
-        ProjectUtils.click(getDriver(), saveButton);
-    }
-
-    private void createFieldOpsToDelete(String referenceValue) throws InterruptedException {
-        goPageByName("Fields Ops");
-        getDriver().findElement(By.xpath("//i[contains(text(),'create_new_folder')]")).click();
-        Thread.sleep(5000);
-        WebElement deleteReferenceCheckBox = getDriver().findElement(By.xpath(String.format("//label[contains(text(), '%s')]", referenceValue)));
-        scrollToElement(deleteReferenceCheckBox);
-        deleteReferenceCheckBox.click();
-        WebElement saveButton = getDriver().findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
-        scrollToElement(saveButton);
-        ProjectUtils.click(getDriver(), saveButton);
-    }
 }
