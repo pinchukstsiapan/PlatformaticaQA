@@ -32,12 +32,8 @@ import java.util.List;
 /** set of utils to work with Google Drive */
 public class DriveUtils {
 
-    public static final String baseDirectoryName = "ScreenShots";
-
-    public static final String appName = "PlatfromaticaQA";
-
+    private static final String appName = "PlatfromaticaQA";
     private static final String baseFolderID = "1UHAsw6L5h5_yBBxaembAw-QVf7cIaG_f";
-
     private static final String mediaValues =
             "ewogICJ0eXBlIjogInNlcnZpY2VfYWNjb3VudCIsCiAgInByb2plY3RfaWQiOiAidHJhdmlzLWJ1aWxkZXIiLAogICJwcml2YXRlX2tleV9pZCI6ICJlYzdjNmVjNTliNGEyNWQyMTE4OGNlYTkzYzBjODkwZGU3M2FjZTgzIiwKICAicHJpdmF0ZV9rZXkiOiAiLS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tXG5NSUlFdlFJQkFEQU5CZ2txaGtpRzl3MEJBUUVGQUFTQ0JLY3dnZ1NqQWdFQUFvSUJBUUROQitwdSt1ZzgyKzNJXG5SNlo1ZEZRRlF1c05Cek9NUGdWVHl0bXVUNm50RCtsRkhod3NkakVWY2k5d1VXeFA1"
           + "N0pWSlZVRUdzZ0Fvc0xvXG56YVNDd0dKVDdoQitPbVFhMGJCOVNxVjFmR1VDajdENFg4MXExQ2EweEhTbS9reU9LZFZwZ1h4c3BUS3V0WEdmXG5YUTM0NGh1L3MrOUQ4eXE2U042UmtzQWhDY1ZtZnVMZHl0aTdiOTB6aTJQUldyKzVzQVpHelBxYzJScWszRkF3XG5rVFhRRXl0YlVyREZ0WDN1RmJJTGt4V2lEQXhWZjFiaG8xTjh4K3ZiVnZSQnNtWSthQUZEdldBelVpWjBFUldkXG5FdER1Z21teUphanY5TDV6ejZCdWRVUGdMYmhKSml3TWQxL2c2bzc1Sit6Q0VVVnBYZVh2TllYUVRsdi9UNng3XG5Xc0ZlRzM2dkFnT"
@@ -48,36 +44,24 @@ public class DriveUtils {
           + "G5kQkphVXFrMlpXaU9DaGM0MGxZcklmK1VtRnBKazM3N1BSazA0MkVLenE2S0YrWGdyMXFrM2E1ZXB2TkkybVJYXG5vLy9JeUhzd3ZWbTQ4dW5hbXcrSHBTbz1cbi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS1cbiIsCiAgImNsaWVudF9lbWFpbCI6ICJwbGF0ZnJvbWF0aWNhcWFAdHJhdmlzLWJ1aWxkZXIuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLAogICJjbGllbnRfaWQiOiAiMTAwNzc2MTA0ODczNjU5MzQ5ODY4IiwKICAiYXV0aF91cmkiOiAiaHR0cHM6Ly9hY2NvdW50cy5nb29nbGUuY29tL28vb2F1dGgyL2F1d"
           + "GgiLAogICJ0b2tlbl91cmkiOiAiaHR0cHM6Ly9vYXV0aDIuZ29vZ2xlYXBpcy5jb20vdG9rZW4iLAogICJhdXRoX3Byb3ZpZGVyX3g1MDlfY2VydF91cmwiOiAiaHR0cHM6Ly93d3cuZ29vZ2xlYXBpcy5jb20vb2F1dGgyL3YxL2NlcnRzIiwKICAiY2xpZW50X3g1MDlfY2VydF91cmwiOiAiaHR0cHM6Ly93d3cuZ29vZ2xlYXBpcy5jb20vcm9ib3QvdjEvbWV0YWRhdGEveDUwOS9wbGF0ZnJvbWF0aWNhcWElNDB0cmF2aXMtYnVpbGRlci5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIKfQ==";
 
-    /** get list of all files and folders with all available fields */
-    private static List<File> getAllFilesList(Drive drive) {
-        String fields = "nextPageToken, files(*)";
-
-        return getAllFilesList(drive, fields);
-    }
-
-    /** get list of all files and folders with requested fields */
     private static List<File> getAllFilesList(Drive drive, String fields) {
-        if (drive == null) {
-            return null;
-        }
         if (fields == null || fields.isEmpty()) {
             fields = "nextPageToken, files(*)";
         }
-        FileList result = null;
-        Drive.Files files = drive.files();
 
-        Drive.Files.List list = null;
+        Drive.Files files = drive.files();
         try {
-            result = files.
+            return  files.
                     list().
                     setPageSize(100).
                     setFields(fields).
-                    execute();
+                    execute().
+                    getFiles();
         } catch (IOException ioException) {
             LoggerUtils.logRed(String.format("Unable to get list of files\n%s", getStackTrace(ioException)));
         }
 
-        return result.getFiles();
+        return null;
     }
 
     /** Build an authorized Drive client service and login.
@@ -221,7 +205,7 @@ public class DriveUtils {
         }
     }
 
-    /** set permissions required to share files with PlatformaticaQA@gmail.com */
+    /** Set permissions required to share files with PlatformaticaQA@gmail.com */
     private static void setPermissions(Drive drive, String fileId) {
         JsonBatchCallback<Permission> callback = new JsonBatchCallback<Permission>() {
             @Override
