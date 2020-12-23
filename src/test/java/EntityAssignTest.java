@@ -191,6 +191,7 @@ public class EntityAssignTest extends BaseTest {
     private String currentUser = "";
     private final String myAssignmentsTabLink = "https://ref.eteam.work/index.php?action=screen&screen_id=40&filter";
 
+    @Ignore
     @Test
     public void assignTest1() {
 

@@ -4,10 +4,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
+import runner.type.Run;
+import runner.type.RunType;
 
+@Run(run = RunType.Multiple)
 public class EntityCalendarTest extends BaseTest {
 
     @Test
@@ -47,5 +51,32 @@ public class EntityCalendarTest extends BaseTest {
         listElement.click();
 
         driver.findElement(By.xpath("//div[contains(text(), '" + string + "')]"));
+    }
+
+    @Test(dependsOnMethods = "newCalendar")
+    public void editCalendar() throws InterruptedException {
+
+        WebDriver driver = getDriver();
+        WebElement calendar = driver.findElement(By.xpath("//p[contains(text(),'Calendar')]"));
+        ProjectUtils.click(driver, calendar);
+        WebElement list = driver.findElement(By.xpath("//div[@class='content']//li[2]"));
+        list.click();
+        WebElement editList = driver.findElement(By.xpath("//button[@class='btn btn-round btn-sm btn-primary dropdown-toggle']"));
+        editList.click();
+        Thread.sleep(1000);
+        WebElement clickEdit = driver.findElement(By.xpath("//a[normalize-space()='edit']"));
+        clickEdit.click();
+        WebElement str = driver.findElement(By.xpath("//input[@id='string']"));
+        str.clear();
+        str.sendKeys("New Zapis");
+        WebElement text = driver.findElement(By.xpath("//textarea[@id='text']"));
+        text.clear();
+        text.sendKeys("Ne znayu chto delat");
+        WebElement number = driver.findElement(By.xpath("//*[@id='int']"));
+        number.sendKeys("585");
+        WebElement save = driver.findElement(By.xpath("//button[normalize-space()='Save']"));
+        ProjectUtils.click(driver, save);
+        WebElement resultEdit = driver.findElement(By.xpath("//tr//td[3]"));
+        Assert.assertEquals(resultEdit.getText(), "Ne znayu chto delat");
     }
 }
