@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 @Listeners(TestOrder.class)
 public abstract class  BaseTest {
+    private String screenshotDirectoryName = null;
 
     public static final String HUB_URL = "http://localhost:4444/wd/hub";
 
@@ -87,23 +88,6 @@ public abstract class  BaseTest {
         ProjectUtils.reset(driver);
     }
 
-    private static final String screenshotDirectoryName;
-    static {
-        String tempPath = System.getProperty("java.io.tmpdir");
-        // on windows last char is '\', on Linux is 'p' so need to add separator
-        if (tempPath.charAt(tempPath.length()-1) != File.separator.charAt(0)) {
-            tempPath += File.separator;
-        }
-        screenshotDirectoryName = tempPath + (new SimpleDateFormat("YYYY-MM-dd-kk-mm-").format(new Date()))
-                + UUID.randomUUID().toString();
-    }
-
-    @BeforeSuite
-    protected void beforeSuite() {
-        ScreenshotUtils.createScreenshotsDir(screenshotDirectoryName);
-        LoggerUtils.log("Created directory to save screenshots: " + screenshotDirectoryName);
-    }
-
     @BeforeClass
     protected void beforeClass() {
         profileType = TestUtils.getProfileType(this, ProfileType.DEFAULT);
@@ -133,7 +117,25 @@ public abstract class  BaseTest {
 
     @AfterMethod
     protected void afterMethod(Method method, ITestResult tr) {
+        boolean createDirectory = false;
         if (ITestResult.FAILURE == tr.getStatus()) {
+            if (screenshotDirectoryName == null) {
+                createDirectory = true;
+                String tempPath = System.getProperty("java.io.tmpdir");
+                // on windows last char is '\', on Linux is 'p' so need to add separator
+                if (tempPath.charAt(tempPath.length()-1) != File.separator.charAt(0)) {
+                    tempPath += File.separator;
+                }
+                screenshotDirectoryName = tempPath
+                        + (new SimpleDateFormat("YYYY-MM-dd-kk-mm-").format(new Date()))
+                        + UUID.randomUUID().toString();
+            }
+
+            ScreenshotUtils.createScreenshotsDir(screenshotDirectoryName);
+            if (createDirectory) {
+                LoggerUtils.logYellow("Created directory to save screenshots: " + screenshotDirectoryName);
+            }
+
             ScreenshotUtils.takeScreenShot(getDriver(),
                     screenshotDirectoryName + File.separator + tr.getInstanceName() + "." + tr.getName() + ".png");
         }

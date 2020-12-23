@@ -36,7 +36,7 @@ public abstract class ScreenshotUtils {
     public static void createScreenshotsDir(String fullPath) {
         Path dirFullPath = Paths.get(fullPath);
         if (Files.exists(dirFullPath)) {
-            LoggerUtils.logYellow(String.format("WARNING: Directory %s already exists!", dirFullPath));
+            LoggerUtils.logYellow(String.format("Continue to save in the directory %s", dirFullPath));
         } else {
             try {
                 Files.createDirectories(dirFullPath);
