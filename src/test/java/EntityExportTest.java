@@ -154,7 +154,6 @@ public class EntityExportTest extends BaseTest {
         driver.findElement(By.xpath("//div[@id='menu-list-parent']//p[contains(text(), 'Export')]")).click();
     }
 
-
     @Test (dependsOnMethods = "inputTest")
     public void viewTest() throws InterruptedException {
 

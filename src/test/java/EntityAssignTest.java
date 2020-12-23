@@ -188,14 +188,94 @@ public class EntityAssignTest extends BaseTest {
         Assert.assertTrue(table2.getText().contains(TASK_TITLE));
     }
 
+    private String currentUser = "";
+    private final String myAssignmentsTabLink = "https://ref.eteam.work/index.php?action=screen&screen_id=40&filter";
+
+    @Ignore
     @Test
     public void assignTest1() {
+
+        createRecord();
+
+        WebDriver driver = getDriver();
+
+        driver.navigate().refresh();
+
+        WebElement selectedUser = driver.findElement(By.xpath("//div[contains(text(),'mb--simple text')]" +
+                "/../../..//option[@selected and normalize-space(text())='" + currentUser + "']"));
+
+        Assert.assertTrue(selectedUser.isDisplayed());
+
+        WebElement myAssignmentsTab = driver.findElement(By.xpath("//li[@id='pa-menu-item-41']"));
+        myAssignmentsTab.click();
+
+        Assert.assertEquals(driver.getCurrentUrl(), myAssignmentsTabLink);
+
+        Assert.assertTrue(driver.findElement(By.xpath("//div[contains(text(),'mb--simple text')]")).isDisplayed());
+    }
+
+    @Test
+    public void editTest1() {
+
+        final String anotherUser = "user198@tester.com";
+
+        createRecord();
+
+        WebDriver driver = getDriver();
+
+        Select changeUser = new Select(driver.findElement(By.className("pa-list-assignee")));
+
+        changeUser.selectByVisibleText(anotherUser);
+
+        driver.navigate().refresh();
+
+        WebElement selectedUser = driver.findElement(By.xpath("//div[contains(text(),'mb--simple text')]" +
+                "/../../..//option[@selected and normalize-space(text())='" + anotherUser + "']"));
+
+        Assert.assertTrue(selectedUser.isDisplayed());
+
+        WebElement myAssignmentsTab = driver.findElement(By.xpath("//li[@id='pa-menu-item-41']"));
+        myAssignmentsTab.click();
+
+        Assert.assertEquals(driver.getCurrentUrl(), myAssignmentsTabLink);
+
+        Assert.assertTrue(driver.findElements(By.xpath("//div[contains(text(),'mb--simple text')]")).isEmpty());
+    }
+
+    @Test
+    public void deleteTest1() {
+
+        createRecord();
+
+        WebDriver driver = getDriver();
+
+        WebElement deleteRecord = driver.findElement(By.xpath("//a[text()='delete']"));
+        ProjectUtils.click(driver, deleteRecord);
+
+        Assert.assertTrue(driver.findElements(By.xpath("//div[contains(text(),'mb--simple text')]")).isEmpty());
+
+        WebElement recycleBin = driver.findElement(By.xpath("//a[contains(@href,'recycle_bin')]"));
+        ProjectUtils.click(driver, recycleBin);
+
+        WebElement deletedRecord = driver.findElement(By.xpath
+                ("//td[text()='Assign']/..//b[contains(text(),'mb--simple text')]"));
+
+        Assert.assertTrue(deletedRecord.isDisplayed());
+
+        WebElement myAssignmentsTab = driver.findElement(By.xpath("//li[@id='pa-menu-item-41']"));
+        myAssignmentsTab.click();
+
+        Assert.assertEquals(driver.getCurrentUrl(), myAssignmentsTabLink);
+
+        Assert.assertTrue(driver.findElements(By.xpath("//div[contains(text(),'mb--simple text')]")).isEmpty());
+    }
+
+    public void createRecord() {
 
         final String stringInp = UUID.randomUUID().toString();
         final String textInp = "mb--simple text";
         final int intInp = 10;
         final double decimalInp = 13.5;
-        final String myAssignmentsTabLink = "https://ref.eteam.work/index.php?action=screen&screen_id=40&filter";
 
         WebDriver driver = getDriver();
 
@@ -226,39 +306,18 @@ public class EntityAssignTest extends BaseTest {
         WebElement saveButton = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
         ProjectUtils.click(driver, saveButton);
 
-        String loggedInUser = driver.findElement(By.xpath("//a[@id='navbarDropdownProfile']")).getText().substring(7);
         String[] listOfUsers = driver.findElement(By.xpath("//select")).getText().split("\n|\\                ");
-        String currentUser = determineCurrentUser(listOfUsers, loggedInUser);
+
+        String loggedInUser = driver.findElement(By.xpath("//a[@id='navbarDropdownProfile']")).getText().substring(7);
+
+        for (String user : listOfUsers) {
+            if (loggedInUser.equalsIgnoreCase(user)) {
+                currentUser = user;
+            }
+        }
 
         WebElement userSelect = driver.findElement(By.xpath("//div[contains(text(),'mb--simple text')]" +
                 "/../../..//option[normalize-space(text())='" + currentUser + "']"));
         userSelect.click();
-
-        driver.navigate().refresh();
-
-        WebElement selectedUser = driver.findElement(By.xpath("//div[contains(text(),'mb--simple text')]" +
-                "/../../..//option[@selected and normalize-space(text())='" + currentUser + "']"));
-
-        Assert.assertTrue(selectedUser.isDisplayed());
-
-        WebElement myAssignmentsTab = driver.findElement(By.xpath("//li[@id='pa-menu-item-41']"));
-        myAssignmentsTab.click();
-
-        Assert.assertEquals(driver.getCurrentUrl(), myAssignmentsTabLink);
-
-        Assert.assertTrue(driver.findElement(By.xpath("//div[contains(text(),'mb--simple text')]")).isDisplayed());
-    }
-
-    public String determineCurrentUser(String[] users, String user) {
-
-        String currentUser = "";
-
-        for (int i = 0; i < users.length; i++) {
-            if (user.equalsIgnoreCase(users[i])) {
-                currentUser = users[i];
-            }
-        }
-
-        return currentUser;
     }
 }
