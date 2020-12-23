@@ -157,7 +157,13 @@ public abstract class  BaseTest {
     @AfterSuite
     protected void afterSuite() {
         if (remoteWebDriver) {
-            ScreenshotUtils.uploadScreenshotsDir(screenshotDirectoryName);
+            try {
+                ScreenshotUtils.uploadScreenshotsDir(screenshotDirectoryName);
+            } catch (Exception exception) {
+                LoggerUtils.logRed(String.format("unable to upload images directory %s to Google drive \n%s",
+                        screenshotDirectoryName,
+                        DriveUtils.getStackTrace(exception)));
+            }
         }
     }
 

@@ -20,7 +20,10 @@ import com.google.api.services.drive.model.Permission;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.security.GeneralSecurityException;
 import java.util.Base64;
 import java.util.Collections;
@@ -45,8 +48,15 @@ public class DriveUtils {
           + "G5kQkphVXFrMlpXaU9DaGM0MGxZcklmK1VtRnBKazM3N1BSazA0MkVLenE2S0YrWGdyMXFrM2E1ZXB2TkkybVJYXG5vLy9JeUhzd3ZWbTQ4dW5hbXcrSHBTbz1cbi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS1cbiIsCiAgImNsaWVudF9lbWFpbCI6ICJwbGF0ZnJvbWF0aWNhcWFAdHJhdmlzLWJ1aWxkZXIuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLAogICJjbGllbnRfaWQiOiAiMTAwNzc2MTA0ODczNjU5MzQ5ODY4IiwKICAiYXV0aF91cmkiOiAiaHR0cHM6Ly9hY2NvdW50cy5nb29nbGUuY29tL28vb2F1dGgyL2F1d"
           + "GgiLAogICJ0b2tlbl91cmkiOiAiaHR0cHM6Ly9vYXV0aDIuZ29vZ2xlYXBpcy5jb20vdG9rZW4iLAogICJhdXRoX3Byb3ZpZGVyX3g1MDlfY2VydF91cmwiOiAiaHR0cHM6Ly93d3cuZ29vZ2xlYXBpcy5jb20vb2F1dGgyL3YxL2NlcnRzIiwKICAiY2xpZW50X3g1MDlfY2VydF91cmwiOiAiaHR0cHM6Ly93d3cuZ29vZ2xlYXBpcy5jb20vcm9ib3QvdjEvbWV0YWRhdGEveDUwOS9wbGF0ZnJvbWF0aWNhcWElNDB0cmF2aXMtYnVpbGRlci5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIKfQ==";
 
-    /** get files list matching pattern with requested fields */
-    private static List<File> getFilesList(Drive drive, String fields, String searchPattern) {
+    /** get list of all files and folders with all available fields */
+    private static List<File> getAllFilesList(Drive drive) {
+        String fields = "nextPageToken, files(*)";
+
+        return getAllFilesList(drive, fields);
+    }
+
+    /** get list of all files and folders with requested fields */
+    private static List<File> getAllFilesList(Drive drive, String fields) {
         if (drive == null) {
             return null;
         }
@@ -58,7 +68,6 @@ public class DriveUtils {
 
         Drive.Files.List list = null;
         try {
-            //TODO: add implementation of searchPattern
             result = files.
                     list().
                     setPageSize(100).
@@ -75,9 +84,9 @@ public class DriveUtils {
      * @return an authorized Drive client service
      */
     public static Drive login() {
-        Drive driveService = null;
+        Drive driveService;
+        HttpTransport httpTransport;
 
-        HttpTransport httpTransport = null;
         try {
             httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         } catch (GeneralSecurityException | IOException ex) {
@@ -132,7 +141,7 @@ public class DriveUtils {
     }
 
     /** delete file from Drive */
-    public static void deleteFile(Drive drive, File file){
+    private static void deleteFile(Drive drive, File file){
         try {
             if (!baseFolderID.equals(file.getId())) {
                 drive.files().delete(file.getId()).execute();
@@ -150,7 +159,7 @@ public class DriveUtils {
     }
 
     /** Upload file filePath to the drive in to folder with ID=folderID */
-    public static String uploadFile(Drive drive, String folderID, java.io.File filePath, String mimeType) {
+    private static String uploadFile(Drive drive, String folderID, java.io.File filePath, String mimeType) {
         if (filePath == null) {
             return null;
         }
@@ -183,7 +192,7 @@ public class DriveUtils {
         // Create folder on Drive
         String newFolderID = createFolder(drive, baseFolderID, dir.getName());
         java.io.File[] files = dir.listFiles();
-        if (files.length == 0) {
+        if (files ==null || files.length == 0) {
             LoggerUtils.logYellow(String.format("The directory %s is empty", directoryPath));
         } else {
             for (java.io.File aFile : files) {
@@ -194,18 +203,17 @@ public class DriveUtils {
     }
 
     /** Get list of files from folder by ID */
-    public static List<File> getFilesListInFolder(Drive drive, String folderID) {
-        List<File> files = getFilesList(drive, "nextPageToken, files(id, name, size, mimeType, permissions)", "*");
-        return files;
+    private static List<File> getFilesListInFolder(Drive drive, String folderID) {
+        return getAllFilesList(drive, "nextPageToken, files(id, name, size, mimeType, permissions)");
     }
 
     /** print into system output all files in the list */
-    public static void printFilesInFolder(List<File> files) {
+    private static void printFilesInFolder(List<File> files) {
         System.out.println("\nFiles:");
         for (File file : files) {
             if (file.getSize() != null) {
                 System.out.printf("[%s]  %6.2fK  %s%n", file.getId(),
-                        ((int) 100 * file.getSize() / 1024) / 100.0,
+                        (100 * file.getSize()/1024) / 100.0,
                         file.getName());
             } else {
                 System.out.printf("[%s]  -------  %s%n", file.getId(), file.getName());
@@ -217,18 +225,13 @@ public class DriveUtils {
     private static void setPermissions(Drive drive, String fileId) {
         JsonBatchCallback<Permission> callback = new JsonBatchCallback<Permission>() {
             @Override
-            public void onFailure(GoogleJsonError e,
-                                  HttpHeaders responseHeaders)
-                    throws IOException {
-                // Handle error
-                System.err.println(e.getMessage());
+            public void onFailure(GoogleJsonError e, HttpHeaders responseHeaders) {
+                LoggerUtils.logRed(e.getMessage());
             }
 
             @Override
-            public void onSuccess(Permission permission,
-                                  HttpHeaders responseHeaders)
-                    throws IOException {
-                System.out.println("Permission ID: " + permission.getId());
+            public void onSuccess(Permission permission, HttpHeaders responseHeaders) {
+                LoggerUtils.logRed("Permission ID: " + permission.getId());
             }
         };
         BatchRequest batch = drive.batch();
@@ -250,7 +253,7 @@ public class DriveUtils {
 
     }
 
-    private static String getStackTrace(Exception ex) {
+    public static String getStackTrace(Exception ex) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         ex.printStackTrace(pw);
