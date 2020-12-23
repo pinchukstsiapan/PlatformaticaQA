@@ -1,3 +1,4 @@
+import org.apache.commons.compress.compressors.zstandard.ZstdCompressorOutputStream;
 import org.openqa.selenium.remote.internal.WebElementToJsonConverter;
 import runner.BaseTest;
 import org.openqa.selenium.*;
@@ -16,11 +17,11 @@ import static java.lang.Thread.sleep;
 @Run(run = RunType.Multiple)
 public class EntityChevronTest extends BaseTest {
 
-    final private String TITLE = UUID.randomUUID().toString();
-    final private String INT_NUMBER = "123";
-    final private String DOUBLE_NUMBER = "4.56";
-    final private String STATUS_NEW = "Fulfillment";
-    final private String STATUS_EDITED = "Pending";
+    private static final String TITLE = UUID.randomUUID().toString();
+    private static final String INT_NUMBER = "123";
+    private static final String DOUBLE_NUMBER = "4.56";
+    private static final String STATUS_NEW = "Fulfillment";
+    private static final String STATUS_EDITED = "Pending";
 
     @Test
     public void findChevron() throws InterruptedException {
@@ -73,7 +74,7 @@ public class EntityChevronTest extends BaseTest {
         Assert.assertEquals(ExpectedSign, recheckFulfillment.getText());
     }
 
-    @Test
+    @Test(dependsOnMethods = "findChevron")
     private void addRecord () throws InterruptedException {
 
         WebDriver driver = getDriver();
@@ -118,8 +119,11 @@ public class EntityChevronTest extends BaseTest {
 
         goMenuPage("Chevron");
 
-        WebElement editMenu = driver.findElement(By.xpath("//a[contains(@href, 'action_edit')][1]"));
-        ProjectUtils.click(driver, editMenu);
+        WebElement row = findRowByTitle(TITLE);
+        Assert.assertNotNull(row, "Title hasn't been found in the filtered list");
+
+        WebElement editLink = row.findElement(By.xpath(".//a[contains(@href, 'action_edit')]"));
+        ProjectUtils.click(driver, editLink);
 
         WebElement stringFieldMenu = driver.findElement(By.xpath("//button[@data-id='string']"));
         ProjectUtils.click(driver, stringFieldMenu);
@@ -135,10 +139,10 @@ public class EntityChevronTest extends BaseTest {
         WebElement linkPending = driver.findElement(By.xpath(String.format("//div[contains(@class,'card-body')]/div/a[contains(text(), '%s')]", STATUS_EDITED)));
         ProjectUtils.click(driver, linkPending);
 
-        WebElement row = findRowByTitle(TITLE);
+        row = findRowByTitle(TITLE);
         Assert.assertNotNull(row, "Title hasn't been found in the filtered list");
 
-        WebElement viewMenu = row.findElement(By.xpath("//a[contains(@href, 'action_view')]"));
+        WebElement viewMenu = row.findElement(By.xpath(".//a[contains(@href, 'action_view')]"));
         ProjectUtils.click(driver, viewMenu);
 
         Assert.assertEquals(driver.findElement(By.xpath("//div[@id='crumbs']//a[@class='pa-chev-active']")).getText(), STATUS_EDITED, "New status is not equal");
@@ -146,12 +150,15 @@ public class EntityChevronTest extends BaseTest {
 
     private WebElement findRowByTitle(String title) {
 
-        List<WebElement> rows = getDriver().findElement(By.xpath("//table[@id = 'pa-all-entities-table']")).findElements(By.xpath(".//tbody/tr"));
+        List<WebElement> rows = getDriver().findElements(By.xpath("//table[@id = 'pa-all-entities-table']//tbody/tr"));
 
         for (WebElement row : rows) {
-            WebElement cell = row.findElement(By.xpath(String.format(".//td//div[contains(text(),'%s')]", title)));
-            if (cell != null) {
-                return row;
+            List<WebElement> cells = row.findElements(By.tagName("td"));
+            for (WebElement cell : cells) {
+                System.out.println(cell.getText());
+                if (cell.getText().equals(title)) {
+                    return row;
+                }
             }
         }
 
