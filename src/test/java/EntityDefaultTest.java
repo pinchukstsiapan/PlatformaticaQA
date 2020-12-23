@@ -604,10 +604,10 @@ public class EntityDefaultTest extends BaseTest {
         ProjectUtils.click(driver,saveButton);
 
         //Validation
-        WebElement recordMenu = driver.findElement(By.xpath("//tbody/tr[1]/td[11]/div[1]/button[1]"));
+        WebElement recordMenu = driver.findElement(By.xpath("//i[.='menu']"));
         recordMenu.click();
 
-        WebElement editFunction = driver.findElement(By.xpath("//a[text() = 'edit']"));
+        WebElement editFunction = driver.findElement(By.xpath("//a[text()='edit']"));
         ProjectUtils.click(driver, editFunction);
 
         inputString = driver.findElement(By.xpath("//input[@id='string']"));
