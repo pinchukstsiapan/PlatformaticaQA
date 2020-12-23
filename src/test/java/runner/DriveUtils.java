@@ -20,11 +20,9 @@ import com.google.api.services.drive.model.Permission;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.security.GeneralSecurityException;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,8 +33,17 @@ public class DriveUtils {
 
     public static final String appName = "PlatfromaticaQA";
 
-    // ScreenShots [1UHAsw6L5h5_yBBxaembAw-QVf7cIaG_f]  mimeType: application/vnd.google-apps.folder
     private static final String baseFolderID = "1UHAsw6L5h5_yBBxaembAw-QVf7cIaG_f";
+
+    private static final String mediaValues =
+            "ewogICJ0eXBlIjogInNlcnZpY2VfYWNjb3VudCIsCiAgInByb2plY3RfaWQiOiAidHJhdmlzLWJ1aWxkZXIiLAogICJwcml2YXRlX2tleV9pZCI6ICJlYzdjNmVjNTliNGEyNWQyMTE4OGNlYTkzYzBjODkwZGU3M2FjZTgzIiwKICAicHJpdmF0ZV9rZXkiOiAiLS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tXG5NSUlFdlFJQkFEQU5CZ2txaGtpRzl3MEJBUUVGQUFTQ0JLY3dnZ1NqQWdFQUFvSUJBUUROQitwdSt1ZzgyKzNJXG5SNlo1ZEZRRlF1c05Cek9NUGdWVHl0bXVUNm50RCtsRkhod3NkakVWY2k5d1VXeFA1"
+          + "N0pWSlZVRUdzZ0Fvc0xvXG56YVNDd0dKVDdoQitPbVFhMGJCOVNxVjFmR1VDajdENFg4MXExQ2EweEhTbS9reU9LZFZwZ1h4c3BUS3V0WEdmXG5YUTM0NGh1L3MrOUQ4eXE2U042UmtzQWhDY1ZtZnVMZHl0aTdiOTB6aTJQUldyKzVzQVpHelBxYzJScWszRkF3XG5rVFhRRXl0YlVyREZ0WDN1RmJJTGt4V2lEQXhWZjFiaG8xTjh4K3ZiVnZSQnNtWSthQUZEdldBelVpWjBFUldkXG5FdER1Z21teUphanY5TDV6ejZCdWRVUGdMYmhKSml3TWQxL2c2bzc1Sit6Q0VVVnBYZVh2TllYUVRsdi9UNng3XG5Xc0ZlRzM2dkFnT"
+          + "UJBQUVDZ2dFQVYvSFFSZ0JMdzJjV3JIVEhYSXRnU3MxMFl5YzJuaTR3UE12aTZWajBhMklLXG56Z0huVmM3d3FPRk1wZUhYRXNNd2hFTTZIME9aakdSRU5IV1kzaGpGVkhqbURDN2hwM3RRTjczZ0VPL2xwOTZZXG5xMEQwcktFSlpUcHJTd0lETm11TlJlOHJ2ckp4ZGUwUUtxcFFodlA5c1JIdVRIZ3VXSzlQQUtRdzB6c011RFJxXG5hNEZkUlA2d1J3ZlJkZEpqOEVUQ1VTN0NnRTdIa0pBUGVydXdvSlpwTWdBRFI5VXYyZHJVUDVqMjVBRTVTcTV1XG5VRWI1Vkh4WUN4a3p5amJxZU5vVFRQUVNCZWdOVkl4WEFqTE83ZjhRS"
+          + "lgwc05kNEhJTzFCRjFQT2w3VWROV04zXG50bktJN0VKUXVJNkphelZrajNUUEhKa0tTNlpNNjk5eTljQ0pTZUxMR1FLQmdRRG8vZDkrZXNkWnh2N0liUVEvXG5ZV1ZHQmc4NE91TGxIRnc5RnZsWnRUY3djaG8xUHBUM1ZKSUhwaFBoc1BNakMvcU1PazZhTXh3ZzRGdTIrM1lYXG5kQlU1Qy9vS3JKeTRnWWFRbkdVU1lLcEoyc1hmRWZFcmpEMHd2NDIxYUd0bUV2UXZZWmNnUTNKN1ZmeTllN0NDXG5weXQyUmRkbjQvUlh6MEt6Y2R4OHNxZTk4d0tCZ1FEaFJ5N01tbExoVEl3WHNYM2ZQWW9Db2UvYnd6Z20vSkc5XG54OWx6M"
+          + "UgyMWZ0NjduMklZNkk0RTRKZEpLMzkxc2kwVFRRYVhaYmtNS1pzU3NreU1TQUF1dEhvR1lTM1lrRmlRXG5YT3cwMSsvV1NrVnRYcHU0YnhZT1dFemFCKzVIdS82aUVLMmFPcTFDcGNvQnQxU3RuNGlKRG44czVjZTlDMDB4XG45aW9IeHpNZlZRS0JnUUMyVStXUC90aitRcUdqaXR4bUZQdkJ2b0F1aXJhQWdKOFdGMkp1ZDBlSEcrT3lneFRrXG5NRVJPeEFLTy9ZQm5qcm8wL25RQWE3cTVaNW1lS2s2UnIvL2pzcUdydE1TNEJuU2R1aVhHS2V0WS9HRVlYZHdUXG5MaDI4aGtxSkNmdngxeWRMNU56MUhKTDhQYUFaVURBakxsc"
+          + "nVwVjBhS2VOT3pCendmRXdGTVhIZlRRS0JnSDBZXG5NZnlibFhwV0wxVFkwclNzVDM2MnZhS2kvUU5wTE9UZG5QcWMvRkZVYWdwMXJ0dDJCNmJkc0NTSmF2WElRdzk4XG5yalJUNERYSXhMdlZGbnl2WHFxUXZWSGRsTCsxSi9qQ0lNZ1hRSzhWL3dlRWlhUVl5MzZidWRFNHBqQmZURDVpXG5WSVJZSU8zcGNnc1I2b3VmRXdwSWFvWmI4bFlmZUhaTjQzaitQSDBoQW9HQVlzbjhDeWczQ2phT0czQkNIblFJXG5oeFI2Q0ZsT2ZKaExxZ1RJWmhMMDg2ci90dFNGRFJKVURUc1ZpRzMrN2RWVDk0YTlxL3lwQUhkZWNQd09XMWk4X"
+          + "G5kQkphVXFrMlpXaU9DaGM0MGxZcklmK1VtRnBKazM3N1BSazA0MkVLenE2S0YrWGdyMXFrM2E1ZXB2TkkybVJYXG5vLy9JeUhzd3ZWbTQ4dW5hbXcrSHBTbz1cbi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS1cbiIsCiAgImNsaWVudF9lbWFpbCI6ICJwbGF0ZnJvbWF0aWNhcWFAdHJhdmlzLWJ1aWxkZXIuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLAogICJjbGllbnRfaWQiOiAiMTAwNzc2MTA0ODczNjU5MzQ5ODY4IiwKICAiYXV0aF91cmkiOiAiaHR0cHM6Ly9hY2NvdW50cy5nb29nbGUuY29tL28vb2F1dGgyL2F1d"
+          + "GgiLAogICJ0b2tlbl91cmkiOiAiaHR0cHM6Ly9vYXV0aDIuZ29vZ2xlYXBpcy5jb20vdG9rZW4iLAogICJhdXRoX3Byb3ZpZGVyX3g1MDlfY2VydF91cmwiOiAiaHR0cHM6Ly93d3cuZ29vZ2xlYXBpcy5jb20vb2F1dGgyL3YxL2NlcnRzIiwKICAiY2xpZW50X3g1MDlfY2VydF91cmwiOiAiaHR0cHM6Ly93d3cuZ29vZ2xlYXBpcy5jb20vcm9ib3QvdjEvbWV0YWRhdGEveDUwOS9wbGF0ZnJvbWF0aWNhcWElNDB0cmF2aXMtYnVpbGRlci5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIKfQ==";
 
     /** get files list matching pattern with requested fields */
     private static List<File> getFilesList(Drive drive, String fields, String searchPattern) {
@@ -66,18 +73,12 @@ public class DriveUtils {
 
     /** Build an authorized Drive client service and login.
      * @return an authorized Drive client service
-     * @throws IOException
      */
     public static Drive login() {
         Drive driveService = null;
 
         HttpTransport httpTransport = null;
         try {
-            // Get a new instance of NetHttpTransport that uses GoogleUtils.getCertificateTrustStore() for the trusted
-            // certificates using NetHttpTransport.Builder.trustCertificates(KeyStore).
-            // If `GOOGLE_API_USE_CLIENT_CERTIFICATE` environment variable is set to "true", and the default client
-            // certificate key store from Utils#loadDefaultMtlsKeyStore() is not null, then the transport uses the
-            // default client certificate and is mutual TLS.
             httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         } catch (GeneralSecurityException | IOException ex) {
             LoggerUtils.logRed(String.format("Unable to get a new instance of NetHttpTransport\n%s", getStackTrace(ex)));
@@ -88,12 +89,10 @@ public class DriveUtils {
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
         //Build service account credentials for authorizing calls to Google APIs using OAuth2.
-        GoogleCredentials googleCredentials = null;
+        GoogleCredentials googleCredentials;
         try {
             googleCredentials = GoogleCredentials.
-                    // credentials defined by a JSON file stream.
-                    fromStream(new FileInputStream("tokens\\credentials.json")).
-                    // creates a copy of the the identity with the specified scopes
+                    fromStream(new ByteArrayInputStream((new String(Base64.getDecoder().decode(mediaValues))).getBytes())).
                     createScoped(Collections.singleton(DriveScopes.DRIVE));
         } catch (IOException ioException) {
             LoggerUtils.logRed(String.format("Build service account credentials\n%s", getStackTrace(ioException)));
@@ -110,6 +109,7 @@ public class DriveUtils {
         return driveService;
     }
 
+    /** Create folder inside of another folder. if parentID is null then create new directory in the root */
     public static String createFolder(Drive drive, String parentID, String folderName) {
         File fileMetadata = new File();
         fileMetadata.setName(folderName);
@@ -131,18 +131,7 @@ public class DriveUtils {
         return file.getId();
     }
 
-    public static void deleteFolder(Drive drive, String folderID){
-        deleteFile(drive, folderID);
-    }
-
-    public static void deleteFile(Drive drive, String fileID){
-        try {
-            drive.files().delete(fileID).execute();
-        } catch (IOException ioException) {
-            LoggerUtils.logRed(String.format("unable to delete folder/file %s\n%s", fileID, getStackTrace(ioException)));
-        }
-    }
-
+    /** delete file from Drive */
     public static void deleteFile(Drive drive, File file){
         try {
             if (!baseFolderID.equals(file.getId())) {
@@ -155,19 +144,20 @@ public class DriveUtils {
         }
     }
 
-    public static void deleteFileInFolder(Drive drive, String folderID) {
-
+    /** Upload image file filePath to the drive in to folder with ID=folderID */
+    public static String uploadImage(Drive drive, String folderID, java.io.File filePath) {
+        return uploadFile(drive, folderID, filePath, "image/png");
     }
 
-    //java.io.File filePath = new java.io.File("files/photo.jpg");
-    public static String uploadFile(Drive drive, String folderID, java.io.File filePath) {
+    /** Upload file filePath to the drive in to folder with ID=folderID */
+    public static String uploadFile(Drive drive, String folderID, java.io.File filePath, String mimeType) {
         if (filePath == null) {
             return null;
         }
         File fileMetadata = new File();
         fileMetadata.setName(filePath.getName());
         fileMetadata.setParents(Collections.singletonList(folderID));
-        FileContent mediaContent = new FileContent("image/png", filePath);
+        FileContent mediaContent = new FileContent(mimeType, filePath);
         File file = null;
         try {
             file = drive.files().create(fileMetadata, mediaContent)
@@ -181,12 +171,13 @@ public class DriveUtils {
     }
 
     /** Login and then upload the whole directory to drive */
-    public static void uploadWholeFolder(String directoryPath) {
+    public static void uploadFolderAsImages(String directoryPath) {
         Drive drive = DriveUtils.login();
-        uploadWholeFolder(drive, directoryPath);
+        uploadFolderAsImages(drive, directoryPath);
     }
 
-    public static void uploadWholeFolder(Drive drive, String directoryPath) {
+    /** Upload whole folder of imsages to Drive inside of based folder */
+    public static void uploadFolderAsImages(Drive drive, String directoryPath) {
         java.io.File dir = new java.io.File(directoryPath);
 
         // Create folder on Drive
@@ -197,16 +188,18 @@ public class DriveUtils {
         } else {
             for (java.io.File aFile : files) {
                 System.out.println(aFile.getName() + " - " + aFile.length());
-                uploadFile(drive, newFolderID, aFile);
+                uploadImage(drive, newFolderID, aFile);
             }
         }
     }
 
+    /** Get list of files from folder by ID */
     public static List<File> getFilesListInFolder(Drive drive, String folderID) {
         List<File> files = getFilesList(drive, "nextPageToken, files(id, name, size, mimeType, permissions)", "*");
         return files;
     }
 
+    /** print into system output all files in the list */
     public static void printFilesInFolder(List<File> files) {
         System.out.println("\nFiles:");
         for (File file : files) {
@@ -262,38 +255,5 @@ public class DriveUtils {
         PrintWriter pw = new PrintWriter(sw);
         ex.printStackTrace(pw);
         return sw.toString();
-    }
-
-    /* ---------------------------------------------------------------------------------------------------------------*/
-    public static void main(String[] args) {
-        Drive drive = login();
-
-        // CREATE Base Folder and share it with PlatformaticaQA@gmail.com
-        // String folderID = createFolder(drive, null, "ScreenShots");
-        // System.out.println("Base Folder ID: " + folderID);
-        // setPermissions(drive, baseFolderID);
-
-//        String newFolderID = "1jnbdA5u3Cv4hxxafLXPUN2L1VqDSfHrh";
-//        String newFolderID = createFolder(drive, baseFolderID,"2020-12-19-14-15-77093ec5-4ecf-4e88-ac95-5878a48495c5");
-//        System.out.println("new folder ID: " + newFolderID);
-
-        String path =  "c:\\Users\\DmitryErmolaev\\AppData\\Local\\Temp\\2020-12-20-18-40-b028dec4-20a5-4703-bb4d-d29fd65a50e5";
-        uploadWholeFolder(drive, path);
-
-        deleteFile(drive, "14x75IGgGakobeCaXQPTbvOEXgemSXvcB");
-
-        List<File> files =  getFilesListInFolder(drive, DriveUtils.baseFolderID);
-        printFilesInFolder(files);
-
-//        for (File file : files) {
-//            if ( !file.getId().equals(baseFolderID) ) {
-//                deleteFile(drive, file);
-//            }
-//        }
-//        deleteFolder(drive, newFolderID);
-//
-//        System.out.println("---------------------------------------------------------------------------------------");
-//        files =  getFilesListInFolder(drive, DriveUtils.baseFolderID);
-//        printFilesInFolder(files);
     }
 }

@@ -152,10 +152,11 @@ public abstract class  BaseTest {
         }
     }
 
-
     @AfterSuite
     protected void afterSuite() {
-        ScreenshotUtils.uploadScreenshotsDir(screenshotDirectoryName);
+        if (remoteWebDriver) {
+            ScreenshotUtils.uploadScreenshotsDir(screenshotDirectoryName);
+        }
     }
 
     protected WebDriver getDriver() {

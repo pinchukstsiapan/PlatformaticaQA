@@ -78,7 +78,7 @@ public abstract class ScreenshotUtils {
     /** upload directory with name fullPath to Google Drive*/
     public static void uploadScreenshotsDir(String fullDirPath) {
         LoggerUtils.log("Uploading directory with files to google Drive of the PlatformaticaQA@gmail.com");
-        DriveUtils.uploadWholeFolder(fullDirPath);
+        DriveUtils.uploadFolderAsImages(fullDirPath);
     }
 
 }
