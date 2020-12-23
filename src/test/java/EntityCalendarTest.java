@@ -3,6 +3,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
@@ -83,6 +84,8 @@ public class EntityCalendarTest extends BaseTest {
     public void newRecord() throws InterruptedException {
         WebDriver driver = getDriver();
 
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+
         WebElement tab = driver.findElement(By.xpath("//p[contains(text(),'Calendar')]"));
         tab.click();
 
@@ -121,6 +124,6 @@ public class EntityCalendarTest extends BaseTest {
         RecycleBin.click();
 
         WebElement deleteRecord = driver.findElement(By.xpath("//b[contains(text(),'" + titleFieldNew + "')]"));
-        deleteRecord.isDisplayed();
+        wait.until(driver1 -> deleteRecord.isDisplayed());
     }
 }
