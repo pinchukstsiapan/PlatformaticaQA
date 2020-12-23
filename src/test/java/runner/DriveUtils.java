@@ -189,16 +189,16 @@ public class DriveUtils {
     public static void uploadFolderAsImages(Drive drive, String directoryPath) {
         java.io.File dir = new java.io.File(directoryPath);
 
-        // Create folder on Drive
-        String newFolderID = createFolder(drive, baseFolderID, dir.getName());
         java.io.File[] files = dir.listFiles();
         if (files ==null || files.length == 0) {
             LoggerUtils.logYellow(String.format("The directory %s is empty", directoryPath));
-        } else {
-            for (java.io.File aFile : files) {
-                System.out.println(aFile.getName() + " - " + aFile.length());
-                uploadImage(drive, newFolderID, aFile);
-            }
+            return;
+        }
+
+        String newFolderID = createFolder(drive, baseFolderID, dir.getName());
+        for (java.io.File aFile : files) {
+            System.out.println(aFile.getName() + " - " + aFile.length());
+            uploadImage(drive, newFolderID, aFile);
         }
     }
 
