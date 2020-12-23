@@ -5,6 +5,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
@@ -150,7 +151,7 @@ public class EntityExportTest extends BaseTest {
         driver.findElement(By.xpath("//div[@id='menu-list-parent']//p[contains(text(), 'Export')]")).click();
     }
 
-
+    @Ignore
     @Test
     public void viewTest() throws InterruptedException {
 

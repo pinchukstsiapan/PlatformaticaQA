@@ -11,11 +11,7 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
 
 public class EntityFieldOpsTest extends BaseTest {
 
@@ -49,26 +45,18 @@ public class EntityFieldOpsTest extends BaseTest {
         }
     }
 
-    @Ignore
     @Test
-    public void fieldOpsView() {
+    public void fieldOpsViewBaseRecord() {
 
-        WebDriver driver = getDriver();
-        setup();
+        final String entityName = "Fields Ops";
+        final String expDropdown = "Pending";
+        final String expSwitch = "0";
+        final String expReferenceConstant = "contact@company.com";
 
-        int numOfPreexistingRecords = getNumberOfRecords();
-
+        By cardTitle = By.className("card-title");
+        By cardHeader = By.cssSelector("div.card-header");
         By createNew = By.xpath("//div[@class='card-icon']/i");
-        By upperToggle = By.xpath("//div[@class='d-flex']//span");
-        By dropDown = By.cssSelector("select#dropdown");
-        By refSelect = By.cssSelector("select#reference");
-        By firstRefLabel = By.xpath("//input[@id='multireference-1']/..");
-        By secondRefLabel = By.xpath("//input[@id='multireference-2']/..");
-        By refFilterSelect = By.cssSelector("select#reference_with_filter");
-        By refConstant = By.cssSelector("span[class$='filled'] > input[id$='reference_constant']");
-        By embedFoAddButton = By.cssSelector("td > button");
         By saveButton = By.cssSelector("button[id*='save']");
-
         String lastRecordXpath = "//tbody/tr[last()]";
         By recordCheckbox = By.xpath(String.format("%s/td/i[@class='fa fa-check-square-o']", lastRecordXpath));
         By switchValue = By.xpath(String.format("%s/td[2]", lastRecordXpath));
@@ -77,117 +65,40 @@ public class EntityFieldOpsTest extends BaseTest {
         By multiReferenceValue = By.xpath(String.format("%s/td[5]", lastRecordXpath));
         By referenceWithFilterValue = By.xpath(String.format("%s/td[6]", lastRecordXpath));
         By referenceConstantValue = By.xpath(String.format("%s/td[7]", lastRecordXpath));
+        By viewSwitchValue = By.xpath("//label[text()='Switch']/../div[1]//span");
+        By viewDropdownValue = By.xpath("//label[text()='Switch']/../div[2]//span");
+        By fieldsOpsRecordCard = By.cssSelector("div.card");
 
-        By recordViewReference = By.xpath("//label[text()='Reference']/following-sibling::p");
-        By recordViewMultireferences = By.xpath("//label[text()='Multireference']/following-sibling::p");
-        By recordViewRefWithFilterValue = By.xpath("//label[text()='Reference with filter']/following-sibling::p");
-
-        By embedFoTableData = By.cssSelector("tbody td");
-
+        WebDriver driver = getDriver();
+        goPageByName(entityName);
         driver.findElement(createNew).click();
-        driver.findElement(upperToggle).click();
-        final String mainDropdown = "Done";
-        new Select(driver.findElement(dropDown)).selectByValue(mainDropdown);
-        String mainReference = driver.findElement(By.cssSelector("select#reference option[value='1']")).getText();
-        new Select(driver.findElement(refSelect)).selectByVisibleText(mainReference);
-        WebElement firstReferenceLabel = driver.findElement(firstRefLabel);
-        String multiRefOne = firstReferenceLabel.getText();
-        firstReferenceLabel.click();
-        WebElement secondReferenceLabel = driver.findElement(secondRefLabel);
-        String multiRefTwo = secondReferenceLabel.getText();
-        secondReferenceLabel.click();
-        String referenceWithFilter = driver.findElement(By.cssSelector(
-                "select#reference_with_filter option:nth-of-type(2)")).getText();
-        new Select(driver.findElement(refFilterSelect)).selectByVisibleText(referenceWithFilter);
-        String referenceConstant = driver.findElement(refConstant).getAttribute("value");
-        driver.findElement(embedFoAddButton).click();
         driver.findElement(saveButton).click();
-
         try {
-            By pageTitle = By.cssSelector("h3");
-            Assert.assertEquals(driver.findElement(pageTitle).getText(), "Fields Ops",
-                    "Redirection to wrong page after saving new Fields Ops record");
+            Assert.assertEquals(driver.findElement(cardTitle).getText(), entityName,
+                    String.format("Redirection to wrong page after saving new %s record", entityName));
         } catch (TimeoutException e) {
-            Assert.fail("Redirection to wrong page after saving new Fields Ops record");
+            Assert.fail(String.format("Redirection to wrong page after saving new %s record", entityName));
         }
-
-        int numOfRecords = getNumberOfRecords();
-        if (numOfRecords == numOfPreexistingRecords) {
-            Assert.fail("Number of records didn't change after creating new Fields Ops record");
-        } else if (numOfRecords != numOfPreexistingRecords + 1) {
-            String errorMessage = String.format(
-                    "Number of records changed by %s after creating one new Fields Ops record",
-                    (numOfRecords - numOfPreexistingRecords));
-            Assert.fail(errorMessage);
-        }
-
-        getPaginationLastPage();
-
         try {
             driver.findElement(recordCheckbox);
         } catch (TimeoutException e) {
-            Assert.fail("Checkbox not found for new Fields Ops record");
+            Assert.fail(String.format("Checkbox not found for new %s record", entityName));
         }
-        Assert.assertEquals(driver.findElement(switchValue).getText(), "1",
-                "Wrong Switch value for new Fields Ops record");
-        Assert.assertEquals(driver.findElement(dropdownValue).getText(), mainDropdown,
-                "Wrong Switch value for new Fields Ops record");
-        Assert.assertEquals(driver.findElement(referenceValue).getText(), mainReference,
-                "Wrong Reference value for new Fields Ops record");
-        Assert.assertEquals(driver.findElement(multiReferenceValue).getText(),
-                String.format("%s, %s", multiRefOne, multiRefTwo),
-                "Wrong Multireference value for new Fields Ops record");
-        Assert.assertEquals(driver.findElement(referenceWithFilterValue).getText(), referenceWithFilter,
-                "Wrong Reference with filter value for new Fields Ops record");
-        Assert.assertEquals(driver.findElement(referenceConstantValue).getText(), referenceConstant,
-                "Wrong Multireference value for new Fields Ops record");
+        Assert.assertEquals(driver.findElement(switchValue).getText(), expSwitch);
+        Assert.assertEquals(driver.findElement(dropdownValue).getText(), expDropdown);
+        Assert.assertEquals(driver.findElement(referenceValue).getText(), "");
+        Assert.assertEquals(driver.findElement(multiReferenceValue).getText(), "");
+        Assert.assertEquals(driver.findElement(referenceWithFilterValue).getText(), "");
+        Assert.assertEquals(driver.findElement(referenceConstantValue).getText(), expReferenceConstant);
 
         driver.findElement(dropdownValue).click();
-
-        try {
-            By pageTitle = By.cssSelector("h4");
-            Assert.assertEquals(driver.findElement(pageTitle).getText(), "Fields Ops",
-                    "Redirection to wrong page, expected individual Fields Ops page");
-        } catch (TimeoutException e) {
-            Assert.fail("Redirection to wrong page, expected individual Fields Ops page");
-        }
-
-        String recordViewSwitchValue = driver.findElements(By.cssSelector("span.pa-view-field")).get(0).getText();
-        String recordViewDropdownValue = driver.findElements(By.cssSelector("span.pa-view-field")).get(1).getText();
-        List<String> recordViewMultireference = new ArrayList<>();
-        for (WebElement reference : driver.findElements(recordViewMultireferences)) {
-            recordViewMultireference.add(reference.getText());
-        }
-        String[] cardText = driver.findElement(By.cssSelector("div.card")).getText()
+        Assert.assertEquals(driver.findElement(cardHeader).getText(), entityName);
+        Assert.assertEquals(driver.findElement(viewSwitchValue).getText(), expSwitch);
+        Assert.assertEquals(driver.findElement(viewDropdownValue).getText(), expDropdown);
+        String[] cardText = driver.findElement(fieldsOpsRecordCard).getText()
                 .split("EmbedFO")[0].split("\n");
-        String recordViewReferenceConstant = cardText[cardText.length - 1];
-
-        List<WebElement> embedFoTableDataLstWe = driver.findElements(embedFoTableData);
-        String embedFoNumberValue = embedFoTableDataLstWe.get(0).getText();
-        String embedFoSwitchValue = embedFoTableDataLstWe.get(1).getText();
-        String embedFoDropdownValue = embedFoTableDataLstWe.get(2).getText();
-        String embedFoReferenceValue = embedFoTableDataLstWe.get(3).getText();
-        String embedFoReferenceWithfilterValue = embedFoTableDataLstWe.get(4).getText();
-        String embedFoReferenceConstantValue = embedFoTableDataLstWe.get(5).getText();
-        String embedFoMultireferenceValue = embedFoTableDataLstWe.get(6).getText();
-
-        Assert.assertEquals(recordViewSwitchValue, "1");
-        Assert.assertEquals(recordViewDropdownValue, mainDropdown);
-        Assert.assertEquals(driver.findElement(recordViewReference).getText(), mainReference);
-        Assert.assertEquals(recordViewMultireference, new ArrayList<>(Arrays.asList(multiRefOne, multiRefTwo)));
-        Assert.assertEquals(driver.findElement(recordViewRefWithFilterValue).getText(), referenceWithFilter);
-        Assert.assertEquals(recordViewReferenceConstant, referenceConstant);
-        Assert.assertEquals(embedFoNumberValue, "1");
-        Assert.assertEquals(embedFoSwitchValue, "");
-        Assert.assertEquals(embedFoDropdownValue, "Plan");
-        Assert.assertEquals(embedFoReferenceValue, "First reference");
-        Assert.assertEquals(embedFoReferenceWithfilterValue, "Third reference");
-        Assert.assertEquals(embedFoReferenceConstantValue, referenceConstant);
-        Assert.assertEquals(embedFoMultireferenceValue, "");
-
-        driver.navigate().back();
-        getPaginationLastPage();
-        deleteLastRecord();
+        String viewReferenceConstant = cardText[cardText.length - 1];
+        Assert.assertEquals(viewReferenceConstant, expReferenceConstant);
     }
 
     private WebDriverWait getWait(int timeoutSecond) {
@@ -220,13 +131,6 @@ public class EntityFieldOpsTest extends BaseTest {
         }
 
         return numOfRecords;
-    }
-
-    private void getPaginationLastPage() {
-        if (getNumberOfRecords() > 10) {
-            List<WebElement> paginationButtons = getDriver().findElements(By.cssSelector("a.page-link"));
-            paginationButtons.get(paginationButtons.size() - 2).click();
-        }
     }
 
     private void deleteLastRecord() {
