@@ -4,12 +4,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
 
 import java.util.UUID;
-
 public class EntityVisibilityEventsTest extends BaseTest {
 
     private void setUp() {
@@ -87,7 +87,6 @@ public class EntityVisibilityEventsTest extends BaseTest {
         Assert.assertNotNull(actionButton);
         return actionButton;
     }
-
     @Test
     public void testFieldVisibility() {
         WebDriver driver = getDriver();
