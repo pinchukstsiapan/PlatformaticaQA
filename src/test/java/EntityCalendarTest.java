@@ -55,7 +55,7 @@ public class EntityCalendarTest extends BaseTest {
         dropdown.click();
 
         WebElement editBtn = driver.findElement(By.xpath("//a[contains(text(),'edit')]"));
-        editBtn.click();
+        ProjectUtils.click(driver,editBtn);
 
         setValue(driver,titleFieldNew,"test test test",256,0.1);
 
