@@ -26,7 +26,7 @@ public class GroupJavaBearsTest extends BaseTest {
     }
 
     @Test
-    public void Alex_Mack() throws InterruptedException {
+    public void Alex_Mack() {
 
         WebDriver driver = getDriver();
         driver.get("https://en.wikipedia.org/wiki/Golden_Gate");
@@ -142,14 +142,13 @@ public class GroupJavaBearsTest extends BaseTest {
 
     @Ignore
     @Test
-    public void bogdanQA() throws InterruptedException {
+    public void olgaV2() {
 
         WebDriver browser = getDriver();
-        browser.get("https://en.wikipedia.org/wiki/Main_Page");
+        browser.get("https://www.recreation.gov/");
 
-        WebElement button = browser.findElement(By.xpath("//li[@id='ca-view']/a[contains(text(),'Read')]"));
-        Thread.sleep(3000);
-        Assert.assertEquals(button.getText(), "Read");
+        browser.findElement(By.xpath("//div[@class='nav-links-wrap']/a[1]")).click();
+        Assert.assertEquals(browser.getCurrentUrl(), "https://www.recreation.gov/whats-new");
     }
 
     @Test
@@ -161,6 +160,16 @@ public class GroupJavaBearsTest extends BaseTest {
         WebElement homePage = driver.findElement(By.xpath("//a[@href='https://github.com/']"));
         homePage.click();
         Assert.assertEquals(getDriver().getCurrentUrl(),"https://github.com/");
+    }
+
+    @Test
+    public void bogdanQA() throws InterruptedException {
+        WebDriver browser = getDriver();
+        browser.get("https://en.wikipedia.org/wiki/Main_Page");
+
+        WebElement button = browser.findElement(By.xpath("//li[@id='ca-view']/a[contains(text(),'Read')]"));
+        Thread.sleep(3000);
+        Assert.assertEquals(button.getText(), "Read");
     }
 
     @Test
