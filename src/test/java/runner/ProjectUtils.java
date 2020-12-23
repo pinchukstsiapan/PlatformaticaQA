@@ -6,6 +6,8 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import runner.type.ProfileType;
 
 public abstract class ProjectUtils {
@@ -43,9 +45,6 @@ public abstract class ProjectUtils {
 
     }
 
-    /*
-    *  The method helps to avoid - Element is not clickable at point (x,x). Other element would receive the click
-    */
     public static void click(WebDriver driver, WebElement element) {
         JavascriptExecutor executor = (JavascriptExecutor)driver;
         executor.executeScript("arguments[0].click()", element);
@@ -64,6 +63,23 @@ public abstract class ProjectUtils {
 
     public static void sendKeys(WebElement element, double keys) throws InterruptedException {
         sendKeys(element, String.valueOf(keys));
+    }
+
+    public static void inputKeys(WebDriver driver, WebElement element, String keys) throws InterruptedException {
+        if (!"input".equals(element.getTagName())) {
+            throw new RuntimeException(element + " is not input");
+        }
+
+        ProjectUtils.sendKeys(element, keys);
+        new WebDriverWait(driver, 10).until(ExpectedConditions.attributeContains(element, "value", keys));
+    }
+
+    public static void inputKeys(WebDriver driver, WebElement element, int keys) throws InterruptedException {
+        inputKeys(driver, element, String.valueOf(keys));
+    }
+
+    public static void inputKeys(WebDriver driver, WebElement element, double keys) throws InterruptedException {
+        inputKeys(driver, element, String.valueOf(keys));
     }
 
     public static void setAttribute(WebDriver driver, WebElement element, String attName, String attValue) {
