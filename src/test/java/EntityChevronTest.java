@@ -162,17 +162,3 @@ public class EntityChevronTest extends BaseTest {
         ProjectUtils.click(getDriver(), getDriver().findElement(By.xpath(String.format("//p[contains(text(),'%s')]", pageName))));
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
