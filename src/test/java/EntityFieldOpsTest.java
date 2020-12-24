@@ -102,52 +102,41 @@ public class EntityFieldOpsTest extends BaseTest {
     @Test
     public void fieldOpsViewBaseRecord() {
 
-        final String entityName = "Fields Ops";
-        final String expDropdown = "Pending";
         final String expSwitch = "0";
+        final String expDropdown = "Pending";
+        final String reference = "";
+        final String multiReference = "";
+        final String referenceWithFilter = "";
         final String expReferenceConstant = "contact@company.com";
         WebDriver driver = getDriver();
         JavascriptExecutor executor = (JavascriptExecutor)driver;
+        String [] values = {null, expSwitch, expDropdown, reference, multiReference, referenceWithFilter,
+                            expReferenceConstant, null};
 
-        By cardTitle = By.className("card-title");
-        By cardHeader = By.cssSelector("div.card-header");
         By createNew = By.xpath("//div[@class='card-icon']/i");
         By saveButton = By.cssSelector("button[id*='save']");
-        String lastRecordXpath = "//tbody/tr[last()]";
-        By recordCheckbox = By.xpath(String.format("%s/td/i[@class='fa fa-check-square-o']", lastRecordXpath));
-        By switchValue = By.xpath(String.format("%s/td[2]", lastRecordXpath));
-        By dropdownValue = By.xpath(String.format("%s/td[3]", lastRecordXpath));
-        By referenceValue = By.xpath(String.format("%s/td[4]", lastRecordXpath));
-        By multiReferenceValue = By.xpath(String.format("%s/td[5]", lastRecordXpath));
-        By referenceWithFilterValue = By.xpath(String.format("%s/td[6]", lastRecordXpath));
-        By referenceConstantValue = By.xpath(String.format("%s/td[7]", lastRecordXpath));
+        By fieldsOpsRecordCard = By.cssSelector("div.card");
         By viewSwitchValue = By.xpath("//label[text()='Switch']/../div[1]//span");
         By viewDropdownValue = By.xpath("//label[text()='Switch']/../div[2]//span");
-        By fieldsOpsRecordCard = By.cssSelector("div.card");
 
         goPageByName("Fields Ops");
-
         driver.findElement(createNew).click();
         driver.findElement(saveButton).click();
 
         Assert.assertEquals(driver.findElements(rows).size(), 1);
-
         WebElement row = driver.findElement(rows);
         List<WebElement> cols = row.findElements(By.tagName("td"));
-
+        Assert.assertEquals(cols.size(), values.length);
+        for (int i = 0; i < values.length; i++) {
+            if (values[i] != null) {
+                Assert.assertEquals(cols.get(i).getText(), values[i]);
+            }
+        }
         String script = "return window.getComputedStyle(document.querySelector('i.fa'),'::before').getPropertyValue('content')";
         String faCheckSquareO = executor.executeScript(script).toString();
         Assert.assertEquals(faCheckSquareO, "\"\"");
 
-        Assert.assertEquals(driver.findElement(switchValue).getText(), expSwitch);
-        Assert.assertEquals(driver.findElement(dropdownValue).getText(), expDropdown);
-        Assert.assertEquals(driver.findElement(referenceValue).getText(), "");
-        Assert.assertEquals(driver.findElement(multiReferenceValue).getText(), "");
-        Assert.assertEquals(driver.findElement(referenceWithFilterValue).getText(), "");
-        Assert.assertEquals(driver.findElement(referenceConstantValue).getText(), expReferenceConstant);
-
-        driver.findElement(dropdownValue).click();
-        Assert.assertEquals(driver.findElement(cardHeader).getText(), entityName);
+        cols.get(2).findElement(By.tagName("a")).click();
         Assert.assertEquals(driver.findElement(viewSwitchValue).getText(), expSwitch);
         Assert.assertEquals(driver.findElement(viewDropdownValue).getText(), expDropdown);
         String[] cardText = driver.findElement(fieldsOpsRecordCard).getText()
