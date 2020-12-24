@@ -1,5 +1,3 @@
-import org.apache.commons.compress.compressors.zstandard.ZstdCompressorOutputStream;
-import org.openqa.selenium.remote.internal.WebElementToJsonConverter;
 import org.testng.annotations.Ignore;
 import runner.BaseTest;
 import org.openqa.selenium.*;
@@ -13,8 +11,6 @@ import runner.type.RunType;
 import java.util.List;
 import java.util.UUID;
 
-import static java.lang.Thread.sleep;
-
 @Run(run = RunType.Multiple)
 public class EntityChevronTest extends BaseTest {
 
@@ -24,7 +20,6 @@ public class EntityChevronTest extends BaseTest {
     private static final String STATUS_NEW = "Fulfillment";
     private static final String STATUS_EDITED = "Pending";
 
-    /* Need refactoring */
     @Ignore
     @Test
     public void findChevron() throws InterruptedException {
