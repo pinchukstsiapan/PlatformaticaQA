@@ -10,13 +10,24 @@ import runner.BaseTest;
 import runner.ProjectUtils;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class EntityFieldOpsTest extends BaseTest {
 
-    private By rows = By.xpath("//tbody/tr");
+    private final By rows = By.xpath("//tbody/tr");
 
     private WebDriverWait getWait(int timeoutSecond) {
         return new WebDriverWait(getDriver(), timeoutSecond);
+    }
+
+    private boolean isVisible(By by) {
+        getDriver().manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+        List<WebElement> list = getDriver().findElements(by);
+        if (list.isEmpty()) {
+            return false;
+        } else {
+            return list.get(0).isDisplayed();
+        }
     }
 
     private void goPageByName(String name) {
@@ -118,6 +129,9 @@ public class EntityFieldOpsTest extends BaseTest {
         By fieldsOpsRecordCard = By.cssSelector("div.card");
         By viewSwitchValue = By.xpath("//label[text()='Switch']/../div[1]//span");
         By viewDropdownValue = By.xpath("//label[text()='Switch']/../div[2]//span");
+        By viewReferenceValue = By.xpath("//label[text()='Reference']/following-sibling::p");
+        By viewMultiReferenceValue = By.xpath("//label[text()='Multireference']/following-sibling::p");
+        By viewReferenceWithFilterValue = By.xpath("//label[text()='Reference with filter']/following-sibling::p");
 
         goPageByName("Fields Ops");
         driver.findElement(createNew).click();
@@ -143,6 +157,10 @@ public class EntityFieldOpsTest extends BaseTest {
                 .split("EmbedFO")[0].split("\n");
         String viewReferenceConstant = cardText[cardText.length - 1];
         Assert.assertEquals(viewReferenceConstant, expReferenceConstant);
+        Assert.assertFalse(isVisible(viewReferenceValue));
+        Assert.assertFalse(isVisible(viewMultiReferenceValue));
+        Assert.assertFalse(isVisible(viewReferenceWithFilterValue));
+        Assert.assertFalse(isVisible(rows));
     }
 
     @Test
