@@ -157,7 +157,9 @@ public abstract class  BaseTest {
     protected void afterSuite() {
         if (remoteWebDriver) {
             try {
-                ScreenshotUtils.uploadScreenshotsDir(screenshotDirectoryName);
+                if (screenshotDirectoryName != null) {
+                    ScreenshotUtils.uploadScreenshotsDir(screenshotDirectoryName);
+                }
             } catch (Exception exception) {
                 LoggerUtils.logRed(String.format("unable to upload images directory %s to Google drive \n%s",
                         screenshotDirectoryName,
