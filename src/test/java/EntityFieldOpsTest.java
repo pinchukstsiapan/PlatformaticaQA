@@ -1,7 +1,4 @@
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -12,7 +9,11 @@ import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
 
+import java.util.List;
+
 public class EntityFieldOpsTest extends BaseTest {
+
+    private By rows = By.xpath("//tbody/tr");
 
     private WebDriverWait getWait(int timeoutSecond) {
         return new WebDriverWait(getDriver(), timeoutSecond);
@@ -105,6 +106,8 @@ public class EntityFieldOpsTest extends BaseTest {
         final String expDropdown = "Pending";
         final String expSwitch = "0";
         final String expReferenceConstant = "contact@company.com";
+        WebDriver driver = getDriver();
+        JavascriptExecutor executor = (JavascriptExecutor)driver;
 
         By cardTitle = By.className("card-title");
         By cardHeader = By.cssSelector("div.card-header");
@@ -122,21 +125,20 @@ public class EntityFieldOpsTest extends BaseTest {
         By viewDropdownValue = By.xpath("//label[text()='Switch']/../div[2]//span");
         By fieldsOpsRecordCard = By.cssSelector("div.card");
 
-        WebDriver driver = getDriver();
-        goPageByName(entityName);
+        goPageByName("Fields Ops");
+
         driver.findElement(createNew).click();
         driver.findElement(saveButton).click();
-        try {
-            Assert.assertEquals(driver.findElement(cardTitle).getText(), entityName,
-                    String.format("Redirection to wrong page after saving new %s record", entityName));
-        } catch (TimeoutException e) {
-            Assert.fail(String.format("Redirection to wrong page after saving new %s record", entityName));
-        }
-        try {
-            driver.findElement(recordCheckbox);
-        } catch (TimeoutException e) {
-            Assert.fail(String.format("Checkbox not found for new %s record", entityName));
-        }
+
+        Assert.assertEquals(driver.findElements(rows).size(), 1);
+
+        WebElement row = driver.findElement(rows);
+        List<WebElement> cols = row.findElements(By.tagName("td"));
+
+        String script = "return window.getComputedStyle(document.querySelector('i.fa'),'::before').getPropertyValue('content')";
+        String faCheckSquareO = executor.executeScript(script).toString();
+        Assert.assertEquals(faCheckSquareO, "\"\"");
+
         Assert.assertEquals(driver.findElement(switchValue).getText(), expSwitch);
         Assert.assertEquals(driver.findElement(dropdownValue).getText(), expDropdown);
         Assert.assertEquals(driver.findElement(referenceValue).getText(), "");
