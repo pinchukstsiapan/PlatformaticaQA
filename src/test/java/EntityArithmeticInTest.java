@@ -6,7 +6,6 @@ import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
 
-
 public class EntityArithmeticInTest extends BaseTest {
 
     @Test
@@ -45,11 +44,11 @@ public class EntityArithmeticInTest extends BaseTest {
         ProjectUtils.click(driver, clickNCheckRecord);
 
         WebElement findNCheckF1 =
-                driver.findElement(By.xpath("//div[2]/div/div/div/div[1]/div"));
+                driver.findElement(By.xpath("/html/body/div/div[2]/div[1]/div/div/div/div/div[2]/div/div/div/div[1]/div"));
         ProjectUtils.click(driver, findNCheckF1);
 
         WebElement findNCheckF2 =
-                driver.findElement(By.xpath("//div[2]/div/div/div/div[2]/div"));
+                driver.findElement(By.xpath("/html/body/div/div[2]/div[1]/div/div/div/div/div[2]/div/div/div/div[2]/div"));
         ProjectUtils.click(driver, findNCheckF1);
 
         Thread.sleep(5000);
