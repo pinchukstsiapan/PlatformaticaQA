@@ -8,7 +8,6 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
-
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -126,9 +125,9 @@ public class EntityFieldOpsTest extends BaseTest {
         final String reference = "";
         final String multiReference = "";
         final String referenceWithFilter = "";
-        final String expReferenceConstant = "contact@company.com";
-        String [] values = {null, expSwitch, expDropdown, reference, multiReference, referenceWithFilter,
-                            expReferenceConstant, null};
+        final String referenceConstant = "contact@company.com";
+        String[] values = {null, expSwitch, expDropdown, reference, multiReference, referenceWithFilter,
+                            referenceConstant, null};
 
         WebDriver driver = getDriver();
         JavascriptExecutor executor = (JavascriptExecutor)driver;
@@ -156,7 +155,7 @@ public class EntityFieldOpsTest extends BaseTest {
         String[] cardText = driver.findElement(fieldsOpsRecordCard).getText()
                 .split("EmbedFO")[0].split("\n");
         String viewReferenceConstant = cardText[cardText.length - 1];
-        Assert.assertEquals(viewReferenceConstant, expReferenceConstant);
+        Assert.assertEquals(viewReferenceConstant, referenceConstant);
         Assert.assertFalse(isVisible(viewReferenceValue));
         Assert.assertFalse(isVisible(viewMultiReferenceValue));
         Assert.assertFalse(isVisible(viewReferenceWithFilterValue));
