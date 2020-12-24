@@ -29,7 +29,6 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 
-/** set of utils to work with Google Drive */
 public class DriveUtils {
 
     private static final String appName = "PlatfromaticaQA";
@@ -44,24 +43,26 @@ public class DriveUtils {
           + "G5kQkphVXFrMlpXaU9DaGM0MGxZcklmK1VtRnBKazM3N1BSazA0MkVLenE2S0YrWGdyMXFrM2E1ZXB2TkkybVJYXG5vLy9JeUhzd3ZWbTQ4dW5hbXcrSHBTbz1cbi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS1cbiIsCiAgImNsaWVudF9lbWFpbCI6ICJwbGF0ZnJvbWF0aWNhcWFAdHJhdmlzLWJ1aWxkZXIuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLAogICJjbGllbnRfaWQiOiAiMTAwNzc2MTA0ODczNjU5MzQ5ODY4IiwKICAiYXV0aF91cmkiOiAiaHR0cHM6Ly9hY2NvdW50cy5nb29nbGUuY29tL28vb2F1dGgyL2F1d"
           + "GgiLAogICJ0b2tlbl91cmkiOiAiaHR0cHM6Ly9vYXV0aDIuZ29vZ2xlYXBpcy5jb20vdG9rZW4iLAogICJhdXRoX3Byb3ZpZGVyX3g1MDlfY2VydF91cmwiOiAiaHR0cHM6Ly93d3cuZ29vZ2xlYXBpcy5jb20vb2F1dGgyL3YxL2NlcnRzIiwKICAiY2xpZW50X3g1MDlfY2VydF91cmwiOiAiaHR0cHM6Ly93d3cuZ29vZ2xlYXBpcy5jb20vcm9ib3QvdjEvbWV0YWRhdGEveDUwOS9wbGF0ZnJvbWF0aWNhcWElNDB0cmF2aXMtYnVpbGRlci5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIKfQ==";
 
-    private static List<File> getAllFilesList(Drive drive, String fields) {
-        if (fields == null || fields.isEmpty()) {
-            fields = "nextPageToken, files(*)";
-        }
-
-        Drive.Files files = drive.files();
+    /**
+     * Upload .png image file filePath to the Drive in to specific folder
+     * @param drive Google Drive API service handle
+     * @param folderID ID of the folder were to upload file
+     * @param filePath path to file for upload
+     */
+    private static void uploadImage(Drive drive, String folderID, java.io.File filePath) {
+        File fileMetadata = new File();
+        fileMetadata.setName(filePath.getName());
+        fileMetadata.setParents(Collections.singletonList(folderID));
+        FileContent mediaContent = new FileContent("image/png", filePath);
         try {
-            return  files.
-                    list().
-                    setPageSize(100).
-                    setFields(fields).
-                    execute().
-                    getFiles();
+            File file = drive.files()
+                    .create(fileMetadata, mediaContent)
+                    .setFields("id, parents")
+                    .execute();
+            LoggerUtils.log(String.format("uploaded file %s with id %s", filePath.toString(), file.getId()));
         } catch (IOException ioException) {
-            LoggerUtils.logRed(String.format("Unable to get list of files\n%s", getStackTrace(ioException)));
+            LoggerUtils.logRed(String.format("unable to upload file %s\n%s", filePath.toString(), getStackTrace(ioException)));
         }
-
-        return null;
     }
 
     /** Build an authorized Drive client service and login.
@@ -78,11 +79,9 @@ public class DriveUtils {
             return null;
         }
 
-        // Returns a global thread-safe instance of Low-level JSON library implementation based on Jackson 2.
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-
-        //Build service account credentials for authorizing calls to Google APIs using OAuth2.
         GoogleCredentials googleCredentials;
+
         try {
             googleCredentials = GoogleCredentials.
                     fromStream(new ByteArrayInputStream((new String(Base64.getDecoder().decode(mediaValues))).getBytes())).
@@ -92,7 +91,6 @@ public class DriveUtils {
             return null;
         }
 
-        // create a wrapper for using Credentials with the Google API Client Libraries for Java with Http.
         HttpRequestInitializer requestInitializer = new HttpCredentialsAdapter(googleCredentials);
 
         driveService = new Drive.Builder(httpTransport, jsonFactory, requestInitializer)
@@ -102,7 +100,35 @@ public class DriveUtils {
         return driveService;
     }
 
-    /** Create folder inside of another folder. if parentID is null then create new directory in the root */
+    /**
+     * Login and then upload whole folder of images to Drive inside of base folder
+     * @param directoryPath full path to directory to be uploaded
+     */
+    public static void uploadFolderAsImages(String directoryPath) {
+        Drive drive = DriveUtils.login();
+
+        java.io.File dir = new java.io.File(directoryPath);
+        java.io.File[] files = dir.listFiles();
+        if (files ==null || files.length == 0) {
+            LoggerUtils.logYellow(String.format("The directory %s is empty", directoryPath));
+            return;
+        }
+
+        String newFolderID = createFolder(drive, baseFolderID, dir.getName());
+
+        for (java.io.File aFile : files) {
+            System.out.println(aFile.getName() + " - " + aFile.length());
+            uploadImage(drive, newFolderID, aFile);
+        }
+    }
+
+    /**
+     * Create folder inside of another folder. if parentID is null then create new directory in the root.
+     * @param drive Google drive API service handle
+     * @param parentID ID of the parent folder
+     * @param folderName name of the folder to create
+     * @return ID of the new folder
+     */
     public static String createFolder(Drive drive, String parentID, String folderName) {
         File fileMetadata = new File();
         fileMetadata.setName(folderName);
@@ -112,129 +138,16 @@ public class DriveUtils {
             fileMetadata.setParents(Collections.singletonList(parentID));
         }
 
-        File file = null;
         try {
-            file = drive.files().create(fileMetadata)
+            File file = drive.files().create(fileMetadata)
                     .setFields("id")
                     .execute();
+            LoggerUtils.logYellow(String.format("Folder ID: %s", file.getId()));
+            return file.getId();
         } catch (IOException ioException) {
             LoggerUtils.logRed(String.format("Build service account credentials\n%s", getStackTrace(ioException)));
         }
-            LoggerUtils.logYellow(String.format("Folder ID: %s", file.getId()));
-        return file.getId();
-    }
-
-    /** delete file from Drive */
-    private static void deleteFile(Drive drive, File file){
-        try {
-            if (!baseFolderID.equals(file.getId())) {
-                drive.files().delete(file.getId()).execute();
-            }
-            System.out.printf("deleting file [%s] %s\n", file.getId(), file.getName());
-        } catch (IOException ioException) {
-            LoggerUtils.logRed(String.format("unable to delete folder/file [%s] %s\n%s",
-                    file.getId(), file.getName(), getStackTrace(ioException)));
-        }
-    }
-
-    /** Upload image file filePath to the drive in to folder with ID=folderID */
-    public static String uploadImage(Drive drive, String folderID, java.io.File filePath) {
-        return uploadFile(drive, folderID, filePath, "image/png");
-    }
-
-    /** Upload file filePath to the drive in to folder with ID=folderID */
-    private static String uploadFile(Drive drive, String folderID, java.io.File filePath, String mimeType) {
-        if (filePath == null) {
-            return null;
-        }
-        File fileMetadata = new File();
-        fileMetadata.setName(filePath.getName());
-        fileMetadata.setParents(Collections.singletonList(folderID));
-        FileContent mediaContent = new FileContent(mimeType, filePath);
-        File file = null;
-        try {
-            file = drive.files().create(fileMetadata, mediaContent)
-                    .setFields("id, parents")
-                    .execute();
-        } catch (IOException ioException) {
-            LoggerUtils.logRed(String.format("unable to upload file %s\n%s", filePath.toString(), getStackTrace(ioException)));
-        }
-        LoggerUtils.log(String.format("uploaded file %s with id %s", filePath.toString(), file.getId()));
-        return file.getId();
-    }
-
-    /** Login and then upload the whole directory to drive */
-    public static void uploadFolderAsImages(String directoryPath) {
-        Drive drive = DriveUtils.login();
-        uploadFolderAsImages(drive, directoryPath);
-    }
-
-    /** Upload whole folder of imsages to Drive inside of based folder */
-    public static void uploadFolderAsImages(Drive drive, String directoryPath) {
-        java.io.File dir = new java.io.File(directoryPath);
-
-        java.io.File[] files = dir.listFiles();
-        if (files ==null || files.length == 0) {
-            LoggerUtils.logYellow(String.format("The directory %s is empty", directoryPath));
-            return;
-        }
-
-        String newFolderID = createFolder(drive, baseFolderID, dir.getName());
-        for (java.io.File aFile : files) {
-            System.out.println(aFile.getName() + " - " + aFile.length());
-            uploadImage(drive, newFolderID, aFile);
-        }
-    }
-
-    /** Get list of files from folder by ID */
-    private static List<File> getFilesListInFolder(Drive drive, String folderID) {
-        return getAllFilesList(drive, "nextPageToken, files(id, name, size, mimeType, permissions)");
-    }
-
-    /** print into system output all files in the list */
-    private static void printFilesInFolder(List<File> files) {
-        System.out.println("\nFiles:");
-        for (File file : files) {
-            if (file.getSize() != null) {
-                System.out.printf("[%s]  %6.2fK  %s%n", file.getId(),
-                        (100 * file.getSize()/1024) / 100.0,
-                        file.getName());
-            } else {
-                System.out.printf("[%s]  -------  %s%n", file.getId(), file.getName());
-            }
-        }
-    }
-
-    /** Set permissions required to share files with PlatformaticaQA@gmail.com */
-    private static void setPermissions(Drive drive, String fileId) {
-        JsonBatchCallback<Permission> callback = new JsonBatchCallback<Permission>() {
-            @Override
-            public void onFailure(GoogleJsonError e, HttpHeaders responseHeaders) {
-                LoggerUtils.logRed(e.getMessage());
-            }
-
-            @Override
-            public void onSuccess(Permission permission, HttpHeaders responseHeaders) {
-                LoggerUtils.logRed("Permission ID: " + permission.getId());
-            }
-        };
-        BatchRequest batch = drive.batch();
-
-        Permission userPermission = new Permission()
-                .setType("user")
-                .setRole("writer")
-                .setEmailAddress("PlatformaticaQA@gmail.com");
-
-        try {
-            drive.permissions().create(fileId, userPermission)
-                    .setFields("id")
-                    .queue(batch, callback);
-
-            batch.execute();
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
-
+        return null;
     }
 
     public static String getStackTrace(Exception ex) {

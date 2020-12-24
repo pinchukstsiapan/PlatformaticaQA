@@ -110,20 +110,17 @@ public abstract class  BaseTest {
         } else {
             driver.get(profileType.getUrl());
         }
-        this.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        this.driver.manage().window().maximize();
-
     }
 
     @AfterMethod
     protected void afterMethod(Method method, ITestResult tr) {
-        boolean createDirectory = false;
+        boolean createdDirectory = false;
         if (ITestResult.FAILURE == tr.getStatus()) {
             if (screenshotDirectoryName == null) {
-                createDirectory = true;
+                createdDirectory = true;
                 String tempPath = System.getProperty("java.io.tmpdir");
                 // on windows last char is '\', on Linux is 'p' so need to add separator
-                if (tempPath.charAt(tempPath.length()-1) != File.separator.charAt(0)) {
+                if (tempPath.charAt(tempPath.length()-1) != File.separatorChar) {
                     tempPath += File.separator;
                 }
                 screenshotDirectoryName = tempPath
@@ -132,12 +129,12 @@ public abstract class  BaseTest {
             }
 
             ScreenshotUtils.createScreenshotsDir(screenshotDirectoryName);
-            if (createDirectory) {
+            if (createdDirectory) {
                 LoggerUtils.logYellow("Created directory to save screenshots: " + screenshotDirectoryName);
             }
 
-            ScreenshotUtils.takeScreenShot(getDriver(),
-                    screenshotDirectoryName + File.separator + tr.getInstanceName() + "." + tr.getName() + ".png");
+            ScreenshotUtils.takeScreenShot(getDriver(), String.format("%s%s%s.%s.png",
+                    screenshotDirectoryName, File.separator, tr.getInstanceName(), tr.getName()));
         }
 
         if (runType == RunType.Single) {
@@ -179,5 +176,9 @@ public abstract class  BaseTest {
         }
 
         return webDriverWait;
+    }
+
+    protected String getScreenshotDirectoryName() {
+        return screenshotDirectoryName;
     }
 }
