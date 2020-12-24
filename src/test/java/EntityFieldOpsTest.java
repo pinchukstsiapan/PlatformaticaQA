@@ -15,6 +15,14 @@ import java.util.concurrent.TimeUnit;
 public class EntityFieldOpsTest extends BaseTest {
 
     private final By rows = By.xpath("//tbody/tr");
+    private final By createNew = By.xpath("//div[@class='card-icon']/i");
+    private final By saveButton = By.cssSelector("button[id*='save']");
+    private final By fieldsOpsRecordCard = By.cssSelector("div.card");
+    private final By viewSwitchValue = By.xpath("//label[text()='Switch']/../div[1]//span");
+    private final By viewDropdownValue = By.xpath("//label[text()='Switch']/../div[2]//span");
+    private final By viewReferenceValue = By.xpath("//label[text()='Reference']/following-sibling::p");
+    private final By viewMultiReferenceValue = By.xpath("//label[text()='Multireference']/following-sibling::p");
+    private final By viewReferenceWithFilterValue = By.xpath("//label[text()='Reference with filter']/following-sibling::p");
 
     private WebDriverWait getWait(int timeoutSecond) {
         return new WebDriverWait(getDriver(), timeoutSecond);
@@ -119,19 +127,11 @@ public class EntityFieldOpsTest extends BaseTest {
         final String multiReference = "";
         final String referenceWithFilter = "";
         final String expReferenceConstant = "contact@company.com";
-        WebDriver driver = getDriver();
-        JavascriptExecutor executor = (JavascriptExecutor)driver;
         String [] values = {null, expSwitch, expDropdown, reference, multiReference, referenceWithFilter,
                             expReferenceConstant, null};
 
-        By createNew = By.xpath("//div[@class='card-icon']/i");
-        By saveButton = By.cssSelector("button[id*='save']");
-        By fieldsOpsRecordCard = By.cssSelector("div.card");
-        By viewSwitchValue = By.xpath("//label[text()='Switch']/../div[1]//span");
-        By viewDropdownValue = By.xpath("//label[text()='Switch']/../div[2]//span");
-        By viewReferenceValue = By.xpath("//label[text()='Reference']/following-sibling::p");
-        By viewMultiReferenceValue = By.xpath("//label[text()='Multireference']/following-sibling::p");
-        By viewReferenceWithFilterValue = By.xpath("//label[text()='Reference with filter']/following-sibling::p");
+        WebDriver driver = getDriver();
+        JavascriptExecutor executor = (JavascriptExecutor)driver;
 
         goPageByName("Fields Ops");
         driver.findElement(createNew).click();
