@@ -74,7 +74,7 @@ public class EntityChevronTest extends BaseTest {
         Assert.assertEquals(ExpectedSign, recheckFulfillment.getText());
     }
 
-    @Test(dependsOnMethods = "findChevron")
+    @Test
     private void addRecord () throws InterruptedException {
 
         WebDriver driver = getDriver();
@@ -140,7 +140,7 @@ public class EntityChevronTest extends BaseTest {
         ProjectUtils.click(driver, linkPending);
 
         row = findRowByTitle(TITLE);
-        Assert.assertNotNull(row, "Title hasn't been found in the filtered list");
+        Assert.assertNotNull(row, "Edited title hasn't been found in the filtered list");
 
         WebElement viewMenu = row.findElement(By.xpath(".//a[contains(@href, 'action_view')]"));
         ProjectUtils.click(driver, viewMenu);
@@ -150,12 +150,11 @@ public class EntityChevronTest extends BaseTest {
 
     private WebElement findRowByTitle(String title) {
 
-        List<WebElement> rows = getDriver().findElements(By.xpath("//table[@id = 'pa-all-entities-table']//tbody/tr"));
+        List<WebElement> rows = getDriver().findElements(By.xpath("//table[@id='pa-all-entities-table']//tbody/tr"));
 
         for (WebElement row : rows) {
             List<WebElement> cells = row.findElements(By.tagName("td"));
             for (WebElement cell : cells) {
-                System.out.println(cell.getText());
                 if (cell.getText().equals(title)) {
                     return row;
                 }
