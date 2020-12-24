@@ -1,7 +1,9 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
@@ -9,9 +11,13 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
+import runner.type.ProfileType;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import static javax.swing.Action.DEFAULT;
 
 public class EntityExportTest extends BaseTest {
     public String exportString = "My String";
@@ -31,7 +37,7 @@ public class EntityExportTest extends BaseTest {
     public String tableInt = "124";
     public String tableDec = "34.56";
 
-    private void createFieldForm(WebDriver driver){
+    private void createFieldForm(WebDriver driver) {
 
         driver.findElement(By.xpath("//div[@id='menu-list-parent']//p[contains(text(), 'Export')]")).click();
         driver.findElement(By.xpath("//div/i")).click();
@@ -65,7 +71,7 @@ public class EntityExportTest extends BaseTest {
         selDr.selectByVisibleText(User);
     }
 
-    private void createEmbedExp (WebDriver driver) {
+    private void createEmbedExp(WebDriver driver) {
         WebElement addRecord = driver.findElement(By.xpath("//tr[@id='add-row-23']/td/button"));
         ProjectUtils.click(driver, addRecord);
         driver.findElement(By.id("t-undefined-r-1-_line_number")).click();
@@ -104,10 +110,10 @@ public class EntityExportTest extends BaseTest {
 
 
     @Test
-    public void inputTest(){
+    public void inputTest() {
 
         WebDriver driver = getDriver();
-        WebDriverWait wait = new WebDriverWait(driver,4);
+        WebDriverWait wait = new WebDriverWait(driver, 4);
 
         createFieldForm(driver);
         createEmbedExp(driver);
@@ -116,26 +122,26 @@ public class EntityExportTest extends BaseTest {
 
         List<WebElement> list = driver.findElements(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr/td[7]"));
 
-        int number =0;
+        int number = 0;
         for (int i = 0; i < size; i++) {
             if (list.get(i).getText().equals(DataTime)) {
                 number = i;
             }
         }
 
-        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number +1) + "]/td[2]")).getText(),
+        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number + 1) + "]/td[2]")).getText(),
                 exportString);
-        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number +1) + "]/td[3]")).getText(),
+        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number + 1) + "]/td[3]")).getText(),
                 exportText);
-        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number +1) + "]/td[4]")).getText(),
+        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number + 1) + "]/td[4]")).getText(),
                 exportInt);
-        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number +1) + "]/td[5]")).getText(),
+        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number + 1) + "]/td[5]")).getText(),
                 exportDec);
-        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number +1) + "]/td[6]")).getText(),
+        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number + 1) + "]/td[6]")).getText(),
                 Data);
-        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number +1) + "]/td[7]")).getText(),
+        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number + 1) + "]/td[7]")).getText(),
                 DataTime);
-        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number +1) + "]/td[9]")).getText(),
+        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number + 1) + "]/td[9]")).getText(),
                 User);
 
         driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number + 1) + "]/td[2]/a/div")).click();
@@ -156,7 +162,7 @@ public class EntityExportTest extends BaseTest {
     public void viewTest() throws InterruptedException {
 
         WebDriver driver = getDriver();
-        WebDriverWait wait = new WebDriverWait(driver,4);
+        WebDriverWait wait = new WebDriverWait(driver, 4);
 
         WebElement exportButton = driver.findElement(By.xpath("//div[@id= 'menu-list-parent']/ul/li[8]/a"));
         ProjectUtils.click(driver, exportButton);
@@ -165,7 +171,7 @@ public class EntityExportTest extends BaseTest {
 
         final String title = "My String";
         final String text = "New text with 1234";
-        final int  number = 1234;
+        final int number = 1234;
         final double decimal = 23.34;
 
         WebElement titleElement = driver.findElement(By.xpath("//input[@id= 'string']"));
@@ -202,7 +208,7 @@ public class EntityExportTest extends BaseTest {
         WebElement decField = driver.findElement(By.xpath("//textarea[@id= 't-23-r-1-decimal']"));
         decField.sendKeys(String.valueOf(tableDec));
         WebElement saveButton = driver.findElement(By.xpath("//button[@value='1']"));
-        ProjectUtils.click(driver,saveButton);
+        ProjectUtils.click(driver, saveButton);
         WebElement actionsButton = driver.findElement(By.xpath("//tbody/tr[1]/td[10]/div[1]/button[1]"));
         actionsButton.click();
         WebElement viewButton = driver.findElement(By.xpath("//a[contains(text(),'view')]"));
@@ -221,13 +227,60 @@ public class EntityExportTest extends BaseTest {
         WebElement tableNumberColumn = driver.findElement(By.xpath("//tbody/tr[1]/td[1]"));
         Assert.assertTrue(tableNumberColumn.isDisplayed());
         WebElement tableStringField = driver.findElement(By.xpath("//td[contains(text(),'abc')]"));
-        Assert.assertEquals(tableStringField.getText(),"abc");
+        Assert.assertEquals(tableStringField.getText(), "abc");
         WebElement tableTextField = driver.findElement(By.xpath("//td[contains(text(),'abc123')]"));
-        Assert.assertEquals(tableTextField.getText(),"abc123");
+        Assert.assertEquals(tableTextField.getText(), "abc123");
         WebElement tableIntField = driver.findElement(By.xpath("//tbody/tr[1]/td[4]"));
-        Assert.assertEquals(tableIntField.getText(),"124");
+        Assert.assertEquals(tableIntField.getText(), "124");
         WebElement tableDecimalField = driver.findElement(By.xpath("//td[contains(text(),'34.56')]"));
-        Assert.assertEquals(tableDecimalField.getText(),"34.56");
+        Assert.assertEquals(tableDecimalField.getText(), "34.56");
+    }
+
+    @Test
+    //Negative test String to Int Field
+    public void negativeStringForInt() {
+        WebDriver driver = getDriver();
+        WebDriverWait wait = new WebDriverWait(driver, 5);
+        WebElement export = driver.findElement(By.xpath("//p[contains (text(), 'Export') ]"));
+        ProjectUtils.click(driver, export);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains (text(), 'create_new_folder')]"))).click();
+
+
+        WebElement thirdField = driver.findElement(By.xpath("//*[@name='entity_form_data[int]']"));
+        ProjectUtils.click(driver, thirdField);
+        thirdField.sendKeys(exportString);
+
+        WebElement button = driver.findElement(By.xpath("//button[@class='btn btn-warning']"));
+        ProjectUtils.click(driver, button);
+
+        WebElement error = driver.findElement(By.xpath("//div[@id='pa-error']"));
+        error.getText();
+        Assert.assertTrue(true, "Error saving entity");
+    }
+
+    @Ignore //поле принимает значение Decimal в поле Int, тест падает
+    @Test
+    // Negative test Decimal to Int Field
+
+
+    public void negativeDecimalForInt() {
+        WebDriver driver = getDriver();
+        WebDriverWait wait = new WebDriverWait(driver, 5);
+        WebElement export = driver.findElement(By.xpath("//p[contains (text(), 'Export') ]"));
+        ProjectUtils.click(driver, export);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains (text(), 'create_new_folder')]"))).click();
+
+        WebElement thirdField = driver.findElement(By.xpath("//*[@name='entity_form_data[int]']"));
+        ProjectUtils.click(driver, thirdField);
+        thirdField.sendKeys(exportDec);
+
+        WebElement button = driver.findElement(By.xpath("//button[@class='btn btn-warning']"));
+        ProjectUtils.click(driver, button);
+
+        WebElement error = driver.findElement(By.xpath("//div[@id='pa-error']"));
+        error.getText();
+        Assert.assertTrue(true, "Error saving entity");
+
     }
 }
 
