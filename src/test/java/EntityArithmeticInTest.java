@@ -100,5 +100,8 @@ public class EntityArithmeticInTest extends BaseTest {
 
             WebElement error = driver.findElement(By.xpath("//*[@id = 'pa-error']"));
             Assert.assertEquals(error.getText(), "Error saving entity");
+
+
+
         }
 }
