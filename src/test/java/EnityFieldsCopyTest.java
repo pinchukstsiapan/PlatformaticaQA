@@ -1,0 +1,43 @@
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.testng.annotations.Test;
+import runner.BaseTest;
+import runner.type.Run;
+import runner.type.RunType;
+
+@Run(run = RunType.Single)
+public class EnityFieldsCopyTest extends BaseTest {
+
+    @Test
+    public void newAlexRecord() throws InterruptedException {
+
+        final String title = "AleksandrSmirnov";
+        final String comments = "TEST IT";
+        final int InTeGeR = 11;
+
+        WebDriver driver = getDriver();
+
+        WebElement tab = driver.findElement(By.xpath("//li[@id = 'pa-menu-item-45']"));
+        tab.click();
+        WebElement newFile = driver.findElement(By.xpath("//i[text() = 'create_new_folder']"));
+        newFile.click();
+        Thread.sleep(1000);
+
+        WebElement first = driver.findElement(By.xpath("//input[contains(@name, 'title')]"));
+        first.sendKeys(title);
+        WebElement second = driver.findElement(By.xpath("//textarea[@id = 'comments']"));
+        second.sendKeys(comments);
+        WebElement tri = driver.findElement(By.xpath("//input[contains(@name, 'int')]"));
+        tri.sendKeys(String.valueOf(InTeGeR));
+
+        WebElement button2 = driver.findElement(By.xpath("//button[text() = 'Save']"));
+        button2.click();
+
+        WebElement butt3 = driver.findElement(By.xpath("(//button[@data-toggle= 'dropdown'])[1]"));
+        butt3.click();
+        Thread.sleep(1000);
+        WebElement vw = driver.findElement(By.xpath("//a[text() = 'view']"));
+        vw.click();
+    }
+}
