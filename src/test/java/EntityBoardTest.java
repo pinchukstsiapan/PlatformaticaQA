@@ -18,7 +18,7 @@ public class EntityBoardTest extends BaseTest {
     private final String PENDING = "Pending";
     private final String USER_DEMO = "user249@tester.com";
 
-   public  List<WebElement> createRecord() {
+   public void createRecord() {
        WebDriver driver = getDriver();
        WebDriverWait wait = new WebDriverWait(driver,6);
        WebElement tabBoard = driver.findElement(By.xpath("//p[contains(text(),'Board')]"));
@@ -53,7 +53,6 @@ public class EntityBoardTest extends BaseTest {
 
        WebElement saveButton = driver.findElement(By.id("pa-entity-form-save-btn"));
        ProjectUtils.click(driver, saveButton);
-       return
    }
 
     @Test
