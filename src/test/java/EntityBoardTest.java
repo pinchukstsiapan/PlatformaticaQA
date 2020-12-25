@@ -163,8 +163,7 @@ public class EntityBoardTest extends BaseTest {
         WebElement newFolder = driver.findElement(By.xpath("//i[contains(text(),'create_new_folder')]"));
         ProjectUtils.click(driver, newFolder);
 
-        //WebElement text = driver.findElement(By.id("text"));
-        WebElement text = driver.findElement(By.name("entity_form_data[text]"));
+        WebElement text = driver.findElement(By.id("text"));
         text.sendKeys(uniqueText);
 
         WebElement integer = driver.findElement(By.id("int"));
@@ -187,7 +186,6 @@ public class EntityBoardTest extends BaseTest {
         ProjectUtils.click(driver, list);
 
         WebElement container = driver.findElement(By.xpath("//i[text()='menu']"));
-        //wait.until(ExpectedConditions.elementToBeClickable(container));
         ProjectUtils.click(driver, container);
 
         WebElement edit = driver.findElement(By.xpath("//a[text()='edit']"));
@@ -200,16 +198,17 @@ public class EntityBoardTest extends BaseTest {
         WebElement onTrack = driver.findElement(By.xpath("//span[contains(text(),'On track')]"));
         ProjectUtils.click(driver, onTrack);
 
-        /*Thread.sleep(3000);
-        text.clear();
+        WebElement text1 = driver.findElement(By.id("text"));
+        text1.clear();
+        text1.sendKeys("my test changed");
 
-        text.sendKeys("my test changed");
+        WebElement integer1 = driver.findElement(By.id("int"));
+        integer1.clear();
+        integer1.sendKeys(String.valueOf(50));
 
-        integer.clear();
-        integer.sendKeys(String.valueOf(50));
-
-        decimal.clear();
-        decimal.sendKeys(String.valueOf(50.5));
+        WebElement decimal1 = driver.findElement(By.id("decimal"));
+        decimal1.clear();
+        decimal1.sendKeys(String.valueOf(50.5));
 
         WebElement saveButton1 = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
         ProjectUtils.click(driver, saveButton1);
@@ -217,15 +216,16 @@ public class EntityBoardTest extends BaseTest {
         String result = driver.findElement(By.xpath("//tbody/tr[1]/td[3]/a[1]/div[1]")).getText();
         Assert.assertEquals(result, "my test changed");
 
-        container.click();
-        wait.until(ExpectedConditions.elementToBeClickable(container));
+        WebElement container1 = driver.findElement(By.xpath("//i[text()='menu']"));
+        container1.click();
+        wait.until(ExpectedConditions.elementToBeClickable(container1));
 
         WebElement delete = driver.findElement(By.xpath("//a[text()='delete']"));
         delete.click();
 
         ProjectUtils.click(driver, driver.findElement(By.xpath("//i[text()='list']")));
         boolean emptyField = driver.findElements(By.xpath("//tbody/tr[1]/td[10]/div[1]/button[1]")).size() < 1;
-        Assert.assertTrue(emptyField);*/
+        Assert.assertTrue(emptyField);
     }
 }
 
