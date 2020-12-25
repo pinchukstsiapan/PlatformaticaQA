@@ -1,5 +1,4 @@
 import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -7,18 +6,17 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
-import runner.type.ProfileType;
+import runner.type.Run;
+import runner.type.RunType;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import static javax.swing.Action.DEFAULT;
-
+@Run(run = RunType.Multiple)
 public class EntityExportTest extends BaseTest {
     public String exportString = "My String";
     public String exportText = "New text with 1234";
@@ -37,7 +35,7 @@ public class EntityExportTest extends BaseTest {
     public String tableInt = "124";
     public String tableDec = "34.56";
 
-    private void createFieldForm(WebDriver driver) {
+    private void createFieldForm(WebDriver driver){
 
         driver.findElement(By.xpath("//div[@id='menu-list-parent']//p[contains(text(), 'Export')]")).click();
         driver.findElement(By.xpath("//div/i")).click();
@@ -71,7 +69,7 @@ public class EntityExportTest extends BaseTest {
         selDr.selectByVisibleText(User);
     }
 
-    private void createEmbedExp(WebDriver driver) {
+    private void createEmbedExp (WebDriver driver) {
         WebElement addRecord = driver.findElement(By.xpath("//tr[@id='add-row-23']/td/button"));
         ProjectUtils.click(driver, addRecord);
         driver.findElement(By.id("t-undefined-r-1-_line_number")).click();
@@ -110,10 +108,10 @@ public class EntityExportTest extends BaseTest {
 
 
     @Test
-    public void inputTest() {
+    public void inputTest(){
 
         WebDriver driver = getDriver();
-        WebDriverWait wait = new WebDriverWait(driver, 4);
+        WebDriverWait wait = new WebDriverWait(driver,4);
 
         createFieldForm(driver);
         createEmbedExp(driver);
@@ -122,26 +120,26 @@ public class EntityExportTest extends BaseTest {
 
         List<WebElement> list = driver.findElements(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr/td[7]"));
 
-        int number = 0;
+        int number =0;
         for (int i = 0; i < size; i++) {
             if (list.get(i).getText().equals(DataTime)) {
                 number = i;
             }
         }
 
-        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number + 1) + "]/td[2]")).getText(),
+        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number +1) + "]/td[2]")).getText(),
                 exportString);
-        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number + 1) + "]/td[3]")).getText(),
+        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number +1) + "]/td[3]")).getText(),
                 exportText);
-        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number + 1) + "]/td[4]")).getText(),
+        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number +1) + "]/td[4]")).getText(),
                 exportInt);
-        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number + 1) + "]/td[5]")).getText(),
+        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number +1) + "]/td[5]")).getText(),
                 exportDec);
-        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number + 1) + "]/td[6]")).getText(),
+        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number +1) + "]/td[6]")).getText(),
                 Data);
-        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number + 1) + "]/td[7]")).getText(),
+        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number +1) + "]/td[7]")).getText(),
                 DataTime);
-        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number + 1) + "]/td[9]")).getText(),
+        Assert.assertEquals(driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number +1) + "]/td[9]")).getText(),
                 User);
 
         driver.findElement(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr[" + (number + 1) + "]/td[2]/a/div")).click();
@@ -157,83 +155,38 @@ public class EntityExportTest extends BaseTest {
         driver.findElement(By.xpath("//div[@id='menu-list-parent']//p[contains(text(), 'Export')]")).click();
     }
 
-    @Ignore
-    @Test
+    @Test (dependsOnMethods = "inputTest")
     public void viewTest() throws InterruptedException {
 
         WebDriver driver = getDriver();
-        WebDriverWait wait = new WebDriverWait(driver, 4);
 
         WebElement exportButton = driver.findElement(By.xpath("//div[@id= 'menu-list-parent']/ul/li[8]/a"));
         ProjectUtils.click(driver, exportButton);
-        WebElement createRecordButton = driver.findElement(By.xpath("//i[contains(text(),'create_new_folder')]"));
-        createRecordButton.click();
-
-        final String title = "My String";
-        final String text = "New text with 1234";
-        final int number = 1234;
-        final double decimal = 23.34;
-
-        WebElement titleElement = driver.findElement(By.xpath("//input[@id= 'string']"));
-        titleElement.sendKeys(title);
-        WebElement textElement = driver.findElement(By.xpath("//textarea[@id= 'text']"));
-        textElement.sendKeys(text);
-        WebElement numberElement = driver.findElement(By.xpath("//input[@id= 'int']"));
-        numberElement.sendKeys(String.valueOf(number));
-        WebElement number1Element = driver.findElement(By.xpath("//input[@id= 'decimal']"));
-        number1Element.sendKeys(String.valueOf(decimal));
-        WebElement dateElement = driver.findElement(By.xpath("//input[@id= 'date']"));
-        Actions actions = new Actions(driver);
-        actions.moveToElement(dateElement).build().perform();
-        dateElement.click();
-        WebElement datetimeElement = driver.findElement(By.xpath("//input[@id= 'datetime']"));
-        Actions actions1 = new Actions(driver);
-        actions1.moveToElement(datetimeElement).build().perform();
-        datetimeElement.click();
-
-        WebElement addRecord = driver.findElement(By.xpath("//tr[@id='add-row-23']/td/button"));
-        ProjectUtils.click(driver, addRecord);
-
-        final String string = "abc";
-        final String tableText = "abc123";
-        final int tableInt = 124;
-        final double tableDec = 34.56;
-
-        WebElement stringField = driver.findElement(By.id("t-23-r-1-string"));
-        stringField.sendKeys(string);
-        WebElement textField = driver.findElement(By.xpath("//textarea[@id= 't-23-r-1-text']"));
-        textField.sendKeys(tableText);
-        WebElement intField = driver.findElement(By.xpath("//textarea[@id= 't-23-r-1-int']"));
-        intField.sendKeys(String.valueOf(tableInt));
-        WebElement decField = driver.findElement(By.xpath("//textarea[@id= 't-23-r-1-decimal']"));
-        decField.sendKeys(String.valueOf(tableDec));
-        WebElement saveButton = driver.findElement(By.xpath("//button[@value='1']"));
-        ProjectUtils.click(driver, saveButton);
-        WebElement actionsButton = driver.findElement(By.xpath("//tbody/tr[1]/td[10]/div[1]/button[1]"));
+        WebElement actionsButton = driver.findElement(By.xpath("//tbody/tr[1]/td[10]/div[1]/button[1]/i[1]"));
         actionsButton.click();
         WebElement viewButton = driver.findElement(By.xpath("//a[contains(text(),'view')]"));
         viewButton.click();
 
         WebElement exportPage = driver.findElement(By.xpath(" //h4[contains(text(),'Export')]"));
         Assert.assertTrue(exportPage.isDisplayed());
-        WebElement verifyString = driver.findElement(By.xpath("//span[contains(text(),'My String')]"));
-        Assert.assertEquals(verifyString.getText(), "My String");
-        WebElement verifyText = driver.findElement(By.xpath("//span[contains(text(),'New text with 1234')]"));
-        Assert.assertEquals(verifyText.getText(), "New text with 1234");
-        WebElement verifyInt = driver.findElement(By.xpath("//span[text()='1234']"));
-        Assert.assertEquals(verifyInt.getText(), "1234");
-        WebElement verifyDecimal = driver.findElement(By.xpath("//span[text()='23.34']"));
+        WebElement verifyString = driver.findElement(By.xpath("//label[text()='String']/../div[1]//span"));
+        Assert.assertEquals(verifyString.getText(),exportString);
+        WebElement verifyText = driver.findElement(By.xpath("//label[text()='String']/../div[2]//span"));
+        Assert.assertEquals(verifyText.getText(), exportText);
+        WebElement verifyInt = driver.findElement(By.xpath("//label[text()='String']/../div[3]//span"));
+        Assert.assertEquals(verifyInt.getText(), exportInt);
+        WebElement verifyDecimal = driver.findElement(By.xpath("//label[text()='String']/../div[4]//span"));
         Assert.assertTrue(verifyDecimal.isDisplayed());
         WebElement tableNumberColumn = driver.findElement(By.xpath("//tbody/tr[1]/td[1]"));
         Assert.assertTrue(tableNumberColumn.isDisplayed());
-        WebElement tableStringField = driver.findElement(By.xpath("//td[contains(text(),'abc')]"));
-        Assert.assertEquals(tableStringField.getText(), "abc");
-        WebElement tableTextField = driver.findElement(By.xpath("//td[contains(text(),'abc123')]"));
-        Assert.assertEquals(tableTextField.getText(), "abc123");
+        WebElement tableStringField = driver.findElement(By.xpath("//tbody/tr[1]/td[2]"));
+        Assert.assertEquals(tableStringField.getText(), tablString);
+        WebElement tableTextField = driver.findElement(By.xpath("//tbody/tr[1]/td[3]"));
+        Assert.assertEquals(tableTextField.getText(), tableTex);
         WebElement tableIntField = driver.findElement(By.xpath("//tbody/tr[1]/td[4]"));
-        Assert.assertEquals(tableIntField.getText(), "124");
-        WebElement tableDecimalField = driver.findElement(By.xpath("//td[contains(text(),'34.56')]"));
-        Assert.assertEquals(tableDecimalField.getText(), "34.56");
+        Assert.assertEquals(tableIntField.getText(), tableInt);
+        WebElement tableDecimalField = driver.findElement(By.xpath("//tbody/tr[1]/td[5]"));
+        Assert.assertEquals(tableDecimalField.getText(), tableDec);
     }
 
     @Test
