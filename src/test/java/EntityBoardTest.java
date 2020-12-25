@@ -3,12 +3,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -57,7 +55,7 @@ public class EntityBoardTest extends BaseTest {
        ProjectUtils.click(driver, saveButton);
    }
 
-    @Test
+    @Test(invocationCount = 25)
     public void inputTest() {
         WebDriver driver = getDriver();
         createRecord();
