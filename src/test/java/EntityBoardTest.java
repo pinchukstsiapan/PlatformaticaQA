@@ -3,89 +3,82 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
 
+import java.util.List;
 import java.util.UUID;
 
 public class EntityBoardTest extends BaseTest {
 
     private static final String TEXT = UUID.randomUUID().toString();
-    private static final int NUMBER = (int) (Math.random()*100);
-    private static final double DECIMAL = (int) (Math.random()*20000) / 100.0;
-    private static final String DATE_FIELD = "05/09/1945";
-    final String DATE_TIME_FIELD = "05/09/1945 12:34:56";
-    final String PENDING = "Pending";
-    final String USER_DEMO = "user249@tester.com";
+    private static final String NUMBER = String.valueOf ((int)(Math.random()*100));
+    private static final String DECIMAL = String.valueOf((int) (Math.random()*20000) / 100.0);
+    private final String PENDING = "Pending";
+    private final String USER_DEMO = "user249@tester.com";
+
+   public void createRecord() {
+       WebDriver driver = getDriver();
+       WebDriverWait wait = new WebDriverWait(driver,6);
+       WebElement tabBoard = driver.findElement(By.xpath("//p[contains(text(),'Board')]"));
+       ProjectUtils.click(driver, tabBoard);
+
+       WebElement viewList = driver.findElement(By.xpath("//a[contains(@href, '31')]/i[text()='list']"));
+       viewList.click();
+
+       WebElement createNew = driver.findElement(By.xpath("//div[@class = 'card-icon']"));
+       createNew.click();
+
+       Select dropdownStatus = new Select(driver.findElement(By.id("string")));
+       dropdownStatus.selectByVisibleText(PENDING);
+
+       WebElement textPlaceholder = driver.findElement(By.id("text"));
+       textPlaceholder.click();
+       textPlaceholder.sendKeys(TEXT);
+       wait.until(ExpectedConditions.attributeContains(textPlaceholder, "value", TEXT));
+
+       WebElement intPlaceholder = driver.findElement(By.xpath("//input[@name='entity_form_data[int]']"));
+       intPlaceholder.click();
+       intPlaceholder.sendKeys(NUMBER);
+       wait.until(ExpectedConditions.attributeContains(intPlaceholder, "value",NUMBER));
+
+       WebElement decimalPlaceholder = driver.findElement(By.id("decimal"));
+       decimalPlaceholder.click();
+       decimalPlaceholder.sendKeys(DECIMAL);
+       wait.until(ExpectedConditions.attributeContains(decimalPlaceholder, "value", DECIMAL));
+
+       Select dropdownUser = new Select(driver.findElement(By.id("user")));
+       dropdownUser.selectByVisibleText(USER_DEMO);
+
+       WebElement saveButton = driver.findElement(By.id("pa-entity-form-save-btn"));
+       ProjectUtils.click(driver, saveButton);
+   }
 
     @Test
-    public void inputTest() throws InterruptedException {
-
-
+    public void inputTest() {
         WebDriver driver = getDriver();
-        WebDriverWait wait = new WebDriverWait(driver,6);
+        createRecord();
 
-        WebElement tabBoard = driver.findElement(By.xpath("//p[contains(text(),'Board')]"));
-        ProjectUtils.click(driver, tabBoard);
+        List<WebElement> tabList = driver.findElements(By.xpath("//tbody/tr"));
+        Assert.assertEquals(tabList.size(), 1, "Issue with unique record");
 
-        WebElement viewList = driver.findElement(By.xpath("//a[contains(@href, '31')]/i[text()='list']"));
-        viewList.click();
-
-        WebElement createNew = driver.findElement(By.xpath("//div[@class = 'card-icon']"));
-        createNew.click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//textarea[@name='entity_form_data[text]']")));
-
-        Select dropdownStatus = new Select(driver.findElement(By.id("string")));
-        dropdownStatus.selectByVisibleText(PENDING);
-
-        WebElement textPlaceholder = driver.findElement(By.id("text"));
-        textPlaceholder.clear();
-       textPlaceholder.sendKeys(TEXT);
-       // ProjectUtils.sendKeys(textPlaceholder, TEXT);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//textarea[@name='entity_form_data[text]']")));
-        wait.until(ExpectedConditions.attributeContains(textPlaceholder, "value", TEXT));
-
-        WebElement intPlaceholder = driver.findElement(By.xpath("//input[@name='entity_form_data[int]']"));
-        ProjectUtils.sendKeys(intPlaceholder, NUMBER);
-        wait.until(ExpectedConditions.attributeContains(intPlaceholder, "value", String.valueOf(NUMBER)));
-
-        WebElement decimalPlaceholder = driver.findElement(By.id("decimal"));
-        ProjectUtils.sendKeys(decimalPlaceholder, DECIMAL);
-        wait.until(ExpectedConditions.attributeContains(decimalPlaceholder, "value", String.valueOf(DECIMAL)));
-
-        WebElement date = driver.findElement(By.id("date"));
-        date.sendKeys(DATE_FIELD);
-       // ProjectUtils.setAttribute(driver, date, "value", DATE_FIELD);
-
-        WebElement dateTime = driver.findElement(By.id("datetime"));
-      //  ProjectUtils.setAttribute(driver, dateTime, "value", DATE_TIME_FIELD);
-
-        WebElement dropdownUser = driver.findElement(By.id("user"));
-        Select s2 = new Select(dropdownUser);
-      //  s2.selectByVisibleText(userDemo);
-
-        WebElement saveBtn = driver.findElement(By.id("pa-entity-form-save-btn"));
-        ProjectUtils.click(driver, saveBtn);
-
-        String recordTitleXpath = String.format("//div[contains(text(), '%s')]", TEXT);
-        WebElement createdRecordText = driver.findElement(By.xpath(recordTitleXpath));
-        WebElement createdRecordStringPending = driver.findElement( By.xpath(String.format("%s/../../../td[2]/a/div", recordTitleXpath)));
-        WebElement createdRecordInt = driver.findElement(By.xpath(String.format("%s/../../../td[4]/a/div", recordTitleXpath)));
-        WebElement createdRecordDecimal = driver.findElement(By.xpath(String.format("%s/../../../td[5]/a/div", recordTitleXpath)));
-        WebElement createdRecordDate = driver.findElement(By.xpath(String.format("%s/../../../td[6]/a/div", recordTitleXpath)));
-        WebElement createdRecordDateTime = driver.findElement(By.xpath(String.format("%s/../../../td[7]/a/div", recordTitleXpath)));
-        WebElement createdNewImage = driver.findElement(By.xpath(String.format("%s/../../../td[8]", recordTitleXpath)));
-        WebElement createdRecordUserDemo = driver.findElement(By.xpath(String.format("%s/../../../td[9]", recordTitleXpath)));
-
+        WebElement createdRecordStringPending = tabList.get(0).findElement(By.xpath("td[2]/a/div"));
         Assert.assertEquals(createdRecordStringPending.getText(), PENDING, "Created record Pending issue");
+
+        WebElement createdRecordText = tabList.get(0).findElement(By.xpath("td[3]/a/div"));
         Assert.assertEquals(createdRecordText.getText(), TEXT, "Created record text issue");
-        Assert.assertEquals(createdRecordInt.getText(), Integer.toString(NUMBER), "Created record number issue");
-        Assert.assertEquals(createdRecordDecimal.getText(), Double.toString(DECIMAL), "Created record decimal issue");
-        Assert.assertEquals(createdRecordDate.getText(), DATE_FIELD, "Created date issue");
-        Assert.assertEquals(createdRecordDateTime.getText(), DATE_TIME_FIELD, "Created dateTime issue");
-        //Assert.assertEquals(createdRecordUserDemo.getText(), userDemo, "Created user issue");
+
+        WebElement createdRecordInt = tabList.get(0).findElement(By.xpath("td[4]/a/div"));
+        Assert.assertEquals(createdRecordInt.getText(), NUMBER, "Created record number issue");
+
+        WebElement createdRecordDecimal = tabList.get(0).findElement(By.xpath("td[5]/a/div"));
+        Assert.assertEquals(createdRecordDecimal.getText(), DECIMAL, "Created record decimal issue");
+
+        WebElement createdRecordUserDemo = tabList.get(0).findElement(By.xpath("td[9]"));
+        Assert.assertEquals(createdRecordUserDemo.getText(), USER_DEMO, "Created record user default issue");
     }
 
     @Ignore
