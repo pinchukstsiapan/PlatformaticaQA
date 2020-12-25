@@ -3,8 +3,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 import runner.BaseTest;
+import runner.ProjectUtils;
 import runner.type.Run;
 import runner.type.RunType;
+
+import java.util.UUID;
 
 @Run(run = RunType.Single)
 public class EnityFieldsCopyTest extends BaseTest {
@@ -12,7 +15,7 @@ public class EnityFieldsCopyTest extends BaseTest {
     @Test
     public void newAlexRecord() throws InterruptedException {
 
-        final String title = "AleksandrSmirnov";
+        final String title = UUID.randomUUID().toString();;
         final String comments = "TEST IT";
         final int InTeGeR = 11;
 
@@ -32,7 +35,7 @@ public class EnityFieldsCopyTest extends BaseTest {
         tri.sendKeys(String.valueOf(InTeGeR));
 
         WebElement button2 = driver.findElement(By.xpath("//button[text() = 'Save']"));
-        button2.click();
+        ProjectUtils.click(driver, button2);
 
         WebElement butt3 = driver.findElement(By.xpath("(//button[@data-toggle= 'dropdown'])[1]"));
         butt3.click();
