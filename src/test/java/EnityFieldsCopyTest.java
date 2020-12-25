@@ -1,6 +1,7 @@
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
@@ -37,6 +38,7 @@ public class EnityFieldsCopyTest extends BaseTest {
         WebElement button2 = driver.findElement(By.xpath("//button[text() = 'Save']"));
         ProjectUtils.click(driver, button2);
 
+        //validation of record
         WebElement butt3 = driver.findElement(By.xpath("(//button[@data-toggle= 'dropdown'])[1]"));
         butt3.click();
         Thread.sleep(1000);
