@@ -237,50 +237,20 @@ public class EntityExportTest extends BaseTest {
     }
 
     @Test
-    //Negative test String to Int Field
-    public void negativeStringForInt() {
+    public void negativeTestForInt() {
         WebDriver driver = getDriver();
         WebDriverWait wait = new WebDriverWait(driver, 5);
         WebElement export = driver.findElement(By.xpath("//p[contains (text(), 'Export') ]"));
         ProjectUtils.click(driver, export);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains (text(), 'create_new_folder')]"))).click();
-
-
         WebElement thirdField = driver.findElement(By.xpath("//*[@name='entity_form_data[int]']"));
         ProjectUtils.click(driver, thirdField);
         thirdField.sendKeys(exportString);
-
         WebElement button = driver.findElement(By.xpath("//button[@class='btn btn-warning']"));
         ProjectUtils.click(driver, button);
-
         WebElement error = driver.findElement(By.xpath("//div[@id='pa-error']"));
-        error.getText();
-        Assert.assertTrue(true, "Error saving entity");
-    }
-
-    @Ignore //поле принимает значение Decimal в поле Int, тест падает
-    @Test
-    // Negative test Decimal to Int Field
-
-
-    public void negativeDecimalForInt() {
-        WebDriver driver = getDriver();
-        WebDriverWait wait = new WebDriverWait(driver, 5);
-        WebElement export = driver.findElement(By.xpath("//p[contains (text(), 'Export') ]"));
-        ProjectUtils.click(driver, export);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains (text(), 'create_new_folder')]"))).click();
-
-        WebElement thirdField = driver.findElement(By.xpath("//*[@name='entity_form_data[int]']"));
-        ProjectUtils.click(driver, thirdField);
-        thirdField.sendKeys(exportDec);
-
-        WebElement button = driver.findElement(By.xpath("//button[@class='btn btn-warning']"));
-        ProjectUtils.click(driver, button);
-
-        WebElement error = driver.findElement(By.xpath("//div[@id='pa-error']"));
-        error.getText();
-        Assert.assertTrue(true, "Error saving entity");
-
+        String errorText = error.getText();
+        Assert.assertEquals("Error saving entity", errorText);
     }
 }
 
