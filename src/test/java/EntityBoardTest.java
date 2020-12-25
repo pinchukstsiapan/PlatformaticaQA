@@ -7,23 +7,25 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
+
 import java.util.UUID;
 
 public class EntityBoardTest extends BaseTest {
 
-    @Ignore
+    private static final String TEXT = UUID.randomUUID().toString();
+    private static final int NUMBER = (int) (Math.random()*100);
+    private static final double DECIMAL = (int) (Math.random()*20000) / 100.0;
+    private static final String DATE_FIELD = "05/09/1945";
+    final String DATE_TIME_FIELD = "05/09/1945 12:34:56";
+    final String PENDING = "Pending";
+    final String USER_DEMO = "user249@tester.com";
+
     @Test
     public void inputTest() throws InterruptedException {
-        final String text = UUID.randomUUID().toString();
-        final int number = (int) (Math.random()*100);
-        final double decimal = (int) (Math.random()*20000) / 100.0;
-        final String dateField = "05/09/1945";
-        final String dateTimeField = "05/09/1945 12:34:56";
-        final String pending = "Pending";
-        final String userDemo = "user249@tester.com";
+
 
         WebDriver driver = getDriver();
-        WebDriverWait wait = new WebDriverWait(driver,30);
+        WebDriverWait wait = new WebDriverWait(driver,6);
 
         WebElement tabBoard = driver.findElement(By.xpath("//p[contains(text(),'Board')]"));
         ProjectUtils.click(driver, tabBoard);
@@ -35,37 +37,39 @@ public class EntityBoardTest extends BaseTest {
         createNew.click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//textarea[@name='entity_form_data[text]']")));
 
-        WebElement dropdownStatus = driver.findElement(By.id("string"));
-        Select s = new Select(dropdownStatus);
-        s.selectByVisibleText(pending);
+        Select dropdownStatus = new Select(driver.findElement(By.id("string")));
+        dropdownStatus.selectByVisibleText(PENDING);
 
-        WebElement textPlaceholder = driver.findElement(By.xpath("//textarea[@name='entity_form_data[text]']"));
-        ProjectUtils.sendKeys(textPlaceholder, text);
+        WebElement textPlaceholder = driver.findElement(By.id("text"));
+        textPlaceholder.clear();
+       textPlaceholder.sendKeys(TEXT);
+       // ProjectUtils.sendKeys(textPlaceholder, TEXT);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//textarea[@name='entity_form_data[text]']")));
-        wait.until(ExpectedConditions.attributeContains(textPlaceholder, "value", text));
+        wait.until(ExpectedConditions.attributeContains(textPlaceholder, "value", TEXT));
 
         WebElement intPlaceholder = driver.findElement(By.xpath("//input[@name='entity_form_data[int]']"));
-        ProjectUtils.sendKeys(intPlaceholder, number);
-        wait.until(ExpectedConditions.attributeContains(intPlaceholder, "value", String.valueOf(number)));
+        ProjectUtils.sendKeys(intPlaceholder, NUMBER);
+        wait.until(ExpectedConditions.attributeContains(intPlaceholder, "value", String.valueOf(NUMBER)));
 
         WebElement decimalPlaceholder = driver.findElement(By.id("decimal"));
-        ProjectUtils.sendKeys(decimalPlaceholder, decimal);
-        wait.until(ExpectedConditions.attributeContains(decimalPlaceholder, "value", String.valueOf(decimal)));
+        ProjectUtils.sendKeys(decimalPlaceholder, DECIMAL);
+        wait.until(ExpectedConditions.attributeContains(decimalPlaceholder, "value", String.valueOf(DECIMAL)));
 
         WebElement date = driver.findElement(By.id("date"));
-        ProjectUtils.setAttribute(driver, date, "value", dateField);
+        date.sendKeys(DATE_FIELD);
+       // ProjectUtils.setAttribute(driver, date, "value", DATE_FIELD);
 
         WebElement dateTime = driver.findElement(By.id("datetime"));
-        ProjectUtils.setAttribute(driver, dateTime, "value", dateTimeField);
+      //  ProjectUtils.setAttribute(driver, dateTime, "value", DATE_TIME_FIELD);
 
         WebElement dropdownUser = driver.findElement(By.id("user"));
         Select s2 = new Select(dropdownUser);
-        s2.selectByVisibleText(userDemo);
+      //  s2.selectByVisibleText(userDemo);
 
         WebElement saveBtn = driver.findElement(By.id("pa-entity-form-save-btn"));
         ProjectUtils.click(driver, saveBtn);
 
-        String recordTitleXpath = String.format("//div[contains(text(), '%s')]", text);
+        String recordTitleXpath = String.format("//div[contains(text(), '%s')]", TEXT);
         WebElement createdRecordText = driver.findElement(By.xpath(recordTitleXpath));
         WebElement createdRecordStringPending = driver.findElement( By.xpath(String.format("%s/../../../td[2]/a/div", recordTitleXpath)));
         WebElement createdRecordInt = driver.findElement(By.xpath(String.format("%s/../../../td[4]/a/div", recordTitleXpath)));
@@ -75,15 +79,16 @@ public class EntityBoardTest extends BaseTest {
         WebElement createdNewImage = driver.findElement(By.xpath(String.format("%s/../../../td[8]", recordTitleXpath)));
         WebElement createdRecordUserDemo = driver.findElement(By.xpath(String.format("%s/../../../td[9]", recordTitleXpath)));
 
-        Assert.assertEquals(createdRecordStringPending.getText(), pending, "Created record Pending issue");
-        Assert.assertEquals(createdRecordText.getText(), text, "Created record text issue");
-        Assert.assertEquals(createdRecordInt.getText(), Integer.toString(number), "Created record number issue");
-        Assert.assertEquals(createdRecordDecimal.getText(), Double.toString(decimal), "Created record decimal issue");
-        Assert.assertEquals(createdRecordDate.getText(), dateField, "Created date issue");
-        Assert.assertEquals(createdRecordDateTime.getText(), dateTimeField, "Created dateTime issue");
-        Assert.assertEquals(createdRecordUserDemo.getText(), userDemo, "Created user issue");
+        Assert.assertEquals(createdRecordStringPending.getText(), PENDING, "Created record Pending issue");
+        Assert.assertEquals(createdRecordText.getText(), TEXT, "Created record text issue");
+        Assert.assertEquals(createdRecordInt.getText(), Integer.toString(NUMBER), "Created record number issue");
+        Assert.assertEquals(createdRecordDecimal.getText(), Double.toString(DECIMAL), "Created record decimal issue");
+        Assert.assertEquals(createdRecordDate.getText(), DATE_FIELD, "Created date issue");
+        Assert.assertEquals(createdRecordDateTime.getText(), DATE_TIME_FIELD, "Created dateTime issue");
+        //Assert.assertEquals(createdRecordUserDemo.getText(), userDemo, "Created user issue");
     }
 
+    @Ignore
     @Test
     public void newBoardRecordCreation() throws InterruptedException {
         final String text = UUID.randomUUID().toString();
@@ -114,9 +119,9 @@ public class EntityBoardTest extends BaseTest {
         WebElement fieldDecimal = driver.findElement(By.id("decimal"));
         ProjectUtils.sendKeys(fieldDecimal, decimal);
         WebElement fieldDate = driver.findElement(By.id("date"));
-        ProjectUtils.setAttribute(driver, fieldDate, "value", date);
+        //ProjectUtils.setAttribute(driver, fieldDate, "value", date);
         WebElement fieldDateTime = driver.findElement(By.id("datetime"));
-        ProjectUtils.setAttribute(driver, fieldDateTime, "value", dateTime);
+       // ProjectUtils.setAttribute(driver, fieldDateTime, "value", dateTime);
         WebElement buttonSave = driver.findElement(By.id("pa-entity-form-save-btn"));
         ProjectUtils.click(driver, buttonSave);
 
