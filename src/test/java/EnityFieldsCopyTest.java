@@ -28,11 +28,11 @@ public class EnityFieldsCopyTest extends BaseTest {
         Thread.sleep(1000);
 
         WebElement first = driver.findElement(By.xpath("//input[contains(@name, 'title')]"));
-        first.sendKeys(title);
+        ProjectUtils.sendKeys(first, title);
         WebElement second = driver.findElement(By.xpath("//textarea[@id = 'comments']"));
-        second.sendKeys(comments);
+        ProjectUtils.sendKeys(second, comments);
         WebElement tri = driver.findElement(By.xpath("//input[contains(@name, 'int')]"));
-        tri.sendKeys(String.valueOf(InTeGeR));
+        ProjectUtils.sendKeys(tri, InTeGeR);
 
         WebElement button2 = driver.findElement(By.xpath("//button[text() = 'Save']"));
         ProjectUtils.click(driver, button2);
