@@ -81,9 +81,4 @@ public abstract class ProjectUtils {
     public static void inputKeys(WebDriver driver, WebElement element, double keys) throws InterruptedException {
         inputKeys(driver, element, String.valueOf(keys));
     }
-
-    public static void setAttribute(WebDriver driver, WebElement element, String attName, String attValue) {
-        JavascriptExecutor executor = (JavascriptExecutor)driver;
-        executor.executeScript("arguments[0].setAttribute(arguments[1], arguments[2]);", element, attName, attValue);
-    }
 }
