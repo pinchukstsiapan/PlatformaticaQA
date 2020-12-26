@@ -151,6 +151,7 @@ public class EntityDefaultTest extends BaseTest {
         ProjectUtils.click(driver, scrollDownMenuField);
     }
 
+    @Ignore
     @Test
     public void checkDefaultValueAndUpdateThem() throws InterruptedException {
 
