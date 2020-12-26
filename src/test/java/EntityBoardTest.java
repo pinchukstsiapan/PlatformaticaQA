@@ -48,9 +48,6 @@ public class EntityBoardTest extends BaseTest {
        decimalPlaceholder.sendKeys(DECIMAL);
        wait.until(ExpectedConditions.attributeContains(decimalPlaceholder, "value", DECIMAL));
 
-       Select dropdownUser = new Select(driver.findElement(By.id("user")));
-       dropdownUser.selectByVisibleText(USER_DEFAULT);
-
        ProjectUtils.click(driver, driver.findElement(By.id("pa-entity-form-save-btn")));
    }
 
@@ -67,7 +64,6 @@ public class EntityBoardTest extends BaseTest {
         Assert.assertEquals(tabListValues.get(2).getText(), TEXT, "Created record text issue");
         Assert.assertEquals(tabListValues.get(3).getText(), NUMBER, "Created record number issue");
         Assert.assertEquals(tabListValues.get(4).getText(), DECIMAL, "Created record decimal issue");
-        Assert.assertEquals(tabListValues.get(8).getText(), USER_DEFAULT, "Created record user default issue");
     }
 
     @Ignore
@@ -131,5 +127,50 @@ public class EntityBoardTest extends BaseTest {
         WebElement emptyRecycleBin = driver.findElement(By.xpath(
                 "//div[contains(text(), 'Good job with housekeeping! Recycle bin is currently empty!')]"));
         Assert.assertNotNull(emptyRecycleBin, "No empty recycle bin message found.");
+    }
+
+    @Test (dependsOnMethods = "inputValidationTest")
+    public void editBoard() throws InterruptedException {
+
+        WebDriver driver = getDriver();
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+
+        WebElement board = driver.findElement(By.xpath("//p[contains(text(),'Board')]"));
+        ProjectUtils.click(driver, board);
+
+        WebElement list = driver.findElement(By.xpath("//a[contains(@href, '31')]/i[text()='list']"));
+        wait.until(ExpectedConditions.elementToBeClickable(list));
+        ProjectUtils.click(driver, list);
+
+        WebElement container = driver.findElement(By.xpath("//i[text() = 'menu']/.."));
+        ProjectUtils.click(driver, container);
+
+        WebElement edit = driver.findElement(By.xpath("//a[text()='edit']"));
+        ProjectUtils.click(driver, edit);
+
+        WebElement pending = driver.findElement(By.xpath("//div[contains(text(),'Pending')]"));
+        wait.until(ExpectedConditions.elementToBeClickable(pending));
+        pending.click();
+
+        WebElement onTrack = driver.findElement(By.xpath("//span[contains(text(),'On track')]"));
+        ProjectUtils.click(driver, onTrack);
+
+        WebElement text1 = driver.findElement(By.id("text"));
+        text1.clear();
+        text1.sendKeys("my test changed");
+
+        WebElement integer1 = driver.findElement(By.id("int"));
+        integer1.clear();
+        integer1.sendKeys(String.valueOf(50));
+
+        WebElement decimal1 = driver.findElement(By.id("decimal"));
+        decimal1.clear();
+        decimal1.sendKeys(String.valueOf(50.5));
+
+        WebElement saveButton1 = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
+        ProjectUtils.click(driver, saveButton1);
+
+        String result = driver.findElement(By.xpath("//tbody/tr[1]/td[3]/a[1]/div[1]")).getText();
+        Assert.assertEquals(result, "my test changed");
     }
 }
