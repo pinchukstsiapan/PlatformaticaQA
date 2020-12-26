@@ -7,31 +7,31 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
+import runner.TestUtils;
+import runner.type.ProfileType;
+import runner.type.Run;
+import runner.type.RunType;
 import java.util.List;
 import java.util.UUID;
 
+@Run(run = RunType.Multiple)
 public class EntityBoardTest extends BaseTest {
 
     private static final String TEXT = UUID.randomUUID().toString();
     private static final String NUMBER = String.valueOf ((int)(Math.random()*100));
     private static final String DECIMAL = String.valueOf((int) (Math.random()*20000) / 100.0);
-    private final String PENDING = "Pending";
-    private final String USER_DEMO = "user249@tester.com";
+    private static final String PENDING = "Pending";
+    private final String USER_DEFAULT = "user249@tester.com";
 
-   public void createRecord() {
+   private void createRecord() {
        WebDriver driver = getDriver();
        WebDriverWait wait = new WebDriverWait(driver,6);
-       WebElement tabBoard = driver.findElement(By.xpath("//p[contains(text(),'Board')]"));
-       ProjectUtils.click(driver, tabBoard);
 
-       WebElement viewList = driver.findElement(By.xpath("//a[contains(@href, '31')]/i[text()='list']"));
-       viewList.click();
+       ProjectUtils.click(driver, driver.findElement(By.xpath("//p[contains(text(),'Board')]")));
 
-       WebElement createNew = driver.findElement(By.xpath("//div[@class = 'card-icon']"));
-       createNew.click();
+       driver.findElement(By.xpath("//a[contains(@href, '31')]/i[text()='list']")).click();
 
-       Select dropdownStatus = new Select(driver.findElement(By.id("string")));
-       dropdownStatus.selectByVisibleText(PENDING);
+       driver.findElement(By.xpath("//div[@class = 'card-icon']")).click();
 
        WebElement textPlaceholder = driver.findElement(By.id("text"));
        textPlaceholder.click();
@@ -49,34 +49,25 @@ public class EntityBoardTest extends BaseTest {
        wait.until(ExpectedConditions.attributeContains(decimalPlaceholder, "value", DECIMAL));
 
        Select dropdownUser = new Select(driver.findElement(By.id("user")));
-       dropdownUser.selectByVisibleText(USER_DEMO);
+       dropdownUser.selectByVisibleText(USER_DEFAULT);
 
-       WebElement saveButton = driver.findElement(By.id("pa-entity-form-save-btn"));
-       ProjectUtils.click(driver, saveButton);
+       ProjectUtils.click(driver, driver.findElement(By.id("pa-entity-form-save-btn")));
    }
 
     @Test
-    public void inputTest() {
+    public void inputValidationTest() {
         WebDriver driver = getDriver();
         createRecord();
 
         List<WebElement> tabList = driver.findElements(By.xpath("//tbody/tr"));
         Assert.assertEquals(tabList.size(), 1, "Issue with unique record");
 
-        WebElement createdRecordStringPending = tabList.get(0).findElement(By.xpath("td[2]/a/div"));
-        Assert.assertEquals(createdRecordStringPending.getText(), PENDING, "Created record Pending issue");
-
-        WebElement createdRecordText = tabList.get(0).findElement(By.xpath("td[3]/a/div"));
-        Assert.assertEquals(createdRecordText.getText(), TEXT, "Created record text issue");
-
-        WebElement createdRecordInt = tabList.get(0).findElement(By.xpath("td[4]/a/div"));
-        Assert.assertEquals(createdRecordInt.getText(), NUMBER, "Created record number issue");
-
-        WebElement createdRecordDecimal = tabList.get(0).findElement(By.xpath("td[5]/a/div"));
-        Assert.assertEquals(createdRecordDecimal.getText(), DECIMAL, "Created record decimal issue");
-
-        WebElement createdRecordUserDemo = tabList.get(0).findElement(By.xpath("td[9]"));
-        Assert.assertEquals(createdRecordUserDemo.getText(), USER_DEMO, "Created record user default issue");
+        List<WebElement> tabListValues = driver.findElements(By.xpath("//tbody/tr/td"));
+        Assert.assertEquals(tabListValues.get(1).getText(), PENDING, "Created record Pending issue");
+        Assert.assertEquals(tabListValues.get(2).getText(), TEXT, "Created record text issue");
+        Assert.assertEquals(tabListValues.get(3).getText(), NUMBER, "Created record number issue");
+        Assert.assertEquals(tabListValues.get(4).getText(), DECIMAL, "Created record decimal issue");
+        Assert.assertEquals(tabListValues.get(8).getText(), USER_DEFAULT, "Created record user default issue");
     }
 
     @Ignore
