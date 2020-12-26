@@ -48,9 +48,6 @@ public class EntityBoardTest extends BaseTest {
        decimalPlaceholder.sendKeys(DECIMAL);
        wait.until(ExpectedConditions.attributeContains(decimalPlaceholder, "value", DECIMAL));
 
-       Select dropdownUser = new Select(driver.findElement(By.id("user")));
-       dropdownUser.selectByVisibleText(USER_DEFAULT);
-
        ProjectUtils.click(driver, driver.findElement(By.id("pa-entity-form-save-btn")));
    }
 
@@ -67,7 +64,6 @@ public class EntityBoardTest extends BaseTest {
         Assert.assertEquals(tabListValues.get(2).getText(), TEXT, "Created record text issue");
         Assert.assertEquals(tabListValues.get(3).getText(), NUMBER, "Created record number issue");
         Assert.assertEquals(tabListValues.get(4).getText(), DECIMAL, "Created record decimal issue");
-        Assert.assertEquals(tabListValues.get(8).getText(), USER_DEFAULT, "Created record user default issue");
     }
 
     @Ignore
@@ -133,10 +129,8 @@ public class EntityBoardTest extends BaseTest {
         Assert.assertNotNull(emptyRecycleBin, "No empty recycle bin message found.");
     }
 
-    @Test
+    @Test (dependsOnMethods = "inputValidationTest")
     public void editBoard() throws InterruptedException {
-
-        final String uniqueText = UUID.randomUUID().toString();
 
         WebDriver driver = getDriver();
         WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -144,32 +138,11 @@ public class EntityBoardTest extends BaseTest {
         WebElement board = driver.findElement(By.xpath("//p[contains(text(),'Board')]"));
         ProjectUtils.click(driver, board);
 
-        WebElement newFolder = driver.findElement(By.xpath("//i[contains(text(),'create_new_folder')]"));
-        ProjectUtils.click(driver, newFolder);
-
-        WebElement text = driver.findElement(By.id("text"));
-        text.sendKeys(uniqueText);
-
-        WebElement integer = driver.findElement(By.id("int"));
-        integer.sendKeys(String.valueOf(20));
-
-        WebElement decimal = driver.findElement(By.id("decimal"));
-        decimal.sendKeys(String.valueOf(22.5));
-
-        WebElement date = driver.findElement(By.id("date"));
-        ProjectUtils.click(driver, date);
-
-        WebElement dateTime = driver.findElement(By.id("datetime"));
-        ProjectUtils.click(driver, dateTime);
-
-        WebElement saveButton = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
-        ProjectUtils.click(driver, saveButton);
-
         WebElement list = driver.findElement(By.xpath("//a[contains(@href, '31')]/i[text()='list']"));
         wait.until(ExpectedConditions.elementToBeClickable(list));
         ProjectUtils.click(driver, list);
 
-        WebElement container = driver.findElement(By.xpath("//i[text()='menu']"));
+        WebElement container = driver.findElement(By.xpath("//i[text() = 'menu']/.."));
         ProjectUtils.click(driver, container);
 
         WebElement edit = driver.findElement(By.xpath("//a[text()='edit']"));
@@ -199,16 +172,5 @@ public class EntityBoardTest extends BaseTest {
 
         String result = driver.findElement(By.xpath("//tbody/tr[1]/td[3]/a[1]/div[1]")).getText();
         Assert.assertEquals(result, "my test changed");
-
-        WebElement container1 = driver.findElement(By.xpath("//i[text()='menu']"));
-        container1.click();
-        wait.until(ExpectedConditions.elementToBeClickable(container1));
-
-        WebElement delete = driver.findElement(By.xpath("//a[text()='delete']"));
-        delete.click();
-
-        ProjectUtils.click(driver, driver.findElement(By.xpath("//i[text()='list']")));
-        boolean emptyField = driver.findElements(By.xpath("//tbody/tr[1]/td[10]/div[1]/button[1]")).size() < 1;
-        Assert.assertTrue(emptyField);
     }
 }
