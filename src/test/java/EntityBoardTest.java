@@ -18,38 +18,38 @@ import java.util.UUID;
 public class EntityBoardTest extends BaseTest {
 
     private static final String TEXT = UUID.randomUUID().toString();
-    private static final String NUMBER = String.valueOf ((int)(Math.random()*100));
-    private static final String DECIMAL = String.valueOf((int) (Math.random()*20000) / 100.0);
+    private static final String NUMBER = String.valueOf((int) (Math.random() * 100));
+    private static final String DECIMAL = String.valueOf((int) (Math.random() * 20000) / 100.0);
     private static final String PENDING = "Pending";
     private final String USER_DEFAULT = "user249@tester.com";
 
-   private void createRecord() {
-       WebDriver driver = getDriver();
-       WebDriverWait wait = new WebDriverWait(driver,6);
+    private void createRecord() {
+        WebDriver driver = getDriver();
+        WebDriverWait wait = new WebDriverWait(driver, 6);
 
-       ProjectUtils.click(driver, driver.findElement(By.xpath("//p[contains(text(),'Board')]")));
+        ProjectUtils.click(driver, driver.findElement(By.xpath("//p[contains(text(),'Board')]")));
 
-       driver.findElement(By.xpath("//a[contains(@href, '31')]/i[text()='list']")).click();
+        driver.findElement(By.xpath("//a[contains(@href, '31')]/i[text()='list']")).click();
 
-       driver.findElement(By.xpath("//div[@class = 'card-icon']")).click();
+        driver.findElement(By.xpath("//div[@class = 'card-icon']")).click();
 
-       WebElement textPlaceholder = driver.findElement(By.id("text"));
-       textPlaceholder.click();
-       textPlaceholder.sendKeys(TEXT);
-       wait.until(ExpectedConditions.attributeContains(textPlaceholder, "value", TEXT));
+        WebElement textPlaceholder = driver.findElement(By.id("text"));
+        textPlaceholder.click();
+        textPlaceholder.sendKeys(TEXT);
+        wait.until(ExpectedConditions.attributeContains(textPlaceholder, "value", TEXT));
 
-       WebElement intPlaceholder = driver.findElement(By.xpath("//input[@name='entity_form_data[int]']"));
-       intPlaceholder.click();
-       intPlaceholder.sendKeys(NUMBER);
-       wait.until(ExpectedConditions.attributeContains(intPlaceholder, "value",NUMBER));
+        WebElement intPlaceholder = driver.findElement(By.xpath("//input[@name='entity_form_data[int]']"));
+        intPlaceholder.click();
+        intPlaceholder.sendKeys(NUMBER);
+        wait.until(ExpectedConditions.attributeContains(intPlaceholder, "value", NUMBER));
 
-       WebElement decimalPlaceholder = driver.findElement(By.id("decimal"));
-       decimalPlaceholder.click();
-       decimalPlaceholder.sendKeys(DECIMAL);
-       wait.until(ExpectedConditions.attributeContains(decimalPlaceholder, "value", DECIMAL));
+        WebElement decimalPlaceholder = driver.findElement(By.id("decimal"));
+        decimalPlaceholder.click();
+        decimalPlaceholder.sendKeys(DECIMAL);
+        wait.until(ExpectedConditions.attributeContains(decimalPlaceholder, "value", DECIMAL));
 
-       ProjectUtils.click(driver, driver.findElement(By.id("pa-entity-form-save-btn")));
-   }
+        ProjectUtils.click(driver, driver.findElement(By.id("pa-entity-form-save-btn")));
+    }
 
     @Test
     public void inputValidationTest() {
@@ -66,71 +66,8 @@ public class EntityBoardTest extends BaseTest {
         Assert.assertEquals(tabListValues.get(4).getText(), DECIMAL, "Created record decimal issue");
     }
 
-    @Ignore
-    @Test
-    public void newBoardRecordCreation() throws InterruptedException {
-        final String text = UUID.randomUUID().toString();
-        final int number = 320;
-        final double decimal = 0.41;
-        final String status = "Pending";
-        final String date = "25/12/2021";
-        final String dateTime = "25/12/2021 00:00:01";
-        WebDriver driver = getDriver();
-        WebDriverWait wait = new WebDriverWait(driver, 6);
-
-        WebElement tab = driver.findElement(By.xpath("//p[contains(text(),'Board')]"));
-        ProjectUtils.click(driver, tab);
-
-        WebElement buttonBoard = driver.findElement(By.xpath("//i[text()='create_new_folder']"));
-        ProjectUtils.click(driver, buttonBoard);
-        WebElement menuString = driver.findElement(By.xpath("//button[@data-id='string']"));
-        ProjectUtils.click(driver, menuString);
-
-        WebElement optionPending = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
-                "//a[@role='option']/span[contains(text(), '" + status + "')]/..")));
-        ProjectUtils.click(driver, optionPending);
-
-        WebElement fieldText = driver.findElement(By.id("text"));
-        ProjectUtils.sendKeys(fieldText, text);
-        WebElement fieldInt = driver.findElement(By.id("int"));
-        ProjectUtils.sendKeys(fieldInt, number);
-        WebElement fieldDecimal = driver.findElement(By.id("decimal"));
-        ProjectUtils.sendKeys(fieldDecimal, decimal);
-        WebElement fieldDate = driver.findElement(By.id("date"));
-        //ProjectUtils.setAttribute(driver, fieldDate, "value", date);
-        WebElement fieldDateTime = driver.findElement(By.id("datetime"));
-       // ProjectUtils.setAttribute(driver, fieldDateTime, "value", dateTime);
-        WebElement buttonSave = driver.findElement(By.id("pa-entity-form-save-btn"));
-        ProjectUtils.click(driver, buttonSave);
-
-        WebElement viewList = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
-                "//a[contains(@href, '31')]/i[text()='list']")));
-        ProjectUtils.click(driver, viewList);
-        WebElement newRecord = driver.findElement(By.xpath(
-                "//table[@id='pa-all-entities-table']/tbody/tr[1]/td[3]/a/div"));
-        Assert.assertEquals(newRecord.getText(), text, "No matching created record found.");
-
-        WebElement menuActions = driver.findElement(By.xpath("//i[text() = 'menu']/.."));
-        ProjectUtils.click(driver, menuActions);
-        WebElement optionDelete = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
-                "//ul[@role='menu']/li[3]/a[text()= 'delete']")));
-        ProjectUtils.click(driver, optionDelete);
-        WebElement recycleBin = driver.findElement(By.xpath("//li/a/i[text()='delete_outline']"));
-        ProjectUtils.click(driver, recycleBin);
-
-        WebElement deletedRecord = driver.findElement(By.xpath("//span[contains(text(), 'Text:')]/b"));
-        Assert.assertEquals(deletedRecord.getText(), text, "No matching deleted record found.");
-
-        WebElement linkDeletePermanent = driver.findElement(By.xpath("//a[contains(text(), 'delete permanently')]"));
-        ProjectUtils.click(driver, linkDeletePermanent);
-
-        WebElement emptyRecycleBin = driver.findElement(By.xpath(
-                "//div[contains(text(), 'Good job with housekeeping! Recycle bin is currently empty!')]"));
-        Assert.assertNotNull(emptyRecycleBin, "No empty recycle bin message found.");
-    }
-
-    @Test (dependsOnMethods = "inputValidationTest")
-    public void editBoard() throws InterruptedException {
+    @Test(dependsOnMethods = "inputValidationTest")
+    public void editBoard() {
 
         WebDriver driver = getDriver();
         WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -172,5 +109,52 @@ public class EntityBoardTest extends BaseTest {
 
         String result = driver.findElement(By.xpath("//tbody/tr[1]/td[3]/a[1]/div[1]")).getText();
         Assert.assertEquals(result, "my test changed");
+    }
+
+    @Test(dependsOnMethods = {"inputValidationTest", "editBoard"})
+    public void recordDeletion() throws InterruptedException {
+        WebDriver driver = getDriver();
+        WebDriverWait wait = new WebDriverWait(driver, 6);
+
+        WebElement tab = driver.findElement(By.xpath("//p[contains(text(),'Board')]"));
+        ProjectUtils.click(driver, tab);
+
+        WebElement viewList = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
+                "//a[contains(@href, '31')]/i[text()='list']")));
+        ProjectUtils.click(driver, viewList);
+        WebElement newRecord = driver.findElement(By.xpath(
+                "//table[@id='pa-all-entities-table']/tbody/tr[1]/td[3]/a/div"));
+        Assert.assertEquals(newRecord.getText(), "my test changed", "No matching created record found.");
+
+        WebElement menuActions = driver.findElement(By.xpath("//i[text() = 'menu']/.."));
+        ProjectUtils.click(driver, menuActions);
+        WebElement optionDelete = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
+                "//ul[@role='menu']/li[3]/a[text()= 'delete']")));
+        ProjectUtils.click(driver, optionDelete);
+        // ProjectUtils.click(driver, driver.findElement(By.xpath("//i[text()='list']")));
+        boolean emptyField = driver.findElements(By.xpath("//tbody/tr[1]/td[10]/div[1]/button[1]")).size() < 1;
+        Assert.assertTrue(emptyField);
+
+    }
+
+    @Test(dependsOnMethods = {"inputValidationTest", "editBoard", "recordDeletion"})
+    public void recordDeletionRecBin() throws InterruptedException {
+        WebDriver driver = getDriver();
+        WebDriverWait wait = new WebDriverWait(driver, 6);
+
+        WebElement tab = driver.findElement(By.xpath("//p[contains(text(),'Board')]"));
+        ProjectUtils.click(driver, tab);
+        WebElement recycleBin = driver.findElement(By.xpath("//li/a/i[text()='delete_outline']"));
+        ProjectUtils.click(driver, recycleBin);
+
+        WebElement deletedRecord = driver.findElement(By.xpath("//span[contains(text(), 'Text:')]/b"));
+        Assert.assertEquals(deletedRecord.getText(), "my test changed", "No matching deleted record found.");
+
+        WebElement linkDeletePermanent = driver.findElement(By.xpath("//a[contains(text(), 'delete permanently')]"));
+        ProjectUtils.click(driver, linkDeletePermanent);
+
+        WebElement emptyRecycleBin = driver.findElement(By.xpath(
+                "//div[contains(text(), 'Good job with housekeeping! Recycle bin is currently empty!')]"));
+        Assert.assertNotNull(emptyRecycleBin, "No empty recycle bin message found.");
     }
 }
