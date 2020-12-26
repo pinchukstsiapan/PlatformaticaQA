@@ -166,7 +166,7 @@ public class EntityExportTest extends BaseTest {
         WebElement viewButton = driver.findElement(By.xpath("//a[contains(text(),'view')]"));
         viewButton.click();
 
-        WebElement exportPage = driver.findElement(By.xpath(" //h4[contains(text(),'Export')]"));
+        WebElement exportPage = driver.findElement(By.xpath("//h4[contains(text(),'Export')]"));
         Assert.assertTrue(exportPage.isDisplayed());
         WebElement verifyString = driver.findElement(By.xpath("//label[text()='String']/../div[1]//span"));
         Assert.assertEquals(verifyString.getText(),exportString);
