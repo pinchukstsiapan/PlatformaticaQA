@@ -21,23 +21,48 @@ import runner.type.RunType;
 
 @Run(run = RunType.Single)
 public class EntityDefaultTest extends BaseTest {
+    private class DefaultValues {
+        String fieldString;
+        String fieldText;
+        int fieldInt;
+        double fieldDecimal;
+        String fieldDate;
+        String fieldDateTime;
+        String fieldUser;
+        int linesQty;
 
-    private final DefaultValues defaultValues = new DefaultValues();
+        public DefaultValues(String fieldString, String fieldText, int fieldInt, double fieldDecimal, String fieldDate, String fieldDateTime, String fieldUser, int linesQty) {
+            this.fieldString = fieldString;
+            this.fieldText = fieldText;
+            this.fieldInt = fieldInt;
+            this.fieldDecimal = fieldDecimal;
+            this.fieldDate = fieldDate;
+            this.fieldDateTime = fieldDateTime;
+            this.fieldUser = fieldUser;
+            this.linesQty = linesQty;
+        }
+    }
+
+    private final DefaultValues defaultValues = new DefaultValues(
+            "DEFAULT STRING VALUE",
+            "DEFAULT TEXT VALUE",
+            55,
+            110.32,
+            "01/01/1970",
+            "01/01/1970 00:00:00",
+            "User 1 Demo",
+            9);
 
     private DefaultValues currentValues = new DefaultValues(
-                                 UUID.randomUUID().toString(),
-                                "Some random text as Edited Text Value",
-                                (int) Math.random()*100,
-                            (int) (Math.random()*20000) / 100.0,
-                                "23/12/2021",
-                                "23/12/2021 12:34:56",
-                                "user100@tester.com",
-                                9);
+            UUID.randomUUID().toString(),
+            "Some random text as Edited Text Value",
+            (int) Math.random()*100,
+            (int) (Math.random()*20000) / 100.0,
+            "23/12/2021",
+            "23/12/2021 12:34:56",
+            "user100@tester.com",
+            9);
 
-    /**
-     * Implementation of the User Story "Entity = Default: Edit (Existing record)"
-     * https://trello.com/c/MYJS5EMR/223-entity-default-edit-existing-record
-     */
     @ Test
     public void editRecord() {
 
@@ -85,7 +110,7 @@ public class EntityDefaultTest extends BaseTest {
 
         Assert.assertEquals(row.findElements(By.cssSelector("td")).get(2).getText(), currentValues.fieldText);
         Assert.assertEquals(row.findElements(By.cssSelector("td")).get(3).getText(), String.valueOf(currentValues.fieldInt));
-        Assert.assertEquals(row.findElements(By.cssSelector("td")).get(4).getText(), String.valueOf(currentValues.fieldDecimal));
+        Assert.assertEquals(row.findElements(By.cssSelector("td")).get(4).getText(), String.format("%.2f", currentValues.fieldDecimal));
         Assert.assertEquals(row.findElements(By.cssSelector("td")).get(5).getText(), String.valueOf(currentValues.fieldDate));
         Assert.assertEquals(row.findElements(By.cssSelector("td")).get(6).getText(), String.valueOf(currentValues.fieldDateTime));
         Assert.assertEquals(row.findElements(By.cssSelector("td")).get(9).getText().toLowerCase(), String.valueOf(currentValues.fieldUser));
@@ -126,7 +151,7 @@ public class EntityDefaultTest extends BaseTest {
         intLineDefaultData.sendKeys(String.valueOf(newValues.fieldInt));
 
         WebElement decimalLineDefaultData = driver.findElement(By.xpath("//input[@id='decimal']"));
-        Assert.assertEquals(decimalLineDefaultData.getAttribute("value"), String.valueOf(oldValues.fieldDecimal));
+        Assert.assertEquals(decimalLineDefaultData.getAttribute("value"), String.format("%.2f", oldValues.fieldDecimal));
         decimalLineDefaultData.clear();
         decimalLineDefaultData.sendKeys(String.valueOf(newValues.fieldDecimal));
 
@@ -246,7 +271,7 @@ public class EntityDefaultTest extends BaseTest {
         Assert.assertEquals(listOfNewValues.get(0).getText(), currentValues.fieldString);
         Assert.assertEquals(listOfNewValues.get(1).getText(), currentValues.fieldText);
         Assert.assertEquals(listOfNewValues.get(2).getText(), currentValues.fieldInt + "");
-        Assert.assertEquals(listOfNewValues.get(3).getText(), currentValues.fieldDecimal + "");
+        Assert.assertEquals(listOfNewValues.get(3).getText(), String.format("%.2f", currentValues.fieldDecimal));
         Assert.assertEquals(listOfNewValues.get(4).getText(), currentValues.fieldDate);
         Assert.assertEquals(listOfNewValues.get(5).getText(), currentValues.fieldDateTime);
         WebElement fieldUser = driver.findElement(By.xpath("//div[@class='form-group']/p"));
@@ -255,8 +280,8 @@ public class EntityDefaultTest extends BaseTest {
         List<WebElement> embedDArrayOfNewValues = driver.findElements(By.xpath("//table/tbody/tr/td"));
         Assert.assertEquals(embedDArrayOfNewValues.get(1).getText(), stringEmbedLineNewText);
         Assert.assertEquals(embedDArrayOfNewValues.get(2).getText(), textEmbedLineNewText);
-        Assert.assertEquals(embedDArrayOfNewValues.get(3).getText(), intEmbedLineNew + "");
-        Assert.assertEquals(embedDArrayOfNewValues.get(4).getText(), decimalEmbedLineNew + "");
+        Assert.assertEquals(embedDArrayOfNewValues.get(3).getText(), String.valueOf(intEmbedLineNew));
+        Assert.assertEquals(embedDArrayOfNewValues.get(4).getText(), String.format("%.2f", decimalEmbedLineNew));
         Assert.assertEquals(embedDArrayOfNewValues.get(5).getText(), dateEmbedLineNew);
         Assert.assertEquals(embedDArrayOfNewValues.get(6).getText(), dateTimeEmbedLineNew);
         Assert.assertEquals(embedDArrayOfNewValues.get(9).getText(), userEmbedDSelected);
@@ -512,7 +537,7 @@ public class EntityDefaultTest extends BaseTest {
         Assert.assertEquals(intLineDefaultData.getAttribute("value"),(String.valueOf(defaultValues.fieldInt)));
 
         WebElement decimalLineDefaultData = driver.findElement(By.xpath("//input[@id='decimal']"));
-        Assert.assertEquals(decimalLineDefaultData.getAttribute("value"),(String.valueOf(defaultValues.fieldDecimal)));
+        Assert.assertEquals(decimalLineDefaultData.getAttribute("value"),(String.format("%.2f", defaultValues.fieldDecimal)));
 
         WebElement dateLineDefaultData = driver.findElement(By.xpath("//input[@id='date']"));
         Assert.assertEquals(dateLineDefaultData.getAttribute("value"),(defaultValues.fieldDate));
@@ -526,55 +551,5 @@ public class EntityDefaultTest extends BaseTest {
         //save new record
         WebElement saveBtn = driver.findElement(By.xpath("//button[.='Save']"));
         ProjectUtils.click(driver, saveBtn);
-    }
-}
-
-
-class DefaultValues {
-    String fieldString;
-    String fieldText;
-    int fieldInt;
-    double fieldDecimal;
-    String fieldDate;
-    String fieldDateTime;
-    String fieldUser;
-    int linesQty;
-
-    /** set default values */
-    public DefaultValues() {
-        this.fieldString = "DEFAULT STRING VALUE";
-        this.fieldText = "DEFAULT TEXT VALUE";
-        this.fieldInt = 55;
-        this.fieldDecimal = 110.32;
-        this.fieldDate = "01/01/1970";
-        this.fieldDateTime = "01/01/1970 00:00:00";
-        this.fieldUser = "User 1 Demo";
-        this.linesQty = 9;
-    }
-
-    /** setting arbitrary values */
-    public DefaultValues(String fieldString, String fieldText, int fieldInt, double fieldDecimal, String fieldDate, String fieldDateTime, String fieldUser, int linesQty) {
-        this.fieldString = fieldString;
-        this.fieldText = fieldText;
-        this.fieldInt = fieldInt;
-        this.fieldDecimal = fieldDecimal;
-        this.fieldDate = fieldDate;
-        this.fieldDateTime = fieldDateTime;
-        this.fieldUser = fieldUser;
-        this.linesQty = linesQty;
-    }
-
-    @Override
-    public String toString() {
-        return "DefaultValues{" +
-                "fieldString='" + fieldString + '\'' +
-                ", fieldText='" + fieldText + '\'' +
-                ", fieldInt=" + fieldInt +
-                ", fieldDecimal=" + fieldDecimal +
-                ", fieldDate='" + fieldDate + '\'' +
-                ", fieldDateTime='" + fieldDateTime + '\'' +
-                ", fieldUser='" + fieldUser + '\'' +
-                ", linesQty=" + linesQty +
-                '}';
     }
 }
