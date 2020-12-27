@@ -67,7 +67,7 @@ public class EntityBoardTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "inputValidationTest")
-    public void editBoard() {
+    public void editBoard() throws InterruptedException {
 
         WebDriver driver = getDriver();
         WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -94,7 +94,7 @@ public class EntityBoardTest extends BaseTest {
 
         WebElement text1 = driver.findElement(By.id("text"));
         text1.clear();
-        text1.sendKeys("my test changed");
+        ProjectUtils.sendKeys(text1, "my test changed");
 
         WebElement integer1 = driver.findElement(By.id("int"));
         integer1.clear();
