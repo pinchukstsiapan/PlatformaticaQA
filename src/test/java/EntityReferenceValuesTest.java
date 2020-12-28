@@ -6,10 +6,11 @@ import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
 
+import java.util.UUID;
 
 
 public class EntityReferenceValuesTest extends BaseTest {
-    final String LABEL="Automation label - do not delete";
+    final String LABEL = UUID.randomUUID().toString();
     final String FILTER_1="Filter 1";
     final String FILTER_2="Filter 2";
 
@@ -59,6 +60,7 @@ public class EntityReferenceValuesTest extends BaseTest {
         ProjectUtils.click(driver, page);
         return id;
     }
+
     @Test
     public void newRecordTest(){
 
@@ -72,6 +74,7 @@ public class EntityReferenceValuesTest extends BaseTest {
 
         //validation
         WebElement labelInList = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", paginationFindRicent(driver), LABEL)));
+        Assert.assertTrue(labelInList.isDisplayed());
         WebElement filter1_InList = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", paginationFindRicent(driver), FILTER_1)));
         WebElement filter2_InList = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", paginationFindRicent(driver), FILTER_2)));
     }
@@ -87,25 +90,24 @@ public class EntityReferenceValuesTest extends BaseTest {
 
         //validation
         WebElement labelInList = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", paginationFindRicent(driver), "")));
+        Assert.assertTrue(labelInList.isDisplayed());
         WebElement filter1_InList = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", paginationFindRicent(driver), "")));
         WebElement filter2_InList = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", paginationFindRicent(driver), "")));
     }
+
     @Test
-    public void saveAsDraftTest(){
+    public void saveAsDraftTest() {
 
         WebDriver driver = getDriver();
 
         clickReferenceValue(driver);
         createNewReferenceValueBtn(driver);
-        fillUpValues(driver,LABEL,FILTER_1,FILTER_2);
+        fillUpValues(driver, LABEL, FILTER_1, FILTER_2);
         clickSaveDraftButton(driver);
         paginationFindRicent(driver);
 
         //validation
-        Assert.assertTrue(driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//i[contains(@class, 'fa fa-pencil')]",paginationFindRicent(driver)))).isDisplayed());
-        WebElement labelInList = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", paginationFindRicent(driver), LABEL)));
-        WebElement filter1_InList = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", paginationFindRicent(driver), FILTER_1)));
-        WebElement filter2_InList = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", paginationFindRicent(driver), FILTER_2)));
+        Assert.assertTrue(driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//i[contains(@class, 'fa fa-pencil')]", paginationFindRicent(driver)))).isDisplayed());
     }
 
 }
