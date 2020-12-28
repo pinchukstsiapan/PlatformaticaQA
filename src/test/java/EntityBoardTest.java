@@ -3,14 +3,12 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
-import runner.TestUtils;
-import runner.type.ProfileType;
 import runner.type.Run;
 import runner.type.RunType;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -21,7 +19,7 @@ public class EntityBoardTest extends BaseTest {
     private static final String NUMBER = String.valueOf((int) (Math.random() * 100));
     private static final String DECIMAL = String.valueOf((int) (Math.random() * 20000) / 100.0);
     private static final String PENDING = "Pending";
-    private final String USER_DEFAULT = "user249@tester.com";
+    private static final String APP_USER = "apptester1@tester.com";
 
     private void createRecord() {
         WebDriver driver = getDriver();
@@ -48,6 +46,14 @@ public class EntityBoardTest extends BaseTest {
         decimalPlaceholder.sendKeys(DECIMAL);
         wait.until(ExpectedConditions.attributeContains(decimalPlaceholder, "value", DECIMAL));
 
+        JavascriptExecutor js = ((JavascriptExecutor) driver);
+        WebElement dropdownUser = driver.findElement(By.xpath("//div[contains(text(),'User 1 Demo')]"));
+        js.executeScript("arguments[0].scrollIntoView();", dropdownUser);
+        ProjectUtils.click(driver, dropdownUser);
+
+        Select appTester1 = new Select(driver.findElement(By.id("user")));
+        appTester1.selectByVisibleText(APP_USER);
+
         ProjectUtils.click(driver, driver.findElement(By.id("pa-entity-form-save-btn")));
     }
 
@@ -64,6 +70,8 @@ public class EntityBoardTest extends BaseTest {
         Assert.assertEquals(tabListValues.get(2).getText(), TEXT, "Created record text issue");
         Assert.assertEquals(tabListValues.get(3).getText(), NUMBER, "Created record number issue");
         Assert.assertEquals(tabListValues.get(4).getText(), DECIMAL, "Created record decimal issue");
+        Assert.assertEquals(tabListValues.get(8).getText(), APP_USER, "Created record user issue");
+
     }
 
     @Test(dependsOnMethods = "inputValidationTest")
@@ -131,14 +139,13 @@ public class EntityBoardTest extends BaseTest {
         WebElement optionDelete = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
                 "//ul[@role='menu']/li[3]/a[text()= 'delete']")));
         ProjectUtils.click(driver, optionDelete);
-        // ProjectUtils.click(driver, driver.findElement(By.xpath("//i[text()='list']")));
         boolean emptyField = driver.findElements(By.xpath("//tbody/tr[1]/td[10]/div[1]/button[1]")).size() < 1;
         Assert.assertTrue(emptyField);
 
     }
 
     @Test(dependsOnMethods = {"inputValidationTest", "editBoard", "recordDeletion"})
-    public void recordDeletionRecBin() throws InterruptedException {
+    public void recordDeletionRecBin() {
         WebDriver driver = getDriver();
         WebDriverWait wait = new WebDriverWait(driver, 6);
 
