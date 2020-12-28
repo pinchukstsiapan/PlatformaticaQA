@@ -19,61 +19,51 @@ public class EntityBoardTest extends BaseTest {
     private static final String NUMBER = String.valueOf((int) (Math.random() * 100));
     private static final String DECIMAL = String.valueOf((int) (Math.random() * 20000) / 100.0);
     private static final String PENDING = "Pending";
+    private static final String DONE = "Done";
+    private static final String ON_TRACK = "On track";
     private static final String APP_USER = "apptester1@tester.com";
 
-    private void createRecord() {
-        WebDriver driver = getDriver();
+    private void createRecord(WebDriver driver, String status) {
         WebDriverWait wait = new WebDriverWait(driver, 6);
-
         ProjectUtils.click(driver, driver.findElement(By.xpath("//p[contains(text(),'Board')]")));
-
-        driver.findElement(By.xpath("//a[contains(@href, '31')]/i[text()='list']")).click();
-
         driver.findElement(By.xpath("//div[@class = 'card-icon']")).click();
-
+        Select drop = new Select(driver.findElement(By.id("string")));
+        drop.selectByVisibleText(status);
         WebElement textPlaceholder = driver.findElement(By.id("text"));
         textPlaceholder.click();
         textPlaceholder.sendKeys(TEXT);
         wait.until(ExpectedConditions.attributeContains(textPlaceholder, "value", TEXT));
-
         WebElement intPlaceholder = driver.findElement(By.xpath("//input[@name='entity_form_data[int]']"));
         intPlaceholder.click();
         intPlaceholder.sendKeys(NUMBER);
         wait.until(ExpectedConditions.attributeContains(intPlaceholder, "value", NUMBER));
-
         WebElement decimalPlaceholder = driver.findElement(By.id("decimal"));
         decimalPlaceholder.click();
         decimalPlaceholder.sendKeys(DECIMAL);
         wait.until(ExpectedConditions.attributeContains(decimalPlaceholder, "value", DECIMAL));
-
         JavascriptExecutor js = ((JavascriptExecutor) driver);
         WebElement dropdownUser = driver.findElement(By.xpath("//div[contains(text(),'User 1 Demo')]"));
         js.executeScript("arguments[0].scrollIntoView();", dropdownUser);
         ProjectUtils.click(driver, dropdownUser);
-
         Select appTester1 = new Select(driver.findElement(By.id("user")));
         appTester1.selectByVisibleText(APP_USER);
-
-        ProjectUtils.click(driver, driver.findElement(By.id("pa-entity-form-save-btn")));
     }
 
     @Test
     public void inputValidationTest() {
         WebDriver driver = getDriver();
-        createRecord();
-
+        createRecord(driver,PENDING);
+        ProjectUtils.click(driver, driver.findElement(By.id("pa-entity-form-draft-btn")));
+        driver.findElement(By.xpath("//a[contains(@href, '31')]/i[text()='list']")).click();
         List<WebElement> tabList = driver.findElements(By.xpath("//tbody/tr"));
         Assert.assertEquals(tabList.size(), 1, "Issue with unique record");
-
         List<WebElement> tabListValues = driver.findElements(By.xpath("//tbody/tr/td"));
         Assert.assertEquals(tabListValues.get(1).getText(), PENDING, "Created record Pending issue");
         Assert.assertEquals(tabListValues.get(2).getText(), TEXT, "Created record text issue");
         Assert.assertEquals(tabListValues.get(3).getText(), NUMBER, "Created record number issue");
         Assert.assertEquals(tabListValues.get(4).getText(), DECIMAL, "Created record decimal issue");
         Assert.assertEquals(tabListValues.get(8).getText(), APP_USER, "Created record user issue");
-
     }
-
     @Test(dependsOnMethods = "inputValidationTest")
     public void editBoard() throws InterruptedException {
 
@@ -112,6 +102,15 @@ public class EntityBoardTest extends BaseTest {
         decimal1.clear();
         decimal1.sendKeys(String.valueOf(50.5));
 
+        JavascriptExecutor js = ((JavascriptExecutor) driver);
+        WebElement dropdownUser = driver.findElement(By.xpath("//div[contains(text(),'apptester1@tester.com')]"));
+        js.executeScript("arguments[0].scrollIntoView();", dropdownUser);
+        ProjectUtils.click(driver, dropdownUser);
+
+        WebElement dropdownUser166 = driver.findElement(By.xpath("//span[contains(text(),'user166@tester.com')]"));
+        js.executeScript("arguments[0].scrollIntoView();", dropdownUser166);
+        ProjectUtils.click(driver, dropdownUser166);
+
         WebElement saveButton1 = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
         ProjectUtils.click(driver, saveButton1);
 
@@ -134,7 +133,7 @@ public class EntityBoardTest extends BaseTest {
                 "//table[@id='pa-all-entities-table']/tbody/tr[1]/td[3]/a/div"));
         Assert.assertEquals(newRecord.getText(), "my test changed", "No matching created record found.");
 
-        WebElement menuActions = driver.findElement(By.xpath("//i[text() = 'menu']/.."));
+        WebElement menuActions = driver.findElement(By.xpath("//i[text() = 'menu']"));
         ProjectUtils.click(driver, menuActions);
         WebElement optionDelete = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
                 "//ul[@role='menu']/li[3]/a[text()= 'delete']")));
