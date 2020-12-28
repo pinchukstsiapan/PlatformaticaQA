@@ -24,39 +24,53 @@ public class EntityBoardTest extends BaseTest {
     private static final String APP_USER = "apptester1@tester.com";
 
     private void createRecord(WebDriver driver, String status) {
+
         WebDriverWait wait = new WebDriverWait(driver, 6);
         ProjectUtils.click(driver, driver.findElement(By.xpath("//p[contains(text(),'Board')]")));
+
         driver.findElement(By.xpath("//div[@class = 'card-icon']")).click();
+
         Select drop = new Select(driver.findElement(By.id("string")));
         drop.selectByVisibleText(status);
+
         WebElement textPlaceholder = driver.findElement(By.id("text"));
         textPlaceholder.click();
         textPlaceholder.sendKeys(TEXT);
         wait.until(ExpectedConditions.attributeContains(textPlaceholder, "value", TEXT));
+
         WebElement intPlaceholder = driver.findElement(By.xpath("//input[@name='entity_form_data[int]']"));
         intPlaceholder.click();
         intPlaceholder.sendKeys(NUMBER);
         wait.until(ExpectedConditions.attributeContains(intPlaceholder, "value", NUMBER));
+
         WebElement decimalPlaceholder = driver.findElement(By.id("decimal"));
         decimalPlaceholder.click();
         decimalPlaceholder.sendKeys(DECIMAL);
         wait.until(ExpectedConditions.attributeContains(decimalPlaceholder, "value", DECIMAL));
+
         JavascriptExecutor js = ((JavascriptExecutor) driver);
         WebElement dropdownUser = driver.findElement(By.xpath("//div[contains(text(),'User 1 Demo')]"));
         js.executeScript("arguments[0].scrollIntoView();", dropdownUser);
         ProjectUtils.click(driver, dropdownUser);
+
         Select appTester1 = new Select(driver.findElement(By.id("user")));
         appTester1.selectByVisibleText(APP_USER);
     }
 
     @Test
     public void inputValidationTest() {
+
         WebDriver driver = getDriver();
-        createRecord(driver,PENDING);
+
+        createRecord(driver, PENDING);
+
         ProjectUtils.click(driver, driver.findElement(By.id("pa-entity-form-draft-btn")));
+
         driver.findElement(By.xpath("//a[contains(@href, '31')]/i[text()='list']")).click();
+
         List<WebElement> tabList = driver.findElements(By.xpath("//tbody/tr"));
         Assert.assertEquals(tabList.size(), 1, "Issue with unique record");
+
         List<WebElement> tabListValues = driver.findElements(By.xpath("//tbody/tr/td"));
         Assert.assertEquals(tabListValues.get(1).getText(), PENDING, "Created record Pending issue");
         Assert.assertEquals(tabListValues.get(2).getText(), TEXT, "Created record text issue");
@@ -64,6 +78,7 @@ public class EntityBoardTest extends BaseTest {
         Assert.assertEquals(tabListValues.get(4).getText(), DECIMAL, "Created record decimal issue");
         Assert.assertEquals(tabListValues.get(8).getText(), APP_USER, "Created record user issue");
     }
+
     @Test(dependsOnMethods = "inputValidationTest")
     public void editBoard() throws InterruptedException {
 
@@ -120,6 +135,7 @@ public class EntityBoardTest extends BaseTest {
 
     @Test(dependsOnMethods = {"inputValidationTest", "editBoard"})
     public void recordDeletion() throws InterruptedException {
+
         WebDriver driver = getDriver();
         WebDriverWait wait = new WebDriverWait(driver, 6);
 
@@ -145,6 +161,7 @@ public class EntityBoardTest extends BaseTest {
 
     @Test(dependsOnMethods = {"inputValidationTest", "editBoard", "recordDeletion"})
     public void recordDeletionRecBin() {
+
         WebDriver driver = getDriver();
         WebDriverWait wait = new WebDriverWait(driver, 6);
 
