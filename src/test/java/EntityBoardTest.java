@@ -1,4 +1,5 @@
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -57,6 +58,76 @@ public class EntityBoardTest extends BaseTest {
         appTester1.selectByVisibleText(APP_USER);
     }
 
+    private void forwardManipulate1(WebDriver driver) {
+        WebElement board = driver.findElement(By.xpath("//div[@id='menu-list-parent']/ul/li[10]/a"));
+        ProjectUtils.click(driver, board);
+
+        WebElement createdRecord = driver.findElement(By.xpath("//div[contains(text(),'" + TEXT + "')]"));
+        WebElement from = createdRecord.findElement(By.xpath("./.."));
+        WebElement to = driver.findElement(By.xpath("//div[2]/main[@class='kanban-drag']"));
+        Actions act = new Actions(driver);
+        act.dragAndDrop(from, to).build().perform();
+
+        driver.findElement(By.xpath("//ul[@role='tablist']/li[2]/a")).click();
+        WebElement myElement = driver.findElement(By.xpath("//div[contains(text(),'" + TEXT + "')]"));
+        WebElement trParent = myElement.findElement(By.xpath("./.."));
+        WebElement tdWithStatus = trParent.findElement(By.xpath("//table/tbody/tr/td[2]"));
+        Assert.assertEquals(tdWithStatus.findElement(By.tagName("div")).getText(), "On track");
+    }
+
+    private void forwardManipulate2(WebDriver driver) {
+
+        driver.findElement(By.xpath("//ul[@role='tablist']/li[1]/a")).click();
+
+        WebElement elementStatus = driver.findElement(By.xpath("//main[@class='kanban-drag']//div[contains(text(),'On track')]"));
+        WebElement from = elementStatus.findElement(By.xpath("./.."));
+        WebElement to = driver.findElement(By.xpath("//div[3]/main[@class='kanban-drag']"));
+        Actions act = new Actions(driver);
+        act.dragAndDrop(from, to).build().perform();
+
+        driver.findElement(By.xpath("//ul[@role='tablist']/li[2]/a")).click();
+
+        WebElement myElement = driver.findElement(By.xpath("//div[contains(text(),'" + TEXT + "')]"));
+        WebElement trParent = myElement.findElement(By.xpath("./.."));
+        WebElement tdWithStatus = trParent.findElement(By.xpath("//table/tbody/tr/td[2]"));
+        Assert.assertEquals(tdWithStatus.findElement(By.tagName("div")).getText(), "Done");
+    }
+
+    private void backwardManipulate1(WebDriver driver) {
+
+        driver.findElement(By.xpath("//ul[@role='tablist']/li[1]/a")).click();
+
+        WebElement elementStatus = driver.findElement(By.xpath("//main[@class='kanban-drag']//div[contains(text(),'Done')]"));
+        WebElement from = elementStatus.findElement(By.xpath("./.."));
+        WebElement to = driver.findElement(By.xpath("//div[2]/main[@class='kanban-drag']"));
+        Actions act = new Actions(driver);
+        act.dragAndDrop(from, to).build().perform();
+
+        driver.findElement(By.xpath("//ul[@role='tablist']/li[2]/a")).click();
+
+        WebElement myElement = driver.findElement(By.xpath("//div[contains(text(),'" + TEXT + "')]"));
+        WebElement trParent = myElement.findElement(By.xpath("./.."));
+        WebElement tdWithStatus = trParent.findElement(By.xpath("//table/tbody/tr/td[2]"));
+        Assert.assertEquals(tdWithStatus.findElement(By.tagName("div")).getText(), "On track");
+    }
+    private void backwardManipulate2(WebDriver driver) {
+
+        driver.findElement(By.xpath("//ul[@role='tablist']/li[1]/a")).click();
+
+        WebElement elementStatus = driver.findElement(By.xpath("//main[@class='kanban-drag']//div[contains(text(),'On track')]"));
+        WebElement from = elementStatus.findElement(By.xpath("./.."));
+        WebElement to = driver.findElement(By.xpath("//div[1]/main[@class='kanban-drag']"));
+        Actions act = new Actions(driver);
+        act.dragAndDrop(from, to).build().perform();
+
+        driver.findElement(By.xpath("//ul[@role='tablist']/li[2]/a")).click();
+
+        WebElement myElement = driver.findElement(By.xpath("//div[contains(text(),'" + TEXT + "')]"));
+        WebElement trParent = myElement.findElement(By.xpath("./.."));
+        WebElement tdWithStatus = trParent.findElement(By.xpath("//table/tbody/tr/td[2]"));
+        Assert.assertEquals(tdWithStatus.findElement(By.tagName("div")).getText(), "Pending");
+    }
+
     @Test
     public void inputValidationTest() {
 
@@ -79,7 +150,16 @@ public class EntityBoardTest extends BaseTest {
         Assert.assertEquals(tabListValues.get(8).getText(), APP_USER, "Created record user issue");
     }
 
-    @Test(dependsOnMethods = "inputValidationTest")
+    @Test (dependsOnMethods = "inputValidationTest")
+    public void ManipulateTest() {
+        WebDriver driver = getDriver();
+        forwardManipulate1(driver);
+        forwardManipulate2(driver);
+        backwardManipulate1(driver);
+        backwardManipulate2(driver);
+    }
+
+    @Test(dependsOnMethods = {"inputValidationTest", "ManipulateTest"})
     public void editBoard() throws InterruptedException {
 
         WebDriver driver = getDriver();
@@ -133,7 +213,7 @@ public class EntityBoardTest extends BaseTest {
         Assert.assertEquals(result, "my test changed");
     }
 
-    @Test(dependsOnMethods = {"inputValidationTest", "editBoard"})
+    @Test(dependsOnMethods = {"inputValidationTest", "ManipulateTest", "editBoard"})
     public void recordDeletion() throws InterruptedException {
 
         WebDriver driver = getDriver();
@@ -159,7 +239,7 @@ public class EntityBoardTest extends BaseTest {
 
     }
 
-    @Test(dependsOnMethods = {"inputValidationTest", "editBoard", "recordDeletion"})
+    @Test(dependsOnMethods = {"inputValidationTest", "ManipulateTest", "editBoard", "recordDeletion"})
     public void recordDeletionRecBin() {
 
         WebDriver driver = getDriver();
