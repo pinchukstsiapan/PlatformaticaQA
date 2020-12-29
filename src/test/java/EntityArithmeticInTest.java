@@ -1,6 +1,8 @@
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
@@ -9,7 +11,7 @@ import runner.ProjectUtils;
 public class EntityArithmeticInTest extends BaseTest {
 
     @Test
-    public void getNewRecord () throws InterruptedException {
+    private void getNewRecord () throws InterruptedException {
 
         final int num1 = 3;
         final int num2 = 7;
@@ -19,6 +21,7 @@ public class EntityArithmeticInTest extends BaseTest {
         final int div = num1/num2;
 
         WebDriver driver = getDriver();
+        WebDriverWait wait = new WebDriverWait(driver,4);
 
         WebElement elementArithmetic =  driver.findElement(By.xpath("//p[contains(text(), 'Arithmetic Inline')]"));
         ProjectUtils.click(driver, elementArithmetic);
@@ -34,7 +37,7 @@ public class EntityArithmeticInTest extends BaseTest {
         ProjectUtils.click(driver, clickF2);
         clickF2.sendKeys(Integer.toString(num2));
 
-        Thread.sleep(5000);
+        wait.until(ExpectedConditions.textToBePresentInElementValue(By.xpath("//input[@id = 'div']"), "0.43"));
 
         WebElement saveNewRecord = driver.findElement(By.xpath("//*[@id=\"pa-entity-form-save-btn\"]"));
         ProjectUtils.click(driver, saveNewRecord);
@@ -44,11 +47,11 @@ public class EntityArithmeticInTest extends BaseTest {
         ProjectUtils.click(driver, clickNCheckRecord);
 
         WebElement findNCheckF1 =
-                driver.findElement(By.xpath("/html/body/div/div[2]/div[1]/div/div/div/div/div[2]/div/div/div/div[1]/div"));
+                driver.findElement(By.xpath("//span[contains(text(), '3')]"));
         ProjectUtils.click(driver, findNCheckF1);
 
         WebElement findNCheckF2 =
-                driver.findElement(By.xpath("/html/body/div/div[2]/div[1]/div/div/div/div/div[2]/div/div/div/div[2]/div"));
+                driver.findElement(By.xpath("//span[contains(text(), '7')]"));
         ProjectUtils.click(driver, findNCheckF1);
 
         Thread.sleep(5000);
@@ -73,7 +76,7 @@ public class EntityArithmeticInTest extends BaseTest {
     }
 
         @Test
-        public void setNewData () throws InterruptedException {
+        private void setNewData () throws InterruptedException {
 
             final String F1 = "Hi";
             final String F2 = "Hi";
@@ -100,10 +103,5 @@ public class EntityArithmeticInTest extends BaseTest {
 
             WebElement error = driver.findElement(By.xpath("//*[@id = 'pa-error']"));
             Assert.assertEquals(error.getText(), "Error saving entity");
-
-
-
-
-
         }
 }
