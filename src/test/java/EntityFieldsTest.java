@@ -6,13 +6,14 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import org.testng.Assert;
 import runner.BaseTest;
 import runner.ProjectUtils;
 import runner.type.Run;
 import runner.type.RunType;
-
+@Ignore
 @Run(run = RunType.Multiple)
 public class EntityFieldsTest extends BaseTest {
 

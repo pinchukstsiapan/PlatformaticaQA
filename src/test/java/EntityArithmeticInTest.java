@@ -8,6 +8,8 @@ import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
 
+import java.util.List;
+
 public class EntityArithmeticInTest extends BaseTest {
 
     @Test
