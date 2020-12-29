@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 public class EntityFieldOpsTest extends BaseTest {
 
-    private final String DEFAULT_DROPDOWN = "Pending";
+    private final String DEFAULT_DROPDOWN = "Pending';
     private final String OPTIONAL_DROPDOWN = "Done";
     private final String REFERENCE_1 = UUID.randomUUID().toString();
     private final String REFERENCE_2 = UUID.randomUUID().toString();
