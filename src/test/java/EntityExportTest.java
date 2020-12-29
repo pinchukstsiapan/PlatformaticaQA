@@ -2,6 +2,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
@@ -105,6 +106,12 @@ public class EntityExportTest extends BaseTest {
         ProjectUtils.click(driver, submit);
     }
 
+    private void clickSandwichAction(WebElement row, String menuItem) {
+        row.findElement(By.tagName("button")).click();
+        WebElement menuActionButton = new WebDriverWait(getDriver(), 1).until(ExpectedConditions
+                .elementToBeClickable(By.xpath(String.format("//a[contains(@href, '%s')]", menuItem.toLowerCase()))));
+        menuActionButton.click();
+    }
 
     @Test
     public void inputTest(){
@@ -161,12 +168,10 @@ public class EntityExportTest extends BaseTest {
 
         WebElement exportButton = driver.findElement(By.xpath("//div[@id= 'menu-list-parent']/ul/li[8]/a"));
         ProjectUtils.click(driver, exportButton);
-        WebElement actionsButton = driver.findElement(By.xpath("//tbody/tr[1]/td[10]/div[1]/button[1]/i[1]"));
-        actionsButton.click();
-        WebElement viewButton = driver.findElement(By.xpath("//a[contains(text(),'view')]"));
-        viewButton.click();
+        WebElement record = driver.findElement(By.xpath("//tbody/tr"));
+        clickSandwichAction(record, "view");
 
-        WebElement exportPage = driver.findElement(By.xpath(" //h4[contains(text(),'Export')]"));
+        WebElement exportPage = driver.findElement(By.xpath("//h4[contains(text(),'Export')]"));
         Assert.assertTrue(exportPage.isDisplayed());
         WebElement verifyString = driver.findElement(By.xpath("//label[text()='String']/../div[1]//span"));
         Assert.assertEquals(verifyString.getText(),exportString);
