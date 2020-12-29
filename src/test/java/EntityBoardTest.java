@@ -24,6 +24,7 @@ public class EntityBoardTest extends BaseTest {
     private static final String ON_TRACK = "On track";
     private static final String APP_USER = "apptester1@tester.com";
 
+
     private void createRecord(WebDriver driver, String status) {
 
         WebDriverWait wait = new WebDriverWait(driver, 6);
@@ -57,7 +58,6 @@ public class EntityBoardTest extends BaseTest {
         Select appTester1 = new Select(driver.findElement(By.id("user")));
         appTester1.selectByVisibleText(APP_USER);
     }
-
     private void forwardManipulate1(WebDriver driver) {
         WebElement board = driver.findElement(By.xpath("//div[@id='menu-list-parent']/ul/li[10]/a"));
         ProjectUtils.click(driver, board);
@@ -150,8 +150,38 @@ public class EntityBoardTest extends BaseTest {
         Assert.assertEquals(tabListValues.get(8).getText(), APP_USER, "Created record user issue");
     }
 
+
     @Test (dependsOnMethods = "inputValidationTest")
+    public void viewRecords() {
+
+        WebDriver driver = getDriver();
+
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+
+        WebElement board = driver.findElement(By.xpath("//p[contains(text(),'Board')]"));
+        ProjectUtils.click(driver, board);
+
+        WebElement list = driver.findElement(By.xpath("//a[contains(@href, '31')]/i[text()='list']"));
+        wait.until(ExpectedConditions.elementToBeClickable(list));
+        ProjectUtils.click(driver, list);
+
+        WebElement container = driver.findElement(By.xpath("//i[text() = 'menu']"));
+        ProjectUtils.click(driver, container);
+
+        WebElement optionVew = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[text() = 'view']")));
+        ProjectUtils.click(driver, optionVew);
+
+        List<WebElement> record = driver.findElements(By.xpath("//div[@class = 'card-body']//span"));
+        Assert.assertEquals(record.get(0).getText(), PENDING, "Created record Pending issue");
+        Assert.assertEquals(record.get(1).getText(), TEXT, "Created record text issue");
+        Assert.assertEquals(record.get(2).getText(), NUMBER, "Created record number issue");
+        Assert.assertEquals(record.get(3).getText(), DECIMAL, "Created record decimal issue");
+        Assert.assertEquals(driver.findElement(By.xpath("//div[@class = 'form-group']/p")).getText(), APP_USER, "Created record user issue");
+    }
+
+    @Test (dependsOnMethods = {"inputValidationTest", "viewRecords"})
     public void ManipulateTest() {
+
         WebDriver driver = getDriver();
         forwardManipulate1(driver);
         forwardManipulate2(driver);
@@ -159,8 +189,8 @@ public class EntityBoardTest extends BaseTest {
         backwardManipulate2(driver);
     }
 
-    @Test(dependsOnMethods = {"inputValidationTest", "ManipulateTest"})
-    public void editBoard() throws InterruptedException {
+    @Test(dependsOnMethods = {"inputValidationTest","viewRecords", "ManipulateTest"})
+    public void editBoard()  {
 
         WebDriver driver = getDriver();
         WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -176,6 +206,7 @@ public class EntityBoardTest extends BaseTest {
         ProjectUtils.click(driver, container);
 
         WebElement edit = driver.findElement(By.xpath("//a[text()='edit']"));
+        wait.until(ExpectedConditions.elementToBeClickable(edit));
         ProjectUtils.click(driver, edit);
 
         WebElement pending = driver.findElement(By.xpath("//div[contains(text(),'Pending')]"));
@@ -187,7 +218,7 @@ public class EntityBoardTest extends BaseTest {
 
         WebElement text1 = driver.findElement(By.id("text"));
         text1.clear();
-        ProjectUtils.sendKeys(text1, "my test changed");
+        text1.sendKeys("my test changed");
 
         WebElement integer1 = driver.findElement(By.id("int"));
         integer1.clear();
@@ -213,7 +244,7 @@ public class EntityBoardTest extends BaseTest {
         Assert.assertEquals(result, "my test changed");
     }
 
-    @Test(dependsOnMethods = {"inputValidationTest", "ManipulateTest", "editBoard"})
+    @Test(dependsOnMethods = {"inputValidationTest","viewRecords", "ManipulateTest", "editBoard"})
     public void recordDeletion() throws InterruptedException {
 
         WebDriver driver = getDriver();
@@ -239,7 +270,7 @@ public class EntityBoardTest extends BaseTest {
 
     }
 
-    @Test(dependsOnMethods = {"inputValidationTest", "ManipulateTest", "editBoard", "recordDeletion"})
+    @Test(dependsOnMethods = {"inputValidationTest", "viewRecords", "ManipulateTest", "editBoard", "recordDeletion"})
     public void recordDeletionRecBin() {
 
         WebDriver driver = getDriver();
