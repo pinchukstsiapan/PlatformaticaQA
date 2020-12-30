@@ -5,24 +5,26 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
-
+import java.util.List;
 import java.util.UUID;
 
 
 public class EntityReferenceValuesTest extends BaseTest {
     final String LABEL = UUID.randomUUID().toString();
-    final String FILTER_1="Filter 1";
-    final String FILTER_2="Filter 2";
+    final String FILTER_1 = "Filter 1";
+    final String FILTER_2 = "Filter 2";
 
-    void clickReferenceValue(WebDriver driver){
-        WebElement referenceValuesMenuBtn= driver.findElement(By.xpath("//i/following-sibling::p[contains (text(), 'Reference values')]"));
+    void clickReferenceValue(WebDriver driver) {
+        WebElement referenceValuesMenuBtn = driver.findElement(By.xpath("//i/following-sibling::p[contains (text(), 'Reference values')]"));
         referenceValuesMenuBtn.click();
     }
-    void createNewReferenceValueBtn(WebDriver driver){
+
+    void createNewReferenceValueBtn(WebDriver driver) {
         WebElement createNewReferenceValueBtn = driver.findElement(By.xpath("//div[@class='card-icon']"));
         createNewReferenceValueBtn.click();
     }
-    void fillUpValues(WebDriver driver,String label,String filter_1,String filter_2){
+
+    void fillUpValues(WebDriver driver, String label, String filter_1, String filter_2) {
         WebElement labelField = driver.findElement(By.xpath("//input[@data-field_name='label']"));
         WebElement filter1 = driver.findElement(By.xpath("//input[@data-field_name='filter_1']"));
         WebElement filter2 = driver.findElement(By.xpath("//input[@data-field_name='filter_2']"));
@@ -30,84 +32,70 @@ public class EntityReferenceValuesTest extends BaseTest {
         filter1.sendKeys(filter_1);
         filter2.sendKeys(filter_2);
     }
-    void clickSaveButton(WebDriver driver){
+
+    void clickSaveButton(WebDriver driver) {
         WebElement saveButton = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
-        ProjectUtils.click(driver,saveButton);
+        ProjectUtils.click(driver, saveButton);
     }
-    void clickSaveDraftButton(WebDriver driver){
+
+    void clickSaveDraftButton(WebDriver driver) {
         WebElement saveDraftButton = driver.findElement(By.xpath("//button[@id='pa-entity-form-draft-btn']"));
-        ProjectUtils.click(driver,saveDraftButton);
+        ProjectUtils.click(driver, saveDraftButton);
     }
-    int paginationFindRicent(WebDriver driver){
-        WebElement numOfPagesS = driver.findElement(By.xpath("//span[@class='pagination-info']"));
-        String str = numOfPagesS.getText();
-        String[] arrOfStr = str.split(" ");
 
-        int numOfRows =  Integer.parseInt(arrOfStr[5]);
-        int rowsPerPage =  Integer.parseInt(arrOfStr[3]);
-        int pageNumber;
+    @Test
+    public void newRecordTest() {
 
-        if (numOfRows%rowsPerPage == 0) {
-            pageNumber = numOfRows/rowsPerPage;
-        } else {
-            pageNumber = numOfRows/rowsPerPage + 1;
+        WebDriver driver = getDriver();
+        String[] expectedData = {null, LABEL, FILTER_1, FILTER_2, null};
+        clickReferenceValue(driver);
+        createNewReferenceValueBtn(driver);
+        fillUpValues(driver, LABEL, FILTER_1, FILTER_2);
+        clickSaveButton(driver);
+
+        List<WebElement> rows = driver.findElements(By.xpath("//tbody/tr"));
+        Assert.assertEquals(rows.size(), 1);
+        List<WebElement> columns = rows.get(0).findElements(By.tagName("td"));
+        Assert.assertEquals(columns.size(), expectedData.length);
+        for (int i = 0; i < columns.size(); i++) {
+            if (expectedData[i] != null) {
+                Assert.assertEquals(columns.get(i).getText(), expectedData[i]);
+            }
         }
-
-        // id of the newly created record (the last record)
-        int id = numOfRows-1;
-
-        WebElement page = driver.findElement(By.xpath("//a[@class='page-link'][@aria-label='to page " + pageNumber + "']"));
-        ProjectUtils.click(driver, page);
-        return id;
     }
 
     @Test
-    public void newRecordTest(){
+    public void newRecordEmptyFieldsTest() {
 
         WebDriver driver = getDriver();
-
-        clickReferenceValue(driver);
-        createNewReferenceValueBtn(driver);
-        fillUpValues(driver,LABEL,FILTER_1,FILTER_2);
-        clickSaveButton(driver);
-        paginationFindRicent(driver);
-
-        //validation
-        WebElement labelInList = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", paginationFindRicent(driver), LABEL)));
-        Assert.assertTrue(labelInList.isDisplayed());
-        WebElement filter1_InList = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", paginationFindRicent(driver), FILTER_1)));
-        WebElement filter2_InList = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", paginationFindRicent(driver), FILTER_2)));
-    }
-
-    @Test
-    public void newRecordEmptyFieldsTest(){
-        WebDriver driver = getDriver();
-
+        String[] expectedData = {null, "", "", "", null};
         clickReferenceValue(driver);
         createNewReferenceValueBtn(driver);
         clickSaveButton(driver);
-        paginationFindRicent(driver);
 
-        //validation
-        WebElement labelInList = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", paginationFindRicent(driver), "")));
-        Assert.assertTrue(labelInList.isDisplayed());
-        WebElement filter1_InList = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", paginationFindRicent(driver), "")));
-        WebElement filter2_InList = driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//div[contains(text(), '%s')]", paginationFindRicent(driver), "")));
+
+        List<WebElement> rows = driver.findElements(By.xpath("//tbody/tr"));
+        Assert.assertEquals(rows.size(), 1);
+        List<WebElement> columns = rows.get(0).findElements(By.tagName("td"));
+        Assert.assertEquals(columns.size(), expectedData.length);
+        for (int i = 0; i < columns.size(); i++) {
+            if (expectedData[i] != null) {
+                Assert.assertEquals(columns.get(i).getText(), expectedData[i]);
+            }
+        }
     }
 
     @Test
     public void saveAsDraftTest() {
 
         WebDriver driver = getDriver();
-
         clickReferenceValue(driver);
         createNewReferenceValueBtn(driver);
         fillUpValues(driver, LABEL, FILTER_1, FILTER_2);
         clickSaveDraftButton(driver);
-        paginationFindRicent(driver);
 
         //validation
-        Assert.assertTrue(driver.findElement(By.xpath(String.format("//tr[@data-index='%s']//i[contains(@class, 'fa fa-pencil')]", paginationFindRicent(driver)))).isDisplayed());
+        Assert.assertTrue(driver.findElement(By.xpath("//tr[@data-index='0']//i[contains(@class, 'fa fa-pencil')]")).isDisplayed());
     }
 
 }
