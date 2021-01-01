@@ -63,6 +63,8 @@ public class EntityDefaultTest extends BaseTest {
             "user100@tester.com",
             9);
 
+
+
     @ Test
     public void editRecord() {
 
@@ -135,32 +137,32 @@ public class EntityDefaultTest extends BaseTest {
         int count = driver.findElements(By.xpath("//div/label")).size();
         Assert.assertEquals(count, oldValues.linesQty);
 
-        WebElement stringLineDefaultData = driver.findElement(By.xpath("//input[@id='string']"));
+        WebElement stringLineDefaultData = driver.findElement(By.id("string"));
         Assert.assertEquals(stringLineDefaultData.getAttribute("value"), oldValues.fieldString);
         stringLineDefaultData.clear();
         stringLineDefaultData.sendKeys(newValues.fieldString);
 
-        WebElement textLineDefaultData = driver.findElement(By.xpath("//textarea[@id='text']"));
+        WebElement textLineDefaultData = driver.findElement(By.id("text"));
         Assert.assertEquals(textLineDefaultData.getText(), oldValues.fieldText);
         textLineDefaultData.clear();
         textLineDefaultData.sendKeys(newValues.fieldText);
 
-        WebElement intLineDefaultData = driver.findElement(By.xpath("//input[@id='int']"));
+        WebElement intLineDefaultData = driver.findElement(By.id("int"));
         Assert.assertEquals(intLineDefaultData.getAttribute("value"), (String.valueOf(oldValues.fieldInt)));
         intLineDefaultData.clear();
         intLineDefaultData.sendKeys(String.valueOf(newValues.fieldInt));
 
-        WebElement decimalLineDefaultData = driver.findElement(By.xpath("//input[@id='decimal']"));
+        WebElement decimalLineDefaultData = driver.findElement(By.id("decimal"));
         Assert.assertEquals(decimalLineDefaultData.getAttribute("value"), String.format("%.2f", oldValues.fieldDecimal));
         decimalLineDefaultData.clear();
         decimalLineDefaultData.sendKeys(String.valueOf(newValues.fieldDecimal));
 
-        WebElement dateLineDefaultData = driver.findElement(By.xpath("//input[@id='date']"));
+        WebElement dateLineDefaultData = driver.findElement(By.id("date"));
         Assert.assertEquals(dateLineDefaultData.getAttribute("value"), oldValues.fieldDate);
         dateLineDefaultData.clear();
         dateLineDefaultData.sendKeys(newValues.fieldDate);
 
-        WebElement dateTimeLineDefaultData = driver.findElement(By.xpath("//input[@id='datetime']"));
+        WebElement dateTimeLineDefaultData = driver.findElement(By.id("datetime"));
         Assert.assertEquals(dateTimeLineDefaultData.getAttribute("value"), oldValues.fieldDateTime);
         dateTimeLineDefaultData.clear();
         dateTimeLineDefaultData.sendKeys(newValues.fieldDateTime);
