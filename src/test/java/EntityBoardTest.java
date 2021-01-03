@@ -1,3 +1,4 @@
+
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -9,7 +10,7 @@ import runner.BaseTest;
 import runner.ProjectUtils;
 import runner.type.Run;
 import runner.type.RunType;
-
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,7 +24,11 @@ public class EntityBoardTest extends BaseTest {
     private static final String DONE = "Done";
     private static final String ON_TRACK = "On track";
     private static final String APP_USER = "apptester1@tester.com";
-
+    LocalDate today = LocalDate.now();
+    String output = today.toString();
+    String[] arrOfData = output.split("-", 3);
+    private String currentYear = arrOfData[0];
+    private String currentMonth = arrOfData[1];
 
     private void createRecord(WebDriver driver, String status) {
 
@@ -49,6 +54,16 @@ public class EntityBoardTest extends BaseTest {
         decimalPlaceholder.click();
         decimalPlaceholder.sendKeys(DECIMAL);
         wait.until(ExpectedConditions.attributeContains(decimalPlaceholder, "value", DECIMAL));
+
+        driver.findElement(By.id("datetime")).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated((By.xpath("//div[@class = 'datepicker-days']"))));
+        driver.findElement(By.xpath("//td[@data-day = '" +currentMonth + "/" + "15" + "/" + currentYear +"']")).click();
+        wait.until(ExpectedConditions.textToBe(By.xpath("//td[@data-day = '" +currentMonth + "/" + "15" + "/" + currentYear +"']"), "15"));
+
+        driver.findElement(By.id("date")).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated((By.xpath("//div[@class = 'datepicker']"))));
+        driver.findElement(By.xpath("//td[@data-day = '" +currentMonth + "/" + "15" + "/" + currentYear +"']")).click();
+        wait.until(ExpectedConditions.textToBe(By.xpath("//td[@data-day = '" +currentMonth + "/" + "15" + "/" + currentYear +"']"), "15"));
 
         JavascriptExecutor js = ((JavascriptExecutor) driver);
         WebElement dropdownUser = driver.findElement(By.xpath("//div[contains(text(),'User 1 Demo')]"));
@@ -147,6 +162,8 @@ public class EntityBoardTest extends BaseTest {
         Assert.assertEquals(tabListValues.get(2).getText(), TEXT, "Created record text issue");
         Assert.assertEquals(tabListValues.get(3).getText(), NUMBER, "Created record number issue");
         Assert.assertEquals(tabListValues.get(4).getText(), DECIMAL, "Created record decimal issue");
+        Assert.assertEquals(tabListValues.get(5).getText(), "15" + "/" + currentMonth + "/" + currentYear, "Created record date issue");
+        Assert.assertEquals(tabListValues.get(6).getText().substring(0,10), "15" + "/" + currentMonth + "/" + currentYear, "Created record dateTime issue");
         Assert.assertEquals(tabListValues.get(8).getText(), APP_USER, "Created record user issue");
     }
 
