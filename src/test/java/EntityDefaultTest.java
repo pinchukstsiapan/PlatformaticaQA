@@ -106,11 +106,23 @@ public class EntityDefaultTest extends BaseTest {
         return null;
     }
 
+    private String formatDouble(double num) {
+        String result = String.format("%.2f", num);
+        int end = result.length();
+        if (result.charAt(end-1) == '0') {
+            if (result.charAt(end-2) == '0') {
+                result = result.substring(0, end-3);
+            } else{
+                result = result.substring(0, end-1);
+            }
+        }
+        return result;
+    }
     private void validateRowFields(WebElement row) {
 
         Assert.assertEquals(row.findElements(By.cssSelector("td")).get(2).getText(), currentValues.fieldText);
         Assert.assertEquals(row.findElements(By.cssSelector("td")).get(3).getText(), String.valueOf(currentValues.fieldInt));
-        Assert.assertEquals(row.findElements(By.cssSelector("td")).get(4).getText(), String.format("%.2f", currentValues.fieldDecimal));
+        Assert.assertEquals(row.findElements(By.cssSelector("td")).get(4).getText(), formatDouble(currentValues.fieldDecimal));
         Assert.assertEquals(row.findElements(By.cssSelector("td")).get(5).getText(), String.valueOf(currentValues.fieldDate));
         Assert.assertEquals(row.findElements(By.cssSelector("td")).get(6).getText(), String.valueOf(currentValues.fieldDateTime));
         Assert.assertEquals(row.findElements(By.cssSelector("td")).get(9).getText().toLowerCase(), String.valueOf(currentValues.fieldUser));
@@ -271,7 +283,7 @@ public class EntityDefaultTest extends BaseTest {
         Assert.assertEquals(listOfNewValues.get(0).getText(), currentValues.fieldString);
         Assert.assertEquals(listOfNewValues.get(1).getText(), currentValues.fieldText);
         Assert.assertEquals(listOfNewValues.get(2).getText(), currentValues.fieldInt + "");
-        Assert.assertEquals(listOfNewValues.get(3).getText(), String.format("%.2f", currentValues.fieldDecimal));
+        Assert.assertEquals(listOfNewValues.get(3).getText(), formatDouble(currentValues.fieldDecimal));
         Assert.assertEquals(listOfNewValues.get(4).getText(), currentValues.fieldDate);
         Assert.assertEquals(listOfNewValues.get(5).getText(), currentValues.fieldDateTime);
         WebElement fieldUser = driver.findElement(By.xpath("//div[@class='form-group']/p"));
