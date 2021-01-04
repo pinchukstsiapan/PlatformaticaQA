@@ -182,10 +182,6 @@ public class EntityDefaultTest extends BaseTest {
         Assert.assertEquals(columns.get(9).getText().toLowerCase(), newValues.fieldUser);
     }
 
-    private void navigateToEntityDefaultPage(WebDriver driver) {
-        driver.findElement(By.xpath("//i/following-sibling::p[contains (text(), 'Default')]")).click();
-    }
-
     @Test
     public void checkDefaultValuesAndUpdate() throws InterruptedException {
 
@@ -195,10 +191,6 @@ public class EntityDefaultTest extends BaseTest {
 
         WebElement createFolder = driver.findElement(By.xpath("//i[.='create_new_folder']/ancestor::a"));
         ProjectUtils.click(driver, createFolder);
-
-       /* WebElement saveBtn = driver.findElement(By.xpath("//button[.='Save']"));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", saveBtn);
-        Assert.assertTrue(saveBtn.isDisplayed()); */
 
         assertAndReplace(driver, BY_STRING, defaultValues.fieldString, changedDefaultValues.fieldString);
         assertAndReplace(driver, BY_TEXT, defaultValues.fieldText, changedDefaultValues.fieldText);
