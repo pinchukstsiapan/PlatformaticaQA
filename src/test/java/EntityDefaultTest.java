@@ -476,7 +476,7 @@ public class EntityDefaultTest extends BaseTest {
 
 
     @Test
-    public void entityDefaultDelete() {
+    public void deleteRecord() {
         final String title = UUID.randomUUID().toString();
         WebDriver driver = getDriver();
 
