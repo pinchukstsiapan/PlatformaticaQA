@@ -1,3 +1,4 @@
+import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,55 +9,57 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
-
 import java.util.List;
 import java.util.UUID;
 
 public class EntityPlaceholderTest extends BaseTest {
+
+    private static final String title = UUID.randomUUID().toString();
+    private static final String comments = RandomStringUtils.randomAlphabetic(50);
+    private static final String intNumber = String.valueOf((int) (Math.random()* 100000000));
+    private static final String decimal = String.valueOf((int) (Math.random() * 50000) / 100.0);
+
+    By placeholderButton = By.xpath("//p[contains(text(),'Placeholder')]/preceding-sibling::i");
+    By createNewFolderIcon = By.xpath("//i[contains(text(),'create_new_folder')]");
+    By inputTitle = By.xpath("//input[@placeholder='String placeholder']");
+    By inputComments = By.xpath("//textarea[@placeholder='Text placeholder']");
+    By inputIntNumber = By.xpath("//input[@id='int']");
+    By inputDecimal = By.xpath("//input[@id='decimal']");
+    By saveButton = By.id("pa-entity-form-save-btn");
 
     @Test
     public void inputTest() throws InterruptedException {
 
         WebDriver driver = getDriver();
 
-        WebElement tab = driver.findElement(By.xpath("//p[contains(text(),'Placeholder')]/preceding-sibling::i"));
-        ProjectUtils.click(driver, tab);
-        WebElement icon = driver.findElement(By.xpath("//i[contains(text(),'create_new_folder')]"));
-        ProjectUtils.click(driver,icon);
-
-        final String title = UUID.randomUUID().toString();
-        final String comments = "my pretty simple text";
-        final int number = 37;
-        final double value = 18.73;
-
-        WebElement titleElement = driver.findElement(By.xpath("//input[@placeholder='String placeholder']"));
+        ProjectUtils.click(driver, driver.findElement(placeholderButton));
+        ProjectUtils.click(driver, driver.findElement(createNewFolderIcon));
+        WebElement titleElement = driver.findElement(inputTitle);
         titleElement.sendKeys(title);
-        WebElement commentsElement= driver.findElement(By.xpath("//textarea[@placeholder='Text placeholder']"));
+        WebElement commentsElement= driver.findElement(inputComments);
         commentsElement.sendKeys((comments));
-        WebElement numberElement = driver.findElement(By.xpath("//input[@id='int']"));
-        numberElement.sendKeys(String.valueOf(number));
-        WebElement valueElement = driver.findElement(By.xpath("//input[@id='decimal']"));
-        valueElement.sendKeys(String.valueOf(value));
+        WebElement numberElement = driver.findElement(inputIntNumber);
+        numberElement.sendKeys(intNumber);
+        WebElement valueElement = driver.findElement(inputDecimal);
+        valueElement.sendKeys(decimal);
         WebElement userSelection = driver.findElement(By.xpath("//div[contains(text(),'Demo')]"));
         ProjectUtils.click(driver,userSelection);
         WebElement newUser= driver.findElement(By.xpath("//span[text()='User 2']"));
         ProjectUtils.click(driver,newUser);
+        ProjectUtils.click(driver, driver.findElement(saveButton));
 
-        WebElement submit = driver.findElement(By.id("pa-entity-form-save-btn"));
-        ProjectUtils.click(driver,submit);
+        List<WebElement> listOfRecords = driver.findElements(By.xpath("//tbody/tr"));
+        Assert.assertEquals(listOfRecords.size(),1);
 
-        String recordTitleXpath = String.format("//div[contains(text(), '%s')]", title);
-        By newRecordComments = By.xpath(String.format(" %s/../../../td[3]/a/div", recordTitleXpath));
-        By newRecordInt = By.xpath(String.format(" %s/../../../td[4]/a/div", recordTitleXpath));
-        By newRecordVal = By.xpath(String.format(" %s/../../../td[5]/a/div", recordTitleXpath));
-        WebElement createdRecordComments = driver.findElement(newRecordComments);
-        WebElement createdRecordInt = driver.findElement(newRecordInt);
-        WebElement createdRecordVal = driver.findElement(newRecordVal);
+        List<WebElement> listOfValues = driver.findElements(By.xpath("//tbody/tr/td"));
 
-        Assert.assertEquals(createdRecordComments.getText(),comments);
-        Assert.assertEquals(createdRecordInt.getText(),Integer.toString(number));
-        Assert.assertEquals(createdRecordVal.getText(),Double.toString(value));
-    }
+        Assert.assertEquals(listOfValues.get(1).getText(),title);
+        Assert.assertEquals(listOfValues.get(2).getText(),comments);
+        Assert.assertEquals(listOfValues.get(3).getText(),intNumber);
+        Assert.assertEquals(listOfValues.get(4).getText(), decimal);
+        Assert.assertEquals(listOfValues.get(9).getText(),"User 2");
+        }
+
     @Ignore
     @Test
     public void verifyDecimal() throws InterruptedException {
