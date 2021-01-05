@@ -100,7 +100,7 @@ public class EntityDefaultTest extends BaseTest {
             UUID.randomUUID().toString(),
             "Some random text as Edited Text Value",
              String.valueOf((int) (Math.random() * 100)),
-            "50.73",
+            "50.7",
             "30/12/2020",
             "30/12/2020 12:34:56",
             "user100@tester.com");
@@ -122,7 +122,8 @@ public class EntityDefaultTest extends BaseTest {
     private static final By BY_EMBEDD_DECIMAL = By.xpath("//td/textarea[@id='t-11-r-1-decimal']");
     private static final By BY_EMBEDD_DATE = By.id("t-11-r-1-date");
     private static final By BY_EMBEDD_DATETIME = By.id("t-11-r-1-datetime");
-    private static final By BY_EMBEDD_USER = By.xpath("//select[@id='t-11-r-1-user'");
+    private static final By BY_EMBEDD_USER = By.xpath("//select[@id='t-11-r-1-user']/option[@value='0']");
+    private static final By BY_EMBEDD_USER1 = By.xpath("//select[@id='t-11-r-1-user'");
 
     private void assertAndReplace(WebDriver driver, By by, String oldText, String newValue ) {
         WebElement element = driver.findElement(by);
@@ -177,13 +178,11 @@ public class EntityDefaultTest extends BaseTest {
         assertAndReplace(driver, BY_DATE, defaultValues.fieldDate, newValues.fieldDate);
         assertAndReplace(driver, BY_DATETIME, defaultValues.fieldDateTime, newValues.fieldDateTime);
 
-        WebElement user = driver.findElement(By.xpath("//div[@class='filter-option-inner']/div[.='User 1 Demo']"));
-        Assert.assertEquals(user.getText(), defaultEmbeDValues.fieldUser.toUpperCase());
-
-        WebElement fieldUser = driver.findElement(By.xpath("//div[@id='_field_container-user']/div/button"));
+        WebElement fieldUser = driver.findElement(BY_USER);
+        Assert.assertEquals(fieldUser.getText(), defaultValues.fieldUser.toUpperCase());
         ProjectUtils.click(driver, fieldUser);
 
-        WebElement scrollDownMenuField = driver.findElement(By.xpath("//span[text() = '" + changedEmbedDValues.fieldUser + "']"));
+        WebElement scrollDownMenuField = driver.findElement(By.xpath("//span[text() = '" + newValues.fieldUser + "']"));
         ProjectUtils.click(driver, scrollDownMenuField);
 
         WebElement saveButton = driver.findElement(By.xpath("//button[text() = 'Save']"));
@@ -241,7 +240,7 @@ public class EntityDefaultTest extends BaseTest {
 
         WebElement embedDUser = driver.findElement(BY_EMBEDD_USER);
         Assert.assertEquals(embedDUser.getText(), defaultEmbeDValues.fieldUser);
-        Select embedDUserSelect = new Select(driver.findElement(BY_EMBEDD_USER));
+        Select embedDUserSelect = new Select(driver.findElement(By.xpath("//select[@id='t-11-r-1-user']")));
         embedDUserSelect.selectByVisibleText(changedEmbedDValues.fieldUser);
 
         WebElement saveBtn = driver.findElement(By.xpath("//button[.='Save']"));
