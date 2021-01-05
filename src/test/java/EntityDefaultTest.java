@@ -39,7 +39,16 @@ public class EntityDefaultTest extends BaseTest {
             this.fieldString = fieldString;
             this.fieldText = fieldText;
             this.fieldInt = fieldInt;
+
             this.fieldDecimal = fieldDecimal;
+            int end = this.fieldDecimal.length();
+            if (this.fieldDecimal.charAt(end-1) == '0') {
+                if (this.fieldDecimal.charAt(end-2) == '0') {
+                    this.fieldDecimal = this.fieldDecimal.substring(0, end-3);
+                } else{
+                    this.fieldDecimal = this.fieldDecimal.substring(0, end-1);
+                }
+            }
             this.fieldDate = fieldDate;
             this.fieldDateTime = fieldDateTime;
             this.fieldUser = fieldUser;
@@ -69,7 +78,7 @@ public class EntityDefaultTest extends BaseTest {
     private final FieldValues changedDefaultValues = new FieldValues(
             null,
             "Changed default String",
-            "Some random text as Edited Text Value",
+            "Changed default Text",
              String.valueOf((int) (Math.random() * 100)),
             "12.35",
             "01/01/2021",
@@ -106,14 +115,14 @@ public class EntityDefaultTest extends BaseTest {
     private static final By BY_DECIMAL = By.id("decimal");
     private static final By BY_DATE = By.id("date");
     private static final By BY_DATETIME = By.id("datetime");
+    private static final By BY_USER = By.xpath("//div[@id='_field_container-user']/div/button");
     private static final By BY_EMBEDD_STRING = By.xpath("//td/textarea[@id='t-11-r-1-string']");
     private static final By BY_EMBEDD_TEXT = By.xpath("//td/textarea[@id='t-11-r-1-text']");
     private static final By BY_EMBEDD_INT = By.xpath("//td/textarea[@id='t-11-r-1-int']");
     private static final By BY_EMBEDD_DECIMAL = By.xpath("//td/textarea[@id='t-11-r-1-decimal']");
     private static final By BY_EMBEDD_DATE = By.id("t-11-r-1-date");
     private static final By BY_EMBEDD_DATETIME = By.id("t-11-r-1-datetime");
-    private static final By BY_EMBEDD_USER = By.xpath("//select[@id='t-11-r-1-user']/option[@value='0']");
-    private static final By BY_EMBEDD_USER1 = By.xpath("//select[@id='t-11-r-1-user'");
+    private static final By BY_EMBEDD_USER = By.xpath("//select[@id='t-11-r-1-user'");
 
     private void assertAndReplace(WebDriver driver, By by, String oldText, String newValue ) {
         WebElement element = driver.findElement(by);
@@ -130,6 +139,19 @@ public class EntityDefaultTest extends BaseTest {
         element.clear();
         element.sendKeys(newValue);
         element.sendKeys("\t");
+    }
+
+    private String formatDouble(double num) {
+        String result = String.format("%.2f", num);
+        int end = result.length();
+        if (result.charAt(end-1) == '0') {
+            if (result.charAt(end-2) == '0') {
+                result = result.substring(0, end-3);
+            } else{
+                result = result.substring(0, end-1);
+            }
+        }
+        return result;
     }
 
     @ Test
@@ -199,7 +221,7 @@ public class EntityDefaultTest extends BaseTest {
         assertAndReplace(driver, BY_DATE, defaultValues.fieldDate, changedDefaultValues.fieldDate);
         assertAndReplace(driver, BY_DATETIME, defaultValues.fieldDateTime, changedDefaultValues.fieldDateTime);
 
-        WebElement fieldUser = driver.findElement(By.xpath("//div[@id='_field_container-user']/div/button"));
+        WebElement fieldUser = driver.findElement(BY_USER);
         ProjectUtils.click(driver, fieldUser);
         WebElement scrollDownMenuField = driver.findElement(By.xpath("//span[text() = '" + changedDefaultValues.fieldUser + "']"));
         ProjectUtils.click(driver, scrollDownMenuField);
@@ -219,7 +241,7 @@ public class EntityDefaultTest extends BaseTest {
 
         WebElement embedDUser = driver.findElement(BY_EMBEDD_USER);
         Assert.assertEquals(embedDUser.getText(), defaultEmbeDValues.fieldUser);
-        Select embedDUserSelect = new Select(driver.findElement(By.xpath("//select[@id='t-11-r-1-user']")));
+        Select embedDUserSelect = new Select(driver.findElement(BY_EMBEDD_USER));
         embedDUserSelect.selectByVisibleText(changedEmbedDValues.fieldUser);
 
         WebElement saveBtn = driver.findElement(By.xpath("//button[.='Save']"));
@@ -279,13 +301,10 @@ public class EntityDefaultTest extends BaseTest {
 
     private boolean isInt(String str){
 
-        try
-        {
+        try {
             Integer.parseInt(str);
             return  true;
-        }
-        catch (NumberFormatException e)
-        {
+        } catch (NumberFormatException e) {
             return false;
         }
     }
