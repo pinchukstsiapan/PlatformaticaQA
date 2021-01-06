@@ -1,6 +1,11 @@
 package runner.type;
 
+import com.beust.jcommander.Strings;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import runner.BaseTest;
+import runner.ProjectUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,8 +17,8 @@ import java.util.Properties;
 
 public enum ProfileType {
 
-    DEFAULT("https://ref.eteam.work"),
-    MARKETPLACE("https://ref.eteam.work");
+    DEFAULT("https://ref.eteam.work", "https://ref.eteam.work/next_tester.php"),
+    MARKETPLACE("https://portal.platformatica.com", "https://portal.platformatica.com/next_tester.php?persona=customer");
 
     private static Properties credentials;
     static {
@@ -24,13 +29,11 @@ public enum ProfileType {
     private final String passwordKey = getName() + ".password";
 
     private final String url;
+    private final String credentialUrl;
 
-    ProfileType(String url) {
+    ProfileType(String url, String credentialUrl) {
         this.url = url;
-    }
-
-    public String getUrl() {
-        return url;
+        this.credentialUrl = credentialUrl;
     }
 
     public void setUserName(String userName) {
@@ -49,12 +52,30 @@ public enum ProfileType {
         return credentials.getProperty(passwordKey);
     }
 
-    public String getCredentialUrl() {
-        return getUrl() + "/next_tester.php";
-    }
-
     public String getName() {
         return this.name().toLowerCase();
+    }
+
+    public void get(WebDriver driver) {
+        driver.get(url);
+    }
+
+    public void login(WebDriver driver) {
+        if (Strings.isStringEmpty(this.getUserName()) || Strings.isStringEmpty(this.getPassword())) {
+            throw new RuntimeException("Username or Password is empty");
+        }
+
+        WebElement loginElement = driver.findElement(By.xpath("//input[@name='login_name']"));
+        loginElement.sendKeys(this.getUserName());
+        WebElement pasElement = driver.findElement(By.xpath("//input[@name='password']"));
+        pasElement.sendKeys(this.getPassword());
+        WebElement button = driver.findElement(By.xpath("//button[text()='Sign in']"));
+        button.click();
+    }
+
+    public void reset(WebDriver driver) {
+        ProjectUtils.click(driver, driver.findElement(By.id("navbarDropdownProfile")));
+        ProjectUtils.click(driver, driver.findElement(By.xpath("//a[contains(text(), 'Reset')]")));
     }
 
     public static void renewCredentials() {
@@ -78,7 +99,7 @@ public enum ProfileType {
         if (BaseTest.isRemoteWebDriver() || Boolean.parseBoolean(properties.getProperty("serverCredentials"))) {
             for (ProfileType profile : ProfileType.values()) {
                 try {
-                    HttpURLConnection con = (HttpURLConnection) new URL(profile.getCredentialUrl()).openConnection();
+                    HttpURLConnection con = (HttpURLConnection) new URL(profile.credentialUrl).openConnection();
                     try {
                         con.setRequestMethod("GET");
                         if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {

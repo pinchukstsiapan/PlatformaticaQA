@@ -19,6 +19,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -58,18 +60,28 @@ public abstract class  BaseTest {
     private WebDriver createBrowser() {
         WebDriver result;
 
+        Map<String, Object> chromePreferences = new HashMap<>();
+        chromePreferences.put("profile.default_content_settings.geolocation", 2);
+        chromePreferences.put("credentials_enable_service", false);
+        chromePreferences.put("password_manager_enabled", false);
+        chromePreferences.put("safebrowsing.enabled", "true");
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.setExperimentalOption("prefs", chromePreferences);
+        chromeOptions.addArguments("--window-size=1920,1080");
+
         if (isRemoteWebDriver()) {
+            chromeOptions.setHeadless(true);
+            chromeOptions.addArguments("--disable-gpu");
             try {
-                result = new RemoteWebDriver(new URL(HUB_URL), new ChromeOptions());
+                result = new RemoteWebDriver(new URL(HUB_URL), chromeOptions);
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }
         } else {
-            result = new ChromeDriver();
+            result = new ChromeDriver(chromeOptions);
         }
 
         result.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        result.manage().window().maximize();
 
         LoggerUtils.log("Browser opened");
 
@@ -77,15 +89,16 @@ public abstract class  BaseTest {
     }
 
     private void quitBrowser() {
-        getDriver().quit();
+        driver.quit();
+        webDriverWait = null;
 
         LoggerUtils.log("Browser closed");
     }
 
     private void startTest(WebDriver driver, ProfileType profileType) {
-        driver.get(profileType.getUrl());
-        ProjectUtils.login(driver, profileType);
-        ProjectUtils.reset(driver);
+        profileType.get(driver);
+        profileType.login(driver);
+        profileType.reset(driver);
     }
 
     @BeforeClass
@@ -108,7 +121,7 @@ public abstract class  BaseTest {
             driver = createBrowser();
             startTest(driver, TestUtils.getProfileType(method, profileType));
         } else {
-            driver.get(profileType.getUrl());
+            profileType.get(driver);
         }
     }
 
@@ -133,7 +146,7 @@ public abstract class  BaseTest {
                 LoggerUtils.logYellow("Created directory to save screenshots: " + screenshotDirectoryName);
             }
 
-            ScreenshotUtils.takeScreenShot(getDriver(), String.format("%s%s%s.%s.png",
+            ScreenshotUtils.takeScreenShot(driver, String.format("%s%s%s.%s.png",
                     screenshotDirectoryName, File.separator, tr.getInstanceName(), tr.getName()));
         }
 

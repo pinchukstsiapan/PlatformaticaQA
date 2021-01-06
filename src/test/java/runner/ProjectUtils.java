@@ -22,22 +22,14 @@ public abstract class ProjectUtils {
         return driver;
     }
 
+    @Deprecated
     public static void reset(WebDriver driver) {
-        click(driver, driver.findElement(By.id("navbarDropdownProfile")));
-        click(driver, driver.findElement(By.xpath("//a[contains(text(), 'Reset')]")));
+        ProfileType.DEFAULT.reset(driver);
     }
 
+    @Deprecated
     public static void login(WebDriver driver, ProfileType profileType) {
-        if (Strings.isStringEmpty(profileType.getUserName()) || Strings.isStringEmpty(profileType.getPassword())) {
-            throw new RuntimeException("Username or Password is empty");
-        }
-
-        WebElement loginElement = driver.findElement(By.xpath("//input[@name='login_name']"));
-        loginElement.sendKeys(profileType.getUserName());
-        WebElement pasElement = driver.findElement(By.xpath("//input[@name='password']"));
-        pasElement.sendKeys(profileType.getPassword());
-        WebElement button = driver.findElement(By.xpath("//button[text()='Sign in']"));
-        button.click();
+        profileType.login(driver);
     }
 
     @Deprecated

@@ -6,6 +6,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import runner.BaseTest;
+import runner.type.Profile;
+import runner.type.ProfileType;
 import runner.type.Run;
 import runner.type.RunType;
 
