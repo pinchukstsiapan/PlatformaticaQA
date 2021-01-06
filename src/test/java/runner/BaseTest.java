@@ -77,7 +77,8 @@ public abstract class  BaseTest {
     }
 
     private void quitBrowser() {
-        getDriver().quit();
+        driver.quit();
+        webDriverWait = null;
 
         LoggerUtils.log("Browser closed");
     }
@@ -133,7 +134,7 @@ public abstract class  BaseTest {
                 LoggerUtils.logYellow("Created directory to save screenshots: " + screenshotDirectoryName);
             }
 
-            ScreenshotUtils.takeScreenShot(getDriver(), String.format("%s%s%s.%s.png",
+            ScreenshotUtils.takeScreenShot(driver, String.format("%s%s%s.%s.png",
                     screenshotDirectoryName, File.separator, tr.getInstanceName(), tr.getName()));
         }
 
