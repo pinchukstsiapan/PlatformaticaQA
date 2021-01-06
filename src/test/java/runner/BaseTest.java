@@ -96,9 +96,9 @@ public abstract class  BaseTest {
     }
 
     private void startTest(WebDriver driver, ProfileType profileType) {
-        driver.get(profileType.getUrl());
-        ProjectUtils.login(driver, profileType);
-        ProjectUtils.reset(driver);
+        profileType.get(driver);
+        profileType.login(driver);
+        profileType.reset(driver);
     }
 
     @BeforeClass
@@ -121,7 +121,7 @@ public abstract class  BaseTest {
             driver = createBrowser();
             startTest(driver, TestUtils.getProfileType(method, profileType));
         } else {
-            driver.get(profileType.getUrl());
+            profileType.get(driver);
         }
     }
 
