@@ -1,4 +1,5 @@
 
+import java.util.Random;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -14,25 +15,28 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+
 @Run(run = RunType.Multiple)
 public class EntityBoardTest extends BaseTest {
 
     private static final String TEXT = UUID.randomUUID().toString();
-    private static final String NUMBER = String.valueOf((int) (Math.random() * 100));
-    private static final String DECIMAL = String.valueOf((int) (Math.random() * 20000) / 100.0);
+    private static final String NUMBER = Integer.toString((int)(Math.random() * 100));
+    private static final String DECIMAL = Double.toString(35.06);
     private static final String PENDING = "Pending";
     private static final String DONE = "Done";
     private static final String ON_TRACK = "On track";
     private static final String APP_USER = "apptester1@tester.com";
-    LocalDate today = LocalDate.now();
-    String output = today.toString();
-    String[] arrOfData = output.split("-", 3);
-    private String currentYear = arrOfData[0];
-    private String currentMonth = arrOfData[1];
+    private static final LocalDate TODAY = LocalDate.now();
+    private static final String OUTPUT = TODAY.toString();
+    private static final String[] ARR_OF_DATA = OUTPUT.split("-", 3);
+    private static final String CURRENT_YEAR = ARR_OF_DATA[0];
+    private static final String CURRENT_MONTH = ARR_OF_DATA[1];
+    Random generator = new Random();
+    private final String RANDOM_DAY = String.format("%02d", generator.nextInt(27) + 1);
 
-    private void createRecord(WebDriver driver, String status) {
+    private void createRecord(WebDriver driver, String text, String status, String number, String decimal, String RANDOM_DAY, String user) {
 
-        WebDriverWait wait = new WebDriverWait(driver, 6);
+        WebDriverWait wait = getWebDriverWait();
         ProjectUtils.click(driver, driver.findElement(By.xpath("//p[contains(text(),'Board')]")));
 
         driver.findElement(By.xpath("//div[@class = 'card-icon']")).click();
@@ -57,15 +61,11 @@ public class EntityBoardTest extends BaseTest {
 
         driver.findElement(By.id("datetime")).click();
         wait.until(ExpectedConditions.visibilityOfElementLocated((By.xpath("//div[@class = 'datepicker-days']"))));
-        driver.findElement(By.xpath("//td[@data-day = '" +currentMonth + "/" + "15" + "/" + currentYear +"']")).click();
-        wait.until(ExpectedConditions.textToBe
-                (By.xpath("//td[@data-day = '" +currentMonth + "/" + "15" + "/" + currentYear +"']"), "15"));
+        driver.findElement(By.xpath(String.format("//td[@data-day = '%1$s%2$s%3$s%2$s%4$s']", CURRENT_MONTH,"/", RANDOM_DAY, CURRENT_YEAR ))).click();
 
         driver.findElement(By.id("date")).click();
         wait.until(ExpectedConditions.visibilityOfElementLocated((By.xpath("//div[@class = 'datepicker']"))));
-        driver.findElement(By.xpath("//td[@data-day = '" +currentMonth + "/" + "15" + "/" + currentYear +"']")).click();
-        wait.until(ExpectedConditions.textToBe
-                (By.xpath("//td[@data-day = '" +currentMonth + "/" + "15" + "/" + currentYear +"']"), "15"));
+        driver.findElement(By.xpath(String.format("//td[@data-day = '%1$s%2$s%3$s%2$s%4$s']", CURRENT_MONTH,"/", RANDOM_DAY, CURRENT_YEAR ))).click();
 
         JavascriptExecutor js = ((JavascriptExecutor) driver);
         WebElement dropdownUser = driver.findElement(By.xpath("//div[contains(text(),'User 1 Demo')]"));
@@ -75,6 +75,7 @@ public class EntityBoardTest extends BaseTest {
         Select appTester1 = new Select(driver.findElement(By.id("user")));
         appTester1.selectByVisibleText(APP_USER);
     }
+
     private void forwardManipulate1(WebDriver driver) {
         WebElement board = driver.findElement(By.xpath("//div[@id='menu-list-parent']/ul/li[10]/a"));
         ProjectUtils.click(driver, board);
@@ -129,6 +130,7 @@ public class EntityBoardTest extends BaseTest {
         WebElement tdWithStatus = trParent.findElement(By.xpath("//table/tbody/tr/td[2]"));
         Assert.assertEquals(tdWithStatus.findElement(By.tagName("div")).getText(), "On track");
     }
+
     private void backwardManipulate2(WebDriver driver) {
 
         driver.findElement(By.xpath("//ul[@role='tablist']/li[1]/a")).click();
@@ -153,7 +155,7 @@ public class EntityBoardTest extends BaseTest {
 
         WebDriver driver = getDriver();
 
-        createRecord(driver, PENDING);
+        createRecord(driver, TEXT, PENDING, NUMBER, DECIMAL, RANDOM_DAY, APP_USER);
 
         ProjectUtils.click(driver, driver.findElement(By.id("pa-entity-form-draft-btn")));
 
@@ -168,12 +170,11 @@ public class EntityBoardTest extends BaseTest {
         Assert.assertEquals(tabListValues.get(3).getText(), NUMBER, "Created record number issue");
         Assert.assertEquals(tabListValues.get(4).getText(), DECIMAL, "Created record decimal issue");
         Assert.assertEquals(tabListValues.get(5).getText(),
-                "15" + "/" + currentMonth + "/" + currentYear, "Created record date issue");
+                RANDOM_DAY + "/" + CURRENT_MONTH + "/" + CURRENT_YEAR, "Created record date issue");
         Assert.assertEquals(tabListValues.get(6).getText().substring(0,10),
-                "15" + "/" + currentMonth + "/" + currentYear, "Created record dateTime issue");
+                RANDOM_DAY + "/" + CURRENT_MONTH + "/" + CURRENT_YEAR, "Created record dateTime issue");
         Assert.assertEquals(tabListValues.get(8).getText(), APP_USER, "Created record user issue");
     }
-
 
     @Test (dependsOnMethods = "inputValidationTest")
     public void viewRecords() {
@@ -270,7 +271,7 @@ public class EntityBoardTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = {"inputValidationTest","viewRecords", "ManipulateTest", "editBoard"})
-    public void recordDeletion() throws InterruptedException {
+    public void recordDeletion() {
 
         WebDriver driver = getDriver();
         WebDriverWait wait = new WebDriverWait(driver, 6);
@@ -325,7 +326,7 @@ public class EntityBoardTest extends BaseTest {
         WebDriver driver = getDriver();
         WebDriverWait wait = new WebDriverWait(driver, 6);
 
-        createRecord(driver, PENDING);
+        createRecord(driver, TEXT, PENDING, NUMBER, DECIMAL, RANDOM_DAY, APP_USER);
 
         ProjectUtils.click(driver, driver.findElement(By.xpath("//button[contains(text(), 'Cancel')]")));
 
