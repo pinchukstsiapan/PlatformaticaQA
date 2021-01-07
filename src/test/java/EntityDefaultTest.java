@@ -54,7 +54,6 @@ public class EntityDefaultTest extends BaseTest {
     private static final By BY_EMBEDD_USER = By.xpath("//select[@id='t-11-r-1-user']/option[@value='0']");
     private static final By BY_SAVE_BUTTON = By.xpath("//button[.='Save']");
     private static final By BY_RECORD_HAMBURGER_MENU = By.xpath("//button[contains(@data-toggle, 'dropdown')] ");
-    private static final By BY_CREATED_RECORD = By.xpath("//table[@id='pa-all-entities-table']/tbody/tr");
     private static final By BY_DROPDOWN = (By.xpath("//select[@id = 'user']"));
     private static final By BY_EMBEDD_DROPDOWN = By.xpath("//select[@id='t-11-r-1-user']");
     private static final By BY_VIEW = By.xpath("//a[text() = 'view']");
