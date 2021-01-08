@@ -238,6 +238,8 @@ public class EntityBoardTest extends BaseTest {
         WebElement text1 = driver.findElement(By.id("text"));
         text1.clear();
         text1.sendKeys("my test changed");
+        wait.until(ExpectedConditions.visibilityOf(text1));
+
 
         WebElement integer1 = driver.findElement(By.id("int"));
         integer1.clear();
