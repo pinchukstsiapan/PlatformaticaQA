@@ -122,22 +122,19 @@ public class EntityDefaultTest extends BaseTest {
                    changedEmbedDValues.fieldText, changedEmbedDValues.fieldInt, changedEmbedDValues.fieldDecimal,
                    changedEmbedDValues.fieldDate, changedEmbedDValues.fieldDateTime, null, null, changedEmbedDValues.fieldUser};
 
-    private void assertAndReplace(WebDriver driver, By by, String oldText, String newValue ) {
+    private void assertAndReplace(WebDriver driver, By by, String oldValue, String newValue, boolean isEmbedD ) {
         WebElement element = driver.findElement(by);
-        Assert.assertEquals(element.getAttribute("value"), oldText);
+        if (isEmbedD) {
+            Assert.assertEquals(element.getText(), oldValue);
+            element.click();
+        } else {
+            Assert.assertEquals(element.getAttribute("value"), oldValue);
+        }
         element.clear();
         element.sendKeys(newValue);
         element.sendKeys("\t");
     }
 
-    private void assertAndReplaceEmbedD (WebDriver driver, By by, String oldValue, String newValue) {
-        WebElement element = driver.findElement(by);
-        Assert.assertEquals(element.getText(), oldValue);
-        element.click();
-        element.clear();
-        element.sendKeys(newValue);
-        element.sendKeys("\t");
-    }
     private void assertAndReplaceFieldUser(WebDriver driver, String oldValue, String newValue, By byUser, By bySelect ){
         WebElement fieldUser = driver.findElement(byUser);
         Assert.assertEquals(fieldUser.getText(), oldValue);
@@ -158,10 +155,20 @@ public class EntityDefaultTest extends BaseTest {
 
     private void selectFromRecordMenu (WebDriver driver, By byFunction) {
 
-        WebElement recordMenu = driver.findElement(BY_RECORD_HAMBURGER_MENU);
-        recordMenu.click();
+        driver.findElement(BY_RECORD_HAMBURGER_MENU).click();
+
         WebElement viewFunction = driver.findElement(byFunction);
         ProjectUtils.click(driver, viewFunction);
+    }
+
+    private void assertRecordValues(WebDriver driver, String xpath, String[] changed_default_values) {
+        List<WebElement> rows = driver.findElements(By.xpath(xpath));
+        Assert.assertEquals(rows.size(), changed_default_values.length);
+        for (int i = 0; i < changed_default_values.length; i++) {
+            if (changed_default_values[i] != null) {
+                Assert.assertEquals(rows.get(i).getText(), changed_default_values[i]);
+            }
+        }
     }
 
     @Test
@@ -174,12 +181,12 @@ public class EntityDefaultTest extends BaseTest {
         WebElement createFolder = driver.findElement(By.xpath("//i[.='create_new_folder']/ancestor::a"));
         ProjectUtils.click(driver, createFolder);
 
-        assertAndReplace(driver, BY_STRING, defaultValues.fieldString, changedDefaultValues.fieldString);
-        assertAndReplace(driver, BY_TEXT, defaultValues.fieldText, changedDefaultValues.fieldText);
-        assertAndReplace(driver, BY_INT, defaultValues.fieldInt, changedDefaultValues.fieldInt);
-        assertAndReplace(driver, BY_DECIMAL, defaultValues.fieldDecimal, changedDefaultValues.fieldDecimal);
-        assertAndReplace(driver, BY_DATE, defaultValues.fieldDate, changedDefaultValues.fieldDate);
-        assertAndReplace(driver, BY_DATETIME, defaultValues.fieldDateTime, changedDefaultValues.fieldDateTime);
+        assertAndReplace(driver, BY_STRING, defaultValues.fieldString, changedDefaultValues.fieldString, false);
+        assertAndReplace(driver, BY_TEXT, defaultValues.fieldText, changedDefaultValues.fieldText, false);
+        assertAndReplace(driver, BY_INT, defaultValues.fieldInt, changedDefaultValues.fieldInt, false);
+        assertAndReplace(driver, BY_DECIMAL, defaultValues.fieldDecimal, changedDefaultValues.fieldDecimal, false);
+        assertAndReplace(driver, BY_DATE, defaultValues.fieldDate, changedDefaultValues.fieldDate, false);
+        assertAndReplace(driver, BY_DATETIME, defaultValues.fieldDateTime, changedDefaultValues.fieldDateTime, false);
         assertAndReplaceFieldUser(driver, defaultValues.fieldUser, changedDefaultValues.fieldUser, BY_USER, BY_DROPDOWN);
 
         WebElement greenPlus = driver.findElement(By.xpath("//button[@data-table_id='11']"));
@@ -188,12 +195,12 @@ public class EntityDefaultTest extends BaseTest {
         WebElement lineNumber = driver.findElement(By.xpath("//input[@id='t-undefined-r-1-_line_number']"));
         Assert.assertEquals(lineNumber.getAttribute("data-row"), changedEmbedDValues.lineNumber);
 
-        assertAndReplace(driver, BY_EMBEDD_STRING, defaultEmbeDValues.fieldString, changedEmbedDValues.fieldString);
-        assertAndReplace(driver, BY_EMBEDD_TEXT, defaultEmbeDValues.fieldText, changedEmbedDValues.fieldText);
-        assertAndReplace(driver, BY_EMBEDD_INT, defaultEmbeDValues.fieldInt, changedEmbedDValues.fieldInt);
-        assertAndReplace(driver, BY_EMBEDD_DECIMAL, defaultEmbeDValues.fieldDecimal, changedEmbedDValues.fieldDecimal);
-        assertAndReplaceEmbedD(driver, BY_EMBEDD_DATE, defaultEmbeDValues.fieldDate, changedEmbedDValues.fieldDate);
-        assertAndReplaceEmbedD(driver, BY_EMBEDD_DATETIME, defaultEmbeDValues.fieldDateTime, changedEmbedDValues.fieldDateTime);
+        assertAndReplace(driver, BY_EMBEDD_STRING, defaultEmbeDValues.fieldString, changedEmbedDValues.fieldString, false);
+        assertAndReplace(driver, BY_EMBEDD_TEXT, defaultEmbeDValues.fieldText, changedEmbedDValues.fieldText, false);
+        assertAndReplace(driver, BY_EMBEDD_INT, defaultEmbeDValues.fieldInt, changedEmbedDValues.fieldInt, false);
+        assertAndReplace(driver, BY_EMBEDD_DECIMAL, defaultEmbeDValues.fieldDecimal, changedEmbedDValues.fieldDecimal, false);
+        assertAndReplace(driver, BY_EMBEDD_DATE, defaultEmbeDValues.fieldDate, changedEmbedDValues.fieldDate, true);
+        assertAndReplace(driver, BY_EMBEDD_DATETIME, defaultEmbeDValues.fieldDateTime, changedEmbedDValues.fieldDateTime, true);
         assertAndReplaceFieldUser(driver,  defaultEmbeDValues.fieldUser,changedEmbedDValues.fieldUser, BY_EMBEDD_USER, BY_EMBEDD_DROPDOWN);
 
         WebElement saveBtn = driver.findElement(BY_SAVE_BUTTON);
@@ -201,24 +208,12 @@ public class EntityDefaultTest extends BaseTest {
 
         selectFromRecordMenu(driver, BY_VIEW);
 
-        List<WebElement> rows = driver.findElements(By.xpath("//span[@class='pa-view-field']"));
-        Assert.assertEquals(rows.size(), CHANGED_DEFAULT_VALUES.length);
-        for (int i =0; i < CHANGED_DEFAULT_VALUES.length; i++) {
-            if (CHANGED_DEFAULT_VALUES[i] != null) {
-                Assert.assertEquals(rows.get(i).getText(), CHANGED_DEFAULT_VALUES[i]);
-            }
-        }
+        assertRecordValues(driver, "//span[@class='pa-view-field']", CHANGED_DEFAULT_VALUES);
 
         WebElement fieldUser = driver.findElement(By.xpath("//div[@class='form-group']/p"));
         Assert.assertEquals(fieldUser.getText(), changedDefaultValues.fieldUser);
 
-        List<WebElement> embedDColumns = driver.findElements(By.xpath("//table/tbody/tr/td"));
-        Assert.assertEquals(embedDColumns.size(), CHANGED_EMBEDD_VALUES.length);
-        for (int i =0; i < CHANGED_EMBEDD_VALUES.length; i++) {
-            if (CHANGED_EMBEDD_VALUES[i] != null) {
-                Assert.assertEquals(embedDColumns.get(i).getText(), CHANGED_EMBEDD_VALUES[i]);
-            }
-        }
+        assertRecordValues(driver, "//table/tbody/tr/td", CHANGED_EMBEDD_VALUES);
     }
 
     @Test
@@ -266,12 +261,12 @@ public class EntityDefaultTest extends BaseTest {
 
         selectFromRecordMenu(driver, BY_EDIT);
 
-        assertAndReplace(driver, BY_STRING, defaultValues.fieldString, newValues.fieldString);
-        assertAndReplace(driver, BY_TEXT, defaultValues.fieldText, newValues.fieldText);
-        assertAndReplace(driver, BY_INT, defaultValues.fieldInt, newValues.fieldInt);
-        assertAndReplace(driver, BY_DECIMAL, defaultValues.fieldDecimal, newValues.fieldDecimal);
-        assertAndReplace(driver, BY_DATE, defaultValues.fieldDate, newValues.fieldDate);
-        assertAndReplace(driver, BY_DATETIME, defaultValues.fieldDateTime, newValues.fieldDateTime);
+        assertAndReplace(driver, BY_STRING, defaultValues.fieldString, newValues.fieldString, false);
+        assertAndReplace(driver, BY_TEXT, defaultValues.fieldText, newValues.fieldText, false);
+        assertAndReplace(driver, BY_INT, defaultValues.fieldInt, newValues.fieldInt, false);
+        assertAndReplace(driver, BY_DECIMAL, defaultValues.fieldDecimal, newValues.fieldDecimal,false );
+        assertAndReplace(driver, BY_DATE, defaultValues.fieldDate, newValues.fieldDate,false );
+        assertAndReplace(driver, BY_DATETIME, defaultValues.fieldDateTime, newValues.fieldDateTime, false);
         Select userSelect = new Select(driver.findElement(By.xpath("//select[@id = 'user']")));
         userSelect.selectByVisibleText(newValues.fieldUser);
 
@@ -281,12 +276,6 @@ public class EntityDefaultTest extends BaseTest {
         List<WebElement> rows = driver.findElements(By.xpath("//table[@id='pa-all-entities-table']/tbody/tr"));
         Assert.assertEquals(rows.size(), 1);
 
-        List<WebElement> columns = rows.get(0).findElements(By.tagName("td"));
-        Assert.assertEquals(columns.size(), NEW_VALUES.length);
-        for (int i =1; i < NEW_VALUES.length; i++) {
-            if (NEW_VALUES[i] != null) {
-                Assert.assertEquals(columns.get(i).getText(), NEW_VALUES[i]);
-            }
-        }
+        assertRecordValues(driver, "//table/tbody/tr/td", NEW_VALUES);
     }
 }
