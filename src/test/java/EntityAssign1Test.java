@@ -138,6 +138,7 @@ public class EntityAssign1Test extends BaseTest {
         getDriver().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
+    @Ignore
     @Test (dependsOnMethods = "editTest")
     public void deleteTest() throws InterruptedException {
 
