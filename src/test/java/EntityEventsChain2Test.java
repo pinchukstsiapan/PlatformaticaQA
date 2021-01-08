@@ -3,6 +3,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
@@ -185,7 +186,7 @@ public class EntityEventsChain2Test extends BaseTest {
         String actualErrorMessage = driver.findElement(error).getText();
         Assert.assertEquals(actualErrorMessage, expectedErrorMessage);
     }
-
+@Ignore
     @Test
     public void createNewRecordAndVerifyOnViewMode() {
 
