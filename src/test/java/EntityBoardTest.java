@@ -6,6 +6,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
@@ -15,7 +16,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-
+@Ignore
 @Run(run = RunType.Multiple)
 public class EntityBoardTest extends BaseTest {
 

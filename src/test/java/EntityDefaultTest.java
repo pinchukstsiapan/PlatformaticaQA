@@ -63,6 +63,7 @@ public class EntityDefaultTest extends BaseTest {
             "user100@tester.com",
             9);
 
+    @Ignore
     @ Test
     public void editRecord() {
 
