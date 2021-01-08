@@ -1,3 +1,6 @@
+import model.FieldsEditPage;
+import model.FieldsPage;
+import model.MainPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,35 +16,24 @@ import runner.type.RunType;
 import java.util.UUID;
 
 @Run(run = RunType.Multiple)
-public class EnityFieldsCopyTest extends BaseTest {
+public class EntityFields1Test extends BaseTest {
 
     @Test
     public void newAlexRecord() throws InterruptedException {
 
         final String title = UUID.randomUUID().toString();;
         final String comments = "TEST IT";
-        final int InTeGeR = 11;
+        final String int_ = "11";
 
-        WebDriver driver = getDriver();
+        MainPage mainPage = new MainPage(getDriver());
+        FieldsEditPage fieldsEditPage = mainPage.clickMenuFields().clickNewButton();
 
-        WebElement tab = driver.findElement(By.xpath("//li[@id = 'pa-menu-item-45']"));
-        tab.click();
-        WebElement newFile = driver.findElement(By.xpath("//i[text() = 'create_new_folder']"));
-        newFile.click();
+        FieldsPage fieldsPage = fieldsEditPage
+                .sendKeys(title, comments, int_)
+                .clickSaveButton();
 
-        WebElement first = driver.findElement(By.xpath("//input[contains(@name, 'title')]"));
-        ProjectUtils.sendKeys(first, title);
-        WebElement second = driver.findElement(By.xpath("//textarea[@id = 'comments']"));
-        ProjectUtils.sendKeys(second, comments);
-        WebElement tri = driver.findElement(By.xpath("//input[contains(@name, 'int')]"));
-        ProjectUtils.sendKeys(tri, InTeGeR);
-
-        WebElement button2 = driver.findElement(By.xpath("//button[text() = 'Save']"));
-        ProjectUtils.click(driver, button2);
-
-        WebElement butt3 = driver.findElement(By.xpath("//div[contains(text() , '"+ title +"')]"));
-
-        Assert.assertEquals(butt3.getText(), title);
+        Assert.assertEquals(fieldsPage.getRowCount(), 1);
+        Assert.assertEquals(fieldsPage.getTitle(0), title);
     }
 
     @Test(dependsOnMethods = "newAlexRecord")

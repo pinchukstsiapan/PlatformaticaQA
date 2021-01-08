@@ -47,10 +47,12 @@ public abstract class ProjectUtils {
         executor.executeScript("arguments[0].scrollIntoView();", element);
     }
 
-    public static void sendKeys(WebElement element, String keys) throws InterruptedException {
+    public static void sendKeys(WebElement element, String keys) {
         for (int i = 0; i< keys.length(); i++) {
             element.sendKeys(keys.substring(i, i + 1));
-            Thread.sleep(100);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ignore) {}
         }
     }
 
