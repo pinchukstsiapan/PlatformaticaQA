@@ -3,6 +3,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -14,14 +16,15 @@ import runner.BaseTest;
 import runner.ProjectUtils;
 import runner.type.Run;
 import runner.type.RunType;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
+import model.FieldsEditPage;
+import model.FieldsPage;
+import model.MainPage;
 
 @Run(run = RunType.Multiple)
 public class EntityFieldsTest extends BaseTest {
 
     private static final String TITLE = UUID.randomUUID().toString();
-    private static final String COMMENT = RandomStringUtils.randomAlphanumeric(25);
+    private static final String COMMENTS = RandomStringUtils.randomAlphanumeric(25);
     private static final String INT = Integer.toString(ThreadLocalRandom.current().nextInt(100, 200));
     private static final String DECIMAL = String.format("%.2f", (Math.random() * 20000) / 100.0);
     private static final String DATE = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
@@ -127,8 +130,21 @@ public class EntityFieldsTest extends BaseTest {
             case "draft":
                 Assert.assertEquals(entityTypeIconUnicode, "f040", "Wrong draft icon, expected '\\f040'");
                 break;
-             default:
-                 throw new RuntimeException("Unexpected entity type");
+            default:
+                throw new RuntimeException("Unexpected entity type");
+        }
+    }
+
+    private void verifyEntityTypeIcon(String iconUnicode, String entityType) {
+        switch (entityType) {
+            case "record":
+                Assert.assertEquals(iconUnicode, "f046", "Wrong record icon, expected '\\f046'");
+                break;
+            case "draft":
+                Assert.assertEquals(iconUnicode, "f040", "Wrong draft icon, expected '\\f040'");
+                break;
+            default:
+                throw new RuntimeException("Unexpected entity type");
         }
     }
 
@@ -155,6 +171,14 @@ public class EntityFieldsTest extends BaseTest {
         }
     }
 
+    private void verifyEntityData(List<String> actual, String[] expected) {
+        Assert.assertEquals(actual.size(), expected.length);
+        expected[4] = formatDecimal(expected[4]);
+        for (int i = 1; i < actual.size(); i++) {
+            Assert.assertEquals(actual.get(i), expected[i]);
+        }
+    }
+
     private void resetUserData(WebDriver driver) {
         ProjectUtils.click(driver, driver.findElement(By.id("navbarDropdownProfile")));
         ProjectUtils.click(driver, driver.findElement(By.xpath("//a[contains(text(), 'Reset')]")));
@@ -168,13 +192,13 @@ public class EntityFieldsTest extends BaseTest {
         resetUserData(driver);
 
         CURRENT_USER = getCurrentUser();
-        final String[] expectedValues = {null, TITLE, COMMENT, INT, DECIMAL, DATE, DATE_TIME, null, CURRENT_USER, null, null};
+        final String[] expectedValues = {null, TITLE, COMMENTS, INT, DECIMAL, DATE, DATE_TIME, null, CURRENT_USER, null, null};
 
         goFieldsPage();
         driver.findElement(createNewIcon).click();
         getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(titleInputField));
         sendKeys(titleInputField, TITLE);
-        sendKeys(commentInputField, COMMENT);
+        sendKeys(commentInputField, COMMENTS);
         sendKeys(intInputField, INT);
         sendKeys(decimalInputField, DECIMAL);
         sendKeys(dateInputField, DATE);
@@ -191,24 +215,24 @@ public class EntityFieldsTest extends BaseTest {
     @Test
     public void createNewDraftTest() {
 
-        WebDriver driver = getDriver();
-        driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+        String[] expectedValues = {"", TITLE, COMMENTS, "0", "0", "", "", "", CURRENT_USER, ""};
 
-        CURRENT_USER = getCurrentUser();
-        final String[] expectedValues = {null, TITLE, COMMENT, "0", "0", null, null, null, CURRENT_USER, null, null};
+        MainPage mainPage = new MainPage(getDriver());
+        CURRENT_USER = expectedValues[8] = mainPage.getCurrentUser();
 
-        goFieldsPage();
-        click(createNewIcon);
-        getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(titleInputField));
-        sendKeys(titleInputField, TITLE);
-        sendKeys(commentInputField, COMMENT);
-        selectUser(CURRENT_USER);
-        clickButton("draft");
+        FieldsEditPage fieldsEditPage = mainPage
+                .clickMenuFields()
+                .clickNewButton();
 
-        List<WebElement> records = getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(rows));
-        Assert.assertEquals(records.size(), 1);
-        verifyEntityData(records.get(0), expectedValues);
-        verifyEntityTypeIcon("draft");
+        FieldsPage fieldsPage = fieldsEditPage
+                .fillTitle(TITLE)
+                .fillComments(COMMENTS)
+                .selectUser(CURRENT_USER)
+                .clickSaveDraftButton();
+
+        Assert.assertEquals(fieldsPage.getRowCount(), 1);
+        verifyEntityData(fieldsPage.getRecordData(0), expectedValues);
+        verifyEntityTypeIcon(fieldsPage.getEntityIconUnicode(0), "draft");
     }
 
     @Test(dependsOnMethods = "createNewRecordTest")

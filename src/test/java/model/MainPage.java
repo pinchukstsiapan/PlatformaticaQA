@@ -1,10 +1,15 @@
 package model;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public final class MainPage extends BasePage {
+
+    @FindBy(id = "navbarDropdownProfile")
+    WebElement userProfileButton;
 
     @FindBy(xpath = "//li[@id = 'pa-menu-item-45']")
     private WebElement menuFields;
@@ -27,4 +32,12 @@ public final class MainPage extends BasePage {
 
         return new ImportValuesPage(getDriver());
     }
+
+    public String getCurrentUser() {
+        String profileButtonText = getWait().until(ExpectedConditions.visibilityOf(userProfileButton)).getText();
+        String currentUser = profileButtonText.split(" ")[1].toLowerCase();
+
+        return currentUser;
+    }
+
 }
