@@ -9,7 +9,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class FieldsPage extends BasePage {
+public final class FieldsPage extends MainPage {
 
     @FindBy(xpath = "//i[text() = 'create_new_folder']")
     private WebElement buttonNew;
@@ -61,12 +61,18 @@ public final class FieldsPage extends BasePage {
         return rows.get(rowNumber).findElement(By.xpath("//td[2]/a/div")).getText();
     }
 
-    public FieldsEditPage editEntity(int rowNumber) {
+    public FieldsEditPage clickEntityMenuEditButton(int rowNumber) {
         WebElement row = rows.get(rowNumber);
         click(row.findElement(By.tagName("button")));
         click(row.findElement(By.xpath("//li/a[contains(@href, 'edit')]")));
 
         return new FieldsEditPage(getDriver());
+    }
+
+    public void clickEntityMenuDeleteButton(int rowNumber) {
+        WebElement row = rows.get(rowNumber);
+        click(row.findElement(By.tagName("button")));
+        click(row.findElement(By.xpath("//li/a[contains(@href, 'delete')]")));
     }
 
 }

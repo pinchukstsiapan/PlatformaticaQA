@@ -4,20 +4,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
+import model.*;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.annotations.Test;
 import org.testng.Assert;
 import runner.BaseTest;
-import runner.ProjectUtils;
 import runner.type.Run;
 import runner.type.RunType;
-import model.FieldsEditPage;
-import model.FieldsPage;
-import model.MainPage;
-import model.ErrorPage;
 
 @Run(run = RunType.Multiple)
 public class EntityFieldsTest extends BaseTest {
@@ -38,23 +31,12 @@ public class EntityFieldsTest extends BaseTest {
     private static String RANDOM_USER = null;
     private static String CURRENT_USER = null;
 
-    private static final By fieldsPageButtonIcon = By.xpath("//p[contains(text(), ' Fields ')]/..");
-    private static final By rows = By.xpath("//tbody/tr");
-    private static final By recycleBinIcon = By.cssSelector("a[href*=recycle] > i");
-
-    private void goFieldsPage() {
-        WebDriver driver = getDriver();
-        ProjectUtils.click(driver, driver.findElement(fieldsPageButtonIcon));
-    }
-
-    private void click(By by) {
-        getWebDriverWait().until(ExpectedConditions.elementToBeClickable(by)).click();
-    }
-
-    private void clickSandwichAction(WebElement row, String menuItem) throws InterruptedException {
-        row.findElement(By.tagName("button")).click();
-        Thread.sleep(500);
-        row.findElement(By.xpath(String.format("//li/a[contains(@href, '%s')]", menuItem.toLowerCase()))).click();
+    private void verifyEntityData(List<String> actual, String[] expected) {
+        Assert.assertEquals(actual.size(), expected.length);
+        expected[4] = formatDecimal(expected[4]);
+        for (int i = 1; i < actual.size(); i++) {
+            Assert.assertEquals(actual.get(i), expected[i]);
+        }
     }
 
     private void verifyEntityTypeIcon(String iconUnicode, String entityType) {
@@ -80,14 +62,6 @@ public class EntityFieldsTest extends BaseTest {
         DecimalFormat format = new DecimalFormat();
         format.setDecimalSeparatorAlwaysShown(false);
         return format.format(Double.valueOf(decimalString));
-    }
-
-    private void verifyEntityData(List<String> actual, String[] expected) {
-        Assert.assertEquals(actual.size(), expected.length);
-        expected[4] = formatDecimal(expected[4]);
-        for (int i = 1; i < actual.size(); i++) {
-            Assert.assertEquals(actual.get(i), expected[i]);
-        }
     }
 
     @Test
@@ -147,7 +121,7 @@ public class EntityFieldsTest extends BaseTest {
         String[] expectedValues = {"", NEW_TITLE, NEW_COMMENTS, NEW_INT, NEW_DECIMAL, NEW_DATE, NEW_DATE_TIME, "", RANDOM_USER, ""};
 
         MainPage mainPage = new MainPage(getDriver());
-        FieldsEditPage fieldsEditsPage = mainPage.clickMenuFields().editEntity(0);
+        FieldsEditPage fieldsEditsPage = mainPage.clickMenuFields().clickEntityMenuEditButton(0);
 
         RANDOM_USER = expectedValues[8] = fieldsEditsPage.getRandomUser();
         FieldsPage fieldsPage = fieldsEditsPage
@@ -168,22 +142,16 @@ public class EntityFieldsTest extends BaseTest {
     @Test(dependsOnMethods = {"createNewRecordTest", "editRecordTest"})
     public void deleteRecordTest() throws InterruptedException {
 
-        WebDriver driver = getDriver();
-        driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+        FieldsPage fieldsPage = new FieldsPage(getDriver());
+        final String recordTitle = fieldsPage.clickMenuFields().getTitle(0);
+        fieldsPage.clickEntityMenuDeleteButton(0);
 
-        goFieldsPage();
-        WebElement record = getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(rows));
-        final String recordTitle = record.findElement(By.xpath("//td[2]")).getText();
-        clickSandwichAction(record, "delete");
+        Assert.assertEquals(fieldsPage.getRowCount(), 0, "Record has not been deleted");
 
-        WebElement card = getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div.card-body")));
-        Assert.assertEquals(card.getText(), "", "Record has not been deleted");
+        RecycleBinPage recycleBinPage = fieldsPage.clickRecycleBin();
 
-        click(recycleBinIcon);
-        List<WebElement> deletedItems = getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(rows));
-        Assert.assertEquals(deletedItems.size(), 1);
-        Assert.assertEquals(deletedItems.get(0).findElement(By.xpath("//span[contains(text(), 'Title:')]/b")).getText(),
-                recordTitle);
+        Assert.assertEquals(recycleBinPage.getRowCount(), 1);
+        Assert.assertEquals(recycleBinPage.getDeletedEntityTitle(0), recordTitle);
     }
 
     @Test

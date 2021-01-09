@@ -5,13 +5,16 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-public final class MainPage extends BasePage {
+public class MainPage extends BasePage {
 
     @FindBy(id = "navbarDropdownProfile")
     WebElement userProfileButton;
 
     @FindBy(xpath = "//a[contains(text(), 'Reset')]")
     WebElement resetButton;
+
+    @FindBy(css = "a[href*=recycle] > i")
+    private WebElement recycleBinIcon;
 
     @FindBy(xpath = "//li[@id = 'pa-menu-item-45']")
     private WebElement menuFields;
@@ -30,7 +33,7 @@ public final class MainPage extends BasePage {
     }
 
     public ImportValuesPage clickMenuImportValues() {
-        click(menuImportValues);
+        menuImportValues.click();
 
         return new ImportValuesPage(getDriver());
     }
@@ -47,6 +50,12 @@ public final class MainPage extends BasePage {
         click(resetButton);
 
         return this;
+    }
+
+    public RecycleBinPage clickRecycleBin (){
+        click(recycleBinIcon);
+
+        return new RecycleBinPage(getDriver());
     }
 
 }

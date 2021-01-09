@@ -9,7 +9,7 @@ import runner.ProjectUtils;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public final class FieldsEditPage extends BasePage {
+public final class FieldsEditPage extends MainPage {
 
     @FindBy(id = "title")
     private WebElement inputTitle;
