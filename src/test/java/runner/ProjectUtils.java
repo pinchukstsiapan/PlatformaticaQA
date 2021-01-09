@@ -10,6 +10,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import runner.type.ProfileType;
 
+import java.util.UUID;
+
 public abstract class ProjectUtils {
 
     @Deprecated
@@ -79,5 +81,9 @@ public abstract class ProjectUtils {
 
     public static void inputKeys(WebDriver driver, WebElement element, double keys) throws InterruptedException {
         inputKeys(driver, element, String.valueOf(keys));
+    }
+
+    public static String createRandomString(){
+        return UUID.randomUUID().toString();
     }
 }
