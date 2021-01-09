@@ -140,7 +140,7 @@ public class EntityFieldsTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = {"createNewRecordTest", "editRecordTest"})
-    public void deleteRecordTest() throws InterruptedException {
+    public void deleteRecordTest() {
 
         FieldsPage fieldsPage = new FieldsPage(getDriver());
         final String recordTitle = fieldsPage.clickMenuFields().getTitle(0);

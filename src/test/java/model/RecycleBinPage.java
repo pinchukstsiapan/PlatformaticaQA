@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import java.util.List;
 
-public final class RecycleBinPage extends BasePage {
+public final class RecycleBinPage extends MainPage {
 
     @FindBy(className = "card-body")
     private WebElement body;
