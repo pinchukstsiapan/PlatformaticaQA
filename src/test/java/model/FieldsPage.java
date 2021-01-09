@@ -60,4 +60,13 @@ public final class FieldsPage extends BasePage {
     public String getTitle(int rowNumber) {
         return rows.get(rowNumber).findElement(By.xpath("//td[2]/a/div")).getText();
     }
+
+    public FieldsEditPage editEntity(int rowNumber) {
+        WebElement row = rows.get(rowNumber);
+        click(row.findElement(By.tagName("button")));
+        click(row.findElement(By.xpath("//li/a[contains(@href, 'edit')]")));
+
+        return new FieldsEditPage(getDriver());
+    }
+
 }

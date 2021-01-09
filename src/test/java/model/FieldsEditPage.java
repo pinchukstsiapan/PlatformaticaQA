@@ -6,6 +6,8 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import runner.ProjectUtils;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public final class FieldsEditPage extends BasePage {
 
@@ -26,6 +28,9 @@ public final class FieldsEditPage extends BasePage {
 
     @FindBy(id = "datetime")
     private WebElement inputDateTime;
+
+    @FindBy(css = "select#user > option")
+    private List<WebElement> selectUserAllUsers;
 
     @FindBy(css = "div[class$=inner-inner]")
     private WebElement selectedUser;
@@ -85,6 +90,13 @@ public final class FieldsEditPage extends BasePage {
         ProjectUtils.sendKeys(inputInt, int_);
 
         return this;
+    }
+
+    public String getRandomUser() {
+        List<WebElement> userList = selectUserAllUsers;
+        String randomUser = userList.get(ThreadLocalRandom.current().nextInt(1, userList.size())).getText();
+
+        return randomUser;
     }
 
     public FieldsEditPage selectUser(String user) {
