@@ -181,6 +181,8 @@ public class EntityPlaceholderTest extends BaseTest {
         WebElement menuDelete = driver.findElement(By.xpath("//a[contains(text(),'delete')]"));
         ProjectUtils.click(driver, menuDelete);
     }
+
+    @Ignore
     @Test
     public void deleteRecord() {
 
