@@ -34,7 +34,14 @@ public abstract class BasePage {
     }
 
     public static void fill(WebElement element, String text) {
-        webDriverWait.until(ExpectedConditions.visibilityOf(element)).sendKeys(text);
+        webDriverWait.until(ExpectedConditions.visibilityOf(element));
+        if (element.toString().toLowerCase().contains("date")) {
+            element.click();
+        }
+        if (!element.getAttribute("value").isEmpty()) {
+            element.clear();
+        }
+        element.sendKeys(text);
         webDriverWait.until(d -> element.getAttribute("value").equals(text));
     }
 

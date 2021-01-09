@@ -21,6 +21,12 @@ public final class FieldsEditPage extends BasePage {
     @FindBy(id = "decimal")
     private WebElement inputDecimal;
 
+    @FindBy(id = "date")
+    private WebElement inputDate;
+
+    @FindBy(id = "datetime")
+    private WebElement inputDateTime;
+
     @FindBy(css = "div[class$=inner-inner]")
     private WebElement selectedUser;
 
@@ -57,6 +63,18 @@ public final class FieldsEditPage extends BasePage {
 
     public FieldsEditPage fillDecimal(String decimal_) {
         fill(inputDecimal, decimal_);
+
+        return this;
+    }
+
+    public FieldsEditPage fillDate(String date) {
+        fill(inputDate, date);
+
+        return this;
+    }
+
+    public FieldsEditPage fillDateTime(String dateTime) {
+        fill(inputDateTime, dateTime);
 
         return this;
     }

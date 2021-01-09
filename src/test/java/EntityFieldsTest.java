@@ -63,14 +63,6 @@ public class EntityFieldsTest extends BaseTest {
         getWebDriverWait().until(ExpectedConditions.elementToBeClickable(by)).click();
     }
 
-    private String getCurrentUser() {
-        String profileButtonText = getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(By
-                .id("navbarDropdownProfile"))).getText();
-        String currentUser = profileButtonText.split(" ")[1].toLowerCase();
-
-        return currentUser;
-    }
-
     private String getRandomUser() {
         List<WebElement> userList = getDriver().findElements(By.cssSelector("select#user > option"));
         String randomUser = userList.get(ThreadLocalRandom.current().nextInt(1, userList.size())).getText();
@@ -187,29 +179,28 @@ public class EntityFieldsTest extends BaseTest {
     @Test
     public void createNewRecordTest() {
 
-        WebDriver driver = getDriver();
-        driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
-        resetUserData(driver);
+            String[] expectedValues = {"", TITLE, COMMENTS, INT, DECIMAL, DATE, DATE_TIME, "", CURRENT_USER, ""};
 
-        CURRENT_USER = getCurrentUser();
-        final String[] expectedValues = {null, TITLE, COMMENTS, INT, DECIMAL, DATE, DATE_TIME, null, CURRENT_USER, null, null};
+            MainPage mainPage = new MainPage(getDriver());
+            CURRENT_USER = expectedValues[8] = mainPage.getCurrentUser();
 
-        goFieldsPage();
-        driver.findElement(createNewIcon).click();
-        getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(titleInputField));
-        sendKeys(titleInputField, TITLE);
-        sendKeys(commentInputField, COMMENTS);
-        sendKeys(intInputField, INT);
-        sendKeys(decimalInputField, DECIMAL);
-        sendKeys(dateInputField, DATE);
-        sendKeys(dateTimeInputField, DATE_TIME);
-        selectUser(CURRENT_USER);
-        clickButton("save");
+            FieldsEditPage fieldsEditPage = mainPage
+                    .clickMenuFields()
+                    .clickNewButton();
 
-        List<WebElement> records = getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(rows));
-        Assert.assertEquals(records.size(), 1);
-        verifyEntityData(records.get(0), expectedValues);
-        verifyEntityTypeIcon("record");
+            FieldsPage fieldsPage = fieldsEditPage
+                    .fillTitle(TITLE)
+                    .fillComments(COMMENTS)
+                    .fillInt(INT)
+                    .fillDecimal(DECIMAL)
+                    .fillDate(DATE)
+                    .fillDateTime(DATE_TIME)
+                    .selectUser(CURRENT_USER)
+                    .clickSaveButton();
+
+            Assert.assertEquals(fieldsPage.getRowCount(), 1);
+            verifyEntityData(fieldsPage.getRecordData(0), expectedValues);
+            verifyEntityTypeIcon(fieldsPage.getEntityIconUnicode(0), "record");
     }
 
     @Test
