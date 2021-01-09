@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Run(run = RunType.Multiple)
-public class EntityFieldsAlexTest extends BaseTest {
+public class EntityFieldsCopyTest extends BaseTest {
 
     private static final By FIELDS_BUTTON = By.id("pa-menu-item-45");
     private static final By CREATE_newRecord = By.xpath("//i[text() = 'create_new_folder']");
