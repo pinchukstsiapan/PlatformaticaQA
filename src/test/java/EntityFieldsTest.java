@@ -19,6 +19,7 @@ import runner.type.RunType;
 import model.FieldsEditPage;
 import model.FieldsPage;
 import model.MainPage;
+import model.ErrorPage;
 
 @Run(run = RunType.Multiple)
 public class EntityFieldsTest extends BaseTest {
@@ -141,9 +142,9 @@ public class EntityFieldsTest extends BaseTest {
     }
 
     private void verifyDataTypeError() {
-        WebElement error = getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(errorMessage));
-        Assert.assertTrue(error.isDisplayed());
-        Assert.assertEquals(error.getText(), "Error saving entity");
+        ErrorPage errorPage = new ErrorPage(getDriver());
+        Assert.assertTrue(errorPage.isErrorMessageDisplayed());
+        Assert.assertEquals(errorPage.getErrorMessage(), "Error saving entity");
     }
 
     private String formatDecimal(String decimalString) {
@@ -169,11 +170,6 @@ public class EntityFieldsTest extends BaseTest {
         for (int i = 1; i < actual.size(); i++) {
             Assert.assertEquals(actual.get(i), expected[i]);
         }
-    }
-
-    private void resetUserData(WebDriver driver) {
-        ProjectUtils.click(driver, driver.findElement(By.id("navbarDropdownProfile")));
-        ProjectUtils.click(driver, driver.findElement(By.xpath("//a[contains(text(), 'Reset')]")));
     }
 
     @Test
@@ -280,13 +276,11 @@ public class EntityFieldsTest extends BaseTest {
     @Test
     public void invalidIntEntryCreateTest() {
 
-        WebDriver driver = getDriver();
-        resetUserData(driver);
-
-        goFieldsPage();
-        click(createNewIcon);
-        sendKeys(intInputField, INVALID_ENTRY);
-        clickButton("save");
+        new MainPage(getDriver())
+                .clickMenuFields()
+                .clickNewButton()
+                .fillInt(INVALID_ENTRY)
+                .clickSaveButton();
 
         verifyDataTypeError();
     }
@@ -294,13 +288,11 @@ public class EntityFieldsTest extends BaseTest {
     @Test
     public void invalidDecimalEntryCreateTest() {
 
-        WebDriver driver = getDriver();
-        resetUserData(driver);
-
-        goFieldsPage();
-        click(createNewIcon);
-        sendKeys(decimalInputField, INVALID_ENTRY);
-        clickButton("save");
+        new MainPage(getDriver())
+                .clickMenuFields()
+                .clickNewButton()
+                .fillDecimal(INVALID_ENTRY)
+                .clickSaveButton();
 
         verifyDataTypeError();
     }
