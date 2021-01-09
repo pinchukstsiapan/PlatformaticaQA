@@ -33,10 +33,14 @@ public abstract class BasePage {
         return actions;
     }
 
+    public static void click(WebElement element) {
+        webDriverWait.until(ExpectedConditions.elementToBeClickable(element)).click();
+    }
+
     public static void fill(WebElement element, String text) {
         webDriverWait.until(ExpectedConditions.visibilityOf(element));
         if (element.toString().toLowerCase().contains("date")) {
-            element.click();
+            click(element);
         }
         if (!element.getAttribute("value").isEmpty()) {
             element.clear();

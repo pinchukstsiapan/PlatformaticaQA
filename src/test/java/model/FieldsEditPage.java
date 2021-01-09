@@ -96,13 +96,13 @@ public final class FieldsEditPage extends BasePage {
     }
 
     public FieldsPage clickSaveButton() {
-        saveButton.click();
+        click(saveButton);
 
         return new FieldsPage(getDriver());
     }
 
     public FieldsPage clickSaveDraftButton() {
-        saveDraftButton.click();
+        click(saveDraftButton);
 
         return new FieldsPage(getDriver());
     }

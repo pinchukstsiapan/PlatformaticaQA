@@ -185,6 +185,7 @@ public class EntityFieldsTest extends BaseTest {
             CURRENT_USER = expectedValues[8] = mainPage.getCurrentUser();
 
             FieldsEditPage fieldsEditPage = mainPage
+                    .resetUserData()
                     .clickMenuFields()
                     .clickNewButton();
 

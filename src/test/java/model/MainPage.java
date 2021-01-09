@@ -11,6 +11,9 @@ public final class MainPage extends BasePage {
     @FindBy(id = "navbarDropdownProfile")
     WebElement userProfileButton;
 
+    @FindBy(xpath = "//a[contains(text(), 'Reset')]")
+    WebElement resetButton;
+
     @FindBy(xpath = "//li[@id = 'pa-menu-item-45']")
     private WebElement menuFields;
 
@@ -22,13 +25,13 @@ public final class MainPage extends BasePage {
     }
 
     public FieldsPage clickMenuFields() {
-        menuFields.click();
+        click(menuFields);
 
         return new FieldsPage(getDriver());
     }
 
     public ImportValuesPage clickMenuImportValues() {
-        menuImportValues.click();
+        click(menuImportValues);
 
         return new ImportValuesPage(getDriver());
     }
@@ -38,6 +41,13 @@ public final class MainPage extends BasePage {
         String currentUser = profileButtonText.split(" ")[1].toLowerCase();
 
         return currentUser;
+    }
+
+    public MainPage resetUserData() {
+        click(userProfileButton);
+        click(resetButton);
+
+        return this;
     }
 
 }
