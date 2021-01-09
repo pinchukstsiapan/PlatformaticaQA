@@ -5,6 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
@@ -53,6 +54,7 @@ public class EntityCalendarTest extends BaseTest {
         driver.findElement(By.xpath("//div[contains(text(), '" + string + "')]"));
     }
 
+    @Ignore
     @Test(dependsOnMethods = "newCalendar")
     public void editCalendar() throws InterruptedException {
 
