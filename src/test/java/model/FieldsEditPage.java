@@ -106,6 +106,12 @@ public final class FieldsEditPage extends MainPage {
         return new FieldsPage(getDriver());
     }
 
+    public ErrorPage clickSaveButtonErrorExpected() {
+        click(saveButton);
+        return new ErrorPage(getDriver());
+    }
+
+
     public FieldsPage clickSaveDraftButton() {
         click(saveDraftButton);
         return new FieldsPage(getDriver());

@@ -14,10 +14,6 @@ public class ErrorPage extends BasePage {
         super(driver);
     }
 
-    public boolean isErrorMessageDisplayed() {
-        return getWait().until(ExpectedConditions.visibilityOf(errorMessage)).isDisplayed();
-    }
-
     public String getErrorMessage() {
         return getWait().until(ExpectedConditions.visibilityOf(errorMessage)).getText();
     }

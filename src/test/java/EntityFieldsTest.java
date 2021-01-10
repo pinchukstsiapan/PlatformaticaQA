@@ -28,6 +28,7 @@ public class EntityFieldsTest extends BaseTest {
     private static final String NEW_DATE = "25/10/2018";
     private static final String NEW_DATE_TIME = "25/10/2018 08:22:05";
     private static final String INVALID_ENTRY = "a";
+    private static final String ERROR_MESSAGE = "Error saving entity";
     private static String RANDOM_USER = null;
     private static String CURRENT_USER = null;
 
@@ -50,12 +51,6 @@ public class EntityFieldsTest extends BaseTest {
             default:
                 throw new RuntimeException("Unexpected entity type");
         }
-    }
-
-    private void verifyDataTypeError() {
-        ErrorPage errorPage = new ErrorPage(getDriver());
-        Assert.assertTrue(errorPage.isErrorMessageDisplayed());
-        Assert.assertEquals(errorPage.getErrorMessage(), "Error saving entity");
     }
 
     private String formatDecimal(String decimalString) {
@@ -156,25 +151,25 @@ public class EntityFieldsTest extends BaseTest {
     @Test
     public void invalidIntEntryCreateTest() {
 
-        new MainPage(getDriver())
+        ErrorPage errorPage = new FieldsPage(getDriver())
                 .clickMenuFields()
                 .clickNewButton()
                 .fillInt(INVALID_ENTRY)
-                .clickSaveButton();
+                .clickSaveButtonErrorExpected();
 
-        verifyDataTypeError();
+        Assert.assertEquals(errorPage.getErrorMessage(), ERROR_MESSAGE);
     }
 
     @Test
     public void invalidDecimalEntryCreateTest() {
 
-        new MainPage(getDriver())
+        ErrorPage errorPage = new FieldsPage(getDriver())
                 .clickMenuFields()
                 .clickNewButton()
                 .fillDecimal(INVALID_ENTRY)
-                .clickSaveButton();
+                .clickSaveButtonErrorExpected();
 
-        verifyDataTypeError();
+        Assert.assertEquals(errorPage.getErrorMessage(), ERROR_MESSAGE);
     }
 
 }
