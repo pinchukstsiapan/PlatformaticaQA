@@ -182,6 +182,8 @@ public class EntityDefaultTest extends BaseTest {
         ProjectUtils.click(driver, createFolder);
 
         assertAndReplace(driver, BY_STRING, defaultValues.fieldString, changedDefaultValues.fieldString, false);
+
+int i = 1/Integer.parseInt("0");
         assertAndReplace(driver, BY_TEXT, defaultValues.fieldText, changedDefaultValues.fieldText, false);
         assertAndReplace(driver, BY_INT, defaultValues.fieldInt, changedDefaultValues.fieldInt, false);
         assertAndReplace(driver, BY_DECIMAL, defaultValues.fieldDecimal, changedDefaultValues.fieldDecimal, false);
@@ -231,6 +233,8 @@ public class EntityDefaultTest extends BaseTest {
         newField.clear();
         newField.sendKeys(changedDefaultValues.fieldString);
 
+int i = 1/Integer.parseInt("0");
+
         WebElement saveBtn = driver.findElement(BY_SAVE_BUTTON);
         ProjectUtils.click(driver,saveBtn);
 
@@ -270,6 +274,7 @@ public class EntityDefaultTest extends BaseTest {
         Select userSelect = new Select(driver.findElement(By.xpath("//select[@id = 'user']")));
         userSelect.selectByVisibleText(newValues.fieldUser);
 
+int i = 1/Integer.parseInt("0");
         WebElement saveButton = driver.findElement(BY_SAVE_BUTTON);
         ProjectUtils.click(driver, saveButton);
 
