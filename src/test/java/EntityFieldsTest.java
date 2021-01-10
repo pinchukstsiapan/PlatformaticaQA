@@ -5,6 +5,7 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import model.*;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import org.testng.Assert;
 import runner.BaseTest;
@@ -18,6 +19,8 @@ public class EntityFieldsTest extends BaseTest {
     private static final String COMMENTS = RandomStringUtils.randomAlphanumeric(25);
     private static final String INT = Integer.toString(ThreadLocalRandom.current().nextInt(100, 200));
     private static final String DECIMAL = "12.34";
+    private static final String DECIMAL_ENDS_ZERO = "1.10";
+    private static final String ALL_ZERO_AFTER_DECIMAL = "1.00";
     private static final String DATE = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
     private static final String DATE_TIME = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
     private static final String NEW_TITLE = String.format("%s_EditTextAllNew", UUID.randomUUID().toString());
@@ -177,6 +180,25 @@ public class EntityFieldsTest extends BaseTest {
                 .clickSaveButtonErrorExpected();
 
         Assert.assertEquals(errorPage.getErrorMessage(), ERROR_MESSAGE);
+    }
+
+    @Ignore
+    @Test(dependsOnMethods = "deleteDraftTest")
+    public void entityDecimalEndsZeroTest() {
+
+        FieldsPage fieldsPage = new FieldsPage(getDriver())
+                .open()
+                .clickNewButton()
+                .fillDecimal(DECIMAL_ENDS_ZERO)
+                .clickSaveButton();
+
+        Assert.assertEquals(fieldsPage.getDecimal(0), DECIMAL_ENDS_ZERO);
+
+        fieldsPage.clickEntityMenuEditButton(0)
+                .fillDecimal(ALL_ZERO_AFTER_DECIMAL)
+                .clickSaveButton();
+
+        Assert.assertEquals(fieldsPage.getDecimal(0), ALL_ZERO_AFTER_DECIMAL);
     }
 
 }

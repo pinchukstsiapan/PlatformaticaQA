@@ -67,6 +67,12 @@ public final class FieldsPage extends MainPage {
         return rows.get(rowNumber).findElement(By.xpath("//td[2]/a/div")).getText();
     }
 
+    public String getDecimal(int rowNumber) {
+        return rows.get(rowNumber).findElement(By.xpath("//td[5]/a/div")).getText();
+
+    }
+
+
     public FieldsEditPage clickEntityMenuEditButton(int rowNumber) {
         WebElement row = rows.get(rowNumber);
         click(row.findElement(By.tagName("button")));
