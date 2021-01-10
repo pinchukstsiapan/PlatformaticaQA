@@ -1,4 +1,3 @@
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +17,7 @@ public class EntityFieldsTest extends BaseTest {
     private static final String TITLE = UUID.randomUUID().toString();
     private static final String COMMENTS = RandomStringUtils.randomAlphanumeric(25);
     private static final String INT = Integer.toString(ThreadLocalRandom.current().nextInt(100, 200));
-    private static final String DECIMAL = String.format("%.2f", (Math.random() * 20000) / 100.0);
+    private static final String DECIMAL = "12.34";
     private static final String DATE = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
     private static final String DATE_TIME = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
     private static final String NEW_TITLE = String.format("%s_EditTextAllNew", UUID.randomUUID().toString());
@@ -34,7 +33,6 @@ public class EntityFieldsTest extends BaseTest {
 
     private void verifyEntityData(List<String> actual, String[] expected) {
         Assert.assertEquals(actual.size(), expected.length);
-        expected[4] = formatDecimal(expected[4]);
         for (int i = 1; i < actual.size(); i++) {
             Assert.assertEquals(actual.get(i), expected[i]);
         }
@@ -51,12 +49,6 @@ public class EntityFieldsTest extends BaseTest {
             default:
                 throw new RuntimeException("Unexpected entity type");
         }
-    }
-
-    private String formatDecimal(String decimalString) {
-        DecimalFormat format = new DecimalFormat();
-        format.setDecimalSeparatorAlwaysShown(false);
-        return format.format(Double.valueOf(decimalString));
     }
 
     @Test
