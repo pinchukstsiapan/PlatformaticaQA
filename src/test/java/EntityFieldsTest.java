@@ -73,7 +73,6 @@ public class EntityFieldsTest extends BaseTest {
             CURRENT_USER = expectedValues[8] = mainPage.getCurrentUser();
 
             FieldsEditPage fieldsEditPage = mainPage
-                    .resetUserData()
                     .clickMenuFields()
                     .clickNewButton();
 
@@ -92,7 +91,7 @@ public class EntityFieldsTest extends BaseTest {
             verifyEntityTypeIcon(fieldsPage.getEntityIconUnicode(0), "record");
     }
 
-    @Test
+    @Test(dependsOnMethods = "deleteRecordTest")
     public void createNewDraftTest() {
 
         String[] expectedValues = {"", TITLE, COMMENTS, "0", "0", "", "", "", CURRENT_USER, ""};
@@ -139,7 +138,7 @@ public class EntityFieldsTest extends BaseTest {
         verifyEntityTypeIcon(fieldsPage.getEntityIconUnicode(0), "record");
     }
 
-    @Test(dependsOnMethods = {"createNewRecordTest", "editRecordTest"})
+    @Test(dependsOnMethods = "editRecordTest")
     public void deleteRecordTest() {
 
         FieldsPage fieldsPage = new FieldsPage(getDriver());
