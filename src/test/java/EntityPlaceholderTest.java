@@ -1,3 +1,4 @@
+import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,98 +9,88 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
-
 import java.util.List;
 import java.util.UUID;
 
 public class EntityPlaceholderTest extends BaseTest {
 
+    private final String TITLE = UUID.randomUUID().toString();
+    private final String COMMENTS = RandomStringUtils.randomAlphabetic(50);
+    private final String INT_NUMBER = String.valueOf((int) (Math.random() * 100000000));
+    private final String userSelected = "User 2";
+
+    By placeholderButtonXpath = By.xpath("//p[contains(text(),'Placeholder')]/preceding-sibling::i");
+    By createNewFolderXpath = By.xpath("//i[contains(text(),'create_new_folder')]");
+    By inputTitleXpath = By.xpath("//input[@placeholder='String placeholder']");
+    By inputCommentsXpath = By.xpath("//textarea[@placeholder='Text placeholder']");
+    By inputIntNumberXpath = By.xpath("//input[@id='int']");
+    By inputDecimalXpath = By.xpath("//input[@id='decimal']");
+    By saveButtonXpath = By.id("pa-entity-form-save-btn");
+    By newUserSelectedXpath = By.xpath("//span[text()='User 2']");
+
     @Test
     public void inputTest() throws InterruptedException {
 
+        final String decimal = "95.46";
+        String[] array = {null, TITLE, COMMENTS, INT_NUMBER, decimal, null, null, null, null, userSelected, null};
         WebDriver driver = getDriver();
 
-        WebElement tab = driver.findElement(By.xpath("//p[contains(text(),'Placeholder')]/preceding-sibling::i"));
-        ProjectUtils.click(driver, tab);
-        WebElement icon = driver.findElement(By.xpath("//i[contains(text(),'create_new_folder')]"));
-        ProjectUtils.click(driver,icon);
-
-        final String title = UUID.randomUUID().toString();
-        final String comments = "my pretty simple text";
-        final int number = 37;
-        final double value = 18.73;
-
-        WebElement titleElement = driver.findElement(By.xpath("//input[@placeholder='String placeholder']"));
-        titleElement.sendKeys(title);
-        WebElement commentsElement= driver.findElement(By.xpath("//textarea[@placeholder='Text placeholder']"));
-        commentsElement.sendKeys((comments));
-        WebElement numberElement = driver.findElement(By.xpath("//input[@id='int']"));
-        numberElement.sendKeys(String.valueOf(number));
-        WebElement valueElement = driver.findElement(By.xpath("//input[@id='decimal']"));
-        valueElement.sendKeys(String.valueOf(value));
+        ProjectUtils.click(driver, driver.findElement(placeholderButtonXpath));
+        ProjectUtils.click(driver, driver.findElement(createNewFolderXpath));
+        WebElement titleElement = driver.findElement(inputTitleXpath);
+        titleElement.sendKeys(TITLE);
+        WebElement commentsElement = driver.findElement(inputCommentsXpath);
+        commentsElement.sendKeys((COMMENTS));
+        WebElement numberElement = driver.findElement(inputIntNumberXpath);
+        numberElement.sendKeys(INT_NUMBER);
+        WebElement valueElement = driver.findElement(inputDecimalXpath);
+        valueElement.sendKeys(decimal);
         WebElement userSelection = driver.findElement(By.xpath("//div[contains(text(),'Demo')]"));
-        ProjectUtils.click(driver,userSelection);
-        WebElement newUser= driver.findElement(By.xpath("//span[text()='User 2']"));
-        ProjectUtils.click(driver,newUser);
+        ProjectUtils.click(driver, userSelection);
+        ProjectUtils.click(driver, driver.findElement(newUserSelectedXpath));
+        ProjectUtils.click(driver, driver.findElement(saveButtonXpath));
 
-        WebElement submit = driver.findElement(By.id("pa-entity-form-save-btn"));
-        ProjectUtils.click(driver,submit);
-
-        String recordTitleXpath = String.format("//div[contains(text(), '%s')]", title);
-        By newRecordComments = By.xpath(String.format(" %s/../../../td[3]/a/div", recordTitleXpath));
-        By newRecordInt = By.xpath(String.format(" %s/../../../td[4]/a/div", recordTitleXpath));
-        By newRecordVal = By.xpath(String.format(" %s/../../../td[5]/a/div", recordTitleXpath));
-        WebElement createdRecordComments = driver.findElement(newRecordComments);
-        WebElement createdRecordInt = driver.findElement(newRecordInt);
-        WebElement createdRecordVal = driver.findElement(newRecordVal);
-
-        Assert.assertEquals(createdRecordComments.getText(),comments);
-        Assert.assertEquals(createdRecordInt.getText(),Integer.toString(number));
-        Assert.assertEquals(createdRecordVal.getText(),Double.toString(value));
+        List<WebElement> listOfRecords = driver.findElements(By.xpath("//tbody/tr"));
+        List<WebElement> listOfValues = listOfRecords.get(0).findElements(By.xpath("//td"));
+        Assert.assertEquals(listOfValues.size(), array.length);
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] != null) {
+                Assert.assertEquals(listOfValues.get(i).getText(), array[i]);
+            }
+        }
     }
+
     @Ignore
     @Test
     public void verifyDecimal() throws InterruptedException {
 
+        final String newDecimal = "37.0";
+        String[] array = {null, TITLE, COMMENTS, INT_NUMBER, newDecimal, null, null, null, null,userSelected,null};
         WebDriver driver = getDriver();
 
-        WebElement tab = driver.findElement(By.xpath("//p[contains(text(),'Placeholder')]/preceding-sibling::i"));
-        ProjectUtils.click(driver, tab);
-        WebElement icon = driver.findElement(By.xpath("//i[contains(text(),'create_new_folder')]"));
-        ProjectUtils.click(driver,icon);
-
-        final String title = UUID.randomUUID().toString();
-        final String comments = "This is my record";
-        final int number = 1;
-        final double decimalValue = 37.0;
-
-        WebElement titleElement = driver.findElement(By.xpath("//input[@placeholder='String placeholder']"));
-        titleElement.sendKeys(title);
-        WebElement commentsElement= driver.findElement(By.xpath("//textarea[@placeholder='Text placeholder']"));
-        commentsElement.sendKeys((comments));
-        WebElement numberElement = driver.findElement(By.xpath("//input[@id='int']"));
-        numberElement.sendKeys(String.valueOf(number));
-        WebElement valueElement = driver.findElement(By.xpath("//input[@id='decimal']"));
-        valueElement.sendKeys(String.valueOf(decimalValue));
+        ProjectUtils.click(driver, driver.findElement(placeholderButtonXpath));
+        ProjectUtils.click(driver, driver.findElement(createNewFolderXpath));
+        WebElement titleElement = driver.findElement(inputTitleXpath);
+        titleElement.sendKeys(TITLE);
+        WebElement commentsElement = driver.findElement(inputCommentsXpath);
+        commentsElement.sendKeys(COMMENTS);
+        WebElement numberElement = driver.findElement(inputIntNumberXpath);
+        numberElement.sendKeys(INT_NUMBER);
+        WebElement valueElement = driver.findElement(inputDecimalXpath);
+        valueElement.sendKeys(newDecimal);
         WebElement userSelection = driver.findElement(By.xpath("//div[contains(text(),'Demo')]"));
-        ProjectUtils.click(driver,userSelection);
-        WebElement newUser= driver.findElement(By.xpath("//span[text()='User 2']"));
-        ProjectUtils.click(driver,newUser);
+        ProjectUtils.click(driver, userSelection);
+        ProjectUtils.click(driver, driver.findElement(newUserSelectedXpath));
+        ProjectUtils.click(driver, driver.findElement(saveButtonXpath));
 
-        WebElement submit = driver.findElement(By.id("pa-entity-form-save-btn"));
-        ProjectUtils.click(driver,submit);
-
-        String recordTitleXpath = String.format("//div[contains(text(), '%s')]", title);
-        By newRecordComments = By.xpath(String.format(" %s/../../../td[3]/a/div", recordTitleXpath));
-        By newRecordInt = By.xpath(String.format(" %s/../../../td[4]/a/div", recordTitleXpath));
-        By newRecordVal = By.xpath(String.format(" %s/../../../td[5]/a/div", recordTitleXpath));
-        WebElement createdRecordComments = driver.findElement(newRecordComments);
-        WebElement createdRecordInt = driver.findElement(newRecordInt);
-        WebElement createdRecordVal = driver.findElement(newRecordVal);
-
-        Assert.assertEquals(createdRecordComments.getText(),comments);
-        Assert.assertEquals(createdRecordInt.getText(),Integer.toString(number));
-        Assert.assertEquals(createdRecordVal.getText(),Double.toString(decimalValue));
+        List<WebElement> listOfRecords = driver.findElements(By.xpath("//tbody/tr"));
+        List<WebElement> listOfValues = listOfRecords.get(0).findElements(By.xpath("//td"));
+        Assert.assertEquals(listOfValues.size(), array.length);
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] != null) {
+                Assert.assertEquals(listOfValues.get(i).getText(), array[i]);
+            }
+        }
     }
 
     @Test
@@ -190,46 +181,29 @@ public class EntityPlaceholderTest extends BaseTest {
         WebElement menuDelete = driver.findElement(By.xpath("//a[contains(text(),'delete')]"));
         ProjectUtils.click(driver, menuDelete);
     }
+
     @Test
     public void deleteRecord() {
 
-        final String id = UUID.randomUUID().toString();
-
         WebDriver driver = getDriver();
 
-        WebElement tab = driver.findElement(By.xpath("//p[text()=' Placeholder ']"));
-        ProjectUtils.click(driver,tab);
+        ProjectUtils.click(driver,driver.findElement(placeholderButtonXpath));
+        driver.findElement(createNewFolderXpath).click();
+        driver.findElement(By.xpath("//input[@name='entity_form_data[string]']")).sendKeys(TITLE);
+        ProjectUtils.click(driver,driver.findElement( saveButtonXpath));
 
-        WebElement createNewFolder = driver.findElement(By.xpath("//i[contains(text(),'create_new_folder')]"));
-        createNewFolder.click();
+        driver.findElement(By.xpath("(//div[1]/div/ul/li[1]/a/i)[3]")).click();
+        Assert.assertEquals(driver.findElement(By.xpath("(//td/a/div)[1]")).getText(),TITLE);
 
-        WebElement titleElement = driver.findElement(By.xpath("//input[@name='entity_form_data[string]']"));
-        titleElement.sendKeys(id);
-
-        WebElement saveBtn = driver.findElement(By.id("pa-entity-form-save-btn"));
-        ProjectUtils.click(driver,saveBtn);
-
-        WebElement list = driver.findElement(By.xpath("(//div[1]/div/ul/li[1]/a/i)[3]"));
-        list.click();
-
-        WebElement firstColumn = driver.findElement(By.xpath("(//td/a/div)[1]"));
-        Assert.assertEquals(firstColumn.getText(),id);
-
-        WebElement menuAction = driver.findElement(By.xpath("//i[text() = 'menu']/.."));
-        menuAction.click();
-
-        WebElement deleteButton = driver.findElement(By.xpath("//a[contains(text(),'delete')]"));
-        ProjectUtils.click(driver,deleteButton);
+        driver.findElement(By.xpath("//i[text() = 'menu']/..")).click();
+        ProjectUtils.click(driver,driver.findElement(By.xpath("//a[contains(text(),'delete')]")));
 
         new WebDriverWait(driver, 3).until(ExpectedConditions.
-                invisibilityOfElementLocated(By.xpath("//div[contains(text(),'" + id +"')]")));
+                invisibilityOfElementLocated(By.xpath("//div[contains(text(),'" + TITLE +"')]")));
         List<WebElement> listOfElements = driver.findElements(By.xpath("//tbody/tr/.."));
         Assert.assertEquals(listOfElements.size(), 0);
 
-        WebElement recycleButton = driver.findElement(By.xpath("//i[contains(text(),'delete_outline')]/.."));//
-        recycleButton.click();
-
-        WebElement deletedField = driver.findElement(By.xpath("//b[contains(text(),'" + id + "')]"));
-        Assert.assertEquals(deletedField.getText(), id);
+        driver.findElement(By.xpath("//i[contains(text(),'delete_outline')]/..")).click();
+        Assert.assertEquals(driver.findElement(By.xpath("//b[contains(text(),'" + TITLE + "')]")).getText(), TITLE);
     }
 }

@@ -10,6 +10,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import runner.type.ProfileType;
 
+import java.util.UUID;
+
 public abstract class ProjectUtils {
 
     @Deprecated
@@ -22,22 +24,14 @@ public abstract class ProjectUtils {
         return driver;
     }
 
+    @Deprecated
     public static void reset(WebDriver driver) {
-        click(driver, driver.findElement(By.id("navbarDropdownProfile")));
-        click(driver, driver.findElement(By.xpath("//a[contains(text(), 'Reset')]")));
+        ProfileType.DEFAULT.reset(driver);
     }
 
+    @Deprecated
     public static void login(WebDriver driver, ProfileType profileType) {
-        if (Strings.isStringEmpty(profileType.getUserName()) || Strings.isStringEmpty(profileType.getPassword())) {
-            throw new RuntimeException("Username or Password is empty");
-        }
-
-        WebElement loginElement = driver.findElement(By.xpath("//input[@name='login_name']"));
-        loginElement.sendKeys(profileType.getUserName());
-        WebElement pasElement = driver.findElement(By.xpath("//input[@name='password']"));
-        pasElement.sendKeys(profileType.getPassword());
-        WebElement button = driver.findElement(By.xpath("//button[text()='Sign in']"));
-        button.click();
+        profileType.login(driver);
     }
 
     @Deprecated
@@ -50,10 +44,17 @@ public abstract class ProjectUtils {
         executor.executeScript("arguments[0].click()", element);
     }
 
-    public static void sendKeys(WebElement element, String keys) throws InterruptedException {
+    public static void scroll(WebDriver driver, WebElement element) {
+        JavascriptExecutor executor = (JavascriptExecutor)driver;
+        executor.executeScript("arguments[0].scrollIntoView();", element);
+    }
+
+    public static void sendKeys(WebElement element, String keys) {
         for (int i = 0; i< keys.length(); i++) {
             element.sendKeys(keys.substring(i, i + 1));
-            Thread.sleep(100);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ignore) {}
         }
     }
 
@@ -80,5 +81,9 @@ public abstract class ProjectUtils {
 
     public static void inputKeys(WebDriver driver, WebElement element, double keys) throws InterruptedException {
         inputKeys(driver, element, String.valueOf(keys));
+    }
+
+    public static String createRandomString(){
+        return UUID.randomUUID().toString();
     }
 }
