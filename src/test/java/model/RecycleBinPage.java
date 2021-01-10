@@ -15,7 +15,7 @@ public final class RecycleBinPage extends MainPage {
     @FindBy(css = "table tbody > tr")
     private List<WebElement> rows;
 
-    @FindBy(xpath = "//div[@class='card-body'] //table //tbody //tr //td //a //span //b")
+    @FindBy(xpath = "//div[@class='card-body']//table//tbody//tr//td//a//span//b")
     private WebElement firstDeletedImportValue;
 
     public RecycleBinPage(WebDriver driver) {
@@ -34,7 +34,7 @@ public final class RecycleBinPage extends MainPage {
         return rows.get(rowNumber).findElement(By.xpath("//span[contains(text(), 'Title:')]/b")).getText();
     }
 
-    public String getDeletedImportValue(){
+    public String getDeletedImportValue() {
         return firstDeletedImportValue.getText();
     }
 }

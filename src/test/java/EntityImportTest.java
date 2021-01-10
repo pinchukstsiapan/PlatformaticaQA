@@ -1,5 +1,3 @@
-import model.CreateImportValuesPage;
-import model.ImportValuesPage;
 import model.MainPage;
 import model.RecycleBinPage;
 import org.openqa.selenium.By;
@@ -11,24 +9,24 @@ import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
 
+import java.util.UUID;
+
 public class EntityImportTest extends BaseTest {
 
     @Test
     public void deleteRecordFromEntityImport() {
 
-        MainPage mainPage = new MainPage(getDriver());
-        CreateImportValuesPage createImportValuesPage = mainPage
+        final String str = UUID.randomUUID().toString();
+
+        RecycleBinPage recycleBinPage = new MainPage(getDriver())
                 .clickMenuImportValues()
-                .clickCreateImportValues();
-
-        ImportValuesPage importValuesPage = createImportValuesPage
-                .createRecordInEntityImport(getDriver())
-                .findImportValue(createImportValuesPage.getCurrentValue());
-
-        RecycleBinPage recycleBinPage = importValuesPage
+                .clickNewButton()
+                .sendKeys(str)
+                .clickSaveButton()
+                .deleteRecord()
                 .clickRecycleBin();
 
-        Assert.assertTrue(recycleBinPage.getDeletedImportValue().contains(createImportValuesPage.getCurrentValue()));
+        Assert.assertEquals(recycleBinPage.getDeletedImportValue(), str);
     }
 
     @Ignore
