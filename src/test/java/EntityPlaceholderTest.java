@@ -182,47 +182,28 @@ public class EntityPlaceholderTest extends BaseTest {
         ProjectUtils.click(driver, menuDelete);
     }
 
-    @Ignore
     @Test
     public void deleteRecord() {
 
-        final String id = UUID.randomUUID().toString();
-
         WebDriver driver = getDriver();
 
-        WebElement tab = driver.findElement(By.xpath("//p[text()=' Placeholder ']"));
-        ProjectUtils.click(driver,tab);
+        ProjectUtils.click(driver,driver.findElement(placeholderButtonXpath));
+        driver.findElement(createNewFolderXpath).click();
+        driver.findElement(By.xpath("//input[@name='entity_form_data[string]']")).sendKeys(TITLE);
+        ProjectUtils.click(driver,driver.findElement( saveButtonXpath));
 
-        WebElement createNewFolder = driver.findElement(By.xpath("//i[contains(text(),'create_new_folder')]"));
-        createNewFolder.click();
+        driver.findElement(By.xpath("(//div[1]/div/ul/li[1]/a/i)[3]")).click();
+        Assert.assertEquals(driver.findElement(By.xpath("(//td/a/div)[1]")).getText(),TITLE);
 
-        WebElement titleElement = driver.findElement(By.xpath("//input[@name='entity_form_data[string]']"));
-        titleElement.sendKeys(id);
-
-        WebElement saveBtn = driver.findElement(By.id("pa-entity-form-save-btn"));
-        ProjectUtils.click(driver,saveBtn);
-
-        WebElement list = driver.findElement(By.xpath("(//div[1]/div/ul/li[1]/a/i)[3]"));
-        list.click();
-
-        WebElement firstColumn = driver.findElement(By.xpath("(//td/a/div)[1]"));
-        Assert.assertEquals(firstColumn.getText(),id);
-
-        WebElement menuAction = driver.findElement(By.xpath("//i[text() = 'menu']/.."));
-        menuAction.click();
-
-        WebElement deleteButton = driver.findElement(By.xpath("//a[contains(text(),'delete')]"));
-        ProjectUtils.click(driver,deleteButton);
+        driver.findElement(By.xpath("//i[text() = 'menu']/..")).click();
+        ProjectUtils.click(driver,driver.findElement(By.xpath("//a[contains(text(),'delete')]")));
 
         new WebDriverWait(driver, 3).until(ExpectedConditions.
-                invisibilityOfElementLocated(By.xpath("//div[contains(text(),'" + id +"')]")));
+                invisibilityOfElementLocated(By.xpath("//div[contains(text(),'" + TITLE +"')]")));
         List<WebElement> listOfElements = driver.findElements(By.xpath("//tbody/tr/.."));
         Assert.assertEquals(listOfElements.size(), 0);
 
-        WebElement recycleButton = driver.findElement(By.xpath("//i[contains(text(),'delete_outline')]/.."));//
-        recycleButton.click();
-
-        WebElement deletedField = driver.findElement(By.xpath("//b[contains(text(),'" + id + "')]"));
-        Assert.assertEquals(deletedField.getText(), id);
+        driver.findElement(By.xpath("//i[contains(text(),'delete_outline')]/..")).click();
+        Assert.assertEquals(driver.findElement(By.xpath("//b[contains(text(),'" + TITLE + "')]")).getText(), TITLE);
     }
 }
