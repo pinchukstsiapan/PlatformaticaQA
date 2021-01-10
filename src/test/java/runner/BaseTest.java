@@ -168,10 +168,13 @@ public abstract class  BaseTest {
 
     @AfterSuite
     protected void afterSuite() {
+LoggerUtils.logGreen("Starting afterSuite and remoteWebDriver is " + remoteWebDriver);
         if (remoteWebDriver) {
             try {
+LoggerUtils.logGreen(String.format("Trying to save screenshots to directory '%s'", screenshotDirectoryName));
                 if (screenshotDirectoryName != null) {
                     ScreenshotUtils.uploadScreenshotsDir(screenshotDirectoryName);
+LoggerUtils.logGreen("Uploaded screenshots to Drive");
                 }
             } catch (Exception exception) {
                 LoggerUtils.logRed(String.format("unable to upload images directory %s to Google drive \n%s",

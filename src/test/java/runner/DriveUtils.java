@@ -142,7 +142,7 @@ public class DriveUtils {
             File file = drive.files().create(fileMetadata)
                     .setFields("id")
                     .execute();
-            LoggerUtils.logYellow(String.format("Folder ID: %s", file.getId()));
+            LoggerUtils.logYellow(String.format("Folder ID: %s\n", file.getId()));
             return file.getId();
         } catch (IOException ioException) {
             LoggerUtils.logRed(String.format("Build service account credentials\n%s", getStackTrace(ioException)));
