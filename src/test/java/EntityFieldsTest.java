@@ -148,6 +148,21 @@ public class EntityFieldsTest extends BaseTest {
         Assert.assertEquals(recycleBinPage.getDeletedEntityTitle(0), recordTitle);
     }
 
+    @Test(dependsOnMethods = "createNewDraftTest")
+    public void deleteDraftTest() {
+
+        FieldsPage fieldsPage = new FieldsPage(getDriver());
+        final String entityTitle = fieldsPage.clickMenuFields().getTitle(0);
+        fieldsPage.clickEntityMenuDeleteButton(0);
+
+        Assert.assertEquals(fieldsPage.getRowCount(), 0, "Draft has not been deleted");
+
+        RecycleBinPage recycleBinPage = fieldsPage.clickRecycleBin();
+
+        Assert.assertEquals(recycleBinPage.getRowCount(), 1);
+        Assert.assertEquals(recycleBinPage.getDeletedEntityTitle(0), entityTitle);
+    }
+
     @Test
     public void invalidIntEntryCreateTest() {
 
