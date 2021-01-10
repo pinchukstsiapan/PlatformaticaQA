@@ -228,17 +228,17 @@ public class EntityBoardTest extends BaseTest {
 
         WebElement text1 = driver.findElement(By.id("text"));
         text1.clear();
-        text1.sendKeys("my test changed");
+        ProjectUtils.sendKeys(text1, "my test changed");
         wait.until(ExpectedConditions.visibilityOf(text1));
 
 
         WebElement integer1 = driver.findElement(By.id("int"));
         integer1.clear();
-        ProjectUtils.inputKeys(driver, integer1, 50);
+        ProjectUtils.sendKeys(integer1, 50);
 
         WebElement decimal1 = driver.findElement(By.id("decimal"));
         decimal1.clear();
-        decimal1.sendKeys(String.valueOf(50.5));
+        ProjectUtils.sendKeys(decimal1, 50.5);
 
         WebElement dropdownUser = driver.findElement(By.xpath("//div[contains(text(),'apptester1@tester.com')]"));
         ProjectUtils.scroll(driver, dropdownUser);
