@@ -199,6 +199,8 @@ public class EntityBoardTest extends BaseTest {
 
     }
 
+
+    @Ignore
     @Test(dependsOnMethods = {"manipulateTest4"})
     public void editBoard() throws InterruptedException {
 
