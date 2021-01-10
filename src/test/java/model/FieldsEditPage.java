@@ -50,37 +50,31 @@ public final class FieldsEditPage extends MainPage {
 
     public FieldsEditPage fillTitle(String title) {
         fill(inputTitle, title);
-
         return this;
     }
 
     public FieldsEditPage fillComments(String comments) {
         fill(inputComments, comments);
-
         return this;
     }
 
     public FieldsEditPage fillInt(String int_) {
         fill(inputInt, int_);
-
         return this;
     }
 
     public FieldsEditPage fillDecimal(String decimal_) {
         fill(inputDecimal, decimal_);
-
         return this;
     }
 
     public FieldsEditPage fillDate(String date) {
         fill(inputDate, date);
-
         return this;
     }
 
     public FieldsEditPage fillDateTime(String dateTime) {
         fill(inputDateTime, dateTime);
-
         return this;
     }
 
@@ -109,13 +103,11 @@ public final class FieldsEditPage extends MainPage {
 
     public FieldsPage clickSaveButton() {
         click(saveButton);
-
         return new FieldsPage(getDriver());
     }
 
     public FieldsPage clickSaveDraftButton() {
         click(saveDraftButton);
-
         return new FieldsPage(getDriver());
     }
 

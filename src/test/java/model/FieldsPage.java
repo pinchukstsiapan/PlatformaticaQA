@@ -26,7 +26,6 @@ public final class FieldsPage extends MainPage {
 
     public FieldsEditPage clickNewButton() {
         click(buttonNew);
-
         return new FieldsEditPage(getDriver());
     }
 

@@ -28,13 +28,11 @@ public class MainPage extends BasePage {
 
     public FieldsPage clickMenuFields() {
         click(menuFields);
-
         return new FieldsPage(getDriver());
     }
 
     public ImportValuesPage clickMenuImportValues() {
         menuImportValues.click();
-
         return new ImportValuesPage(getDriver());
     }
 
@@ -54,7 +52,6 @@ public class MainPage extends BasePage {
 
     public RecycleBinPage clickRecycleBin (){
         click(recycleBinIcon);
-
         return new RecycleBinPage(getDriver());
     }
 
