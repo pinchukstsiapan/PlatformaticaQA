@@ -11,6 +11,8 @@ import java.util.List;
 
 public final class FieldsPage extends MainPage {
 
+    private static final String URL = "https://ref.eteam.work/index.php?action=action_list&entity_id=5&filter";
+
     @FindBy(xpath = "//i[text() = 'create_new_folder']")
     private WebElement buttonNew;
 
@@ -22,6 +24,11 @@ public final class FieldsPage extends MainPage {
 
     public FieldsPage(WebDriver driver) {
         super(driver);
+    }
+
+    public FieldsPage open() {
+        getDriver().get(URL);
+        return this;
     }
 
     public FieldsEditPage clickNewButton() {
