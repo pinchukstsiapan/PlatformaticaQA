@@ -1,7 +1,7 @@
+import model.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.Select;
@@ -236,12 +236,12 @@ public class EntityExportTest extends BaseTest {
         ProjectUtils.click(driver, export);
 
         WebElement recordLabel = driver.findElement(By.xpath("//a[contains(text(),'Some label')]"));
-        ProjectUtils.click(driver,recordLabel);
+        ProjectUtils.click(driver, recordLabel);
         WebElement saveButton = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
         saveButton.click();
 
         WebElement exportDistination = driver.findElement(By.xpath("//div[@id= 'menu-list-parent']/ul/li[9]/a"));
-        ProjectUtils.click(driver,exportDistination);
+        ProjectUtils.click(driver, exportDistination);
         WebElement verifyRecord = driver.findElement(By.xpath("//tbody/tr/td[2]/a"));
         verifyRecord.click();
 
@@ -264,7 +264,14 @@ public class EntityExportTest extends BaseTest {
         Assert.assertEquals(tableTextField.getText(), tableTex);
         Assert.assertEquals(tableIntField.getText(), tableInt);
         Assert.assertEquals(tableDecimalField.getText(), tableDec);
+    }
 
-
+    @Test
+    public void negativeTestForInt() {
+        MainPage mainPage = new MainPage(getDriver());
+        ExportEditPage exportEditPage = mainPage.clickTubExport().clickNewExportButton();
+        ExportPage exportPage = exportEditPage
+                .sendKeys("comments").clickSaveButton();
+        exportPage.getErrorMassage();
     }
 }
