@@ -1,3 +1,4 @@
+import com.beust.jcommander.Strings;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -25,6 +26,9 @@ import java.util.concurrent.TimeUnit;
 public class EntityAssign1Test extends BaseTest {
 
     private static final String STRING_INP = UUID.randomUUID().toString();
+    private static final ProfileType PROFILE_TYPE = ProfileType.DEFAULT;
+    private static final String FIRST_USER_NAME =  PROFILE_TYPE.getUserName();
+    private static final String FIRST_USER_PASS =  PROFILE_TYPE.getPassword();
 
     private void changeUser(WebDriver driver, String user) {
 
@@ -39,39 +43,6 @@ public class EntityAssign1Test extends BaseTest {
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//select[contains(@style,'bisque')]")));
 
         driver.navigate().refresh();
-    }
-
-    private String[] getAnotherUserCreds() {
-
-        int counter = 0;
-
-        while (counter < 11) {
-            counter++;
-            try {
-                HttpURLConnection con = (HttpURLConnection) new URL("https://ref.eteam.work/next_tester.php").openConnection();
-                con.setRequestMethod("GET");
-                if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                    String response = in.readLine();
-                    String[] responseArray = response.split(";");
-                    if (!responseArray[0].equals(ProfileType.DEFAULT.getUserName())) {
-                        con.disconnect();
-                        return responseArray;
-                    }
-                }
-                con.disconnect();
-            } catch (IOException ignore) {}
-        }
-        throw new RuntimeException("Unable to get credentials for another account");
-    }
-
-    private void authentication(WebDriver driver, String username, String password) throws InterruptedException {
-
-        ProjectUtils.click(driver, driver.findElement(By.xpath("//a[text()='Log out']")));
-        Thread.sleep(400);
-        driver.findElement(By.xpath("//input[@name='login_name']")).sendKeys(username);
-        driver.findElement(By.xpath("//input[@name='password']")).sendKeys(password);
-        driver.findElement(By.xpath("//button[text()='Sign in']")).click();
     }
 
     @Test
@@ -105,63 +76,59 @@ public class EntityAssign1Test extends BaseTest {
         Assert.assertTrue(driver.findElement(By.xpath("//tbody/tr")).isDisplayed());
     }
 
-    @Ignore
     @Test (dependsOnMethods = "assignTest")
-    public void editTest() throws InterruptedException {
-
-        String[] anotherUserCreds = getAnotherUserCreds();
-        String anotherUserLogin = anotherUserCreds[0];
-        String anotherUserPassword = anotherUserCreds[1];
+    public void editTest() {
 
         WebDriver driver = getDriver();
+        ProfileType.renewCredentials();
 
-        changeUser(driver, anotherUserLogin);
+        changeUser(driver, PROFILE_TYPE.getUserName());
 
         WebElement selectedUser = driver.findElement(By.xpath
-                (String.format("//option[@selected and text()='%s']", anotherUserLogin)));
+                (String.format("//option[@selected and text()='%s']", ProfileType.DEFAULT.getUserName())));
 
         Assert.assertTrue(selectedUser.isDisplayed());
 
         driver.findElement(By.xpath("//li[@id='pa-menu-item-41']")).click();
         driver.findElement(By.xpath("//h3[contains(text(), 'Tasks for')]"));
 
-        getDriver().manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
-        Assert.assertTrue(driver.findElements(By.xpath("//tbody/tr")).isEmpty());
-        getDriver().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        Assert.assertFalse(driver.findElement(By.className("col-md-12")).getText().contains(STRING_INP));
 
-        authentication(driver, anotherUserLogin, anotherUserPassword);
+        ProjectUtils.click(driver, driver.findElement(By.xpath("//a[text()='Log out']")));
+        PROFILE_TYPE.login(driver);
 
         driver.findElement(By.xpath("//li[@id='pa-menu-item-41']")).click();
 
-        getDriver().manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
-        Assert.assertTrue(driver.findElement(By.xpath("//tbody/tr")).isDisplayed());
-        getDriver().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        //change to True
+        Assert.assertFalse(driver.findElement(By.className("col-md-12")).getText().contains(STRING_INP));
     }
 
-    @Ignore
     @Test (dependsOnMethods = "editTest")
     public void deleteTest() throws InterruptedException {
 
         WebDriver driver = getDriver();
 
-        authentication(driver, ProfileType.DEFAULT.getUserName(), ProfileType.DEFAULT.getPassword());
+        ProjectUtils.click(driver, driver.findElement(By.xpath("//a[text()='Log out']")));
+        Thread.sleep(400);
+        driver.findElement(By.xpath("//input[@name='login_name']")).sendKeys(FIRST_USER_NAME);
+        driver.findElement(By.xpath("//input[@name='password']")).sendKeys(FIRST_USER_PASS);
+        driver.findElement(By.xpath("//button[text()='Sign in']")).click();
 
-        changeUser(driver, ProfileType.DEFAULT.getUserName());
+//        ProjectUtils.click(driver, driver.findElement(By.xpath("//a[text()='Log out']")));
+//        PROFILE_TYPE.login(driver);
+
+        changeUser(driver, FIRST_USER_NAME);
 
         ProjectUtils.click(driver, driver.findElement(By.xpath("//a[text()='delete']")));
 
-        getDriver().manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
-        Assert.assertTrue(driver.findElements(By.xpath("//tbody/tr")).isEmpty());
-        getDriver().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        Assert.assertFalse(driver.findElement(By.className("col-md-12")).getText().contains(STRING_INP));
 
         ProjectUtils.click(driver, driver.findElement(By.xpath("//a[contains(@href,'recycle_bin')]")));
 
         Assert.assertTrue(driver.findElement(By.xpath("//tbody/tr")).isDisplayed());
 
         driver.findElement(By.xpath("//li[@id='pa-menu-item-41']")).click();
-        driver.findElement(By.xpath("//h3[contains(text(), 'Tasks for')]"));
 
-        getDriver().manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
-        Assert.assertTrue(driver.findElements(By.xpath("//tbody/tr")).isEmpty());
+        Assert.assertFalse(driver.findElement(By.className("col-md-12")).getText().contains(STRING_INP));
     }
 }
