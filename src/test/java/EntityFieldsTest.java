@@ -30,7 +30,7 @@ public class EntityFieldsTest extends BaseTest {
     private static final String NEW_DATE = "25/10/2018";
     private static final String NEW_DATE_TIME = "25/10/2018 08:22:05";
     private static final String INVALID_ENTRY = "a";
-    private static final String ERROR_MESSAGE = "Error saving entity";
+    private static final String ERROR_MESSAGE = "error saving entity";
     private static String RANDOM_USER = null;
     private static String CURRENT_USER = null;
 
