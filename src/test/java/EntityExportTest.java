@@ -1,7 +1,7 @@
+import model.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.Select;
@@ -236,12 +236,12 @@ public class EntityExportTest extends BaseTest {
         ProjectUtils.click(driver, export);
 
         WebElement recordLabel = driver.findElement(By.xpath("//a[contains(text(),'Some label')]"));
-        ProjectUtils.click(driver,recordLabel);
+        ProjectUtils.click(driver, recordLabel);
         WebElement saveButton = driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']"));
         saveButton.click();
 
         WebElement exportDistination = driver.findElement(By.xpath("//div[@id= 'menu-list-parent']/ul/li[9]/a"));
-        ProjectUtils.click(driver,exportDistination);
+        ProjectUtils.click(driver, exportDistination);
         WebElement verifyRecord = driver.findElement(By.xpath("//tbody/tr/td[2]/a"));
         verifyRecord.click();
 
@@ -268,23 +268,10 @@ public class EntityExportTest extends BaseTest {
 
     @Test
     public void negativeTestForInt() {
-        WebDriver driver = getDriver();
-        WebDriverWait wait = new WebDriverWait(driver, 5);
-        WebElement export = driver.findElement(By.xpath("//p[contains (text(), 'Export') ]"));
-        ProjectUtils.click(driver, export);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains (text(), 'create_new_folder')]"))).click();
-        WebElement thirdField = driver.findElement(By.xpath("//*[@name='entity_form_data[int]']"));
-        ProjectUtils.click(driver, thirdField);
-        thirdField.sendKeys(exportString);
-        WebElement button = driver.findElement(By.xpath("//button[@class='btn btn-warning']"));
-        ProjectUtils.click(driver, button);
-        WebElement error = driver.findElement(By.xpath("//div[@id='pa-error']"));
-        String errorText = error.getText();
-        Assert.assertEquals("Error saving entity", errorText);
-    }
-}
-
-
-
+        MainPage mainPage = new MainPage(getDriver());
+        ExportEditPage exportEditPage = mainPage.clickTubExport().clickNewExportButton();
+        ExportPage exportPage = exportEditPage
+                .sendKeys("comments").clickSaveButton();
+        exportPage.getErrorMassage();
     }
 }
