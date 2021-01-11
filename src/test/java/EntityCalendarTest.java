@@ -138,7 +138,7 @@ public class EntityCalendarTest extends BaseTest {
 
         setValue(driver, titleFieldNew, "test test test", 256, 0.1);
 
-        WebElement nameString = driver.findElement(By.xpath("//div[contains(text(),'" + titleFieldNew + "')]"));
+        WebElement nameString = driver.findElement(By.xpath(String.format("//div[contains(text(),'%s')]" , titleFieldNew )));
         Assert.assertEquals(nameString.getText(), titleFieldNew);
 
         WebElement nameText = driver.findElement(By.xpath("//div[contains(text(),'test test test')]"));
@@ -167,7 +167,7 @@ public class EntityCalendarTest extends BaseTest {
         WebElement RecycleBin = driver.findElement(By.xpath("//i[contains(text(),'delete_outline')]"));
         RecycleBin.click();
 
-        WebElement deleteRecord = driver.findElement(By.xpath("//b[contains(text(),'" + titleField + "')]"));
+        WebElement deleteRecord = driver.findElement(By.xpath(String.format("//b[contains(text(), '%s')]", titleField )));
         wait.until(driver1 -> deleteRecord.isDisplayed());
     }
 }
