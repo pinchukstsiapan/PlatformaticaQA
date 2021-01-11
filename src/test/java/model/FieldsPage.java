@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class FieldsPage extends BasePage {
 
@@ -25,7 +26,6 @@ public final class FieldsPage extends BasePage {
 
     public FieldsEditPage clickNewButton() {
         buttonNew.click();
-
         return new FieldsEditPage(getDriver());
     }
 
@@ -40,4 +40,10 @@ public final class FieldsPage extends BasePage {
     public String getTitle(int rowNumber) {
         return trs.get(rowNumber).findElement(By.xpath("//td[2]/a/div")).getText();
     }
+
+    public List<String> getRow(int rowNumber) {
+        return trs.get(rowNumber).findElements(By.xpath("//td/a/div")).stream()
+                .map(WebElement::getText).collect(Collectors.toList());
+    }
+
 }

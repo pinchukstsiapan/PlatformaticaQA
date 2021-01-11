@@ -13,30 +13,34 @@ import runner.ProjectUtils;
 import runner.type.Run;
 import runner.type.RunType;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Run(run = RunType.Multiple)
 public class EntityFields1Test extends BaseTest {
 
     @Test
-    public void newAlexRecord() throws InterruptedException {
+    public void newRecord() {
 
         final String title = UUID.randomUUID().toString();;
         final String comments = "TEST IT";
         final String int_ = "11";
+        final String decimal = "0";
 
-        MainPage mainPage = new MainPage(getDriver());
-        FieldsEditPage fieldsEditPage = mainPage.clickMenuFields().clickNewButton();
+        final List<String> record = Arrays.asList(title, comments, int_, decimal, "", "");
 
-        FieldsPage fieldsPage = fieldsEditPage
-                .sendKeys(title, comments, int_)
+        FieldsPage fieldsPage = new MainPage(getDriver())
+                .clickMenuFields()
+                .clickNewButton()
+                .sendKeys(title, comments, int_, decimal, "", "")
                 .clickSaveButton();
 
         Assert.assertEquals(fieldsPage.getRowCount(), 1);
-        Assert.assertEquals(fieldsPage.getTitle(0), title);
+        Assert.assertEquals(fieldsPage.getRow(0), record);
     }
 
-    @Test(dependsOnMethods = "newAlexRecord")
+    @Test(dependsOnMethods = "newRecord")
     public void editRecord() throws InterruptedException {
 
         final String newTitle = UUID.randomUUID().toString();

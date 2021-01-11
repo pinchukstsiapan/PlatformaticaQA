@@ -23,10 +23,12 @@ public final class FieldsEditPage extends BasePage {
         super(driver);
     }
 
-    public FieldsEditPage sendKeys(String title, String comments, String int_) {
+    public FieldsEditPage sendKeys(String title, String comments, String int_, String decimal, String date, String datetime) {
         ProjectUtils.sendKeys(inputTitle, title);
         ProjectUtils.sendKeys(inputComments, comments);
         ProjectUtils.sendKeys(inputInt, int_);
+
+        //TODO add other inputs
 
         return this;
     }

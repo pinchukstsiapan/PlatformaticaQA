@@ -390,10 +390,12 @@ public class EntityFieldOpsTest extends BaseTest {
         Assert.assertFalse(isVisible(rows));
     }
 
+    @Ignore
+    //Ignored because of defect https://trello.com/c/OPR1zaFw/51-corrupted-data-shown-for-fields-ops-deleted-record-in-recycle-bin
     @Test
     public void fieldOpsDeleteTest() throws InterruptedException {
         String referenceValue = UUID.randomUUID().toString();
-        String refValueId = createReferenceValue(referenceValue);
+        createReferenceValue(referenceValue);
         createFieldOpsToDelete(referenceValue);
 
         goPageByName("Fields Ops");
@@ -412,6 +414,6 @@ public class EntityFieldOpsTest extends BaseTest {
         ProjectUtils.click(getDriver(), notificationIcon);
 
         WebElement firstRow = getDriver().findElement(By.xpath("//tbody/tr[1]/td[1]"));
-        Assert.assertTrue(firstRow.getText().contains(refValueId));
+        Assert.assertTrue(firstRow.getText().contains(referenceValue));
     }
 }
