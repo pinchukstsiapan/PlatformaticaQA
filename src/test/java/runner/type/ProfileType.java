@@ -65,10 +65,14 @@ public enum ProfileType {
             throw new RuntimeException("Username or Password is empty");
         }
 
+        login(driver, this.getUserName(), this.getPassword());
+    }
+
+    public void login(WebDriver driver, String userName, String password) {
         WebElement loginElement = driver.findElement(By.xpath("//input[@name='login_name']"));
-        loginElement.sendKeys(this.getUserName());
+        loginElement.sendKeys(userName);
         WebElement pasElement = driver.findElement(By.xpath("//input[@name='password']"));
-        pasElement.sendKeys(this.getPassword());
+        pasElement.sendKeys(password);
         WebElement button = driver.findElement(By.xpath("//button[text()='Sign in']"));
         button.click();
     }

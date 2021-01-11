@@ -10,6 +10,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import runner.type.ProfileType;
 
+import java.util.UUID;
+
 public abstract class ProjectUtils {
 
     @Deprecated
@@ -42,10 +44,17 @@ public abstract class ProjectUtils {
         executor.executeScript("arguments[0].click()", element);
     }
 
-    public static void sendKeys(WebElement element, String keys) throws InterruptedException {
+    public static void scroll(WebDriver driver, WebElement element) {
+        JavascriptExecutor executor = (JavascriptExecutor)driver;
+        executor.executeScript("arguments[0].scrollIntoView();", element);
+    }
+
+    public static void sendKeys(WebElement element, String keys) {
         for (int i = 0; i< keys.length(); i++) {
             element.sendKeys(keys.substring(i, i + 1));
-            Thread.sleep(100);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ignore) {}
         }
     }
 
@@ -72,5 +81,9 @@ public abstract class ProjectUtils {
 
     public static void inputKeys(WebDriver driver, WebElement element, double keys) throws InterruptedException {
         inputKeys(driver, element, String.valueOf(keys));
+    }
+
+    public static String createRandomString(){
+        return UUID.randomUUID().toString();
     }
 }

@@ -1,3 +1,4 @@
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -7,7 +8,6 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 import org.testng.Assert;
 import runner.BaseTest;
@@ -26,82 +26,72 @@ public class EntityFieldsTest extends BaseTest {
     private static final String DECIMAL = String.format("%.2f", (Math.random() * 20000) / 100.0);
     private static final String DATE = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
     private static final String DATE_TIME = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
+    private static final String NEW_TITLE = String.format("%s_EditTextAllNew", UUID.randomUUID().toString());
+    private static final String NEW_COMMENT = "New comment text for edit test";
+    private static final String NEW_INT = Integer.toString(ThreadLocalRandom.current().nextInt(300, 400));
+    private static final String NEW_DECIMAL = "128.01";
+    private static final String NEW_DATE = "25/10/2018";
+    private static final String NEW_DATE_TIME = "25/10/2018 08:22:05";
+    private static final String INVALID_ENTRY = "a";
+    private static String RANDOM_USER = null;
+    private static String CURRENT_USER = null;
 
     private static final By fieldsPageButtonIcon = By.xpath("//p[contains(text(), ' Fields ')]/..");
     private static final By createNewIcon = (By.xpath("//i[text()='create_new_folder']"));
     private static final By saveButton = By.cssSelector("button[id*='save']");
     private static final By saveDraftButton = By.cssSelector("button[id*='draft']");
+    private static final By cancelButton = By.xpath("//button[text()='Cancel']");
     private static final By titleInputField = By.id("title");
     private static final By commentInputField = By.id("comments");
     private static final By intInputField = By.id("int");
     private static final By decimalInputField = By.id("decimal");
     private static final By dateInputField = By.id("date");
     private static final By dateTimeInputField = By.id("datetime");
-    private static final By selectUserField = By.cssSelector("button[data-id=user]");
     private static final By rows = By.xpath("//tbody/tr");
     private static final By recycleBinIcon = By.cssSelector("a[href*=recycle] > i");
     private static final By errorMessage = By.cssSelector("div[id*=error]");
 
-    private WebDriverWait getWait(int timeout) { return new WebDriverWait(getDriver(), timeout); }
-
-    private WebDriverWait getWait() { return getWait(5); }
-
-    private Actions getActions() { return new Actions(getDriver()); }
-
-    public JavascriptExecutor getExecutor() { return (JavascriptExecutor)getDriver(); }
-
-    private void click(By by) {
-        getWait().until(ExpectedConditions.elementToBeClickable(by)).click();
+    private void goFieldsPage() {
+        WebDriver driver = getDriver();
+        ProjectUtils.click(driver, driver.findElement(fieldsPageButtonIcon));
     }
 
-    private String getText(By by) {
-        return getWait().until(ExpectedConditions.visibilityOfElementLocated(by)).getText();
+    private void click(By by) {
+        getWebDriverWait().until(ExpectedConditions.elementToBeClickable(by)).click();
     }
 
     private String getCurrentUser() {
-        return getText(By.id("navbarDropdownProfile")).split(" ")[1].toLowerCase();
+        String profileButtonText = getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(By
+                .id("navbarDropdownProfile"))).getText();
+        String currentUser = profileButtonText.split(" ")[1].toLowerCase();
+
+        return currentUser;
     }
 
     private String getRandomUser() {
         List<WebElement> userList = getDriver().findElements(By.cssSelector("select#user > option"));
-        return userList.get(ThreadLocalRandom.current().nextInt(1, userList.size())).getText();
-    }
+        String randomUser = userList.get(ThreadLocalRandom.current().nextInt(1, userList.size())).getText();
 
-    private void goFieldsPage() {
-        WebDriver driver = getDriver();
-        getExecutor().executeScript("arguments[0].click();", driver.findElement(fieldsPageButtonIcon));
+        return randomUser;
     }
 
     private void sendKeys(By by, String text) {
-        WebElement textInputField = getWait().until(ExpectedConditions.visibilityOfElementLocated(by));
+        WebElement textInputField = getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(by));
         if (by.toString().contains("date")) {
             textInputField.click();
         }
-        textInputField.clear();
+        if (!textInputField.getAttribute("value").isEmpty()) {
+            textInputField.clear();
+        }
         textInputField.sendKeys(text);
-        getWait(2).until(ExpectedConditions.attributeContains(textInputField, "value", text));
+        getWebDriverWait().until(ExpectedConditions.attributeContains(textInputField, "value", text));
     }
 
     private void selectUser(String user) {
-        WebElement userText = getWait().until(ExpectedConditions.visibilityOfElementLocated(By
+        WebElement userText = getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(By
                 .cssSelector("div[class$=inner-inner]")));
-        getActions().moveToElement(userText).perform();
+        new Actions(getDriver()).moveToElement(userText).perform();
         new Select(getDriver().findElement(By.cssSelector("select#user"))).selectByVisibleText(user);
-    }
-
-    private boolean isVisible(By by) {
-        List<WebElement> list = getDriver().findElements(by);
-        if (list.isEmpty()) {
-            return false;
-        } else {
-            return list.get(0).isDisplayed();
-        }
-    }
-
-    private void softWaitInvisibilityOf(WebElement element, int timeout) {
-        try {
-            getWait(timeout).until(ExpectedConditions.invisibilityOf(element));
-        } catch (TimeoutException ignored) {}
     }
 
     private void clickSandwichAction(WebElement row, String menuItem) throws InterruptedException {
@@ -111,53 +101,91 @@ public class EntityFieldsTest extends BaseTest {
     }
 
     private void clickButton(String buttonType) {
-        WebDriver driver = getDriver();
-        if (buttonType.equalsIgnoreCase("save")) {
-            ProjectUtils.click(driver, driver.findElement(saveButton));
-        } else if ((buttonType.equalsIgnoreCase("draft"))) {
-            driver.findElement(saveDraftButton).click();
-        } else {
-            throw new RuntimeException("Unexpected button type");
+        switch (buttonType) {
+            case "save":
+                click(saveButton);
+                break;
+            case "draft":
+                click(saveDraftButton);
+                break;
+            case "cancel":
+                click(cancelButton);
+                break;
+            default:
+                throw new RuntimeException("Unexpected button type");
         }
     }
 
-    private String getRecordTypeIcon() {
-        String script = "return window.getComputedStyle(document.querySelector('td i.fa'),'::before').getPropertyValue('content')";
-        return getExecutor().executeScript(script).toString().replace("\"", "");
+    private void verifyEntityTypeIcon(String entityType) {
+        String script = "return window.getComputedStyle(document.querySelector('td i.fa'),'::before')" +
+                ".getPropertyValue('content').codePointAt(1).toString(16)";
+        String entityTypeIconUnicode = ((JavascriptExecutor) getDriver()).executeScript(script).toString();
+        switch (entityType) {
+            case "record":
+                Assert.assertEquals(entityTypeIconUnicode, "f046", "Wrong record icon, expected '\\f046'");
+                break;
+            case "draft":
+                Assert.assertEquals(entityTypeIconUnicode, "f040", "Wrong draft icon, expected '\\f040'");
+                break;
+             default:
+                 throw new RuntimeException("Unexpected entity type");
+        }
+    }
+
+    private void verifyDataTypeError() {
+        WebElement error = getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(errorMessage));
+        Assert.assertTrue(error.isDisplayed());
+        Assert.assertEquals(error.getText(), "Error saving entity");
+    }
+
+    private String formatDecimal(String decimalString) {
+        DecimalFormat format = new DecimalFormat();
+        format.setDecimalSeparatorAlwaysShown(false);
+        return format.format(Double.valueOf(decimalString));
+    }
+
+    private void verifyEntityData(WebElement row, String[] expected) {
+        List<WebElement> cols = row.findElements(By.tagName("td"));
+        Assert.assertEquals(cols.size(), expected.length);
+        expected[4] = formatDecimal(expected[4]);
+        for (int i = 1; i < cols.size(); i++) {
+            if (expected[i] != null){
+                Assert.assertEquals(cols.get(i).getText(), expected[i]);
+            }
+        }
+    }
+
+    private void resetUserData(WebDriver driver) {
+        ProjectUtils.click(driver, driver.findElement(By.id("navbarDropdownProfile")));
+        ProjectUtils.click(driver, driver.findElement(By.xpath("//a[contains(text(), 'Reset')]")));
     }
 
     @Test
     public void createNewRecordTest() {
 
         WebDriver driver = getDriver();
-        ProjectUtils.reset(driver);
         driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+        resetUserData(driver);
 
-        String currentUser = getCurrentUser();
-        String[] expectedValues = {null, TITLE, COMMENT, INT, DECIMAL, DATE, DATE_TIME, null, currentUser, null, null};
+        CURRENT_USER = getCurrentUser();
+        final String[] expectedValues = {null, TITLE, COMMENT, INT, DECIMAL, DATE, DATE_TIME, null, CURRENT_USER, null, null};
+
         goFieldsPage();
-
         driver.findElement(createNewIcon).click();
-        getWait(10).until(ExpectedConditions.visibilityOfElementLocated(titleInputField));
+        getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(titleInputField));
         sendKeys(titleInputField, TITLE);
         sendKeys(commentInputField, COMMENT);
         sendKeys(intInputField, INT);
         sendKeys(decimalInputField, DECIMAL);
         sendKeys(dateInputField, DATE);
         sendKeys(dateTimeInputField, DATE_TIME);
-        selectUser(currentUser);
+        selectUser(CURRENT_USER);
         clickButton("save");
 
-        List<WebElement> records = getWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(rows));
+        List<WebElement> records = getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(rows));
         Assert.assertEquals(records.size(), 1);
-        List<WebElement> cols = records.get(0).findElements(By.tagName("td"));
-        Assert.assertEquals(cols.size(), expectedValues.length);
-        for (int i = 1; i < cols.size(); i++) {
-            if (expectedValues[i] != null){
-                Assert.assertEquals(cols.get(i).getText(), expectedValues[i]);
-            }
-        }
-        Assert.assertEquals(getRecordTypeIcon(), "", "Wrong record icon, expected '\\f046'");
+        verifyEntityData(records.get(0), expectedValues);
+        verifyEntityTypeIcon("record");
     }
 
     @Test
@@ -166,88 +194,68 @@ public class EntityFieldsTest extends BaseTest {
         WebDriver driver = getDriver();
         driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 
-        String currentUser = getCurrentUser();
-        String[] expectedValues = {null, TITLE, COMMENT, "0", "0", null, null, null, currentUser, null, null};
-        goFieldsPage();
+        CURRENT_USER = getCurrentUser();
+        final String[] expectedValues = {null, TITLE, COMMENT, "0", "0", null, null, null, CURRENT_USER, null, null};
 
+        goFieldsPage();
         click(createNewIcon);
-        getWait(10).until(ExpectedConditions.visibilityOfElementLocated(titleInputField));
+        getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(titleInputField));
         sendKeys(titleInputField, TITLE);
         sendKeys(commentInputField, COMMENT);
-        selectUser(currentUser);
+        selectUser(CURRENT_USER);
         clickButton("draft");
 
-        List<WebElement> records = getWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(rows));
+        List<WebElement> records = getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(rows));
         Assert.assertEquals(records.size(), 1);
-        List<WebElement> cols = records.get(0).findElements(By.tagName("td"));
-        Assert.assertEquals(cols.size(), expectedValues.length);
-        for (int i = 1; i < cols.size(); i++) {
-            if (expectedValues[i] != null){
-                Assert.assertEquals(cols.get(i).getText(), expectedValues[i]);
-            }
-        }
-        Assert.assertEquals(getRecordTypeIcon(), "", "Wrong draft icon, expected '\\f040'");
+        verifyEntityData(records.get(0), expectedValues);
+        verifyEntityTypeIcon("draft");
     }
 
     @Test(dependsOnMethods = "createNewRecordTest")
     public void editRecordTest() throws InterruptedException {
 
-        final String NEW_TITLE = String.format("%s_EditTextAllNew", UUID.randomUUID().toString());
-        final String NEW_COMMENT = "New comment text for edit test";
-        final String NEW_INT = Integer.toString(ThreadLocalRandom.current().nextInt(300, 400));
-        final String NEW_DECIMAL = "128.01";
-        final String NEW_DATE = "25/10/2018";
-        final String NEW_DATE_TIME = "25/10/2018 08:22:05";
-        String randomUser = "";
         String[] expectedValues = {null, NEW_TITLE, NEW_COMMENT, NEW_INT, NEW_DECIMAL, NEW_DATE, NEW_DATE_TIME, null,
-                randomUser, null, null};
+                RANDOM_USER, null, null};
 
         WebDriver driver = getDriver();
         driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+
         goFieldsPage();
-
-        WebElement record = getWait().until(ExpectedConditions.visibilityOfElementLocated(rows));
+        WebElement record = getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(rows));
         clickSandwichAction(record, "edit");
-
-        getWait(10).until(ExpectedConditions.visibilityOfElementLocated(titleInputField));
-        expectedValues[8] = randomUser = getRandomUser();
+        getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(titleInputField));
+        expectedValues[8] = RANDOM_USER = getRandomUser();
         sendKeys(titleInputField, NEW_TITLE);
         sendKeys(commentInputField, NEW_COMMENT);
         sendKeys(intInputField, NEW_INT);
         sendKeys(decimalInputField, NEW_DECIMAL);
         sendKeys(dateInputField, NEW_DATE);
         sendKeys(dateTimeInputField, NEW_DATE_TIME);
-        selectUser(randomUser);
+        selectUser(RANDOM_USER);
         clickButton("save");
 
-        List<WebElement> records = getWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(rows));
+        List<WebElement> records = getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(rows));
         Assert.assertEquals(records.size(), 1);
-        List<WebElement> cols = records.get(0).findElements(By.tagName("td"));
-        Assert.assertEquals(cols.size(), expectedValues.length);
-        for (int i = 1; i < cols.size(); i++) {
-            if (expectedValues[i] != null){
-                Assert.assertEquals(cols.get(i).getText(), expectedValues[i]);
-            }
-        }
-        Assert.assertEquals(getRecordTypeIcon(), "", "Wrong record icon, expected '\\f046'");
+        verifyEntityData(records.get(0), expectedValues);
+        verifyEntityTypeIcon("record");
     }
 
     @Test(dependsOnMethods = {"createNewRecordTest", "editRecordTest"})
     public void deleteRecordTest() throws InterruptedException {
 
-        final String recordTitle;
         WebDriver driver = getDriver();
         driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+
         goFieldsPage();
-        WebElement record = getWait().until(ExpectedConditions.visibilityOfElementLocated(rows));
-        recordTitle = record.findElement(By.xpath("//td[2]")).getText();
+        WebElement record = getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(rows));
+        final String recordTitle = record.findElement(By.xpath("//td[2]")).getText();
         clickSandwichAction(record, "delete");
 
-        softWaitInvisibilityOf(record, 2);
-        Assert.assertFalse(isVisible(rows));
+        WebElement card = getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div.card-body")));
+        Assert.assertEquals(card.getText(), "", "Record has not been deleted");
 
-        driver.findElement(recycleBinIcon).click();
-        List<WebElement> deletedItems = driver.findElements(rows);
+        click(recycleBinIcon);
+        List<WebElement> deletedItems = getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(rows));
         Assert.assertEquals(deletedItems.size(), 1);
         Assert.assertEquals(deletedItems.get(0).findElement(By.xpath("//span[contains(text(), 'Title:')]/b")).getText(),
                 recordTitle);
@@ -256,17 +264,29 @@ public class EntityFieldsTest extends BaseTest {
     @Test
     public void invalidIntEntryCreateTest() {
 
-        final String invalidEntry = "a";
         WebDriver driver = getDriver();
-        ProjectUtils.reset(driver);
-        goFieldsPage();
+        resetUserData(driver);
 
-        driver.findElement(createNewIcon).click();
-        getWait(10).until(ExpectedConditions.visibilityOfElementLocated(intInputField)).sendKeys(invalidEntry);
+        goFieldsPage();
+        click(createNewIcon);
+        sendKeys(intInputField, INVALID_ENTRY);
         clickButton("save");
 
-        WebElement error = getWait(2).until(ExpectedConditions.visibilityOfElementLocated(errorMessage));
-        Assert.assertTrue(error.isDisplayed());
-        Assert.assertEquals(error.getText(), "Error saving entity");
+        verifyDataTypeError();
     }
+
+    @Test
+    public void invalidDecimalEntryCreateTest() {
+
+        WebDriver driver = getDriver();
+        resetUserData(driver);
+
+        goFieldsPage();
+        click(createNewIcon);
+        sendKeys(decimalInputField, INVALID_ENTRY);
+        clickButton("save");
+
+        verifyDataTypeError();
+    }
+
 }
