@@ -1,13 +1,13 @@
 package model;
 
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+
 import java.time.Duration;
 
 public class MainPage extends BasePage {
-
 
     @FindBy(id = "navbarDropdownProfile")
     WebElement userProfileButton;
@@ -28,7 +28,7 @@ public class MainPage extends BasePage {
     private WebElement leftMenu;
 
     @FindBy(xpath = "//p[contains (text(), 'Export')]")
-    private WebElement tubExport;
+    private WebElement menuExport;
 
     @FindBy(css = "#menu-list-parent>ul>li>a[href*='id=62")
     private WebElement menuEventsChain2;
@@ -72,11 +72,11 @@ public class MainPage extends BasePage {
 
     public ExportPage clickMenuExport() {
         getActions().moveToElement(leftMenu).perform();
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("arguments[0].scrollIntoView();", tubExport);
+        getExecutor().executeScript("arguments[0].scrollIntoView();", menuExport);
         getActions().pause(Duration.ofSeconds(3));
-        tubExport.click();
+        menuExport.click();
 
         return new ExportPage(getDriver());
     }
+
 }
