@@ -2,7 +2,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
@@ -11,11 +10,14 @@ import runner.ProjectUtils;
 
 public class EntityLoop1Test extends BaseTest {
 
-    private static WebDriverWait getWait200(WebDriver driver) {
-        return new WebDriverWait(driver, 200);
-    }
-
     private static final By ACTIONS_BUTTON = By.xpath("//tr[@data-index='0']/td/div/button");
+
+    private void waitUntilEnd(WebElement element, String value){
+        do {
+            getWebDriverWait();
+        }
+        while (!element.getAttribute("value").equals(value));
+    }
 
     private void assertLoopValues(WebDriver driver, int value, String mode) {
         getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(ACTIONS_BUTTON)).click();
@@ -75,7 +77,7 @@ public class EntityLoop1Test extends BaseTest {
         WebElement f3_element = driver.findElement(By.xpath("//div[@id='_field_container-f3']/child::span/child::input"));
         ProjectUtils.inputKeys(driver, f1_element, number_1);
 
-        getWait200(driver).until(ExpectedConditions.attributeContains(f3_element, "value", "1002"));
+        waitUntilEnd(f3_element, "1002");
         Assert.assertEquals(f1_element.getAttribute("value"),"1000");
 
         ProjectUtils.click(driver, driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']")));
@@ -88,7 +90,7 @@ public class EntityLoop1Test extends BaseTest {
         getWebDriverWait().until(ExpectedConditions.visibilityOf(f1_edit)).clear();
         ProjectUtils.inputKeys(driver, f1_edit, number_2);
 
-        getWait200(driver).until(ExpectedConditions.attributeContains(f3_edit, "value", "1001"));
+        waitUntilEnd(f3_edit, "1001");
         ProjectUtils.click(driver, driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']")));
 
         assertLoopValues(driver, 999, "view");
