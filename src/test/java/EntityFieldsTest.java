@@ -1,21 +1,21 @@
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
-import model.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import org.testng.Assert;
+import model.*;
 import runner.BaseTest;
 import runner.type.Run;
 import runner.type.RunType;
+import static runner.ProjectUtils.createUUID;
 
 @Run(run = RunType.Multiple)
 public class EntityFieldsTest extends BaseTest {
 
-    private static final String TITLE = UUID.randomUUID().toString();
+    private static final String TITLE = createUUID();
     private static final String COMMENTS = RandomStringUtils.randomAlphanumeric(25);
     private static final String INT = Integer.toString(ThreadLocalRandom.current().nextInt(100, 200));
     private static final String DECIMAL = "12.34";
@@ -23,7 +23,7 @@ public class EntityFieldsTest extends BaseTest {
     private static final String ALL_ZERO_AFTER_DECIMAL = "1.00";
     private static final String DATE = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
     private static final String DATE_TIME = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
-    private static final String NEW_TITLE = String.format("%s_EditTextAllNew", UUID.randomUUID().toString());
+    private static final String NEW_TITLE = String.format("%s_EditTextAllNew", createUUID());
     private static final String NEW_COMMENTS = "New comment text for edit test";
     private static final String NEW_INT = Integer.toString(ThreadLocalRandom.current().nextInt(300, 400));
     private static final String NEW_DECIMAL = "128.01";

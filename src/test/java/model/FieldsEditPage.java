@@ -6,6 +6,8 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import runner.ProjectUtils;
+import static runner.ProjectUtils.click;
+import static runner.ProjectUtils.fill;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -49,32 +51,32 @@ public final class FieldsEditPage extends MainPage {
     }
 
     public FieldsEditPage fillTitle(String title) {
-        fill(inputTitle, title);
+        fill(getWait(), inputTitle, title);
         return this;
     }
 
     public FieldsEditPage fillComments(String comments) {
-        fill(inputComments, comments);
+        fill(getWait(), inputComments, comments);
         return this;
     }
 
     public FieldsEditPage fillInt(String int_) {
-        fill(inputInt, int_);
+        fill(getWait(), inputInt, int_);
         return this;
     }
 
     public FieldsEditPage fillDecimal(String decimal_) {
-        fill(inputDecimal, decimal_);
+        fill(getWait(), inputDecimal, decimal_);
         return this;
     }
 
     public FieldsEditPage fillDate(String date) {
-        fill(inputDate, date);
+        fill(getWait(), inputDate, date);
         return this;
     }
 
     public FieldsEditPage fillDateTime(String dateTime) {
-        fill(inputDateTime, dateTime);
+        fill(getWait(), inputDateTime, dateTime);
         return this;
     }
 
@@ -102,18 +104,18 @@ public final class FieldsEditPage extends MainPage {
     }
 
     public FieldsPage clickSaveButton() {
-        click(saveButton);
+        click(getWait(), saveButton);
         return new FieldsPage(getDriver());
     }
 
     public ErrorPage clickSaveButtonErrorExpected() {
-        click(saveButton);
+        click(getWait(), saveButton);
         return new ErrorPage(getDriver());
     }
 
 
     public FieldsPage clickSaveDraftButton() {
-        click(saveDraftButton);
+        click(getWait(), saveDraftButton);
         return new FieldsPage(getDriver());
     }
 

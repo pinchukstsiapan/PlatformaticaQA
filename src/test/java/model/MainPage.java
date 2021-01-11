@@ -1,11 +1,11 @@
 package model;
 
+import java.time.Duration;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-
-import java.time.Duration;
+import static runner.ProjectUtils.click;
 
 public class MainPage extends BasePage {
 
@@ -45,18 +45,18 @@ public class MainPage extends BasePage {
     }
 
     public MainPage resetUserData() {
-        click(userProfileButton);
-        click(resetButton);
+        click(getWait(), userProfileButton);
+        click(getWait(), resetButton);
         return this;
     }
 
     public RecycleBinPage clickRecycleBin (){
-        click(recycleBinIcon);
+        click(getWait(), recycleBinIcon);
         return new RecycleBinPage(getDriver());
     }
 
     public FieldsPage clickMenuFields() {
-        click(menuFields);
+        click(getWait(), menuFields);
         return new FieldsPage(getDriver());
     }
 

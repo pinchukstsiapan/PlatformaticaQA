@@ -269,7 +269,7 @@ public class EntityExportTest extends BaseTest {
     @Test
     public void negativeTestForInt() {
         MainPage mainPage = new MainPage(getDriver());
-        ExportEditPage exportEditPage = mainPage.clickTubExport().clickNewExportButton();
+        ExportEditPage exportEditPage = mainPage.clickMenuExport().clickNewExportButton();
         ExportPage exportPage = exportEditPage
                 .sendKeys("comments").clickSaveButton();
         exportPage.getErrorMassage();

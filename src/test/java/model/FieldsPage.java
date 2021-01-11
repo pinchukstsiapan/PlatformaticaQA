@@ -2,12 +2,12 @@ package model;
 
 import com.beust.jcommander.Strings;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import java.util.ArrayList;
 import java.util.List;
+import static runner.ProjectUtils.click;
 
 public final class FieldsPage extends MainPage {
 
@@ -32,7 +32,7 @@ public final class FieldsPage extends MainPage {
     }
 
     public FieldsEditPage clickNewButton() {
-        click(buttonNew);
+        click(getWait(), buttonNew);
         return new FieldsEditPage(getDriver());
     }
 
@@ -58,7 +58,7 @@ public final class FieldsPage extends MainPage {
         String script = String.format("return window.getComputedStyle(document.querySelector" +
                 "('tr:nth-of-type(%d) td i.fa'),'::before').getPropertyValue('content')" +
                 ".codePointAt(1).toString(16)", rowNumber + 1);
-        String entityTypeIconUnicode = ((JavascriptExecutor) getDriver()).executeScript(script).toString();
+        String entityTypeIconUnicode = getExecutor().executeScript(script).toString();
 
         return entityTypeIconUnicode;
     }
@@ -69,28 +69,26 @@ public final class FieldsPage extends MainPage {
 
     public String getDecimal(int rowNumber) {
         return rows.get(rowNumber).findElement(By.xpath("//td[5]/a/div")).getText();
-
     }
-
 
     public FieldsEditPage clickEntityMenuEditButton(int rowNumber) {
         WebElement row = rows.get(rowNumber);
-        click(row.findElement(By.tagName("button")));
+        click(getWait(), row.findElement(By.tagName("button")));
         try {
             Thread.sleep(400);
         } catch(InterruptedException ignored) {}
-        click(row.findElement(By.xpath("//li/a[contains(@href, 'edit')]")));
+        click(getWait(), row.findElement(By.xpath("//li/a[contains(@href, 'edit')]")));
 
         return new FieldsEditPage(getDriver());
     }
 
     public void clickEntityMenuDeleteButton(int rowNumber) {
         WebElement row = rows.get(rowNumber);
-        click(row.findElement(By.tagName("button")));
+        click(getWait(), row.findElement(By.tagName("button")));
         try {
             Thread.sleep(400);
         } catch(InterruptedException ignored) {}
-        click(row.findElement(By.xpath("//li/a[contains(@href, 'delete')]")));
+        click(getWait(), row.findElement(By.xpath("//li/a[contains(@href, 'delete')]")));
     }
 
 }
