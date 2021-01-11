@@ -8,6 +8,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.ArrayList;
 import java.util.List;
 import static runner.ProjectUtils.click;
+import java.util.stream.Collectors;
 
 public final class FieldsPage extends MainPage {
 
@@ -89,6 +90,11 @@ public final class FieldsPage extends MainPage {
             Thread.sleep(400);
         } catch(InterruptedException ignored) {}
         click(getWait(), row.findElement(By.xpath("//li/a[contains(@href, 'delete')]")));
+    }
+
+    public List<String> getRow(int rowNumber) {
+        return rows.get(rowNumber).findElements(By.xpath("//td/a/div")).stream()
+                .map(WebElement::getText).collect(Collectors.toList());
     }
 
 }
