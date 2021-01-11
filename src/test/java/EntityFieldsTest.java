@@ -154,8 +154,8 @@ public class EntityFieldsTest extends BaseTest {
 
         RecycleBinPage recycleBinPage = fieldsPage.clickRecycleBin();
 
-        Assert.assertEquals(recycleBinPage.getRowCount(), 1);
-        Assert.assertEquals(recycleBinPage.getDeletedEntityTitle(0), entityTitle);
+        Assert.assertEquals(recycleBinPage.getRowCount(), 2);
+        Assert.assertEquals(recycleBinPage.getDeletedEntityTitle(1), entityTitle);
     }
 
     @Test

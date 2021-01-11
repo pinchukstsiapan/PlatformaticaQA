@@ -76,6 +76,9 @@ public final class FieldsPage extends MainPage {
     public FieldsEditPage clickEntityMenuEditButton(int rowNumber) {
         WebElement row = rows.get(rowNumber);
         click(row.findElement(By.tagName("button")));
+        try {
+            Thread.sleep(400);
+        } catch(InterruptedException ignored) {}
         click(row.findElement(By.xpath("//li/a[contains(@href, 'edit')]")));
 
         return new FieldsEditPage(getDriver());
@@ -84,6 +87,9 @@ public final class FieldsPage extends MainPage {
     public void clickEntityMenuDeleteButton(int rowNumber) {
         WebElement row = rows.get(rowNumber);
         click(row.findElement(By.tagName("button")));
+        try {
+            Thread.sleep(400);
+        } catch(InterruptedException ignored) {}
         click(row.findElement(By.xpath("//li/a[contains(@href, 'delete')]")));
     }
 

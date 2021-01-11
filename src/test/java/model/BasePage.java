@@ -34,7 +34,6 @@ public abstract class BasePage {
     }
 
     public static void click(WebElement element) {
-        webDriverWait.until(ExpectedConditions.visibilityOf(element));
         webDriverWait.until(ExpectedConditions.elementToBeClickable(element)).click();
     }
 
