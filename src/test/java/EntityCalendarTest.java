@@ -112,11 +112,8 @@ public class EntityCalendarTest extends BaseTest {
         listBtn.click();
     }
 
-    @Test
-    public void newRecord() throws InterruptedException {
+    public void newEntityCalendarRecord() {
         WebDriver driver = getDriver();
-
-        WebDriverWait wait = new WebDriverWait(driver, 10);
 
         WebElement tab = driver.findElement(By.xpath("//p[contains(text(),'Calendar')]"));
         tab.click();
@@ -124,7 +121,14 @@ public class EntityCalendarTest extends BaseTest {
         WebElement createNewFolder = driver.findElement(By.xpath("//i[contains(text(),'create_new_folder')]"));
         createNewFolder.click();
 
-        setValue(driver, titleField, "test", 55, 0);
+        setValue(driver, titleField, "test_1", 342, 0);
+    }
+
+    @Test
+    public void editRecord() throws InterruptedException {
+        WebDriver driver = getDriver();
+
+        newEntityCalendarRecord();
 
         WebElement dropdown = driver.findElement(By.xpath("//div[@class='dropdown pull-left']"));
         dropdown.click();
@@ -145,6 +149,14 @@ public class EntityCalendarTest extends BaseTest {
 
         WebElement decimalField = driver.findElement(By.xpath("//div[contains(text(),'0.1')]"));
         Assert.assertEquals(decimalField.getText(), "0.1");
+    }
+
+    @Test
+    public void deleteRecord() throws InterruptedException {
+        WebDriver driver = getDriver();
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+
+        newEntityCalendarRecord();
 
         WebElement dropdownDelete = driver.findElement(By.xpath("//div[@class='dropdown pull-left']"));
         dropdownDelete.click();
@@ -155,7 +167,7 @@ public class EntityCalendarTest extends BaseTest {
         WebElement RecycleBin = driver.findElement(By.xpath("//i[contains(text(),'delete_outline')]"));
         RecycleBin.click();
 
-        WebElement deleteRecord = driver.findElement(By.xpath("//b[contains(text(),'" + titleFieldNew + "')]"));
+        WebElement deleteRecord = driver.findElement(By.xpath("//b[contains(text(),'" + titleField + "')]"));
         wait.until(driver1 -> deleteRecord.isDisplayed());
     }
 }
