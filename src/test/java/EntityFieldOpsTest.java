@@ -30,6 +30,7 @@ public class EntityFieldOpsTest extends BaseTest {
     private final By createEditMainToggle = By.cssSelector("div#_field_container-switch span.toggle");
     private final By createEditDropdownSelect = By.id("dropdown");
     private final By createEditReferenceSelect = By.id("reference");
+    private final By createEditReferenceWithFilter = By.id("reference_with_filter");
     private final By fieldsOpsRecordCard = By.cssSelector("div.card");
     private final By viewSwitchValue = By.xpath("//label[text()='Switch']/../div[1]//span");
     private final By viewDropdownValue = By.xpath("//label[text()='Switch']/../div[2]//span");
@@ -185,27 +186,36 @@ public class EntityFieldOpsTest extends BaseTest {
     @Test
     public void createNewRecordTest() {
         WebDriver driver = getDriver();
+        String LABEL_ONE = "John Doe";
+        String FILTER_ONE = "French";
+        String FILTER_ONE_ = "France";
+
+        String LABEL_TWO = "Anna Belle";
+        String FILTER_TWO = "Italian";
+        String FILTER_TWO_ = "Italy";
+
+        String LABEL_THREE = "Juan Carlos";
+        String FILTER_THREE = "Spanish";
+        String FILTER_THREE_ = "Spain";
+        String MULTI_REFERENCE = String.format("%s, %s", LABEL_ONE, LABEL_TWO,LABEL_THREE);
+
+        createReference(LABEL_ONE, FILTER_ONE, FILTER_ONE_);
+        createReference(LABEL_TWO, FILTER_TWO, FILTER_TWO_);
+        createReference(LABEL_THREE, FILTER_THREE, FILTER_THREE_);
+
         goPageByName("Fields Ops");
-
-        WebElement createNewFolder = driver.findElement(By.xpath("//i[contains(text(),'create_new_folder')]"));
-        createNewFolder.click();
-
-        WebElement checkbox = driver.findElement(By.xpath("//div[@class='d-flex']//span"));
-        checkbox.click();
-
-        Select dropdownMenu = new Select(driver.findElement(By.xpath("//select[@name='entity_form_data[dropdown]']")));
-        dropdownMenu.selectByValue("Done");
-
-        WebElement saveBtn = driver.findElement(By.id("pa-entity-form-save-btn"));
-        ProjectUtils.click(driver, saveBtn);
-
-        try {
-            WebElement pageTitle = driver.findElement(By.className("card-title"));
-            Assert.assertEquals(pageTitle.getText(), "Fields Ops",
-                    "Redirection works incorrectly");
-        } catch (TimeoutException e) {
-            Assert.fail("Redirection works incorrectly");
+        driver.findElement(createNew).click();
+        driver.findElement(createEditMainToggle).click();
+        new Select(driver.findElement(createEditDropdownSelect)).selectByVisibleText(OPTIONAL_DROPDOWN);
+        new Select(driver.findElement(createEditReferenceSelect)).selectByVisibleText(LABEL_ONE);
+        for (String ref : MULTI_REFERENCE.split(", ")) {
+            driver.findElement(By.xpath(String.format("//label[contains(text(), '%s')]/span", ref))).click();
         }
+        new Select(driver.findElement(createEditReferenceWithFilter)).selectByVisibleText(LABEL_THREE);
+        clickSaveButton();
+
+        WebElement cardTitle = driver.findElement(By.tagName("h3"));
+        Assert.assertEquals(cardTitle.getText(), "Fields Ops", "Redirection works incorrectly");
     }
 
     @Test
@@ -380,10 +390,12 @@ public class EntityFieldOpsTest extends BaseTest {
         Assert.assertFalse(isVisible(rows));
     }
 
+    @Ignore
+    //Ignored because of defect https://trello.com/c/OPR1zaFw/51-corrupted-data-shown-for-fields-ops-deleted-record-in-recycle-bin
     @Test
     public void fieldOpsDeleteTest() throws InterruptedException {
         String referenceValue = UUID.randomUUID().toString();
-        String refValueId = createReferenceValue(referenceValue);
+        createReferenceValue(referenceValue);
         createFieldOpsToDelete(referenceValue);
 
         goPageByName("Fields Ops");
@@ -402,6 +414,6 @@ public class EntityFieldOpsTest extends BaseTest {
         ProjectUtils.click(getDriver(), notificationIcon);
 
         WebElement firstRow = getDriver().findElement(By.xpath("//tbody/tr[1]/td[1]"));
-        Assert.assertTrue(firstRow.getText().contains(refValueId));
+        Assert.assertTrue(firstRow.getText().contains(referenceValue));
     }
 }
