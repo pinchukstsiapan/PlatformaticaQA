@@ -112,7 +112,8 @@ public class EntityCalendarTest extends BaseTest {
         listBtn.click();
     }
 
-    public void newEntityCalendarRecord() {
+    @Test
+    public void newRecord(){
         WebDriver driver = getDriver();
 
         WebElement tab = driver.findElement(By.xpath("//p[contains(text(),'Calendar')]"));
@@ -122,13 +123,19 @@ public class EntityCalendarTest extends BaseTest {
         createNewFolder.click();
 
         setValue(driver, titleField, "test_1", 342, 0);
+
+        getWebDriverWait().until(driver1 -> driver.findElement(By.xpath("//tr[@data-index]")).isDisplayed());
     }
 
-    @Test
-    public void editRecord() throws InterruptedException {
+    @Test(dependsOnMethods = "newRecord")
+    public void editRecord() {
         WebDriver driver = getDriver();
 
-        newEntityCalendarRecord();
+        WebElement tab = driver.findElement(By.xpath("//p[contains(text(),'Calendar')]"));
+        tab.click();
+
+        WebElement listBtn = driver.findElement(By.xpath("//ul[@role='tablist']//i[contains(text(),'list')]"));
+        listBtn.click();
 
         WebElement dropdown = driver.findElement(By.xpath("//div[@class='dropdown pull-left']"));
         dropdown.click();
@@ -151,12 +158,15 @@ public class EntityCalendarTest extends BaseTest {
         Assert.assertEquals(decimalField.getText(), "0.1");
     }
 
-    @Test
-    public void deleteRecord() throws InterruptedException {
+    @Test(dependsOnMethods = {"newRecord" , "editRecord"})
+    public void deleteRecord() {
         WebDriver driver = getDriver();
-        WebDriverWait wait = new WebDriverWait(driver, 10);
 
-        newEntityCalendarRecord();
+        WebElement tab = driver.findElement(By.xpath("//p[contains(text(),'Calendar')]"));
+        tab.click();
+
+        WebElement listBtn = driver.findElement(By.xpath("//ul[@role='tablist']//i[contains(text(),'list')]"));
+        listBtn.click();
 
         WebElement dropdownDelete = driver.findElement(By.xpath("//div[@class='dropdown pull-left']"));
         dropdownDelete.click();
@@ -167,7 +177,7 @@ public class EntityCalendarTest extends BaseTest {
         WebElement RecycleBin = driver.findElement(By.xpath("//i[contains(text(),'delete_outline')]"));
         RecycleBin.click();
 
-        WebElement deleteRecord = driver.findElement(By.xpath(String.format("//b[contains(text(), '%s')]", titleField )));
-        wait.until(driver1 -> deleteRecord.isDisplayed());
+        WebElement deleteRecord = driver.findElement(By.xpath(String.format("//b[contains(text(), '%s')]", titleFieldNew )));
+        getWebDriverWait().until(driver1 -> deleteRecord.isDisplayed());
     }
 }
