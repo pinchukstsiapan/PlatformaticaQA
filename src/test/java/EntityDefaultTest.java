@@ -11,7 +11,7 @@ import runner.ProjectUtils;
 import runner.type.Run;
 import runner.type.RunType;
 
-@Run(run = RunType.Single)
+@Run(run = RunType.Multiple)
 
 public class EntityDefaultTest extends BaseTest {
 
@@ -189,8 +189,8 @@ public class EntityDefaultTest extends BaseTest {
         assertAndReplace(driver, BY_DATETIME, defaultValues.fieldDateTime, changedDefaultValues.fieldDateTime, false);
         assertAndReplaceFieldUser(driver, defaultValues.fieldUser, changedDefaultValues.fieldUser, BY_USER, BY_DROPDOWN);
 
-        WebElement greenPlus = driver.findElement(By.xpath("//button[@data-table_id='11']"));
-        ProjectUtils.click(driver, greenPlus);
+        WebElement createEmbedD = driver.findElement(By.xpath("//button[@data-table_id='11']"));
+        ProjectUtils.click(driver, createEmbedD);
 
         WebElement lineNumber = driver.findElement(By.xpath("//input[@id='t-undefined-r-1-_line_number']"));
         Assert.assertEquals(lineNumber.getAttribute("data-row"), changedEmbedDValues.lineNumber);
@@ -216,7 +216,7 @@ public class EntityDefaultTest extends BaseTest {
         assertRecordValues(driver, "//table/tbody/tr/td", CHANGED_EMBEDD_VALUES);
     }
 
-    @Test
+    @Test (dependsOnMethods = "checkDefaultValuesAndUpdate")
     public void deleteRecord() {
 
         WebDriver driver = getDriver();
@@ -224,20 +224,12 @@ public class EntityDefaultTest extends BaseTest {
         WebElement defaultBtn = driver.findElement(By.xpath("//p[contains(text(),' Default ')]"));
         ProjectUtils.click(driver,defaultBtn);
 
-        WebElement newFolderBtn = driver.findElement(By.xpath("//i[contains(text(),'create_new_folder')]"));
-        ProjectUtils.click(driver,newFolderBtn);
-
-        WebElement newField = driver.findElement(BY_STRING);
-        newField.clear();
-        newField.sendKeys(changedDefaultValues.fieldString);
-
-        WebElement saveBtn = driver.findElement(BY_SAVE_BUTTON);
-        ProjectUtils.click(driver,saveBtn);
-
         WebElement firstColumn = driver.findElement(By.xpath("//table/tbody/tr/td[2]"));
         Assert.assertEquals(firstColumn.getText(),changedDefaultValues.fieldString);
 
         selectFromRecordMenu(driver, BY_DELETE);
+
+        Assert.assertEquals(driver.findElement(By.className("card-body")).getText(), "");
 
         WebElement recycleBin = driver.findElement(By.xpath("//i[contains(text(),'delete_outline')]"));
         ProjectUtils.click(driver, recycleBin);
@@ -250,7 +242,7 @@ public class EntityDefaultTest extends BaseTest {
         deletePermanently.click();
     }
 
-    @ Test
+    @ Test (dependsOnMethods = "deleteRecord")
     public void editExistingRecord() {
 
         WebDriver driver = getDriver();
