@@ -84,7 +84,7 @@ public class EntityFieldsTest extends BaseTest {
         Assert.assertEquals(fieldsPage.getEntityIcon(0).getAttribute("class"), "fa fa-pencil");
     }
 
-    @Test(dependsOnMethods = "createNewRecordTest")
+    @Test(dependsOnMethods = "createRecordTest")
     public void editRecordTest() {
 
         String[] expectedValues = {"", NEW_TITLE, NEW_COMMENTS, NEW_INT, NEW_DECIMAL, NEW_DATE, NEW_DATE_TIME, "", RANDOM_USER, ""};
@@ -123,7 +123,7 @@ public class EntityFieldsTest extends BaseTest {
         Assert.assertEquals(recycleBinPage.getDeletedEntityTitle(0), recordTitle);
     }
 
-    @Test(dependsOnMethods = "createNewDraftTest")
+    @Test(dependsOnMethods = "createDraftTest")
     public void deleteDraftTest() {
 
         FieldsPage fieldsPage = new FieldsPage(getDriver());
