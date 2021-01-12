@@ -7,8 +7,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import java.util.ArrayList;
 import java.util.List;
-import static runner.ProjectUtils.click;
 import java.util.stream.Collectors;
+import static runner.ProjectUtils.click;
 
 public final class FieldsPage extends MainPage {
 
