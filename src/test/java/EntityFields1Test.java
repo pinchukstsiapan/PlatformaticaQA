@@ -1,3 +1,6 @@
+import model.FieldsEditPage;
+import model.FieldsPage;
+import model.MainPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,41 +13,34 @@ import runner.ProjectUtils;
 import runner.type.Run;
 import runner.type.RunType;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Run(run = RunType.Multiple)
-public class EnityFieldsCopyTest extends BaseTest {
+public class EntityFields1Test extends BaseTest {
 
     @Test
-    public void newAlexRecord() throws InterruptedException {
+    public void newRecord() {
 
         final String title = UUID.randomUUID().toString();;
         final String comments = "TEST IT";
-        final int InTeGeR = 11;
+        final String int_ = "11";
+        final String decimal = "0";
 
-        WebDriver driver = getDriver();
+        final List<String> record = Arrays.asList(title, comments, int_, decimal, "", "");
 
-        WebElement tab = driver.findElement(By.xpath("//li[@id = 'pa-menu-item-45']"));
-        tab.click();
-        WebElement newFile = driver.findElement(By.xpath("//i[text() = 'create_new_folder']"));
-        newFile.click();
+        FieldsPage fieldsPage = new MainPage(getDriver())
+                .clickMenuFields()
+                .clickNewButton()
+                .sendKeys(title, comments, int_, decimal, "", "")
+                .clickSaveButton();
 
-        WebElement first = driver.findElement(By.xpath("//input[contains(@name, 'title')]"));
-        ProjectUtils.sendKeys(first, title);
-        WebElement second = driver.findElement(By.xpath("//textarea[@id = 'comments']"));
-        ProjectUtils.sendKeys(second, comments);
-        WebElement tri = driver.findElement(By.xpath("//input[contains(@name, 'int')]"));
-        ProjectUtils.sendKeys(tri, InTeGeR);
-
-        WebElement button2 = driver.findElement(By.xpath("//button[text() = 'Save']"));
-        ProjectUtils.click(driver, button2);
-
-        WebElement butt3 = driver.findElement(By.xpath("//div[contains(text() , '"+ title +"')]"));
-
-        Assert.assertEquals(butt3.getText(), title);
+        Assert.assertEquals(fieldsPage.getRowCount(), 1);
+        Assert.assertEquals(fieldsPage.getRow(0), record);
     }
 
-    @Test(dependsOnMethods = "newAlexRecord")
+    @Test(dependsOnMethods = "newRecord")
     public void editRecord() throws InterruptedException {
 
         final String newTitle = UUID.randomUUID().toString();

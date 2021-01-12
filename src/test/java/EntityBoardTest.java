@@ -1,5 +1,6 @@
 
 import java.util.Random;
+
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -12,16 +13,16 @@ import runner.BaseTest;
 import runner.ProjectUtils;
 import runner.type.Run;
 import runner.type.RunType;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-@Ignore
 @Run(run = RunType.Multiple)
 public class EntityBoardTest extends BaseTest {
 
     private static final String TEXT = UUID.randomUUID().toString();
-    private static final String NUMBER = Integer.toString((int)(Math.random() * 100));
+    private static final String NUMBER = Integer.toString((int) (Math.random() * 100));
     private static final String DECIMAL = Double.toString(35.06);
     private static final String PENDING = "Pending";
     private static final String DONE = "Done";
@@ -64,12 +65,12 @@ public class EntityBoardTest extends BaseTest {
         driver.findElement(By.id("datetime")).click();
         wait.until(ExpectedConditions.visibilityOfElementLocated((By.xpath("//div[@class = 'datepicker-days']"))));
         driver.findElement(By.xpath(String.format
-                ("//td[@data-day = '%1$s%2$s%3$s%2$s%4$s']", CURRENT_MONTH,"/", RANDOM_DAY, CURRENT_YEAR ))).click();
+                ("//td[@data-day = '%1$s%2$s%3$s%2$s%4$s']", CURRENT_MONTH, "/", RANDOM_DAY, CURRENT_YEAR))).click();
 
         driver.findElement(By.id("date")).click();
         wait.until(ExpectedConditions.visibilityOfElementLocated((By.xpath("//div[@class = 'datepicker']"))));
         driver.findElement(By.xpath(String.format
-                ("//td[@data-day = '%1$s%2$s%3$s%2$s%4$s']", CURRENT_MONTH,"/", RANDOM_DAY, CURRENT_YEAR ))).click();
+                ("//td[@data-day = '%1$s%2$s%3$s%2$s%4$s']", CURRENT_MONTH, "/", RANDOM_DAY, CURRENT_YEAR))).click();
 
         WebElement dropdownUser = driver.findElement(By.xpath("//div[contains(text(),'User 1 Demo')]"));
         ProjectUtils.scroll(driver, dropdownUser);
@@ -100,12 +101,12 @@ public class EntityBoardTest extends BaseTest {
         Assert.assertEquals(tabListValues.get(4).getText(), DECIMAL, "Created record decimal issue");
         Assert.assertEquals(tabListValues.get(5).getText(),
                 RANDOM_DAY + "/" + CURRENT_MONTH + "/" + CURRENT_YEAR, "Created record date issue");
-        Assert.assertEquals(tabListValues.get(6).getText().substring(0,10),
+        Assert.assertEquals(tabListValues.get(6).getText().substring(0, 10),
                 RANDOM_DAY + "/" + CURRENT_MONTH + "/" + CURRENT_YEAR, "Created record dateTime issue");
         Assert.assertEquals(tabListValues.get(8).getText(), APP_USER, "Created record user issue");
     }
 
-    @Test (dependsOnMethods = "inputValidationTest")
+    @Test(dependsOnMethods = "inputValidationTest")
     public void viewRecords() {
 
         WebDriver driver = getDriver();
@@ -134,7 +135,23 @@ public class EntityBoardTest extends BaseTest {
                 (By.xpath("//div[@class = 'form-group']/p")).getText(), APP_USER, "Created record user issue");
     }
 
-    @Test (dependsOnMethods = {"inputValidationTest", "viewRecords"})
+    private void dragAndDropAndVerify(String status, String path) {
+
+        WebDriver driver = getDriver();
+
+        WebElement elementStatus = driver.findElement(By.xpath(path));
+        WebElement from = elementStatus.findElement(By.xpath("./.."));
+        WebElement to = driver.findElement(By.xpath("//div[contains(text(),'" + status + "')]/../.."));
+        Actions act = new Actions(driver);
+        act.dragAndDrop(from, to).build().perform();
+
+        driver.findElement(By.xpath("//ul[@role='tablist']/li[2]/a")).click();
+        WebElement myElement = driver.findElement(By.xpath("//table[@id='pa-all-entities-table']//tr/td[2]/a"));
+        Assert.assertEquals(myElement.findElement(By.tagName("div")).getText(), status);
+
+    }
+
+    @Test(dependsOnMethods = {"inputValidationTest", "viewRecords"})
     public void manipulateTest1() {
 
         WebDriver driver = getDriver();
@@ -142,18 +159,11 @@ public class EntityBoardTest extends BaseTest {
         WebElement board = driver.findElement(By.xpath("//div[@id='menu-list-parent']/ul/li[10]/a"));
         ProjectUtils.click(driver, board);
 
-        WebElement createdRecord = driver.findElement(By.xpath("//div[contains(text(),'" + TEXT + "')]"));
-        WebElement from = createdRecord.findElement(By.xpath("./.."));
-        WebElement to = driver.findElement(By.xpath("//div[2]/main[@class='kanban-drag']"));
-        Actions act = new Actions(driver);
-        act.dragAndDrop(from, to).build().perform();
+        dragAndDropAndVerify("On track", "//div[contains(text(),'" + TEXT + "')]");
 
-        driver.findElement(By.xpath("//ul[@role='tablist']/li[2]/a")).click();
-        WebElement myElement = driver.findElement(By.xpath("//table[@id='pa-all-entities-table']//tr/td[2]/a"));
-        Assert.assertEquals(myElement.findElement(By.tagName("div")).getText(), "On track");
     }
 
-    @Test (dependsOnMethods = {"manipulateTest1"})
+    @Test(dependsOnMethods = {"manipulateTest1"})
     public void manipulateTest2() {
 
         WebDriver driver = getDriver();
@@ -161,18 +171,11 @@ public class EntityBoardTest extends BaseTest {
         WebElement board = driver.findElement(By.xpath("//div[@id='menu-list-parent']/ul/li[10]/a"));
         ProjectUtils.click(driver, board);
 
-        WebElement elementStatus = driver.findElement(By.xpath("//main[@class='kanban-drag']//div[contains(text(),'On track')]"));
-        WebElement from = elementStatus.findElement(By.xpath("./.."));
-        WebElement to = driver.findElement(By.xpath("//div[3]/main[@class='kanban-drag']"));
-        Actions act = new Actions(driver);
-        act.dragAndDrop(from, to).build().perform();
+        dragAndDropAndVerify("Done", "//main[@class='kanban-drag']//div[contains(text(),'On track')]");
 
-        driver.findElement(By.xpath("//ul[@role='tablist']/li[2]/a")).click();
-        WebElement myElement = driver.findElement(By.xpath("//table[@id='pa-all-entities-table']//tr/td[2]/a"));
-        Assert.assertEquals(myElement.findElement(By.tagName("div")).getText(), "Done");
     }
 
-    @Test (dependsOnMethods = {"manipulateTest2"})
+    @Test(dependsOnMethods = {"manipulateTest2"})
     public void manipulateTest3() {
 
         WebDriver driver = getDriver();
@@ -180,17 +183,11 @@ public class EntityBoardTest extends BaseTest {
         WebElement board = driver.findElement(By.xpath("//div[@id='menu-list-parent']/ul/li[10]/a"));
         ProjectUtils.click(driver, board);
 
-        WebElement elementStatus = driver.findElement(By.xpath("//main[@class='kanban-drag']//div[contains(text(),'Done')]"));
-        WebElement from = elementStatus.findElement(By.xpath("./.."));
-        WebElement to = driver.findElement(By.xpath("//div[2]/main[@class='kanban-drag']"));
-        Actions act = new Actions(driver);
-        act.dragAndDrop(from, to).build().perform();
+        dragAndDropAndVerify("On track", "//main[@class='kanban-drag']//div[contains(text(),'Done')]");
 
-        driver.findElement(By.xpath("//ul[@role='tablist']/li[2]/a")).click();
-        WebElement myElement = driver.findElement(By.xpath("//table[@id='pa-all-entities-table']//tr/td[2]/a"));
-        Assert.assertEquals(myElement.findElement(By.tagName("div")).getText(), "On track");
     }
-    @Test (dependsOnMethods = {"manipulateTest3"})
+
+    @Test(dependsOnMethods = {"manipulateTest3"})
     public void manipulateTest4() {
 
         WebDriver driver = getDriver();
@@ -198,15 +195,8 @@ public class EntityBoardTest extends BaseTest {
         WebElement board = driver.findElement(By.xpath("//div[@id='menu-list-parent']/ul/li[10]/a"));
         ProjectUtils.click(driver, board);
 
-        WebElement elementStatus = driver.findElement(By.xpath("//main[@class='kanban-drag']//div[contains(text(),'On track')]"));
-        WebElement from = elementStatus.findElement(By.xpath("./.."));
-        WebElement to = driver.findElement(By.xpath("//div[1]/main[@class='kanban-drag']"));
-        Actions act = new Actions(driver);
-        act.dragAndDrop(from, to).build().perform();
+        dragAndDropAndVerify("Pending", "//main[@class='kanban-drag']//div[contains(text(),'On track')]");
 
-        driver.findElement(By.xpath("//ul[@role='tablist']/li[2]/a")).click();
-        WebElement myElement = driver.findElement(By.xpath("//table[@id='pa-all-entities-table']//tr/td[2]/a"));
-        Assert.assertEquals(myElement.findElement(By.tagName("div")).getText(), "Pending");
     }
 
     @Test(dependsOnMethods = {"manipulateTest4"})
@@ -238,17 +228,17 @@ public class EntityBoardTest extends BaseTest {
 
         WebElement text1 = driver.findElement(By.id("text"));
         text1.clear();
-        text1.sendKeys("my test changed");
+        ProjectUtils.sendKeys(text1, "my test changed");
         wait.until(ExpectedConditions.visibilityOf(text1));
 
 
         WebElement integer1 = driver.findElement(By.id("int"));
         integer1.clear();
-        ProjectUtils.inputKeys(driver, integer1, 50);
+        ProjectUtils.sendKeys(integer1, 50);
 
         WebElement decimal1 = driver.findElement(By.id("decimal"));
         decimal1.clear();
-        decimal1.sendKeys(String.valueOf(50.5));
+        ProjectUtils.sendKeys(decimal1, 50.5);
 
         WebElement dropdownUser = driver.findElement(By.xpath("//div[contains(text(),'apptester1@tester.com')]"));
         ProjectUtils.scroll(driver, dropdownUser);
@@ -283,7 +273,7 @@ public class EntityBoardTest extends BaseTest {
 
         WebElement menuActions = driver.findElement(By.xpath("//i[text() = 'menu']"));
         ProjectUtils.click(driver, menuActions);
-        WebElement optionDelete =wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
+        WebElement optionDelete = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
                 "//ul[@role='menu']/li[3]/a[text()= 'delete']")));
         ProjectUtils.click(driver, optionDelete);
         boolean emptyField = driver.findElements(By.xpath("//tbody/tr[1]/td[10]/div[1]/button[1]")).size() < 1;
@@ -312,7 +302,7 @@ public class EntityBoardTest extends BaseTest {
         Assert.assertNotNull(emptyRecycleBin, "No empty recycle bin message found.");
     }
 
-    @Test (dependsOnMethods = {"recordDeletionRecBin"})
+    @Test(dependsOnMethods = {"recordDeletionRecBin"})
 
     public void cancelInputTest() {
 
