@@ -6,12 +6,11 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import runner.ProjectUtils;
-import static runner.ProjectUtils.click;
 import static runner.ProjectUtils.fill;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public final class FieldsEditPage extends MainPage {
+public final class FieldsEditPage extends BaseEditPage<FieldsPage> {
 
     @FindBy(id = "title")
     private WebElement inputTitle;
@@ -39,12 +38,6 @@ public final class FieldsEditPage extends MainPage {
 
     @FindBy(css = "select#user")
     private WebElement selectUser;
-
-    @FindBy(css = "button[id*='save']")
-    private WebElement saveButton;
-
-    @FindBy(css = "button[id*='draft']")
-    private WebElement saveDraftButton;
 
     public FieldsEditPage(WebDriver driver) {
         super(driver);
@@ -103,19 +96,8 @@ public final class FieldsEditPage extends MainPage {
         return this;
     }
 
-    public FieldsPage clickSaveButton() {
-        click(getWait(), saveButton);
-        return new FieldsPage(getDriver());
-    }
-
-    public ErrorPage clickSaveButtonErrorExpected() {
-        click(getWait(), saveButton);
-        return new ErrorPage(getDriver());
-    }
-
-
-    public FieldsPage clickSaveDraftButton() {
-        click(getWait(), saveDraftButton);
+    @Override
+    protected FieldsPage createPage() {
         return new FieldsPage(getDriver());
     }
 
