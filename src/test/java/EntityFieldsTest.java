@@ -8,6 +8,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import org.testng.Assert;
 import runner.BaseTest;
@@ -261,6 +262,7 @@ public class EntityFieldsTest extends BaseTest {
                 recordTitle);
     }
 
+    @Ignore
     @Test
     public void invalidIntEntryCreateTest() {
 
@@ -275,6 +277,7 @@ public class EntityFieldsTest extends BaseTest {
         verifyDataTypeError();
     }
 
+    @Ignore
     @Test
     public void invalidDecimalEntryCreateTest() {
 
