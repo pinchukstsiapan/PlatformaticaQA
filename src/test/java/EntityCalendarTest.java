@@ -82,7 +82,6 @@ public class EntityCalendarTest extends BaseTest {
         Assert.assertEquals(resultEdit.getText(), "Ne znayu chto delat");
     }
 
-
     final String titleField = UUID.randomUUID().toString();
 
     final String titleFieldNew = UUID.randomUUID().toString();
