@@ -5,7 +5,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import runner.ProjectUtils;
 import static runner.ProjectUtils.fill;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -58,8 +57,8 @@ public final class FieldsEditPage extends BaseEditPage<FieldsPage> {
         return this;
     }
 
-    public FieldsEditPage fillDecimal(String decimal_) {
-        fill(getWait(), inputDecimal, decimal_);
+    public FieldsEditPage fillDecimal(String decimal) {
+        fill(getWait(), inputDecimal, decimal);
         return this;
     }
 
@@ -74,11 +73,12 @@ public final class FieldsEditPage extends BaseEditPage<FieldsPage> {
     }
 
     public FieldsEditPage sendKeys(String title, String comments, String int_, String decimal, String date, String datetime) {
-        ProjectUtils.sendKeys(inputTitle, title);
-        ProjectUtils.sendKeys(inputComments, comments);
-        ProjectUtils.sendKeys(inputInt, int_);
-
-        //TODO add other inputs
+        fill(getWait(), inputTitle, title);
+        fill(getWait(), inputComments, comments);
+        fill(getWait(), inputInt, int_);
+        fill(getWait(), inputDecimal, decimal);
+        fill(getWait(), inputDate, date);
+        fill(getWait(), inputDateTime, datetime);
 
         return this;
     }
