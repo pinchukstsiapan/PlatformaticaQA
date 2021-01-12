@@ -12,19 +12,19 @@ import runner.ProjectUtils;
 public class EntityArithmeticInTest extends BaseTest {
 
     @Test
-    private void getNewRecord () throws InterruptedException {
+    private void getNewRecord() throws InterruptedException {
 
         final int num1 = 3;
         final int num2 = 7;
         final int sum = num1 + num2;
         final int sub = num1 - num2;
-        final int mul = num1*num2;
-        final int div = num1/num2;
+        final int mul = num1 * num2;
+        final int div = num1 / num2;
 
         WebDriver driver = getDriver();
-        WebDriverWait wait = new WebDriverWait(driver,4);
+        WebDriverWait wait = new WebDriverWait(driver, 4);
 
-        WebElement elementArithmetic =  driver.findElement(By.xpath("//p[contains(text(), 'Arithmetic Inline')]"));
+        WebElement elementArithmetic = driver.findElement(By.xpath("//p[contains(text(), 'Arithmetic Inline')]"));
         ProjectUtils.click(driver, elementArithmetic);
 
         WebElement clickNewFolder = driver.findElement(By.xpath("//i[contains(text(), 'create_new_folder')]"));
@@ -76,34 +76,34 @@ public class EntityArithmeticInTest extends BaseTest {
         Assert.assertEquals(findNCheckDiv.getText(), Integer.toString(div));
     }
 
-        @Ignore
-        @Test
-        private void setNewData () throws InterruptedException {
+    @Ignore
+    @Test
+    private void setNewData() throws InterruptedException {
 
-            final String F1 = "Hi";
-            final String F2 = "Hi";
+        final String F1 = "Hi";
+        final String F2 = "Hi";
 
-            WebDriver driver = getDriver();
+        WebDriver driver = getDriver();
 
-            WebElement elementArithmetic =  driver.findElement(By.xpath("//p[contains(text(), 'Arithmetic Inline')]"));
-            ProjectUtils.click(driver, elementArithmetic);
+        WebElement elementArithmetic = driver.findElement(By.xpath("//p[contains(text(), 'Arithmetic Inline')]"));
+        ProjectUtils.click(driver, elementArithmetic);
 
-            WebElement clickNewFolder = driver.findElement(By.xpath("//i[contains(text(), 'create_new_folder')]"));
-            ProjectUtils.click(driver, clickNewFolder);
+        WebElement clickNewFolder = driver.findElement(By.xpath("//i[contains(text(), 'create_new_folder')]"));
+        ProjectUtils.click(driver, clickNewFolder);
 
-            WebElement clickF1 = driver.findElement(By.xpath("//input[@id = 'f1']"));
-            ProjectUtils.click(driver, clickF1);
-            clickF1.sendKeys(F1);
+        WebElement clickF1 = driver.findElement(By.xpath("//input[@id = 'f1']"));
+        ProjectUtils.click(driver, clickF1);
+        clickF1.sendKeys(F1);
 
-            WebElement clickF2 = driver.findElement(By.xpath("//input[@id = 'f2']"));
-            ProjectUtils.click(driver, clickF2);
-            clickF2.sendKeys(F2);
+        WebElement clickF2 = driver.findElement(By.xpath("//input[@id = 'f2']"));
+        ProjectUtils.click(driver, clickF2);
+        clickF2.sendKeys(F2);
 
-            Thread.sleep(5000);
+        Thread.sleep(5000);
 
-            driver.findElement(By.xpath("//*[@id=\"pa-entity-form-save-btn\"]")).click();
+        driver.findElement(By.xpath("//*[@id=\"pa-entity-form-save-btn\"]")).click();
 
-            WebElement error = driver.findElement(By.xpath("//*[@id = 'pa-error']"));
-            Assert.assertEquals(error.getText(), "Error saving entity");
-        }
+        WebElement error = driver.findElement(By.xpath("//*[@id = 'pa-error']"));
+        Assert.assertEquals(error.getText(), "Error saving entity");
+    }
 }
