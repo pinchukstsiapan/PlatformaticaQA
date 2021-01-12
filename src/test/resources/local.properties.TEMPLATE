@@ -2,3 +2,6 @@ serverCredentials=false
 
 default.username=user1@tester.com
 default.password=ah1QNmgkEO
+
+marketplace.username=tester1@platformatica.net
+marketplace.password=d8aBFiEH31
