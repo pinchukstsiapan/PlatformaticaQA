@@ -43,13 +43,11 @@ public class AdminEntityTest extends BaseTest {
         }
         double finalRandom_double = random_double * 0.01;
         return new HashMap<Integer, String>() {{
-//        Map<Integer, String> entity_record = new HashMap<Integer, String>() {{
             put(1, ProjectUtils.createRandomString());
             put(2, ProjectUtils.createRandomString());
             put(3, String.valueOf(getRandomInteger()));
             put(4, String.format("%.2f", finalRandom_double));
         }};
-//        return entity_record;
     }
 
     private final String entity_name = ProjectUtils.createRandomString();
