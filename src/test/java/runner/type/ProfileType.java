@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import runner.BaseTest;
+import runner.LoggerUtils;
 import runner.ProjectUtils;
 
 import java.io.BufferedReader;
@@ -92,7 +93,8 @@ public enum ProfileType {
             if (!BaseTest.isRemoteWebDriver()) {
                 InputStream inputStream = ProfileType.class.getClassLoader().getResourceAsStream("local.properties");
                 if (inputStream == null) {
-                    throw new RuntimeException("Copy and paste the local.properties.TEMPLATE file to local.properties");
+                    LoggerUtils.logRed("Copy and paste the local.properties.TEMPLATE file to local.properties");
+                    System.exit(1);
                 }
 
                 properties.load(inputStream);
