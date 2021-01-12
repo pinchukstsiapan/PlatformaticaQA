@@ -59,15 +59,6 @@ public final class FieldsPage extends MainPage {
         return rows.get(rowNumber).findElement(By.cssSelector("td > i"));
     }
 
-    public String getEntityIconUnicode(int rowNumber) {
-        String script = String.format("return window.getComputedStyle(document.querySelector" +
-                "('tr:nth-of-type(%d) td i.fa'),'::before').getPropertyValue('content')" +
-                ".codePointAt(1).toString(16)", rowNumber + 1);
-        String entityTypeIconUnicode = getExecutor().executeScript(script).toString();
-
-        return entityTypeIconUnicode;
-    }
-
     public String getTitle(int rowNumber) {
         return rows.get(rowNumber).findElement(By.xpath("//td[2]/a/div")).getText();
     }
