@@ -1,19 +1,26 @@
+import org.apache.commons.lang3.RandomStringUtils;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.annotations.Ignore;
+import org.testng.annotations.Test;
+import org.testng.Assert;
+import org.testng.annotations.Ignore;
+import org.testng.annotations.Test;
+import runner.BaseTest;
+import runner.ProjectUtils;
+import runner.type.Run;
+import runner.type.RunType;
+
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
-import org.testng.annotations.Test;
-import org.testng.Assert;
-import runner.BaseTest;
-import runner.ProjectUtils;
-import runner.type.Run;
-import runner.type.RunType;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
@@ -33,9 +40,6 @@ public class EntityFieldsTest extends BaseTest {
     private static final String NEW_DATE = "25/10/2018";
     private static final String NEW_DATE_TIME = "25/10/2018 08:22:05";
     private static final String INVALID_ENTRY = "a";
-    private static String RANDOM_USER = null;
-    private static String CURRENT_USER = null;
-
     private static final By fieldsPageButtonIcon = By.xpath("//p[contains(text(), ' Fields ')]/..");
     private static final By createNewIcon = (By.xpath("//i[text()='create_new_folder']"));
     private static final By saveButton = By.cssSelector("button[id*='save']");
@@ -50,6 +54,8 @@ public class EntityFieldsTest extends BaseTest {
     private static final By rows = By.xpath("//tbody/tr");
     private static final By recycleBinIcon = By.cssSelector("a[href*=recycle] > i");
     private static final By errorMessage = By.cssSelector("div[id*=error]");
+    private static String RANDOM_USER = null;
+    private static String CURRENT_USER = null;
 
     private void goFieldsPage() {
         WebDriver driver = getDriver();
@@ -127,8 +133,8 @@ public class EntityFieldsTest extends BaseTest {
             case "draft":
                 Assert.assertEquals(entityTypeIconUnicode, "f040", "Wrong draft icon, expected '\\f040'");
                 break;
-             default:
-                 throw new RuntimeException("Unexpected entity type");
+            default:
+                throw new RuntimeException("Unexpected entity type");
         }
     }
 
@@ -149,7 +155,7 @@ public class EntityFieldsTest extends BaseTest {
         Assert.assertEquals(cols.size(), expected.length);
         expected[4] = formatDecimal(expected[4]);
         for (int i = 1; i < cols.size(); i++) {
-            if (expected[i] != null){
+            if (expected[i] != null) {
                 Assert.assertEquals(cols.get(i).getText(), expected[i]);
             }
         }
@@ -240,6 +246,7 @@ public class EntityFieldsTest extends BaseTest {
         verifyEntityTypeIcon("record");
     }
 
+    @Ignore
     @Test(dependsOnMethods = {"createNewRecordTest", "editRecordTest"})
     public void deleteRecordTest() throws InterruptedException {
 
@@ -261,6 +268,7 @@ public class EntityFieldsTest extends BaseTest {
                 recordTitle);
     }
 
+    @Ignore
     @Test
     public void invalidIntEntryCreateTest() {
 
@@ -275,6 +283,7 @@ public class EntityFieldsTest extends BaseTest {
         verifyDataTypeError();
     }
 
+    @Ignore
     @Test
     public void invalidDecimalEntryCreateTest() {
 
