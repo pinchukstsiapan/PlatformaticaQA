@@ -5,7 +5,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import runner.ProjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,27 +53,35 @@ public class Chain2Page extends BasePage {
         return actualValues;
     }
 
-    public Chain2ViewPage viewRecord() {
-        WebDriver driver = getDriver();
-        click(getWait(), chain2Records.get(0).findElement(By.tagName("button")));
-        ProjectUtils.click(driver, getWait().until(ExpectedConditions
-                .presenceOfElementLocated(By.xpath("//ul[@x-placement='bottom-end']//a[text()='view']"))));
-        return new Chain2ViewPage(driver);
+    public Chain2ViewPage viewRecord(int rowNumber) {
+        WebElement row = chain2Records.get(rowNumber);
+        click(getWait(), row.findElement(By.tagName("button")));
+        try {
+            Thread.sleep(400);
+        } catch(InterruptedException ignored) {}
+        click(getWait(), row.findElement(By.xpath("//li/a[contains(@href, 'view')]")));
+
+        return new Chain2ViewPage(getDriver());
     }
 
-    public Chain2EditPage editRecord() {
-        WebDriver driver = getDriver();
-        click(getWait(), chain2Records.get(0).findElement(By.tagName("button")));
-        ProjectUtils.click(driver, getWait().until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//ul[@x-placement='bottom-end']//a[text()='edit']"))));
-        return new Chain2EditPage(driver);
+    public Chain2EditPage editRecord(int rowNumber) {
+        WebElement row = chain2Records.get(rowNumber);
+        click(getWait(), row.findElement(By.tagName("button")));
+        try {
+            Thread.sleep(400);
+        } catch(InterruptedException ignored) {}
+        click(getWait(), row.findElement(By.xpath("//li/a[contains(@href, 'edit')]")));
+
+        return new Chain2EditPage(getDriver());
     }
 
-    public void deleteRecord() {
-        WebDriver driver = getDriver();
-        click(getWait(), chain2Records.get(0).findElement(By.tagName("button")));
-        ProjectUtils.click(driver, getWait().until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//ul[@x-placement='bottom-end']//a[text()='delete']"))));
+    public void deleteRecord(int rowNumber) {
+        WebElement row = chain2Records.get(rowNumber);
+        click(getWait(), row.findElement(By.tagName("button")));
+        try {
+            Thread.sleep(400);
+        } catch(InterruptedException ignored) {}
+        click(getWait(), row.findElement(By.xpath("//li/a[contains(@href, 'delete')]")));
     }
 
     public WebElement getTableParentElement() {
