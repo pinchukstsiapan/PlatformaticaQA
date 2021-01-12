@@ -79,19 +79,14 @@ public class EntityChevronTest extends BaseTest {
 
         goChevronPage(driver);
 
-        WebElement addLink = driver.findElement(By.xpath("//i[contains(text(), 'create_new_folder')]"));
-        ProjectUtils.click(driver, addLink);
+        ProjectUtils.click(driver, driver.findElement(By.xpath("//i[contains(text(), 'create_new_folder')]")));
 
-        WebElement stringFieldMenu = driver.findElement(By.xpath("//button[@data-id='string']"));
-        ProjectUtils.click(driver, stringFieldMenu);
-        WebElement stringField = driver.findElement(By.xpath(String.format("//span[contains(text(), '%s')]", STATUS_NEW)));
-        ProjectUtils.click(driver, stringField);
-
-        driver.findElement(By.id("text")).sendKeys(TITLE);
-        driver.findElement(By.id("int")).sendKeys(INT_NUMBER);
-        driver.findElement(By.id("decimal")).sendKeys(DOUBLE_NUMBER);
-        WebElement submit = driver.findElement(By.id("pa-entity-form-save-btn"));
-        ProjectUtils.click(driver, submit);
+        ProjectUtils.click(driver, driver.findElement(By.xpath("//button[@data-id='string']")));
+        ProjectUtils.click(driver, driver.findElement(By.xpath(String.format("//span[contains(text(), '%s')]", STATUS_NEW))));
+        ProjectUtils.sendKeys(driver.findElement(By.id("text")), TITLE);
+        ProjectUtils.sendKeys(driver.findElement(By.id("int")), INT_NUMBER);
+        ProjectUtils.sendKeys(driver.findElement(By.id("decimal")), DOUBLE_NUMBER);
+        ProjectUtils.click(driver, driver.findElement(By.id("pa-entity-form-save-btn")));
 
         WebElement row = findRow(driver);
         Assert.assertNotNull(row, "New record hasn't been found in the list");
@@ -106,26 +101,18 @@ public class EntityChevronTest extends BaseTest {
 
         WebElement row = findRow(driver);
 
-        WebElement editLink = row.findElement(By.xpath(".//a[contains(@href, 'action_edit')]"));
-        ProjectUtils.click(driver, editLink);
+        ProjectUtils.click(driver, row.findElement(By.xpath(".//a[contains(@href, 'action_edit')]")));
 
-        WebElement stringFieldMenu = driver.findElement(By.xpath("//button[@data-id='string']"));
-        ProjectUtils.click(driver, stringFieldMenu);
+        ProjectUtils.click(driver, driver.findElement(By.xpath("//button[@data-id='string']")));
+        ProjectUtils.click(driver, driver.findElement(By.xpath(String.format("//span[contains(text(), '%s')]", STATUS_EDITED))));
+        ProjectUtils.click(driver, driver.findElement(By.id("pa-entity-form-save-btn")));
 
-        WebElement pendingMenu = driver.findElement(By.xpath(String.format("//span[contains(text(), '%s')]", STATUS_EDITED)));
-        ProjectUtils.click(driver, pendingMenu);
-
-        WebElement submit = driver.findElement(By.id("pa-entity-form-save-btn"));
-        ProjectUtils.click(driver, submit);
-
-        WebElement linkPending = driver.findElement(By.xpath(String.format("//div[contains(@class,'card-body')]/div/a[contains(text(), '%s')]", STATUS_EDITED)));
-        ProjectUtils.click(driver, linkPending);
+        ProjectUtils.click(driver, driver.findElement(By.xpath(String.format("//div[contains(@class,'card-body')]/div/a[contains(text(), '%s')]", STATUS_EDITED))));
 
         WebElement rowEdited = findRow(driver);
         Assert.assertNotNull(rowEdited, "Edited title hasn't been found in the filtered list");
 
-        WebElement viewMenu = rowEdited.findElement(By.xpath(".//a[contains(@href, 'action_view')]"));
-        ProjectUtils.click(driver, viewMenu);
+        ProjectUtils.click(driver, rowEdited.findElement(By.xpath(".//a[contains(@href, 'action_view')]")));
         Assert.assertEquals(driver.findElement(By.xpath("//div[@id='crumbs']//a[@class='pa-chev-active']")).getText(), STATUS_EDITED, "New status is not equal");
     }
 
