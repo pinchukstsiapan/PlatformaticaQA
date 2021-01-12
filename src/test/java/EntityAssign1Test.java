@@ -5,6 +5,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
@@ -13,18 +14,27 @@ import runner.type.Run;
 import runner.type.RunType;
 
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 @Run(run = RunType.Multiple)
 public class EntityAssign1Test extends BaseTest {
 
     private static final String STRING_INP = UUID.randomUUID().toString();
+    private static final ProfileType PROFILE_TYPE = ProfileType.DEFAULT;
+    private static final String FIRST_USER_NAME =  PROFILE_TYPE.getUserName();
+    private static final String FIRST_USER_PASS =  PROFILE_TYPE.getPassword();
+    private static final By ASSIGN_TAB = By.xpath("//a[contains(@href, 'id=37')]");
+    private static final By ASSIGNMENTS_TAB = By.xpath("//li[@id='pa-menu-item-41']");
+    private static final By ASSIGNMENTS_TAB_TEXT = By.xpath("//h3[contains(text(), 'Tasks for')]");
+    private static final By RECORD = By.xpath("//tbody/tr");
+    private static final By RECORD_TABLE = By.className("col-md-12");
+    private static final By LOG_OUT = By.xpath("//a[text()='Log out']");
+
 
     private void changeUser(WebDriver driver, String user) {
 
         WebDriverWait wait = new WebDriverWait(driver, 5);
 
-        ProjectUtils.click(driver, driver.findElement(By.xpath("//a[contains(@href, 'id=37')]")));
+        ProjectUtils.click(driver, driver.findElement(ASSIGN_TAB));
 
         Select changeUser = new Select(driver.findElement(By.className("pa-list-assignee")));
 
@@ -40,7 +50,7 @@ public class EntityAssign1Test extends BaseTest {
 
         WebDriver driver = getDriver();
 
-        ProjectUtils.click(driver, driver.findElement(By.xpath("//a[contains(@href, 'id=37')]")));
+        ProjectUtils.click(driver, driver.findElement(ASSIGN_TAB));
         driver.findElement(By.xpath("//i[contains(text(), 'create_new')]")).click();
         driver.findElement(By.id("string")).sendKeys(STRING_INP);
         driver.findElement(By.id("text")).sendKeys("test text");
@@ -50,64 +60,68 @@ public class EntityAssign1Test extends BaseTest {
         driver.findElement(By.xpath("//input[@id='datetime']")).click();
         ProjectUtils.click(driver, driver.findElement(By.xpath("//button[@id='pa-entity-form-save-btn']")));
         WebElement userSelect = driver.findElement(By.xpath
-                ("//option[text()='" + ProfileType.DEFAULT.getUserName() + "']"));
+                (String.format("//option[text()='%s']", PROFILE_TYPE.getUserName())));
         userSelect.click();
 
         driver.navigate().refresh();
 
         WebElement selectedUser = driver.findElement(By.xpath
-                ("//option[@selected and text()='" + ProfileType.DEFAULT.getUserName() + "']"));
-
+                (String.format("//option[@selected and text()='%s']", PROFILE_TYPE.getUserName())));
         Assert.assertTrue(selectedUser.isDisplayed());
 
-        driver.findElement(By.xpath("//li[@id='pa-menu-item-41']")).click();
-        driver.findElement(By.xpath("//h3[contains(text(), 'Tasks for')]"));
+        driver.findElement(ASSIGNMENTS_TAB).click();
+        driver.findElement(ASSIGNMENTS_TAB_TEXT);
 
-        Assert.assertTrue(driver.findElement(By.xpath("//tbody/tr")).isDisplayed());
+        Assert.assertTrue(driver.findElement(RECORD).isDisplayed());
     }
 
+    @Ignore
     @Test (dependsOnMethods = "assignTest")
     public void editTest() {
 
-        String anotherUser = "user" + (int)(Math.random() * (249 - 100 + 1) + 100) + "@tester.com";
-
         WebDriver driver = getDriver();
+        ProfileType.renewCredentials();
 
-        changeUser(driver, anotherUser);
+        changeUser(driver, PROFILE_TYPE.getUserName());
 
-        WebElement selectedUser = driver.findElement(By.xpath("//option[@selected and text()='" + anotherUser + "']"));
-
+        WebElement selectedUser = driver.findElement(By.xpath
+                (String.format("//option[@selected and text()='%s']", PROFILE_TYPE.getUserName())));
         Assert.assertTrue(selectedUser.isDisplayed());
 
-        driver.findElement(By.xpath("//li[@id='pa-menu-item-41']")).click();
-        driver.findElement(By.xpath("//h3[contains(text(), 'Tasks for')]"));
+        driver.findElement(ASSIGNMENTS_TAB).click();
+        driver.findElement(ASSIGNMENTS_TAB_TEXT);
 
-        getDriver().manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
-        Assert.assertTrue(driver.findElements(By.xpath("//tbody/tr")).isEmpty());
-        getDriver().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        Assert.assertFalse(driver.findElement(RECORD_TABLE).getText().contains(STRING_INP));
+
+        ProjectUtils.click(driver, driver.findElement(LOG_OUT));
+        PROFILE_TYPE.login(driver);
+
+        driver.findElement(ASSIGNMENTS_TAB).click();
+
+        Assert.assertTrue(driver.findElement(RECORD_TABLE).getText().contains(STRING_INP));
     }
 
+    @Ignore
     @Test (dependsOnMethods = "editTest")
     public void deleteTest() {
 
         WebDriver driver = getDriver();
 
-        changeUser(driver, ProfileType.DEFAULT.getUserName());
+        ProjectUtils.click(driver, driver.findElement(LOG_OUT));
+        PROFILE_TYPE.login(driver, FIRST_USER_NAME, FIRST_USER_PASS);
+
+        changeUser(driver, FIRST_USER_NAME);
 
         ProjectUtils.click(driver, driver.findElement(By.xpath("//a[text()='delete']")));
 
-        getDriver().manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
-        Assert.assertTrue(driver.findElements(By.xpath("//tbody/tr")).isEmpty());
-        getDriver().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        Assert.assertFalse(driver.findElement(RECORD_TABLE).getText().contains(STRING_INP));
 
         ProjectUtils.click(driver, driver.findElement(By.xpath("//a[contains(@href,'recycle_bin')]")));
 
-        Assert.assertTrue(driver.findElement(By.xpath("//tbody/tr")).isDisplayed());
+        Assert.assertTrue(driver.findElement(RECORD).isDisplayed());
 
-        driver.findElement(By.xpath("//li[@id='pa-menu-item-41']")).click();
-        driver.findElement(By.xpath("//h3[contains(text(), 'Tasks for')]"));
+        driver.findElement(ASSIGNMENTS_TAB).click();
 
-        getDriver().manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
-        Assert.assertTrue(driver.findElements(By.xpath("//tbody/tr")).isEmpty());
+        Assert.assertFalse(driver.findElement(RECORD_TABLE).getText().contains(STRING_INP));
     }
 }
