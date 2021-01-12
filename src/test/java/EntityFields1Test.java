@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import runner.BaseTest;
 import runner.ProjectUtils;
@@ -40,6 +41,7 @@ public class EntityFields1Test extends BaseTest {
         Assert.assertEquals(fieldsPage.getRow(0), record);
     }
 
+    @Ignore
     @Test(dependsOnMethods = "newRecord")
     public void editRecord() throws InterruptedException {
 
