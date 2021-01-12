@@ -55,6 +55,10 @@ public final class FieldsPage extends MainPage {
         return recordData;
     }
 
+    public WebElement getEntityIcon(int rowNumber) {
+        return rows.get(rowNumber).findElement(By.cssSelector("td > i"));
+    }
+
     public String getEntityIconUnicode(int rowNumber) {
         String script = String.format("return window.getComputedStyle(document.querySelector" +
                 "('tr:nth-of-type(%d) td i.fa'),'::before').getPropertyValue('content')" +

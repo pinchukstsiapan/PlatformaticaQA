@@ -1,6 +1,6 @@
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
+import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.annotations.Ignore;
@@ -34,55 +34,35 @@ public class EntityFieldsTest extends BaseTest {
     private static String RANDOM_USER = null;
     private static String CURRENT_USER = null;
 
-    private void verifyEntityData(List<String> actual, String[] expected) {
-        Assert.assertEquals(actual.size(), expected.length);
-        for (int i = 1; i < actual.size(); i++) {
-            Assert.assertEquals(actual.get(i), expected[i]);
-        }
-    }
-
-    private void verifyEntityTypeIcon(String iconUnicode, String entityType) {
-        switch (entityType) {
-            case "record":
-                Assert.assertEquals(iconUnicode, "f046", "Wrong record icon, expected '\\f046'");
-                break;
-            case "draft":
-                Assert.assertEquals(iconUnicode, "f040", "Wrong draft icon, expected '\\f040'");
-                break;
-            default:
-                throw new RuntimeException("Unexpected entity type");
-        }
-    }
-
     @Test
-    public void createNewRecordTest() {
+    public void createRecordTest() {
 
-            String[] expectedValues = {"", TITLE, COMMENTS, INT, DECIMAL, DATE, DATE_TIME, "", CURRENT_USER, ""};
+        String[] expectedValues = {"", TITLE, COMMENTS, INT, DECIMAL, DATE, DATE_TIME, "", CURRENT_USER, ""};
 
-            MainPage mainPage = new MainPage(getDriver());
-            CURRENT_USER = expectedValues[8] = mainPage.getCurrentUser();
+        MainPage mainPage = new MainPage(getDriver());
+        CURRENT_USER = expectedValues[8] = mainPage.getCurrentUser();
 
-            FieldsEditPage fieldsEditPage = mainPage
-                    .clickMenuFields()
-                    .clickNewButton();
+        FieldsEditPage fieldsEditPage = mainPage
+                .clickMenuFields()
+                .clickNewButton();
 
-            FieldsPage fieldsPage = fieldsEditPage
-                    .fillTitle(TITLE)
-                    .fillComments(COMMENTS)
-                    .fillInt(INT)
-                    .fillDecimal(DECIMAL)
-                    .fillDate(DATE)
-                    .fillDateTime(DATE_TIME)
-                    .selectUser(CURRENT_USER)
-                    .clickSaveButton();
+        FieldsPage fieldsPage = fieldsEditPage
+                .fillTitle(TITLE)
+                .fillComments(COMMENTS)
+                .fillInt(INT)
+                .fillDecimal(DECIMAL)
+                .fillDate(DATE)
+                .fillDateTime(DATE_TIME)
+                .selectUser(CURRENT_USER)
+                .clickSaveButton();
 
-            Assert.assertEquals(fieldsPage.getRowCount(), 1);
-            verifyEntityData(fieldsPage.getRecordData(0), expectedValues);
-            verifyEntityTypeIcon(fieldsPage.getEntityIconUnicode(0), "record");
+        Assert.assertEquals(fieldsPage.getRowCount(), 1);
+        Assert.assertEquals(fieldsPage.getRecordData(0), Arrays.asList(expectedValues));
+        Assert.assertEquals(fieldsPage.getEntityIcon(0).getAttribute("class"), "fa fa-check-square-o");
     }
 
     @Test(dependsOnMethods = "deleteRecordTest")
-    public void createNewDraftTest() {
+    public void createDraftTest() {
 
         String[] expectedValues = {"", TITLE, COMMENTS, "0", "0", "", "", "", CURRENT_USER, ""};
 
@@ -100,8 +80,8 @@ public class EntityFieldsTest extends BaseTest {
                 .clickSaveDraftButton();
 
         Assert.assertEquals(fieldsPage.getRowCount(), 1);
-        verifyEntityData(fieldsPage.getRecordData(0), expectedValues);
-        verifyEntityTypeIcon(fieldsPage.getEntityIconUnicode(0), "draft");
+        Assert.assertEquals(fieldsPage.getRecordData(0), Arrays.asList(expectedValues));
+        Assert.assertEquals(fieldsPage.getEntityIcon(0).getAttribute("class"), "fa fa-pencil");
     }
 
     @Test(dependsOnMethods = "createNewRecordTest")
@@ -124,8 +104,8 @@ public class EntityFieldsTest extends BaseTest {
                 .clickSaveButton();
 
         Assert.assertEquals(fieldsPage.getRowCount(), 1);
-        verifyEntityData(fieldsPage.getRecordData(0), expectedValues);
-        verifyEntityTypeIcon(fieldsPage.getEntityIconUnicode(0), "record");
+        Assert.assertEquals(fieldsPage.getRecordData(0), Arrays.asList(expectedValues));
+        Assert.assertEquals(fieldsPage.getEntityIcon(0).getAttribute("class"), "fa fa-check-square-o");
     }
 
     @Test(dependsOnMethods = "editRecordTest")
