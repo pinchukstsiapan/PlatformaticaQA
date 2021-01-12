@@ -101,7 +101,7 @@ public class EntityArithmeticInTest extends BaseTest {
 
             driver.findElement(By.xpath("//*[@id=\"pa-entity-form-save-btn\"]")).click();
 
-            WebElement error = driver.findElement(By.xpath("//*[@id = 'pa-error']"));
-            Assert.assertEquals(error.getText(), "Error saving entity");
+            WebElement error = driver.findElement(By.tagName("body"));
+            Assert.assertEquals(error.getText(), "error saving entity");
         }
 }

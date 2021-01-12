@@ -13,7 +13,7 @@ public final class ExportEditPage extends BasePage {
     @FindBy(xpath = "//button[@class='btn btn-warning']")
     private WebElement saveButton;
 
-    @FindBy (xpath = "//div[@id='pa-error']")
+    @FindBy (tagName = "body")
     private WebElement getError;
 
     public ExportEditPage(WebDriver driver) {

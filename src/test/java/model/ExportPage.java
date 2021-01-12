@@ -9,7 +9,7 @@ public final class ExportPage extends BasePage {
 
     @FindBy(xpath = "//*[contains (text(), 'create_new_folder')]")
     private WebElement newExportButton;
-    @FindBy(xpath = "//div[@id='pa-error']")
+    @FindBy(tagName = "body")
     private WebElement getError;
 
     public ExportPage(WebDriver driver) {
@@ -21,7 +21,7 @@ public final class ExportPage extends BasePage {
         return new ExportEditPage(getDriver());
     }
     public ExportEditPage getErrorMassage(){
-        Assert.assertEquals("Error saving entity", getError.getText());
+        Assert.assertEquals("error saving entity", getError.getText());
         return new ExportEditPage(getDriver());
     }
 
