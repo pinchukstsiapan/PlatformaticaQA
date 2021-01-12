@@ -105,7 +105,6 @@ public class EntityChevronTest extends BaseTest {
         goChevronPage(driver);
 
         WebElement row = findRow(driver);
-        Assert.assertNotNull(row, "Title hasn't been found in the filtered list");
 
         WebElement editLink = row.findElement(By.xpath(".//a[contains(@href, 'action_edit')]"));
         ProjectUtils.click(driver, editLink);
@@ -142,6 +141,7 @@ public class EntityChevronTest extends BaseTest {
                 }
             }
         }
+        Assert.fail("Title hasn't been found in result table.");
         return null;
     }
 
