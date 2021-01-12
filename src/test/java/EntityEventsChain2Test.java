@@ -40,7 +40,9 @@ public class EntityEventsChain2Test extends BaseTest {
     public void verifyRecordView() {
 
         Chain2Page chain2Page = new Chain2Page(getDriver());
-        Chain2ViewPage chain2ViewPage = chain2Page.viewRecord();
+        Chain2ViewPage chain2ViewPage = chain2Page
+                .open()
+                .viewRecord();
 
         Assert.assertEquals(chain2ViewPage.getActualValues(), EXPECTED_VALUES_F1_1);
     }
@@ -49,7 +51,9 @@ public class EntityEventsChain2Test extends BaseTest {
     public void verifyRecordEdit() {
 
         Chain2Page chain2Page = new Chain2Page(getDriver());
-        Chain2EditPage chain2EditPage = chain2Page.editRecord();
+        Chain2EditPage chain2EditPage = chain2Page
+                .open()
+                .editRecord();
 
         Assert.assertEquals(chain2EditPage.getActualValues(), EXPECTED_VALUES_F1_1);
     }
@@ -60,6 +64,7 @@ public class EntityEventsChain2Test extends BaseTest {
 
         Chain2Page chain2Page = new Chain2Page(getDriver());
         chain2Page = chain2Page
+                .open()
                 .editRecord()
                 .editF1Value(newF1, EXPECTED_VALUES_F1_0)
                 .clickSaveButton();
@@ -73,6 +78,7 @@ public class EntityEventsChain2Test extends BaseTest {
 
         Chain2Page chain2Page = new Chain2Page(getDriver());
         Chain2ErrorPage chain2ErrorPage = chain2Page
+                .open()
                 .editRecord()
                 .editValues(EXPECTED_VALUES_UUID)
                 .clickSaveButtonReturnError();
@@ -91,7 +97,9 @@ public class EntityEventsChain2Test extends BaseTest {
     public void deleteRecord() {
 
         Chain2Page chain2Page = new Chain2Page(getDriver());
-        chain2Page.deleteRecord();
+        chain2Page
+                .open()
+                .deleteRecord();
 
         WebElement parentElement = chain2Page.getTableParentElement();
 

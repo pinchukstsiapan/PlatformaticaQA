@@ -9,13 +9,16 @@ import runner.ProjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import static runner.ProjectUtils.click;
 
 public class Chain2Page extends BasePage {
+
+    private static final String URL = "https://ref.eteam.work/index.php?action=action_list&entity_id=62";
 
     @FindBy(css = "div.card-icon>i")
     private WebElement createNewRecordButton;
 
-    @FindBy(css = "#pa-all-entities-table>tbody>tr")
+    @FindBy(xpath = "//table[@id='pa-all-entities-table']/tbody/tr")
     private List<WebElement> chain2Records;
 
     @FindBy(css = "td>a>div")
@@ -23,6 +26,11 @@ public class Chain2Page extends BasePage {
 
     public Chain2Page(WebDriver driver) {
         super(driver);
+    }
+
+    public Chain2Page open() {
+        getDriver().get(URL);
+        return this;
     }
 
     public Chain2NewPage clickNewRecordButton() {
@@ -46,16 +54,9 @@ public class Chain2Page extends BasePage {
         return actualValues;
     }
 
-    private void clickModeMenuButton(WebDriver driver) {
-        driver.get("https://ref.eteam.work/index.php?action=action_list&entity_id=62");
-        List<WebElement> rows = chain2Records;
-        WebElement modeMenuButton = rows.get(rows.size() - 1).findElement(By.cssSelector("td>div>button"));
-        ProjectUtils.click(driver, modeMenuButton);
-    }
-
     public Chain2ViewPage viewRecord() {
         WebDriver driver = getDriver();
-        clickModeMenuButton(driver);
+        click(getWait(), chain2Records.get(0).findElement(By.tagName("button")));
         ProjectUtils.click(driver, getWait().until(ExpectedConditions
                 .presenceOfElementLocated(By.xpath("//ul[@x-placement='bottom-end']//a[text()='view']"))));
         return new Chain2ViewPage(driver);
@@ -63,7 +64,7 @@ public class Chain2Page extends BasePage {
 
     public Chain2EditPage editRecord() {
         WebDriver driver = getDriver();
-        clickModeMenuButton(driver);
+        click(getWait(), chain2Records.get(0).findElement(By.tagName("button")));
         ProjectUtils.click(driver, getWait().until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//ul[@x-placement='bottom-end']//a[text()='edit']"))));
         return new Chain2EditPage(driver);
@@ -71,7 +72,7 @@ public class Chain2Page extends BasePage {
 
     public void deleteRecord() {
         WebDriver driver = getDriver();
-        clickModeMenuButton(driver);
+        click(getWait(), chain2Records.get(0).findElement(By.tagName("button")));
         ProjectUtils.click(driver, getWait().until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//ul[@x-placement='bottom-end']//a[text()='delete']"))));
     }
