@@ -17,9 +17,4 @@ public class Chain2ErrorPage extends BasePage {
     public String getActualError() {
         return getWait().until(ExpectedConditions.visibilityOf(actualError)).getText();
     }
-
-    public void openChain2Page() {
-        WebDriver driver = getDriver();
-        driver.get("https://ref.eteam.work/index.php?action=action_list&entity_id=62");
-    }
 }

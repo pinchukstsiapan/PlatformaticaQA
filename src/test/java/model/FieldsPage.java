@@ -9,41 +9,15 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class FieldsPage extends BasePage {
-
-    @FindBy(xpath = "//i[text() = 'create_new_folder']")
-    private WebElement buttonNew;
-
-    @FindBy(className = "card-body")
-    private WebElement body;
-
-    @FindBy(xpath = "//table[@id='pa-all-entities-table']/tbody/tr")
-    private List<WebElement> trs;
+public final class FieldsPage extends BaseTablePage<FieldsPage, FieldsEditPage> {
 
     public FieldsPage(WebDriver driver) {
         super(driver);
     }
 
-    public FieldsEditPage clickNewButton() {
-        buttonNew.click();
+    @Override
+    protected FieldsEditPage createEditPage() {
         return new FieldsEditPage(getDriver());
-    }
-
-    public int getRowCount() {
-        if (Strings.isStringEmpty(body.getText())) {
-            return 0;
-        } else {
-            return trs.size();
-        }
-    }
-
-    public String getTitle(int rowNumber) {
-        return trs.get(rowNumber).findElement(By.xpath("//td[2]/a/div")).getText();
-    }
-
-    public List<String> getRow(int rowNumber) {
-        return trs.get(rowNumber).findElements(By.xpath("//td/a/div")).stream()
-                .map(WebElement::getText).collect(Collectors.toList());
     }
 
 }

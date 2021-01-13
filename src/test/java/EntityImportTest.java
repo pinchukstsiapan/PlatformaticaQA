@@ -20,10 +20,10 @@ public class EntityImportTest extends BaseTest {
 
         RecycleBinPage recycleBinPage = new MainPage(getDriver())
                 .clickMenuImportValues()
-                .clickNewButton()
+                .clickNewFolder()
                 .sendKeys(str)
                 .clickSaveButton()
-                .deleteRecord()
+                .deleteRow()
                 .clickRecycleBin();
 
         Assert.assertEquals(recycleBinPage.getDeletedImportValue(), str);

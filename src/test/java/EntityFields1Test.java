@@ -33,7 +33,7 @@ public class EntityFields1Test extends BaseTest {
 
         FieldsPage fieldsPage = new MainPage(getDriver())
                 .clickMenuFields()
-                .clickNewButton()
+                .clickNewFolder()
                 .sendKeys(title, comments, int_, decimal, "", "")
                 .clickSaveButton();
 

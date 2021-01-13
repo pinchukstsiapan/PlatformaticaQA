@@ -42,6 +42,12 @@ public class Chain2EditPage extends BasePage {
         return actualValues;
     }
 
+    public Chain2EditPage inputF1Value(String f1Value) {
+        ProjectUtils.sendKeys(fValuesEdit.get(0), f1Value);
+        getWait().until(ExpectedConditions.attributeToBeNotEmpty(fValuesEdit.get(9), "value"));
+        return this;
+    }
+
     public Chain2EditPage editF1Value(String f1Value, List<String> expectedValues) {
         String f10ExpectedValue = expectedValues.get(expectedValues.size() - 1);
         WebElement f1 = getWait().until(ExpectedConditions.visibilityOfElementLocated(By.id("f1")));
